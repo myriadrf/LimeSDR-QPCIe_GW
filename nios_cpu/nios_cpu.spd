@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<simPackage>
+ <file path="simulation/nios_cpu.vhd" type="VHDL" />
+ <file path="simulation/nios_cpu_rst_controller.vhd" type="VHDL" />
+ <file path="simulation/nios_cpu_rst_controller_001.vhd" type="VHDL" />
+ <topLevel name="nios_cpu" />
+ <deviceFamily name="cyclonev" />
+ <modelMap controllerPath="nios_cpu.oc_mem" modelPath="nios_cpu.oc_mem" />
+</simPackage>
