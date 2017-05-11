@@ -1214,6 +1214,19 @@ set_location_assignment PIN_L20 -to FPGA_SPI0_MISO_ADC
 set_instance_assignment -name IO_STANDARD "1.8 V" -to FPGA_SPI0_MISO_ADC
 set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to FPGA_SPI0_MISO_LMS2
 set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to FPGA_SPI0_MISO_LMS1
+set_global_assignment -name VHDL_FILE src/tx_path_top/packets2data/synth/packets2data_top.vhd
+set_global_assignment -name VHDL_FILE src/tx_path_top/packets2data/synth/packets2data.vhd
+set_global_assignment -name VHDL_FILE src/tx_path_top/packets2data/synth/p2d_wr_fsm.vhd
+set_global_assignment -name VHDL_FILE src/tx_path_top/packets2data/synth/p2d_sync_fsm.vhd
+set_global_assignment -name VHDL_FILE src/tx_path_top/packets2data/synth/p2d_rd_fsm.vhd
+set_global_assignment -name VHDL_FILE src/tx_path_top/packets2data/synth/p2d_clr_fsm.vhd
+set_global_assignment -name VHDL_FILE src/tx_path_top/handshake_sync/synth/handshake_sync.vhd
+set_global_assignment -name VHDL_FILE src/tx_path_top/fifo2diq/synth/txiq.vhd
+set_global_assignment -name VHDL_FILE src/tx_path_top/fifo2diq/synth/fifo2diq.vhd
+set_global_assignment -name VHDL_FILE src/tx_path_top/bit_unpack/synth/unpack_64_to_64.vhd
+set_global_assignment -name VHDL_FILE src/tx_path_top/bit_unpack/synth/unpack_64_to_56.vhd
+set_global_assignment -name VHDL_FILE src/tx_path_top/bit_unpack/synth/unpack_64_to_48.vhd
+set_global_assignment -name VHDL_FILE src/tx_path_top/bit_unpack/synth/bit_unpack_64.vhd
 set_global_assignment -name VHDL_FILE src/altera_inst/lpm_cnt_inst.vhd
 set_global_assignment -name VHDL_FILE src/rx_path_top/smpl_cnt/synth/smpl_cnt.vhd
 set_global_assignment -name VHDL_FILE src/rx_path_top/diq2fifo/synth/test_data_dd.vhd
@@ -1239,8 +1252,6 @@ set_global_assignment -name QIP_FILE ip/pcie_core/pcie_reconfig/synthesis/pcie_r
 set_global_assignment -name QIP_FILE ip/ddr3_av_2x32/ddr3_av_2x32.qip
 set_global_assignment -name QIP_FILE nios_cpu/synthesis/nios_cpu.qip
 set_global_assignment -name SDC_FILE lms7_x2_trx_timing.sdc
-set_global_assignment -name VHDL_FILE src/fifo2diq/synth/txiq.vhd
-set_global_assignment -name VHDL_FILE src/fifo2diq/synth/fifo2diq.vhd
 set_global_assignment -name VHDL_FILE src/general/bus_sync_reg.vhd
 set_global_assignment -name VHDL_FILE src/pulse_divider/synth/pulse_gen.vhd
 set_global_assignment -name VHDL_FILE src/pulse_divider/synth/pulse_div.vhd
@@ -1389,7 +1400,6 @@ set_global_assignment -name VHDL_FILE src/avmm_arb/avmm_arb_top.vhd
 set_global_assignment -name VHDL_FILE src/avmm_arb/DDR3_avmm_2x32_ctrl.vhd
 set_global_assignment -name VHDL_FILE src/wfm_ram_buffer/decompress_top.vhd
 set_global_assignment -name VHDL_FILE src/wfm_ram_buffer/wfm_player_x2_top.vhd
-set_global_assignment -name VHDL_FILE src/tx_modules/sync_fifo_rw.vhd
 set_global_assignment -name VHDL_FILE src/tx_modules/tx_pct_data_mimo_v3.vhd
 set_global_assignment -name VHDL_FILE src/adpd/fifo_buff.vhd
 set_global_assignment -name VHDL_FILE src/adpd/data_cap_buffer.vhd
@@ -1399,4 +1409,6 @@ set_global_assignment -name VHDL_FILE src/general/deinterleave.vhd
 set_global_assignment -name MIF_FILE ip/test_ram/test_ram.mif
 set_global_assignment -name VHDL_FILE src/general/mac_ch_sel.vhd
 set_global_assignment -name VHDL_FILE src/rx_path_top/rx_path/synth/rx_path_top.vhd
+set_global_assignment -name VHDL_FILE src/tx_path_top/tx_path/synth/tx_path_top.vhd
+set_global_assignment -name VHDL_FILE src/tx_path_top/tx_path/synth/sync_fifo_rw.vhd
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
