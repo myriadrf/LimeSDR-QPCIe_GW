@@ -1152,7 +1152,7 @@ inst1_diq2fifo : entity work.fifo2diq
 		mimo_en		   => mimo_en,
 		ch_en			   => ch_en,
 		fidm			   => fr_start,
-      xen            => xen,--xen_div,
+      --xen            => xen,--xen_div,
       DIQ		 	   => open,
 		fsync	 	      => open,
 		DIQ_H				=> diq_h,
