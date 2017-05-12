@@ -25,6 +25,7 @@ entity rx_path_top is
       reset_n              : in std_logic;
 		io_reset_n				: in std_logic;
 		test_ptrn_en			: in std_logic;
+		smpl_src_sel			: in std_logic;	-- 0 - RX data, 1 - smpl_fifo 
       --Mode settings
       sample_width         : in std_logic_vector(1 downto 0); --"10"-12bit, "01"-14bit, "00"-16bit;
       mode			         : in std_logic; -- JESD207: 1; TRXIQ: 0
@@ -39,6 +40,9 @@ entity rx_path_top is
 		DIQ_h						: out std_logic_vector(iq_width downto 0);
 		DIQ_l						: out std_logic_vector(iq_width downto 0);
       --samples
+		smpl_fifo_wrreq		: in std_logic;
+		smpl_fifo_data			: in std_logic_vector(iq_width*4-1 downto 0);
+		smpl_fifo_wfull	   : out std_logic;
       smpl_fifo_wrreq_out  : out std_logic;
       --Packet fifo ports 
       pct_fifo_wusedw      : in std_logic_vector(pct_buff_wrusedw_w-1 downto 0);
@@ -78,7 +82,8 @@ signal ch_en_sync             : std_logic_vector(1 downto 0);
 signal fidm_sync              : std_logic;
 signal clr_smpl_nr_sync       : std_logic;	
 signal ld_smpl_nr_sync        : std_logic;
-signal smpl_nr_in_sync        : std_logic_vector(63 downto 0);		 
+signal smpl_nr_in_sync        : std_logic_vector(63 downto 0);
+signal smpl_src_sel_sync				: std_logic;		 
 
 
 --inst0 
@@ -101,6 +106,12 @@ type my_array is array (0 to 5) of std_logic_vector(63 downto 0);
 signal delay_chain   : my_array;
 
 signal tx_pct_loss_detect     : std_logic;
+
+signal smpl_fifo_wrreq_mux		: std_logic;
+signal smpl_fifo_data_mux		: std_logic_vector(iq_width*4-1 downto 0);
+
+signal smpl_fifo_wrreq_mux_reg: std_logic;
+signal smpl_fifo_data_mux_reg	: std_logic_vector(iq_width*4-1 downto 0);
 
 
 
@@ -144,6 +155,9 @@ port map(clk, '1', test_ptrn_en, test_ptrn_en_sync);
 
 sync_reg11 : entity work.sync_reg 
 port map(clk, '1', io_reset_n, io_reset_n_sync);
+
+sync_reg12 : entity work.sync_reg 
+port map(clk, '1', smpl_src_sel, smpl_src_sel_sync);
 
 
 
@@ -196,7 +210,28 @@ diq2fifo_inst0 : entity work.diq2fifo
         );
         
         
-smpl_fifo_wrreq_out <= inst0_fifo_wrreq; 
+smpl_fifo_mux : process(clk, reset_n)
+begin
+   if reset_n = '0' then 
+      smpl_fifo_wrreq_mux <= '0';
+      smpl_fifo_data_mux <= (others => '0');
+   elsif (clk'event AND clk='1') then 
+      if smpl_src_sel_sync = '0' then 
+         smpl_fifo_wrreq_mux <= inst0_fifo_wrreq;
+         smpl_fifo_data_mux <= inst0_fifo_wdata;
+      else 
+         smpl_fifo_wrreq_mux <= smpl_fifo_wrreq;
+         smpl_fifo_data_mux <= smpl_fifo_data;
+      end if;
+   end if;
+end process;
+
+smpl_fifo_wrreq_out <= smpl_fifo_wrreq_mux;
+
+
+
+
+
         
                
 -- ----------------------------------------------------------------------------
@@ -216,8 +251,8 @@ smpl_fifo_inst1 : entity work.fifo_inst
       --input ports 
       reset_n       => reset_n_sync,
       wrclk         => clk,
-      wrreq         => inst0_fifo_wrreq,
-      data          => inst0_fifo_wdata,
+      wrreq         => smpl_fifo_wrreq_mux,
+      data          => smpl_fifo_data_mux,
       wrfull        => inst1_wrfull,
 		wrempty		  => open,
       wrusedw       => open,
@@ -227,12 +262,29 @@ smpl_fifo_inst1 : entity work.fifo_inst
       rdempty       => open,
       rdusedw       => inst1_rdusedw  
         );
+        
+   smpl_fifo_wfull <= inst1_wrfull;
  
---samples are placed to MSb LSb ar filled with zeros 
-inst2_smpl_buff_rddata <=  inst1_q(47 downto 36) & "0000" & 
-                           inst1_q(35 downto 24) & "0000" & 
-                           inst1_q(23 downto 12) & "0000" & 
-                           inst1_q(11 downto 0) & "0000";
+--samples are placed to MSb LSb are filled with zeros 
+-- inst2_smpl_buff_rddata <=  inst1_q(47 downto 36) & "0000" & 
+                           -- inst1_q(35 downto 24) & "0000" & 
+                           -- inst1_q(23 downto 12) & "0000" & 
+                           -- inst1_q(11 downto 0) & "0000";
+ 
+ 
+inst2_smpl_buff_rddata(63 downto 64-iq_width) <= inst1_q(iq_width*4-1 downto iq_width*3);
+inst2_smpl_buff_rddata(64-iq_width-1 downto 48) <= (others=>'0');
+
+inst2_smpl_buff_rddata(47 downto 48-iq_width) <= inst1_q(iq_width*3-1 downto iq_width*2);
+inst2_smpl_buff_rddata(48-iq_width-1 downto 32) <= (others=>'0');
+
+inst2_smpl_buff_rddata(31 downto 32-iq_width) <= inst1_q(iq_width*2-1 downto iq_width);
+inst2_smpl_buff_rddata(32-iq_width-1 downto 16) <= (others=>'0');
+
+inst2_smpl_buff_rddata(15 downto 16-iq_width) <= inst1_q(iq_width-1 downto 0);
+inst2_smpl_buff_rddata(16-iq_width-1 downto 0) <= (others=>'0');
+                           
+                           
 -------------------------------------------------------------------------------
 -- detect cleared packets in tx path
 -------------------------------------------------------------------------------   
