@@ -1214,6 +1214,10 @@ set_location_assignment PIN_L20 -to FPGA_SPI0_MISO_ADC
 set_instance_assignment -name IO_STANDARD "1.8 V" -to FPGA_SPI0_MISO_ADC
 set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to FPGA_SPI0_MISO_LMS2
 set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to FPGA_SPI0_MISO_LMS1
+set_global_assignment -name VHDL_FILE src/adc/synth/adc_top.vhd
+set_global_assignment -name VHDL_FILE src/adc/synth/ADS4246_check.vhd
+set_global_assignment -name VHDL_FILE src/adc/synth/ADS4246_ch.vhd
+set_global_assignment -name VHDL_FILE src/adc/synth/ADS4246.vhd
 set_global_assignment -name VHDL_FILE src/tx_path_top/packets2data/synth/packets2data_top.vhd
 set_global_assignment -name VHDL_FILE src/tx_path_top/packets2data/synth/packets2data.vhd
 set_global_assignment -name VHDL_FILE src/tx_path_top/packets2data/synth/p2d_wr_fsm.vhd
@@ -1370,7 +1374,6 @@ set_global_assignment -name SIGNALTAP_FILE signal_tap/wfm_load_test.stp
 set_global_assignment -name SIGNALTAP_FILE signal_tap/wfm_to_ram_test.stp
 set_global_assignment -name QIP_FILE ip/fpga_pll/fpga_pll.qip
 set_global_assignment -name SIP_FILE ip/fpga_pll/fpga_pll.sip
-set_global_assignment -name VHDL_FILE src/adc/ADS4246_check.vhd
 set_global_assignment -name SIGNALTAP_FILE signal_tap/adc_test.stp
 set_global_assignment -name QIP_FILE ip/lpm_const/lpm_const.qip
 set_global_assignment -name QIP_FILE ip/lpm_const/lmp_const40265318.qip
@@ -1389,8 +1392,6 @@ set_global_assignment -name QIP_FILE ip/lb_fifo/lb_fifo.qip
 set_global_assignment -name VHDL_FILE src/general/sign_to_uns_std.vhd
 set_global_assignment -name VHDL_FILE src/spi/adpdcfg.vhd
 set_global_assignment -name QIP_FILE ip/ddo/ddro14.qip
-set_global_assignment -name VHDL_FILE src/adc/ADS4246_ch.vhd
-set_global_assignment -name VHDL_FILE src/adc/ADS4246.vhd
 set_global_assignment -name QIP_FILE ip/lpm_mux/lpm_mux14.qip
 set_global_assignment -name QIP_FILE ip/lpm_mux/lpm_mux18.qip
 set_global_assignment -name QIP_FILE ip/lms_dlb_fifo/lms_dlb_fifo.qip
