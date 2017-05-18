@@ -65,10 +65,10 @@ entity wfm_player_x2_top is
 
 		wfm0_iq_clk				: in std_logic;
 		wfm0_xen					: in std_logic; -- wfm 0 data read enable
-		wfm0_Aiq_h				: out std_logic_vector(15 downto 0);
-		wfm0_Aiq_l				: out std_logic_vector(15 downto 0);
-		wfm0_Biq_h				: out std_logic_vector(15 downto 0);
-		wfm0_Biq_l				: out std_logic_vector(15 downto 0);
+		wfm0_Aiq_h				: out std_logic_vector(wfm0_iq_width downto 0);
+		wfm0_Aiq_l				: out std_logic_vector(wfm0_iq_width downto 0);
+		wfm0_Biq_h				: out std_logic_vector(wfm0_iq_width downto 0);
+		wfm0_Biq_l				: out std_logic_vector(wfm0_iq_width downto 0);
 --		wfm0_dd_iq_h_uns_0	: out std_logic_vector(15 downto 0);
 --		wfm0_dd_iq_l_uns_0	: out std_logic_vector(15 downto 0);
 
@@ -89,10 +89,10 @@ entity wfm_player_x2_top is
 
 		wfm1_iq_clk				: in std_logic;
 		wfm1_xen					: in std_logic; --wfm 1 data read enable
-		wfm1_Aiq_h				: out std_logic_vector(15 downto 0);
-		wfm1_Aiq_l				: out std_logic_vector(15 downto 0);
-		wfm1_Biq_h				: out std_logic_vector(15 downto 0);
-		wfm1_Biq_l				: out std_logic_vector(15 downto 0);
+		wfm1_Aiq_h				: out std_logic_vector(wfm1_iq_width downto 0);
+		wfm1_Aiq_l				: out std_logic_vector(wfm1_iq_width downto 0);
+		wfm1_Biq_h				: out std_logic_vector(wfm1_iq_width downto 0);
+		wfm1_Biq_l				: out std_logic_vector(wfm1_iq_width downto 0);
 --		wfm1_dd_iq_h_uns		: out std_logic_vector(15 downto 0);
 --		wfm1_dd_iq_l_uns		: out std_logic_vector(15 downto 0);
 
@@ -329,7 +329,8 @@ component decompress_top is
 			data_width 	: integer := 32;
 			data_rwidth	: integer:= 32;
 			fifo_rsize	: integer := 9;
-			fifo_wsize	: integer := 10);
+			fifo_wsize	: integer := 10;
+         iq_width		: integer := 16);
   port (
 			--input ports 
 			wclk          	: in std_logic;
@@ -344,10 +345,10 @@ component decompress_top is
 			fr_start  		: in std_logic;
 			ch_en				: in std_logic_vector(1 downto 0);
 			mimo_en			: in std_logic;
-			A_diq_h			: out std_logic_vector(15 downto 0);				
-			A_diq_l			: out std_logic_vector(15 downto 0);
-			B_diq_h			: out std_logic_vector(15 downto 0);				
-			B_diq_l			: out std_logic_vector(15 downto 0)
+			A_diq_h			: out std_logic_vector(iq_width downto 0);				
+			A_diq_l			: out std_logic_vector(iq_width downto 0);
+			B_diq_h			: out std_logic_vector(iq_width downto 0);				
+			B_diq_l			: out std_logic_vector(iq_width downto 0)
         );
 end component;
 
@@ -631,7 +632,8 @@ decompress_top_inst4 : decompress_top
 			data_width 	=> lcl_bus_size,
 			data_rwidth	=> 64,
 			fifo_rsize	=> (outfifo_size_0 - 2),
-			fifo_wsize	=> outfifo_size_0
+			fifo_wsize	=> outfifo_size_0,
+         iq_width    => wfm0_iq_width
 			)
   port map (
 			--input ports 
@@ -647,8 +649,8 @@ decompress_top_inst4 : decompress_top
 			fr_start  		=> wfm0_fr_start,
 			ch_en				=> wfm0_ch_en,
 			mimo_en			=> wfm0_mimo_en,
-			A_diq_h			=> wfm0_Aiq_l,
-			A_diq_l			=> wfm0_Aiq_h,
+			A_diq_h			=> wfm0_Aiq_h,
+			A_diq_l			=> wfm0_Aiq_l,
 			B_diq_h			=> wfm0_Biq_h,
 			B_diq_l			=> wfm0_Biq_l 
         );
@@ -674,7 +676,8 @@ decompress_top_inst5 : decompress_top
 			data_width 	=> lcl_bus_size,
 			data_rwidth	=> 64,
 			fifo_rsize	=> (outfifo_size_1 - 2),
-			fifo_wsize	=> outfifo_size_1
+			fifo_wsize	=> outfifo_size_1,
+         iq_width    => wfm1_iq_width
 			)
   port map (
 			--input ports 
@@ -690,8 +693,8 @@ decompress_top_inst5 : decompress_top
 			fr_start  		=> wfm1_fr_start,
 			ch_en				=> wfm1_ch_en,
 			mimo_en			=> wfm1_mimo_en,
-			A_diq_h			=> wfm1_Aiq_l,
-			A_diq_l			=> wfm1_Aiq_h,
+			A_diq_h			=> wfm1_Aiq_h,
+			A_diq_l			=> wfm1_Aiq_l,
 			B_diq_h			=> wfm1_Biq_h,
 			B_diq_l			=> wfm1_Biq_l 
         );
