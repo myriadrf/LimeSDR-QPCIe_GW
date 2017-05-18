@@ -423,7 +423,7 @@ avmm_arb_top_inst1 : avmm_arb_top
 		rcmd_wr				=> rcmd_wr_1,
 		rcmd_brst_en		=> rcmd_brst_en_1,
 		
-		outbuf_wrusedw		=> outbuf_wrusedw_0,
+		outbuf_wrusedw		=> outbuf_wrusedw_1,
 		
 		local_ready			=> inst4_avl_ready_1,
 		local_addr			=> inst1_local_addr,
