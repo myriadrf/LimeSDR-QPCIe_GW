@@ -50,6 +50,10 @@ signal pll_inclk_global          : std_logic;
 
 signal c0_global                 : std_logic;
 signal c1_global                 : std_logic;
+
+attribute keep : boolean;
+attribute keep of c0_global      : signal is true;
+attribute keep of c1_global      : signal is true;
       
 signal rcnfig_en_sync            : std_logic;
 signal rcnfig_data_sync          : std_logic_vector(143 downto 0);
@@ -218,19 +222,26 @@ PORT MAP (
 -- ----------------------------------------------------------------------------
 -- Clock control buffers 
 -- ----------------------------------------------------------------------------
-clkctrl_c5_inst3 : clkctrl_c5
-	port map(
-		inclk  => c0_mux,
-		ena    => clk_ena(0),
-		outclk => c0_global
-	);
+--clkctrl_c5_inst3 : clkctrl_c5
+--	port map(
+--		inclk  => c0_mux,
+--		ena    => clk_ena(0),
+--		outclk => c0_global
+--	);
+
+--c0_global <= c0_mux;
+
+c0_global <= inst1_outclk_0;
   
-clkctrl_c5_inst4 : clkctrl_c5
-	port map(
-		inclk  => c1_mux,
-		ena    => clk_ena(1),
-		outclk => c1_global
-	);
+--clkctrl_c5_inst4 : clkctrl_c5
+--	port map(
+--		inclk  => c1_mux,
+--		ena    => clk_ena(1),
+--		outclk => c1_global
+--	);
+
+--c1_global <= c1_mux;
+c1_global <= inst1_outclk_1;
 
 -- ----------------------------------------------------------------------------
 -- To output ports

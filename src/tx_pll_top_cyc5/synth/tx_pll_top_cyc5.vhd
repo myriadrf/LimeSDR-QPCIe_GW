@@ -12,6 +12,8 @@ use ieee.numeric_std.all;
 LIBRARY altera_mf;
 USE altera_mf.all;
 USE altera_mf.altera_mf_components.all;
+library altera; 
+use altera.altera_primitives_components.all;
 
 ----------------------------------------------------------------------------
 -- Entity declaration
@@ -50,7 +52,7 @@ signal pll_inclk_global          : std_logic;
 
 signal c0_global                 : std_logic;
 signal c1_global                 : std_logic;
-      
+  
 signal rcnfig_en_sync            : std_logic;
 signal rcnfig_data_sync          : std_logic_vector(143 downto 0);
 
@@ -74,6 +76,10 @@ signal inst2_dataout             : std_logic_vector(0 downto 0);
 
 signal drct_c0_dly_chain         : std_logic_vector(drct_c0_ndly-1 downto 0);
 signal drct_c1_dly_chain         : std_logic_vector(drct_c1_ndly-1 downto 0);
+
+attribute keep : boolean;
+attribute keep of drct_c0_dly_chain      : signal is true;
+attribute keep of drct_c1_dly_chain      : signal is true;
 
 signal c0_mux, c1_mux            : std_logic;
 signal locked_mux                : std_logic;
@@ -218,19 +224,38 @@ PORT MAP (
 -- ----------------------------------------------------------------------------
 -- Clock control buffers 
 -- ----------------------------------------------------------------------------
-clkctrl_c5_inst3 : clkctrl_c5
-	port map(
-		inclk  => c0_mux,
-		ena    => clk_ena(0),
-		outclk => c0_global
-	);
+--clkctrl_c5_inst3 : clkctrl_c5
+--	port map(
+--		inclk  => c0_mux,
+--		ena    => clk_ena(0),
+--		outclk => c0_global
+--	);
+
+--	global_buff0 : GLOBAL
+--	port map (
+--               a_in => c0_mux, 
+--               a_out => c0_global
+--            );
+
+--c0_global <= c0_mux;
+c0_global <= inst1_outclk_0;
+
   
-clkctrl_c5_inst4 : clkctrl_c5
-	port map(
-		inclk  => c1_mux,
-		ena    => clk_ena(1),
-		outclk => c1_global
-	);
+--clkctrl_c5_inst4 : clkctrl_c5
+--	port map(
+--		inclk  => c1_mux,
+--		ena    => clk_ena(1),
+--		outclk => c1_global
+--	);
+
+--	global_buff1 : GLOBAL
+--	port map (
+--               a_in => c1_mux, 
+--               a_out => c1_global
+--            );
+
+--c1_global <= c1_mux;
+c1_global <= inst1_outclk_1;
 
 -- ----------------------------------------------------------------------------
 -- To output ports
