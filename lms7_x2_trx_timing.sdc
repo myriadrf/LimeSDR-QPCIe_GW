@@ -90,11 +90,6 @@ create_generated_clock 	-name NIOS_DACSPI1_SCLK \
 								-source [get_ports {CLK100_FPGA}] \
 [get_registers {nios_cpu_top:inst175|nios_cpu:u0|nios_cpu_dac_spi1:dac_spi1|SCLK_reg}]
 
-#Read periphery constraints files
-read_sdc LMS1_timing.sdc
-read_sdc LMS2_timing.sdc
-read_sdc ADS4246_timing.sdc
-read_sdc DAC5672_timing.sdc
 
 #====================Other clock constraints====================================
 # clock uncertainty is already derived in other sdc files
