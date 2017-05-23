@@ -22,6 +22,7 @@ entity adc_top is
 
       clk               : in std_logic;
       reset_n           : in std_logic;
+      en                : in std_logic;
       ch_a              : in std_logic_vector(data_width-1 downto 0); 	--Input to DDR cells from pins
       ch_b              : in std_logic_vector(data_width-1 downto 0); 	--Input to DDR cells from pins
       
@@ -49,8 +50,13 @@ signal reg_chain        : reg_chain_type;
 
 signal valid_cnt        : unsigned(7 downto 0);
 signal valid_cnt_ovrfl  : std_logic;
+
+signal reset_n_sync     : std_logic;
   
 begin
+
+sync_reg0 : entity work.sync_reg 
+port map(clk, reset_n, en, reset_n_sync);
    
 -- ----------------------------------------------------------------------------
 -- ADC instance
@@ -61,7 +67,7 @@ begin
    )
    port map(
       clk         => clk,
-      reset_n     => reset_n,
+      reset_n     => reset_n_sync,
       ch_a        => ch_a,
       ch_b        => ch_b,
       data_ch_a   => inst0_data_ch_a,
@@ -72,9 +78,9 @@ begin
 -- ----------------------------------------------------------------------------
 -- Chain of registers for storing samples
 -- ----------------------------------------------------------------------------
-process(clk, reset_n)
+process(clk, reset_n_sync)
 begin
-   if reset_n = '0' then 
+   if reset_n_sync = '0' then 
       reg_chain <= (others=>(others=>'0'));
    elsif (clk'event AND clk='1') then 
       for i in 0 to smpls_to_capture/2-1 loop
@@ -94,13 +100,13 @@ end process;
 process(reg_chain)
    begin
       for i in 0 to smpls_to_capture/2-1 loop
-         data_ch_ab(i*data_width*4 + data_width*4-1 downto i*data_width*4) <= reg_chain(i);
+         data_ch_ab(i*data_width*4 + data_width*4-1 downto i*data_width*4) <= reg_chain(smpls_to_capture/2-1-i);
       end loop;
 end process;
 
-process(clk, reset_n)
+process(clk, reset_n_sync)
 begin
-   if reset_n = '0' then 
+   if reset_n_sync = '0' then 
       valid_cnt <= (others=>'0');
       data_ch_ab_valid <= '0';
       valid_cnt_ovrfl <= '0';

@@ -26,12 +26,20 @@ architecture tb_behave of adc_top_tb is
    signal clk0,clk1        : std_logic;
    signal reset_n          : std_logic;
    
-   signal data_cnt         : unsigned(13 downto 0);
-   signal data_cnt_vect    : std_logic_vector(13 downto 0);
-   signal adc_data_even    : std_logic_vector(6 downto 0);
-   signal adc_data_odd     : std_logic_vector(6 downto 0);
+   signal data_cnt_ch_a       : unsigned(13 downto 0);
+   signal data_cnt_vect_ch_a  : std_logic_vector(13 downto 0);
+   signal adc_data_even_ch_a  : std_logic_vector(6 downto 0);
+   signal adc_data_odd_ch_a   : std_logic_vector(6 downto 0);
 
-   signal adc_data_ddr     : std_logic_vector(6 downto 0);
+   signal adc_data_ddr_ch_a   : std_logic_vector(6 downto 0);
+   
+   
+   signal data_cnt_ch_b       : unsigned(13 downto 0);
+   signal data_cnt_vect_ch_b  : std_logic_vector(13 downto 0);
+   signal adc_data_even_ch_b  : std_logic_vector(6 downto 0);
+   signal adc_data_odd_ch_b   : std_logic_vector(6 downto 0);
+
+   signal adc_data_ddr_ch_b   : std_logic_vector(6 downto 0);
    
    
 
@@ -61,33 +69,66 @@ begin
 process(clk0, reset_n)
    begin
       if reset_n = '0' then 
-         data_cnt <= (others=>'0');
+         data_cnt_ch_a <= (others=>'0');
       elsif (clk0'event AND clk0='0') then 
-         data_cnt <= data_cnt+1;
+         data_cnt_ch_a <= data_cnt_ch_a+2;
       end if;
    end process;
    
    
-   data_cnt_vect <= std_logic_vector(data_cnt);
+   data_cnt_vect_ch_a <= std_logic_vector(data_cnt_ch_a);
    
    --even bits
-   adc_data_even <=  data_cnt_vect(12) & 
-                  data_cnt_vect(10) & 
-                  data_cnt_vect(8) &
-                  data_cnt_vect(6) &
-                  data_cnt_vect(4) &
-                  data_cnt_vect(2) &
-                  data_cnt_vect(0);
+   adc_data_even_ch_a <=   data_cnt_vect_ch_a(12) & 
+                           data_cnt_vect_ch_a(10) & 
+                           data_cnt_vect_ch_a(8) &
+                           data_cnt_vect_ch_a(6) &
+                           data_cnt_vect_ch_a(4) &
+                           data_cnt_vect_ch_a(2) &
+                           data_cnt_vect_ch_a(0);
    --odd bits               
-   adc_data_odd <=  data_cnt_vect(13) & 
-                  data_cnt_vect(11) & 
-                  data_cnt_vect(9) &
-                  data_cnt_vect(7) &
-                  data_cnt_vect(5) &
-                  data_cnt_vect(3) &
-                  data_cnt_vect(1);
+   adc_data_odd_ch_a <=    data_cnt_vect_ch_a(13) & 
+                           data_cnt_vect_ch_a(11) & 
+                           data_cnt_vect_ch_a(9) &
+                           data_cnt_vect_ch_a(7) &
+                           data_cnt_vect_ch_a(5) &
+                           data_cnt_vect_ch_a(3) &
+                           data_cnt_vect_ch_a(1);
                   
-   adc_data_ddr <= adc_data_odd when clk0 = '1' else adc_data_even;
+   adc_data_ddr_ch_a <= adc_data_odd_ch_a when clk0 = '1' else adc_data_even_ch_a;
+   
+   
+   
+   process(clk0, reset_n)
+   begin
+      if reset_n = '0' then 
+         data_cnt_ch_b <= "00000000000001";
+      elsif (clk0'event AND clk0='0') then 
+         data_cnt_ch_b <= data_cnt_ch_b+2;
+      end if;
+   end process;
+   
+   
+   data_cnt_vect_ch_b <= std_logic_vector(data_cnt_ch_b);
+   
+   --even bits
+   adc_data_even_ch_b <=   data_cnt_vect_ch_b(12) & 
+                           data_cnt_vect_ch_b(10) & 
+                           data_cnt_vect_ch_b(8) &
+                           data_cnt_vect_ch_b(6) &
+                           data_cnt_vect_ch_b(4) &
+                           data_cnt_vect_ch_b(2) &
+                           data_cnt_vect_ch_b(0);
+   --odd bits               
+   adc_data_odd_ch_b <=    data_cnt_vect_ch_b(13) & 
+                           data_cnt_vect_ch_b(11) & 
+                           data_cnt_vect_ch_b(9) &
+                           data_cnt_vect_ch_b(7) &
+                           data_cnt_vect_ch_b(5) &
+                           data_cnt_vect_ch_b(3) &
+                           data_cnt_vect_ch_b(1);
+                  
+   adc_data_ddr_ch_b <= adc_data_odd_ch_b when clk0 = '1' else adc_data_even_ch_b;
    
    
    
@@ -101,8 +142,9 @@ process(clk0, reset_n)
 
       clk               => clk1,
       reset_n           => reset_n,
-      ch_a              => adc_data_ddr,
-      ch_b              => adc_data_ddr,
+      en                => '1', 
+      ch_a              => adc_data_ddr_ch_a,
+      ch_b              => adc_data_ddr_ch_b,
 
       data_ch_a         => open,
       data_ch_b         => open,
