@@ -221,12 +221,12 @@ void init_ADC()
 
 	// 0xDB
 	wr_buf[0] = 0xDB;	//Address
-	wr_buf[1] = 0x00;	//Data
+	wr_buf[1] = 0x01;	//Data (0x01 - Low Speed MODE CH B enabled, 0x00 - Low Speed MODE CH B disabled)
 	spirez = alt_avalon_spi_command(FPGA_SPI0_BASE, SPI_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
 
 	// 0xEF
 	wr_buf[0] = 0xEF;	//Address
-	wr_buf[1] = 0x00;	//Data
+	wr_buf[1] = 0x10;	//Data (0x10 - Low Speed MODE enabled, 0x00 - Low Speed MODE disabled)
 	spirez = alt_avalon_spi_command(FPGA_SPI0_BASE, SPI_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
 
 	// 0xF1
@@ -236,7 +236,7 @@ void init_ADC()
 
 	// 0xF2
 	wr_buf[0] = 0xF2;	//Address
-	wr_buf[1] = 0x00;	//Data
+	wr_buf[1] = 0x08;	//Data (0x08 - Low Speed MODE CH A enabled, 0x00 - Low Speed MODE CH A disabled)
 	spirez = alt_avalon_spi_command(FPGA_SPI0_BASE, SPI_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
 
 }
