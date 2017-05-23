@@ -32,7 +32,7 @@ puts {
 
 #Add files to compile, follow compilation order(last file - top module)
 set library_file_list {
-                           source_library { 
+                           source_library { ../general/sync_reg.vhd
                                             synth/ADS4246_ch.vhd
                                             synth/ADS4246.vhd
                                             synth/adc_top.vhd
