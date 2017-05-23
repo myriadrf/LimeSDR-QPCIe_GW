@@ -133,8 +133,8 @@ begin
 tx_pll_top_cyc5_inst0 : entity work.tx_pll_top_cyc5
    generic map(
       intended_device_family  => dev_family,
-      drct_c0_ndly            => 1,
-      drct_c1_ndly            => 2
+      drct_c0_ndly            => 2,
+      drct_c1_ndly            => 3
    )
    port map(
    --PLL input 
@@ -160,8 +160,8 @@ tx_pll_top_cyc5_inst0 : entity work.tx_pll_top_cyc5
 rx_pll_top_cyc5_inst1 : entity work.rx_pll_top_cyc5
    generic map(
       intended_device_family  => dev_family,
-      drct_c0_ndly            => 1,
-      drct_c1_ndly            => 2
+      drct_c0_ndly            => 2,
+      drct_c1_ndly            => 3
    )
    port map(
    --PLL input 

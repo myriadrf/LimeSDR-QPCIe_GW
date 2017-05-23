@@ -210,9 +210,9 @@ diq2fifo_inst0 : entity work.diq2fifo
         );
         
         
-smpl_fifo_mux : process(clk, reset_n)
+smpl_fifo_mux : process(clk, reset_n_sync)
 begin
-   if reset_n = '0' then 
+   if reset_n_sync = '0' then 
       smpl_fifo_wrreq_mux <= '0';
       smpl_fifo_data_mux <= (others => '0');
    elsif (clk'event AND clk='1') then 
@@ -288,9 +288,9 @@ inst2_smpl_buff_rddata(16-iq_width-1 downto 0) <= (others=>'0');
 -------------------------------------------------------------------------------
 -- detect cleared packets in tx path
 -------------------------------------------------------------------------------   
-process(reset_n, clk)
+process(reset_n_sync, clk)
     begin
-      if reset_n='0' then
+      if reset_n_sync='0' then
           tx_pct_loss_detect<='0';
  	    elsif (clk'event and clk = '1') then
  	        if tx_pct_loss_sync='1' then 
@@ -375,7 +375,7 @@ smpl_cnt_inst4 : entity work.smpl_cnt
       sclr        => clr_smpl_nr_sync,
       sload       => ld_smpl_nr_sync,
       data        => smpl_nr_in_sync,
-      cnt_en      => inst0_fifo_wrreq,
+      cnt_en      => smpl_fifo_wrreq_mux,
       q           => smpl_nr_cnt        
         );
         
@@ -383,9 +383,9 @@ smpl_cnt_inst4 : entity work.smpl_cnt
 -- There is 6 clock cycle latency from smpl_fifo_inst1 to packet formation
 -- and smpl_cnt has to be delayed 6 cycles
 -- ----------------------------------------------------------------------------        
-delay_registers : process(clk, reset_n)
+delay_registers : process(clk, reset_n_sync)
 begin
-   if reset_n = '0' then 
+   if reset_n_sync = '0' then 
       delay_chain <= (others=>(others=>'0'));
    elsif (clk'event AND clk='1') then 
       for i in 0 to 5 loop
