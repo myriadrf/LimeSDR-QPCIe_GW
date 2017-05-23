@@ -31,14 +31,14 @@ set LMS7_IN_MIN_DELAY [expr $LMS1_LMS7_Th - $LMS1_MCLK2_period/2]
 create_clock 	-period $LMS1_MCLK1_period \
 					-name LMS1_MCLK1			[get_ports LMS1_MCLK1] 
 
-create_clock 	-period $LMS1_MCLK1_period_5MHz \
-					-name LMS1_MCLK1_5MHz	[get_ports LMS1_MCLK1] -add
+#create_clock 	-period $LMS1_MCLK1_period_5MHz \
+#					-name LMS1_MCLK1_5MHz	[get_ports LMS1_MCLK1] -add
 					
 create_clock 	-period $LMS1_MCLK2_period \
 					-name LMS1_MCLK2 			[get_ports LMS1_MCLK2]
 					
-create_clock 	-period $LMS1_MCLK2_period_5MHz \
-					-name LMS1_MCLK2_5MHz 	[get_ports LMS1_MCLK2] -add
+#create_clock 	-period $LMS1_MCLK2_period_5MHz \
+#					-name LMS1_MCLK2_5MHz 	[get_ports LMS1_MCLK2] -add
 					
 					
 
@@ -47,14 +47,19 @@ create_clock 	-period $LMS1_MCLK2_period_5MHz \
 #-----------------------------------------------------------------------
 create_clock -name LMS1_MCLK2_VIRT			-period $LMS1_MCLK2_period
 
-create_clock -name LMS1_MCLK2_VIRT_5MHz	-period $LMS1_MCLK2_period_5MHz
+#create_clock -name LMS1_MCLK2_VIRT_5MHz	-period $LMS1_MCLK2_period_5MHz
 
 #-----------------------------------------------------------------------
 #Generated clocks
 #-----------------------------------------------------------------------
-#LMS1 TXPLL
-create_generated_clock 	-name LMS1_TXPLL_VCOPH \
+#LMS1 TXPLL Path
+create_generated_clock 	-name LMS1_MCLK1_GLOBAL \
 								-master [get_clocks LMS1_MCLK1] \
+                        -source [get_pins -compatibility_mode *inst120*|tx_pll*|clkctrl*|inclk*] \
+                        [get_pins -compatibility_mode *inst120*|tx_pll*|clkctrl*|outclk*]
+                        
+create_generated_clock 	-name LMS1_TXPLL_VCOPH \
+								-master [get_clocks LMS1_MCLK1_GLOBAL] \
 								-source  [get_pins -compatibility_mode *inst120|tx*|refclkin*]\
 								-divide_by 1 -multiply_by 2 \
 								[get_pins -compatibility_mode *inst120*|tx_pll*|*vcoph[0]*]
@@ -74,15 +79,34 @@ create_generated_clock 	-name LMS1_FCLK1_PLL \
 								-master [get_clocks LMS1_TXPLL_C0] \
 								-source [get_pins -compatibility_mode *inst120|*tx*|ALTDDIO*|dataout] \
 								[get_ports LMS1_FCLK1]
-								
-create_generated_clock 	-name LMS1_FCLK1_DRCT \
-								-master [get_clocks LMS1_MCLK1_5MHz] \
-								-source [get_pins -compatibility_mode *inst120|*tx*|ALTDDIO*|dataout] \
-								[get_ports LMS1_FCLK1] -add								
+                        
+                        
+#LMS1 TX Direct clock Path                        
+#create_generated_clock 	-name LMS1_MCLK1_GLOBAL_5MHz \
+#								-master [get_clocks LMS1_MCLK1_5MHz] \
+#                        -source [get_pins -compatibility_mode *inst120*|tx_pll*|clkctrl*|inclk*] \
+#                        [get_pins -compatibility_mode *inst120*|tx_pll*|clkctrl*|outclk*] -add
+#                        
+#create_generated_clock 	-name LMS1_MCLK1_MUX_5MHz \
+#                        -master [get_clocks LMS1_MCLK1_GLOBAL_5MHz] \
+#                        -source [get_pins -compatibility_mode *inst120*|*tx_pll*|c0_mux*|dataa] \
+#                        [get_pins -compatibility_mode *inst120*|*tx_pll*|c0_mux*|combout]                        
+#
+#								
+#create_generated_clock 	-name LMS1_FCLK1_DRCT \
+#								-master [get_clocks LMS1_MCLK1_GLOBAL_5MHz] \
+#								-source [get_pins -compatibility_mode *inst120|*tx*|ALTDDIO*|dataout] \
+#								[get_ports LMS1_FCLK1] -add								
 
 #LMS1 RXPLL
-create_generated_clock 	-name LMS1_RXPLL_VCOPH \
+
+create_generated_clock 	-name LMS1_MCLK2_GLOBAL \
 								-master [get_clocks LMS1_MCLK2] \
+                        -source [get_pins -compatibility_mode *inst120*|rx_pll*|clkctrl*|inclk*] \
+                        [get_pins -compatibility_mode *inst120*|rx_pll*|clkctrl*|outclk*]
+                        
+create_generated_clock 	-name LMS1_RXPLL_VCOPH \
+								-master [get_clocks LMS1_MCLK2_GLOBAL] \
 								-source  [get_pins -compatibility_mode *inst120|rx*|*refclkin*]\
 								-divide_by 1 -multiply_by 2 \
 								[get_pins -compatibility_mode *inst120|rx*|*vcoph[0]*]
@@ -103,10 +127,10 @@ create_generated_clock 	-name LMS1_FCLK2_PLL \
 								-source [get_pins -compatibility_mode *inst120|rx*|ALTDDIO*|dataout] \
 								[get_ports LMS1_FCLK2]
 								
-create_generated_clock 	-name LMS1_FCLK2_DRCT \
-								-master [get_clocks LMS1_MCLK2_5MHz] \
-								-source [get_pins -compatibility_mode *inst120|rx*|ALTDDIO*|dataout] \
-								[get_ports LMS1_FCLK2] -add								
+#create_generated_clock 	-name LMS1_FCLK2_DRCT \
+#								-master [get_clocks LMS1_MCLK2_5MHz] \
+#								-source [get_pins -compatibility_mode *inst120|rx*|ALTDDIO*|dataout] \
+#								[get_ports LMS1_FCLK2] -add								
 #-----------------------------------------------------------------------
 #Input constraints
 #-----------------------------------------------------------------------
@@ -126,19 +150,19 @@ set_input_delay	-min $LMS7_IN_MIN_DELAY \
 						-clock_fall [get_ports {LMS1_DIQ2_D[*] LMS1_ENABLE_IQSEL2}] -add_delay
 						
 #LMS1 when clocked with direct clock						
-set_input_delay	-max $LMS7_IN_MAX_DELAY \
-						-clock [get_clocks LMS1_MCLK2_VIRT_5MHz] [get_ports {LMS1_DIQ2_D[*] LMS1_ENABLE_IQSEL2}] -add_delay
-						
-set_input_delay	-min $LMS7_IN_MIN_DELAY \
-						-clock [get_clocks LMS1_MCLK2_VIRT_5MHz] [get_ports {LMS1_DIQ2_D[*] LMS1_ENABLE_IQSEL2}] -add_delay
-						
-set_input_delay	-max $LMS7_IN_MAX_DELAY \
-						-clock [get_clocks LMS1_MCLK2_VIRT_5MHz] \
-						-clock_fall [get_ports {LMS1_DIQ2_D[*] LMS1_ENABLE_IQSEL2}] -add_delay
-												
-set_input_delay	-min $LMS7_IN_MIN_DELAY \
-						-clock [get_clocks LMS1_MCLK2_VIRT_5MHz] \
-						-clock_fall [get_ports {LMS1_DIQ2_D[*] LMS1_ENABLE_IQSEL2}] -add_delay
+#set_input_delay	-max $LMS7_IN_MAX_DELAY \
+#						-clock [get_clocks LMS1_MCLK2_VIRT_5MHz] [get_ports {LMS1_DIQ2_D[*] LMS1_ENABLE_IQSEL2}] -add_delay
+#						
+#set_input_delay	-min $LMS7_IN_MIN_DELAY \
+#						-clock [get_clocks LMS1_MCLK2_VIRT_5MHz] [get_ports {LMS1_DIQ2_D[*] LMS1_ENABLE_IQSEL2}] -add_delay
+#						
+#set_input_delay	-max $LMS7_IN_MAX_DELAY \
+#						-clock [get_clocks LMS1_MCLK2_VIRT_5MHz] \
+#						-clock_fall [get_ports {LMS1_DIQ2_D[*] LMS1_ENABLE_IQSEL2}] -add_delay
+#												
+#set_input_delay	-min $LMS7_IN_MIN_DELAY \
+#						-clock [get_clocks LMS1_MCLK2_VIRT_5MHz] \
+#						-clock_fall [get_ports {LMS1_DIQ2_D[*] LMS1_ENABLE_IQSEL2}] -add_delay
 						
 #-----------------------------------------------------------------------
 #Output constraints
@@ -160,19 +184,19 @@ set_output_delay	-min -$LMS1_LMS7_Th \
 						
 						
 #LMS1						
-set_output_delay	-max $LMS1_LMS7_Tsu \
-						-clock [get_clocks LMS1_FCLK1_DRCT] [get_ports {LMS1_DIQ1_D[*] LMS1_ENABLE_IQSEL1}] -add_delay
-						
-set_output_delay	-min -$LMS1_LMS7_Th \
-						-clock [get_clocks LMS1_FCLK1_DRCT] [get_ports {LMS1_DIQ1_D[*] LMS1_ENABLE_IQSEL1}]	-add_delay					
-						
-set_output_delay	-max $LMS1_LMS7_Tsu \
-						-clock [get_clocks LMS1_FCLK1_DRCT] \
-						-clock_fall [get_ports {LMS1_DIQ1_D[*] LMS1_ENABLE_IQSEL1}] -add_delay
-											
-set_output_delay	-min -$LMS1_LMS7_Th \
-						-clock [get_clocks LMS1_FCLK1_DRCT] \
-						-clock_fall [get_ports {LMS1_DIQ1_D[*] LMS1_ENABLE_IQSEL1}] -add_delay	
+#set_output_delay	-max $LMS1_LMS7_Tsu \
+#						-clock [get_clocks LMS1_FCLK1_DRCT] [get_ports {LMS1_DIQ1_D[*] LMS1_ENABLE_IQSEL1}] -add_delay
+#						
+#set_output_delay	-min -$LMS1_LMS7_Th \
+#						-clock [get_clocks LMS1_FCLK1_DRCT] [get_ports {LMS1_DIQ1_D[*] LMS1_ENABLE_IQSEL1}]	-add_delay					
+#						
+#set_output_delay	-max $LMS1_LMS7_Tsu \
+#						-clock [get_clocks LMS1_FCLK1_DRCT] \
+#						-clock_fall [get_ports {LMS1_DIQ1_D[*] LMS1_ENABLE_IQSEL1}] -add_delay
+#											
+#set_output_delay	-min -$LMS1_LMS7_Th \
+#						-clock [get_clocks LMS1_FCLK1_DRCT] \
+#						-clock_fall [get_ports {LMS1_DIQ1_D[*] LMS1_ENABLE_IQSEL1}] -add_delay	
 
 #-----------------------------------------------------------------------
 #Exceptions
@@ -193,6 +217,6 @@ set_false_path -hold -fall_from [get_clocks LMS1_MCLK2_VIRT] -fall_to \
 #Clock groups					
 #Clock groups are set in top .sdc file
 											
-#False Path between PLL output and clock output ports LMS2_FCLK1 an LMS2_FCLK2
+#False Path between PLL output and clock output ports LMS1_FCLK1 an LMS2_FCLK2
 set_false_path -to [get_ports LMS1_FCLK*]	
 
