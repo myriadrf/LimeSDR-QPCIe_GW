@@ -50,12 +50,12 @@ entity fpgacfg is
 		mimo_int_en		: out std_logic;
 		synch_dis		: out std_logic;
 		dlb_en         : out std_logic;
-		smpl_nr_clr		: out std_logic_vector(1 downto 0);
-		txpct_loss_clr	: out std_logic_vector(1 downto 0);
-		rx_en				: out std_logic_vector(1 downto 0);
-		tx_en				: out std_logic_vector(1 downto 0);
-		wfm_play			: out std_logic_vector(1 downto 0);
-		wfm_load			: out std_logic_vector(1 downto 0);
+		smpl_nr_clr		: out std_logic_vector(2 downto 0);
+		txpct_loss_clr	: out std_logic_vector(2 downto 0);
+		rx_en				: out std_logic_vector(2 downto 0);
+		tx_en				: out std_logic_vector(2 downto 0);
+		wfm_play			: out std_logic_vector(2 downto 0);
+		wfm_load			: out std_logic_vector(2 downto 0);
 		wfm0_ch_en		: out std_logic_vector(15 downto 0);
 		wfm0_smpl_width: out std_logic_vector(1 downto 0);
 		wfm1_ch_en		: out std_logic_vector(15 downto 0);
@@ -271,15 +271,15 @@ begin
 		mimo_int_en		<= mem(8) (8);
 		synch_dis		<= mem(8) (9);
 		dlb_en         <= mem(8) (10);
-		smpl_nr_clr		<= mem(9) (2) & mem(9) (0);
-		txpct_loss_clr	<= mem(9) (3) & mem(9) (1);
-		rx_en				<= mem(10) (2) & mem(10) (0);
-		tx_en				<= mem(10) (3) & mem(10) (1);
+		smpl_nr_clr		<= mem(9) (4) & mem(9) (2) & mem(9) (0);
+		txpct_loss_clr	<= mem(9) (5) & mem(9) (3) & mem(9) (1);
+		rx_en				<= mem(10) (4) & mem(10) (2) & mem(10) (0);
+		tx_en				<= mem(10) (5) & mem(10) (3) & mem(10) (1);
 		
 		wfm1_ch_en		<= mem(11) (15 downto 0);
 		wfm0_ch_en		<= mem(12) (15 downto 0);
-		wfm_play			<= mem(13) (3) & mem(13) (1);
-		wfm_load			<= mem(13) (4) & mem(13) (2);
+		wfm_play			<= mem(13) (5) & mem(13) (3) & mem(13) (1);
+		wfm_load			<= mem(13) (6) & mem(13) (4) & mem(13) (2);
 		wfm0_smpl_width<= mem(14) (1 downto 0);
 		wfm1_smpl_width<= mem(15) (1 downto 0);
 
