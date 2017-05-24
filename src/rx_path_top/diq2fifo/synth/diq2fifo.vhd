@@ -101,6 +101,9 @@ inst1_rxiq : entity work.rxiq
         );
 		  
 int2_test_data_dd	: entity work.test_data_dd
+generic map(
+   iq_width       => iq_width
+)
 port map(
 
 	clk       		=> clk,

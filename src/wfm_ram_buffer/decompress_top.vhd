@@ -88,7 +88,7 @@ signal inst4_reset_n			: std_logic;
 signal inst4_diq_h			: std_logic_vector(iq_width downto 0);
 signal inst4_diq_l			: std_logic_vector(iq_width downto 0);
 signal inst4_fifo_rdreq		: std_logic;
-signal inst4_fifo_q			: std_logic_vector(47 downto 0);
+signal inst4_fifo_q			: std_logic_vector(iq_width*4-1 downto 0);
 
 signal A_diq_h_reg			: std_logic_vector(15 downto 0);				
 signal A_diq_l_reg			: std_logic_vector(15 downto 0);
@@ -213,10 +213,10 @@ fifo_inst_inst3 : entity work.fifo_inst
         ); 
 		  
 		  
-inst4_fifo_q <=   inst3_q(63 downto 52) & 
-                  inst3_q(47 downto 36) &
-                  inst3_q(31 downto 20) & 
-                  inst3_q(15 downto 4);
+inst4_fifo_q <=   inst3_q(63 downto 64-iq_width) & 
+                  inst3_q(47 downto 48-iq_width) &
+                  inst3_q(31 downto 32-iq_width) & 
+                  inst3_q(15 downto 16-iq_width);
 	
 diq2fifo_inst4 : entity work.fifo2diq
 	generic map( 

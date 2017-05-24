@@ -82,7 +82,7 @@ signal inst0_in_pct_clr_flag        : std_logic;
 
 --inst1
 signal inst1_fifo_rdreq             : std_logic;
-signal inst1_fifo_q                 : std_logic_vector(47 downto 0);
+signal inst1_fifo_q                 : std_logic_vector(iq_width*4-1 downto 0);
 
 signal pct_loss_flg_int             : std_logic;
 
@@ -225,10 +225,10 @@ sync_fifo_rw_inst : entity work.sync_fifo_rw
 -- ----------------------------------------------------------------------------
 -- fifo2diq instance
 -- ----------------------------------------------------------------------------       
-inst1_fifo_q <=   inst0_smpl_buff_q(63 downto 52) & 
-                  inst0_smpl_buff_q(47 downto 36) &
-                  inst0_smpl_buff_q(31 downto 20) & 
-                  inst0_smpl_buff_q(15 downto 4);
+inst1_fifo_q <=   inst0_smpl_buff_q(63 downto 64-iq_width) & 
+                  inst0_smpl_buff_q(47 downto 48-iq_width) &
+                  inst0_smpl_buff_q(31 downto 32-iq_width) & 
+                  inst0_smpl_buff_q(15 downto 16-iq_width);
 
 diq2fifo_inst1 : entity work.fifo2diq
 	generic map( 
