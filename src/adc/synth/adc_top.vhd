@@ -23,6 +23,13 @@ entity adc_top is
       clk               : in std_logic;
       reset_n           : in std_logic;
       en                : in std_logic;
+      
+      sclk              : IN STD_LOGIC;
+      sdin              : IN STD_LOGIC;
+      sen               : IN STD_LOGIC;
+      memrstn           : IN STD_LOGIC;
+      sdout             : OUT STD_LOGIC;
+      
       ch_a              : in std_logic_vector(data_width-1 downto 0); 	--Input to DDR cells from pins
       ch_b              : in std_logic_vector(data_width-1 downto 0); 	--Input to DDR cells from pins
       
@@ -43,6 +50,12 @@ architecture arch of adc_top is
 --declare signals,  components here
 signal inst0_data_ch_a  : std_logic_vector (data_width*2-1 downto 0); 
 signal inst0_data_ch_b  : std_logic_vector (data_width*2-1 downto 0);
+
+--inst1 signals
+signal inst1_RXI        : std_logic_vector(17 downto 0);
+signal inst1_RXQ        : std_logic_vector(17 downto 0);
+signal inst1_RYI        : std_logic_vector (17 downto 0);
+signal inst1_RYQ        : std_logic_vector (17 downto 0);
 
 type reg_chain_type is array (0 to smpls_to_capture/2-1) of std_logic_vector(data_width*4-1 downto 0);
 
@@ -74,6 +87,28 @@ port map(clk, reset_n, en, reset_n_sync);
       data_ch_b   => inst0_data_ch_b  
         );
 
+
+inst1_RXI <= inst0_data_ch_a & "0000";
+inst1_RXQ <= inst0_data_ch_b & "0000";       
+        
+rx_chain_inst1 : entity work.rx_chain 
+	port map
+	(
+		clk         => clk,
+		nrst        => reset_n_sync,
+		sclk        => sclk,
+		sdin        => sdin,
+		sen         => sen,
+		memrstn     => memrstn,
+		HBD_ratio   => (others=>'0'),
+		RXI         => inst1_RXI,
+		RXQ         => inst1_RXQ,
+		sdout       => sdout,
+		xen         => open,
+		RYI         => inst1_RYI,
+		RYQ         => inst1_RYQ
+	);
+
         
 -- ----------------------------------------------------------------------------
 -- Chain of registers for storing samples
@@ -85,7 +120,7 @@ begin
    elsif (clk'event AND clk='1') then 
       for i in 0 to smpls_to_capture/2-1 loop
          if i = 0 then 
-            reg_chain(0) <= inst0_data_ch_a & inst0_data_ch_b;
+            reg_chain(0) <= inst1_RYI(17 downto 18-data_width*2) & inst1_RYQ(17 downto 18-data_width*2);
          else 
             reg_chain(i) <= reg_chain(i-1);
          end if;
