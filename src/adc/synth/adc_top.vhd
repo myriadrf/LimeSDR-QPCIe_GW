@@ -85,7 +85,7 @@ begin
    elsif (clk'event AND clk='1') then 
       for i in 0 to smpls_to_capture/2-1 loop
          if i = 0 then 
-            reg_chain(0) <= inst0_data_ch_b & inst0_data_ch_a;
+            reg_chain(0) <= inst0_data_ch_a & inst0_data_ch_b;
          else 
             reg_chain(i) <= reg_chain(i-1);
          end if;
