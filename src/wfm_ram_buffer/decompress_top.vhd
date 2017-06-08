@@ -37,6 +37,7 @@ entity decompress_top is
 			fr_start  		: in std_logic;
 			ch_en				: in std_logic_vector(1 downto 0);
 			mimo_en			: in std_logic;
+         intrlv_dis     : in std_logic; -- 0 - interleaved data, 1 - paralel data
 			A_diq_h			: out std_logic_vector(iq_width downto 0);				
 			A_diq_l			: out std_logic_vector(iq_width downto 0);
 			B_diq_h			: out std_logic_vector(iq_width downto 0);				
@@ -83,6 +84,7 @@ signal inst3_wrusedw_max	: std_logic_vector(fifo_wsize-3 downto 0);
 signal inst3_wrusedw_limit	: unsigned(fifo_wsize-3 downto 0);
 signal inst3_q					: std_logic_vector(63 downto 0);
 signal inst3_rdempty			: std_logic;
+signal inst3_fifo_rdreq_mux: std_logic;
 --isnt4
 signal inst4_reset_n			: std_logic;
 signal inst4_diq_h			: std_logic_vector(iq_width downto 0);
@@ -90,16 +92,23 @@ signal inst4_diq_l			: std_logic_vector(iq_width downto 0);
 signal inst4_fifo_rdreq		: std_logic;
 signal inst4_fifo_q			: std_logic_vector(iq_width*4-1 downto 0);
 
-signal A_diq_h_reg			: std_logic_vector(15 downto 0);				
-signal A_diq_l_reg			: std_logic_vector(15 downto 0);
-signal B_diq_h_reg			: std_logic_vector(15 downto 0);				
-signal B_diq_l_reg		   : std_logic_vector(15 downto 0);
+signal A_diq_h_reg			: std_logic_vector(iq_width downto 0);				
+signal A_diq_l_reg			: std_logic_vector(iq_width downto 0);
+signal B_diq_h_reg			: std_logic_vector(iq_width downto 0);				
+signal B_diq_l_reg		   : std_logic_vector(iq_width downto 0);
+
+signal intrlv_dis_sync     : std_logic;
 
 begin
 
 
 sync_reg0 : entity work.sync_reg 
 port map(rclk, '1', xen, inst4_reset_n);
+
+sync_reg1 : entity work.sync_reg 
+port map(rclk, '1', intrlv_dis, intrlv_dis_sync);
+
+
 
 isnt1_bulk_size <= x"0003" when sample_width = "10" else 
 						 x"0007" when sample_width = "01" else 
@@ -206,11 +215,13 @@ fifo_inst_inst3 : entity work.fifo_inst
 		wrempty		  => open,
       wrusedw       => inst3_wrusedw,
       rdclk 	     => rclk,
-      rdreq         => inst4_fifo_rdreq,
+      rdreq         => inst3_fifo_rdreq_mux,
       q             => inst3_q,
       rdempty       => inst3_rdempty,
       rdusedw       => open    
         ); 
+        
+  inst3_fifo_rdreq_mux <= inst4_fifo_rdreq when intrlv_dis = '0' else not inst3_rdempty;
 		  
 		  
 inst4_fifo_q <=   inst3_q(63 downto 64-iq_width) & 
@@ -241,13 +252,36 @@ diq2fifo_inst4 : entity work.fifo2diq
       fifo_q         => inst4_fifo_q
      
         ); 
+        
+        
+process(rclk, reset_n)
+begin
+   if reset_n = '0' then 
+      A_diq_h_reg <= (others=>'0');
+      A_diq_l_reg <= (others=>'0');
+      B_diq_h_reg <= (others=>'0');
+      B_diq_l_reg <= (others=>'0');
+   elsif (rclk'event AND rclk='1') then 
+      if intrlv_dis_sync = '0' then 
+         A_diq_h_reg <= inst4_diq_h;
+         A_diq_l_reg <= inst4_diq_l;
+         B_diq_h_reg <= (others=>'0');
+         B_diq_l_reg <= (others=>'0');
+      else 
+         A_diq_h_reg <= '0' & inst3_q(15 downto 16-iq_width);
+         A_diq_l_reg <= '0' & inst3_q(31 downto 32-iq_width);
+         B_diq_h_reg <= '1' & inst3_q(47 downto 48-iq_width);
+         B_diq_l_reg <= '1' & inst3_q(63 downto 64-iq_width);
+      end if;
+   end if;
+end process;        
 
 
 
-A_diq_h <= inst4_diq_h;				
-A_diq_l <= inst4_diq_l;
-B_diq_h <= (others=>'0');				
-B_diq_l <= (others=>'0');	
+A_diq_h <= A_diq_h_reg;			
+A_diq_l <= A_diq_l_reg;
+B_diq_h <= B_diq_h_reg;				
+B_diq_l <= B_diq_l_reg;	
 	
 
 end arch;   

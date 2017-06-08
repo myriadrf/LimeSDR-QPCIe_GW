@@ -32,10 +32,10 @@ puts {
 
 #Add files to compile, follow compilation order(last file - top module)
 set library_file_list {
-                           source_library { ../general/sync_reg.vhd
-                                            ../general/bus_sync_reg.vhd                                            
-                                            ../altera_inst/fifo_inst.vhd
-                                            ../altera_inst/lms7002_ddout.vhd
+                           source_library { ../../general/sync_reg.vhd
+                                            ../../general/bus_sync_reg.vhd                                            
+                                            ../../altera_inst/fifo_inst.vhd
+                                            ../../altera_inst/lms7002_ddout.vhd
                                             synth/txiq.vhd
                                             synth/fifo2diq.vhd
                                             sim/diq1_test_data.vhd

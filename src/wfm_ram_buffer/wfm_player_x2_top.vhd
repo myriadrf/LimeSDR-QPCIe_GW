@@ -62,6 +62,7 @@ entity wfm_player_x2_top is
 		wfm0_fr_start			: in std_logic;
 		wfm0_ch_en				: in std_logic_vector(1 downto 0);
       wfm0_mimo_en			: in std_logic;
+      wfm0_intrlv_dis      : in std_logic; -- 0 - interleaved data, 1 - paralel data
 
 		wfm0_iq_clk				: in std_logic;
 		wfm0_xen					: in std_logic; -- wfm 0 data read enable
@@ -86,6 +87,7 @@ entity wfm_player_x2_top is
 		wfm1_fr_start			: in std_logic;
 		wfm1_ch_en				: in std_logic_vector(1 downto 0);
       wfm1_mimo_en			: in std_logic;
+      wfm1_intrlv_dis      : in std_logic; -- 0 - interleaved data, 1 - paralel data
 
 		wfm1_iq_clk				: in std_logic;
 		wfm1_xen					: in std_logic; --wfm 1 data read enable
@@ -345,6 +347,7 @@ component decompress_top is
 			fr_start  		: in std_logic;
 			ch_en				: in std_logic_vector(1 downto 0);
 			mimo_en			: in std_logic;
+         intrlv_dis     : in std_logic; -- 0 - interleaved data, 1 - paralel data
 			A_diq_h			: out std_logic_vector(iq_width downto 0);				
 			A_diq_l			: out std_logic_vector(iq_width downto 0);
 			B_diq_h			: out std_logic_vector(iq_width downto 0);				
@@ -649,6 +652,7 @@ decompress_top_inst4 : decompress_top
 			fr_start  		=> wfm0_fr_start,
 			ch_en				=> wfm0_ch_en,
 			mimo_en			=> wfm0_mimo_en,
+         intrlv_dis     => wfm0_intrlv_dis,
 			A_diq_h			=> wfm0_Aiq_h,
 			A_diq_l			=> wfm0_Aiq_l,
 			B_diq_h			=> wfm0_Biq_h,
@@ -693,6 +697,7 @@ decompress_top_inst5 : decompress_top
 			fr_start  		=> wfm1_fr_start,
 			ch_en				=> wfm1_ch_en,
 			mimo_en			=> wfm1_mimo_en,
+         intrlv_dis     => wfm1_intrlv_dis,
 			A_diq_h			=> wfm1_Aiq_h,
 			A_diq_l			=> wfm1_Aiq_l,
 			B_diq_h			=> wfm1_Biq_h,
