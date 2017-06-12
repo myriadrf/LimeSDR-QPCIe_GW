@@ -660,7 +660,7 @@ int main(void)
 
 
     // I2C initialiazation
-    I2C_init(I2C_OPENCORES_0_BASE, ALT_CPU_FREQ, 400000);
+    I2C_init(I2C_OPENCORES_0_BASE, ALT_CPU_FREQ, 100000);
 
     // Configure LM75
     Configure_LM75();
