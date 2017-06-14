@@ -1,9 +1,18 @@
+# ----------------------------------------------------------------------------
+# FILE: 	LMS1_timing.sdc
+# DESCRIPTION:	Timing constrains file for TimeQuest
+# DATE:	June 2, 2017
+# AUTHOR(s):	Lime Microsystems
+# REVISIONS:
+# ----------------------------------------------------------------------------
+# NOTES:
+# Interface				: Source synchronous SDR, center aligned
+# LAUNCH CLK source 	: FPGA_PLL_C1
+# LATCH CLK source 	: Inverted FPGA_PLL_C1 clock with DDIO cell 
+# ----------------------------------------------------------------------------
+
 #-----------------------------------------------------------------------
 #Timing parameters for DAC5672
-#Interface				: Source synchronous SDR, center aligned
-#LAUNCH CLK source 	: FPGA_PLL_C1
-#LATCH CLK source 	: Inverted FPGA_PLL_C1 clock with DDIO cell 
-#-----------------------------------------------------------------------
 #DAC
 set DAC_Tsu	1.0
 set DAC_Th	1.0
