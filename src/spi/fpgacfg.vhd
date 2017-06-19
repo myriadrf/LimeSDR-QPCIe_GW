@@ -31,6 +31,7 @@ entity fpgacfg is
 		-- Signals coming from the pins or top level serial interface
 		lreset	: in std_logic; 	-- Logic reset signal, resets logic cells only  (use only one reset)
 		mreset	: in std_logic; 	-- Memory reset signal, resets configuration memory only (use only one reset)
+      mac_en   : in std_logic := '1';
 		HW_VER	: in std_logic_vector(3 downto 0);
 		BOM_VER	: in std_logic_vector(2 downto 0);
 		
@@ -98,6 +99,7 @@ end fpgacfg;
 -- ----------------------------------------------------------------------------
 architecture fpgacfg_arch of fpgacfg is
 
+   signal sen_int : std_logic;
 	signal inst_reg: std_logic_vector(15 downto 0);		-- Instruction register
 	signal inst_reg_en: std_logic;
 
@@ -120,11 +122,14 @@ architecture fpgacfg_arch of fpgacfg is
 begin
 
 
+   sen_int <= sen when mac_en = '1' else '1';
+
+
 	-- ---------------------------------------------------------------------------------------------
 	-- Finite state machines
 	-- ---------------------------------------------------------------------------------------------
 	fsm: mcfg32wm_fsm port map( 
-		address => maddress, mimo_en => mimo_en, inst_reg => inst_reg, sclk => sclk, sen => sen, reset => lreset,
+		address => maddress, mimo_en => mimo_en, inst_reg => inst_reg, sclk => sclk, sen => sen_int, reset => lreset,
 		inst_reg_en => inst_reg_en, din_reg_en => din_reg_en, dout_reg_sen => dout_reg_sen,
 		dout_reg_len => dout_reg_len, mem_we => mem_we, oe => oe, stateo => stateo);
 		
@@ -240,7 +245,7 @@ begin
 			mem(28)	<= "0000000000000000"; --  0 free, Reserved[15:4],FX3_LED_G,FX3_LED_R,FX3_LED_OVRD
 			mem(29)	<= "0000000000000001"; --  0 free, FCLK_ENA[1:0]
 			mem(30)	<= "0000000000000000"; --  0 free,data_src
-			mem(30)	<= "0000000000000000"; --  0 free, reserved, MAC
+			mem(31)	<= "0000000000000000"; --  0 free, reserved, MAC
 			
 		elsif sclk'event and sclk = '1' then
 				if mem_we = '1' then
@@ -284,11 +289,11 @@ begin
 		wfm1_smpl_width<= mem(15) (1 downto 0);
 
 		for_loop : for i in 0 to 15 generate --to prevent SPI_SS to go low on same time as sen
-			SPI_SS(i)<= mem(18)(i) OR (NOT sen);
+			SPI_SS(i)<= mem(18)(i) OR (NOT sen_int);
 		end generate;
 		
 
-		LMS1_SS 				<= mem(19)(0) OR (NOT sen); --to prevent SPI_SS to go low on same time as sen
+		LMS1_SS 				<= mem(19)(0) OR (NOT sen_int); --to prevent SPI_SS to go low on same time as sen
 		LMS1_RESET 			<= mem(19)(1);
 		LMS1_CORE_LDO_EN 	<= mem(19)(2);
 		LMS1_TXNRX1			<= mem(19)(3); 
@@ -296,7 +301,7 @@ begin
 		LMS1_TXEN			<= mem(19)(5); 
 		LMS1_RXEN 			<= mem(19)(6);
 	
-		LMS2_SS 				<= mem(19)(8) OR (NOT sen); --to prevent SPI_SS to go low on same time as sen
+		LMS2_SS 				<= mem(19)(8) OR (NOT sen_int); --to prevent SPI_SS to go low on same time as sen
 		LMS2_RESET 			<= mem(19)(9);
 		LMS2_CORE_LDO_EN	<= mem(19)(10); 
 		LMS2_TXNRX1			<= mem(19)(11);
