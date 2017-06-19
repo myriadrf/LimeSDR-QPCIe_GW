@@ -50,7 +50,7 @@ entity avmm_arb_top is
 		local_read_req		: out std_logic;
 		local_burstbegin	: out std_logic;
 		local_wdata			: out std_logic_vector(lcl_bus_size-1 downto 0);
-		local_be				: out std_logic_vector(4*cntrl_rate-1 downto 0);
+		local_be				: out std_logic_vector(lcl_bus_size/8*cntrl_rate-1 downto 0);
 		local_size			: out std_logic_vector(1 downto 0)	
         );
 end avmm_arb_top;
@@ -134,7 +134,7 @@ component avmm_arb is
 		local_read_req		: out std_logic;
 		local_burstbegin	: out std_logic;
 		local_wdata			: out std_logic_vector(lcl_bus_size-1 downto 0);
-		local_be				: out std_logic_vector(4*cntrl_rate-1 downto 0);
+		local_be				: out std_logic_vector(lcl_bus_size/8*cntrl_rate-1 downto 0);
 		local_size			: out std_logic_vector(1 downto 0)	
         );
 end component;

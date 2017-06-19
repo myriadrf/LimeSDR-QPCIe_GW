@@ -19,9 +19,16 @@ entity DDR3_avmm_2x32_ctrl is
 			cntrl_addr_size	: integer := 14;
 			cntrl_ba_size		: integer := 3;
 			cntrl_bus_size		: integer := 32;
-			addr_size			: integer := 27;
-			lcl_bus_size		: integer := 32;
-			lcl_burst_length	: integer := 2;
+         --multiport front end parameters
+         mpfe_0_addr_size     : integer := 27;
+         mpfe_0_bus_size      : integer := 32;
+         mpfe_0_burst_length  : integer := 2;         
+         mpfe_1_addr_size     : integer := 26;
+         mpfe_1_bus_size      : integer := 64;
+         mpfe_1_burst_length  : integer := 2;
+--			addr_size			: integer := 27;
+--			lcl_bus_size		: integer := 32;
+--			lcl_burst_length	: integer := 2;
 			cmd_fifo_size		: integer := 9;
 			outfifo_size_0		: integer := 10;  -- outfifo buffer size
 			outfifo_size_1		: integer := 10  -- outfifo buffer size
@@ -35,40 +42,40 @@ entity DDR3_avmm_2x32_ctrl is
 		wcmd_clk_0				: in std_logic;
 		wcmd_reset_n_0			: in  std_logic;
 		wcmd_rdy_0				: out std_logic;
-		wcmd_addr_0				: in std_logic_vector(addr_size-1 downto 0);
+		wcmd_addr_0				: in std_logic_vector(mpfe_0_addr_size-1 downto 0);
 		wcmd_wr_0				: in std_logic;
 		wcmd_brst_en_0			: in std_logic; --1- writes in burst, 0- single write
-		wcmd_data_0				: in std_logic_vector(lcl_bus_size-1 downto 0);
+		wcmd_data_0				: in std_logic_vector(mpfe_0_bus_size-1 downto 0);
 		rcmd_clk_0				: in std_logic;
 		rcmd_reset_n_0			: in  std_logic;
 		rcmd_rdy_0				: out std_logic;
-		rcmd_addr_0				: in std_logic_vector(addr_size-1 downto 0);
+		rcmd_addr_0				: in std_logic_vector(mpfe_0_addr_size-1 downto 0);
 		rcmd_wr_0				: in std_logic;
 		rcmd_brst_en_0			: in std_logic; --1- reads in burst, 0- single read
 		outbuf_wrusedw_0		: in std_logic_vector(outfifo_size_0-1 downto 0);
 		
 		local_ready_0			: out std_logic;
-		local_rdata_0			: out std_logic_vector(lcl_bus_size-1 downto 0);
+		local_rdata_0			: out std_logic_vector(mpfe_0_bus_size-1 downto 0);
 		local_rdata_valid_0	: out std_logic;
 		
 		--Port 1 
 		wcmd_clk_1				: in std_logic;
 		wcmd_reset_n_1			: in  std_logic;
 		wcmd_rdy_1				: out std_logic;
-		wcmd_addr_1				: in std_logic_vector(addr_size-1 downto 0);
+		wcmd_addr_1				: in std_logic_vector(mpfe_1_addr_size-1 downto 0);
 		wcmd_wr_1				: in std_logic;
 		wcmd_brst_en_1			: in std_logic; --1- writes in burst, 0- single write
-		wcmd_data_1				: in std_logic_vector(lcl_bus_size-1 downto 0);
+		wcmd_data_1				: in std_logic_vector(mpfe_1_bus_size-1 downto 0);
 		rcmd_clk_1				: in std_logic;
 		rcmd_reset_n_1			: in  std_logic;
 		rcmd_rdy_1				: out std_logic;
-		rcmd_addr_1				: in std_logic_vector(addr_size-1 downto 0);
+		rcmd_addr_1				: in std_logic_vector(mpfe_1_addr_size-1 downto 0);
 		rcmd_wr_1				: in std_logic;
 		rcmd_brst_en_1			: in std_logic; --1- reads in burst, 0- single read
 		outbuf_wrusedw_1		: in std_logic_vector(outfifo_size_0-1 downto 0);
 
 		local_ready_1			: out std_logic;
-		local_rdata_1			: out std_logic_vector(lcl_bus_size-1 downto 0);
+		local_rdata_1			: out std_logic_vector(mpfe_1_bus_size-1 downto 0);
 		local_rdata_valid_1	: out std_logic;
 		local_init_done		: out std_logic;
 
@@ -112,79 +119,79 @@ architecture arch of DDR3_avmm_2x32_ctrl  is
 --declare signals,  components here
 
 --inst0 signals 
-signal inst0_local_addr			: std_logic_vector(addr_size-1 downto 0);
+signal inst0_local_addr			: std_logic_vector(mpfe_0_addr_size-1 downto 0);
 signal inst0_local_write_req	: std_logic;
 signal inst0_local_read_req	: std_logic;
 signal inst0_local_burstbegin	: std_logic;
-signal inst0_local_wdata		: std_logic_vector(lcl_bus_size-1 downto 0);
-signal inst0_local_be			: std_logic_vector(4*cntrl_rate-1 downto 0);
+signal inst0_local_wdata		: std_logic_vector(mpfe_0_bus_size-1 downto 0);
+signal inst0_local_be			: std_logic_vector(mpfe_0_bus_size/8*cntrl_rate-1 downto 0);
 signal inst0_local_size			: std_logic_vector(1 downto 0);
 
 --inst1 signals 
-signal inst1_local_addr			: std_logic_vector(addr_size-1 downto 0);
+signal inst1_local_addr			: std_logic_vector(mpfe_1_addr_size-1 downto 0);
 signal inst1_local_write_req	: std_logic;
 signal inst1_local_read_req	: std_logic;
 signal inst1_local_burstbegin	: std_logic;
-signal inst1_local_wdata		: std_logic_vector(lcl_bus_size-1 downto 0);
-signal inst1_local_be			: std_logic_vector(4*cntrl_rate-1 downto 0);
+signal inst1_local_wdata		: std_logic_vector(mpfe_1_bus_size-1 downto 0);
+signal inst1_local_be			: std_logic_vector(mpfe_1_bus_size/8*cntrl_rate-1 downto 0);
 signal inst1_local_size			: std_logic_vector(1 downto 0);
 
 --inst2 signals 
-signal inst2_avl_addr					: std_logic_vector(addr_size-1 downto 0);
+signal inst2_avl_addr					: std_logic_vector(mpfe_0_addr_size-1 downto 0);
 signal inst2_avl_write_req				: std_logic;
 signal inst2_avl_read_req				: std_logic;
 signal inst2_avl_burstbegin			: std_logic;
-signal inst2_avl_wdata					: std_logic_vector(lcl_bus_size-1 downto 0);
-signal inst2_avl_be						: std_logic_vector(4*cntrl_rate-1 downto 0);
+signal inst2_avl_wdata					: std_logic_vector(mpfe_0_bus_size-1 downto 0);
+signal inst2_avl_be						: std_logic_vector(mpfe_0_bus_size/8*cntrl_rate-1 downto 0);
 signal inst2_avl_size					: std_logic_vector(1 downto 0);
 signal begin_test_port0					: std_logic;
-signal inst2_pnf_per_bit 				: std_logic_vector(lcl_bus_size-1 downto 0);
-signal inst2_pnf_per_bit_persist		: std_logic_vector(lcl_bus_size-1 downto 0);
+signal inst2_pnf_per_bit 				: std_logic_vector(mpfe_0_bus_size-1 downto 0);
+signal inst2_pnf_per_bit_persist		: std_logic_vector(mpfe_0_bus_size-1 downto 0);
 signal inst2_pass							: std_logic;
 signal inst2_fail							: std_logic;
 signal inst2_test_complete				: std_logic;
 
 --inst3 signals 
-signal inst3_avl_addr					: std_logic_vector(addr_size-1 downto 0);
+signal inst3_avl_addr					: std_logic_vector(mpfe_1_addr_size-1 downto 0);
 signal inst3_avl_write_req				: std_logic;
 signal inst3_avl_read_req				: std_logic;
 signal inst3_avl_burstbegin			: std_logic;
-signal inst3_avl_wdata					: std_logic_vector(lcl_bus_size-1 downto 0);
-signal inst3_avl_be						: std_logic_vector(4*cntrl_rate-1 downto 0);
+signal inst3_avl_wdata					: std_logic_vector(mpfe_1_bus_size-1 downto 0);
+signal inst3_avl_be						: std_logic_vector(mpfe_1_bus_size/8*cntrl_rate-1 downto 0);
 signal inst3_avl_size					: std_logic_vector(1 downto 0);
 signal begin_test_port1					: std_logic;
-signal inst3_pnf_per_bit 				: std_logic_vector(lcl_bus_size-1 downto 0);
-signal inst3_pnf_per_bit_persist		: std_logic_vector(lcl_bus_size-1 downto 0);
+signal inst3_pnf_per_bit 				: std_logic_vector(mpfe_1_bus_size-1 downto 0);
+signal inst3_pnf_per_bit_persist		: std_logic_vector(mpfe_1_bus_size-1 downto 0);
 signal inst3_pass							: std_logic;
 signal inst3_fail							: std_logic;
 signal inst3_test_complete				: std_logic;
 
 --Avalon signal mux port 0
-signal mux_avl_addr_0			: std_logic_vector(addr_size-1 downto 0);
+signal mux_avl_addr_0			: std_logic_vector(mpfe_0_addr_size-1 downto 0);
 signal mux_avl_write_req_0		: std_logic;
 signal mux_avl_read_req_0		: std_logic;
 signal mux_avl_burstbegin_0	: std_logic;
-signal mux_avl_wdata_0			: std_logic_vector(lcl_bus_size-1 downto 0);
-signal mux_avl_be_0				: std_logic_vector(4*cntrl_rate-1 downto 0);
+signal mux_avl_wdata_0			: std_logic_vector(mpfe_0_bus_size-1 downto 0);
+signal mux_avl_be_0				: std_logic_vector(mpfe_0_bus_size/8*cntrl_rate-1 downto 0);
 signal mux_avl_size_0			: std_logic_vector(1 downto 0);
 
 --Avalon signal mux port 1
-signal mux_avl_addr_1			: std_logic_vector(addr_size-1 downto 0);
+signal mux_avl_addr_1			: std_logic_vector(mpfe_1_addr_size-1 downto 0);
 signal mux_avl_write_req_1		: std_logic;
 signal mux_avl_read_req_1		: std_logic;
 signal mux_avl_burstbegin_1	: std_logic;
-signal mux_avl_wdata_1			: std_logic_vector(lcl_bus_size-1 downto 0);
-signal mux_avl_be_1				: std_logic_vector(4*cntrl_rate-1 downto 0);
+signal mux_avl_wdata_1			: std_logic_vector(mpfe_1_bus_size-1 downto 0);
+signal mux_avl_be_1				: std_logic_vector(mpfe_1_bus_size/8*cntrl_rate-1 downto 0);
 signal mux_avl_size_1			: std_logic_vector(1 downto 0);
 
 --DDR3 controller instance inst4 signals
 signal inst4_afi_half_clk 				: std_logic;
 signal inst4_avl_ready_0 				: std_logic;
 signal inst4_avl_rdata_valid_0 		: std_logic;
-signal inst4_avl_rdata_0 				: std_logic_vector(lcl_bus_size-1 downto 0);
+signal inst4_avl_rdata_0 				: std_logic_vector(mpfe_0_bus_size-1 downto 0);
 signal inst4_avl_ready_1 				: std_logic;
 signal inst4_avl_rdata_valid_1 		: std_logic;
-signal inst4_avl_rdata_1				: std_logic_vector(lcl_bus_size-1 downto 0);
+signal inst4_avl_rdata_1				: std_logic_vector(mpfe_1_bus_size-1 downto 0);
 signal mp_cmd_clk_0_clk 				: std_logic;
 signal mp_cmd_reset_n_0_reset_n 		: std_logic;
 signal mp_cmd_clk_1_clk 				: std_logic;
@@ -240,7 +247,7 @@ component avmm_arb_top is
 		local_read_req		: out std_logic;
 		local_burstbegin	: out std_logic;
 		local_wdata			: out std_logic_vector(lcl_bus_size-1 downto 0);
-		local_be				: out std_logic_vector(4*cntrl_rate-1 downto 0);
+		local_be				: out std_logic_vector(lcl_bus_size/8*cntrl_rate-1 downto 0);
 		local_size			: out std_logic_vector(1 downto 0)	
         );
 end component;
@@ -262,6 +269,28 @@ component ddr3_av_2x32_tester is
 		reset_n             : in  std_logic                     := '0';             -- avl_reset.reset_n
 		pnf_per_bit         : out std_logic_vector(31 downto 0);                    --       pnf.pnf_per_bit
 		pnf_per_bit_persist : out std_logic_vector(31 downto 0);                    --          .pnf_per_bit_persist
+		pass                : out std_logic;                                        --    status.pass
+		fail                : out std_logic;                                        --          .fail
+		test_complete       : out std_logic                                         --          .test_complete
+	);
+end component;
+
+component ddr3_av_x64_tester is
+	port (
+		avl_ready           : in  std_logic                     := '0';             --       avl.waitrequest_n
+		avl_addr            : out std_logic_vector(25 downto 0);                    --          .address
+		avl_size            : out std_logic_vector(1 downto 0);                     --          .burstcount
+		avl_wdata           : out std_logic_vector(63 downto 0);                    --          .writedata
+		avl_rdata           : in  std_logic_vector(63 downto 0) := (others => '0'); --          .readdata
+		avl_write_req       : out std_logic;                                        --          .write
+		avl_read_req        : out std_logic;                                        --          .read
+		avl_rdata_valid     : in  std_logic                     := '0';             --          .readdatavalid
+		avl_be              : out std_logic_vector(7 downto 0);                     --          .byteenable
+		avl_burstbegin      : out std_logic;                                        --          .beginbursttransfer
+		clk                 : in  std_logic                     := '0';             -- avl_clock.clk
+		reset_n             : in  std_logic                     := '0';             -- avl_reset.reset_n
+		pnf_per_bit         : out std_logic_vector(63 downto 0);                    --       pnf.pnf_per_bit
+		pnf_per_bit_persist : out std_logic_vector(63 downto 0);                    --          .pnf_per_bit_persist
 		pass                : out std_logic;                                        --    status.pass
 		fail                : out std_logic;                                        --          .fail
 		test_complete       : out std_logic                                         --          .test_complete
@@ -305,11 +334,11 @@ component ddr3_av_2x32 is
 		avl_size_0                 : in    std_logic_vector(1 downto 0)  := (others => '0'); --                   .burstcount
 		avl_ready_1                : out   std_logic;                                        --              avl_1.waitrequest_n
 		avl_burstbegin_1           : in    std_logic                     := '0';             --                   .beginbursttransfer
-		avl_addr_1                 : in    std_logic_vector(26 downto 0) := (others => '0'); --                   .address
+		avl_addr_1                 : in    std_logic_vector(25 downto 0) := (others => '0'); --                   .address
 		avl_rdata_valid_1          : out   std_logic;                                        --                   .readdatavalid
-		avl_rdata_1                : out   std_logic_vector(31 downto 0);                    --                   .readdata
-		avl_wdata_1                : in    std_logic_vector(31 downto 0) := (others => '0'); --                   .writedata
-		avl_be_1                   : in    std_logic_vector(3 downto 0)  := (others => '0'); --                   .byteenable
+		avl_rdata_1                : out   std_logic_vector(63 downto 0);                    --                   .readdata
+		avl_wdata_1                : in    std_logic_vector(63 downto 0) := (others => '0'); --                   .writedata
+		avl_be_1                   : in    std_logic_vector(7 downto 0)  := (others => '0'); --                   .byteenable
 		avl_read_req_1             : in    std_logic                     := '0';             --                   .read
 		avl_write_req_1            : in    std_logic                     := '0';             --                   .write
 		avl_size_1                 : in    std_logic_vector(1 downto 0)  := (others => '0'); --                   .burstcount
@@ -353,9 +382,9 @@ avmm_arb_top_inst0 : avmm_arb_top
 		dev_family	     	=> dev_family,
 		cntrl_rate			=> cntrl_rate,
 		cntrl_bus_size		=> cntrl_bus_size,
-		addr_size			=> addr_size,
-		lcl_bus_size		=> lcl_bus_size,
-		lcl_burst_length	=> lcl_burst_length,
+		addr_size			=> mpfe_0_addr_size,
+		lcl_bus_size		=> mpfe_0_bus_size,
+		lcl_burst_length	=> mpfe_0_burst_length,
 		cmd_fifo_size		=> cmd_fifo_size,
 		outfifo_size		=> outfifo_size_0
 		)
@@ -398,9 +427,9 @@ avmm_arb_top_inst1 : avmm_arb_top
 		dev_family	     	=> dev_family,
 		cntrl_rate			=> cntrl_rate,
 		cntrl_bus_size		=> cntrl_bus_size,
-		addr_size			=> addr_size,
-		lcl_bus_size		=> lcl_bus_size,
-		lcl_burst_length	=> lcl_burst_length,
+		addr_size			=> mpfe_1_addr_size,
+		lcl_bus_size		=> mpfe_1_bus_size,
+		lcl_burst_length	=> mpfe_1_burst_length,
 		cmd_fifo_size		=> cmd_fifo_size,
 		outfifo_size		=> outfifo_size_1
 		)
@@ -464,7 +493,7 @@ begin_test_port0<= inst4_local_init_done and begin_test;
 -- ----------------------------------------------------------------------------
 -- Port 1 tester
 -- ----------------------------------------------------------------------------
-ddr3_av_2x32_tester_inst3 : ddr3_av_2x32_tester
+ddr3_av_x64_tester_inst3 : ddr3_av_x64_tester
 	port map (
 		avl_ready           => inst4_avl_ready_1,
 		avl_addr            => inst3_avl_addr,
