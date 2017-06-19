@@ -15,7 +15,6 @@ use ieee.numeric_std.all;
 entity wfm_rcmd_fsm is
 	generic(
 			dev_family			: string  := "Cyclone IV E"; 
-			wfm_outfifo_size	: integer := 11;
 			addr_size			: integer := 24;
 			lcl_burst_length	: integer := 2
 );

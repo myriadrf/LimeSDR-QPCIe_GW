@@ -16,24 +16,29 @@ USE altera_mf.all;
 -- ----------------------------------------------------------------------------
 entity decompress_top is
   generic (
-			dev_family 	: string  := "Cyclone V";
-			data_width 	: integer := 32;
-			data_rwidth	: integer := 64;
-			fifo_rsize	: integer := 9;
-			fifo_wsize	: integer := 10;
-			iq_width		: integer := 16
+			dev_family 	         : string  := "Cyclone V";
+			datain_width 	      : integer := 64; --IN data width
+         infifo_wrwidth       : integer := 64; --Should be same as datain_width
+         infifo_rdwidth       : integer := 64;
+         infifo_wsize	      : integer := 9;
+			infifo_rsize	      : integer := 9;
+         decompr_fifo_wrwidth : integer := 128;
+         decompr_fifo_rdwidth : integer := 64;
+         decompr_fifo_wsize   : integer := 8;
+         decompr_fifo_rsize   : integer := 7;
+			iq_width		         : integer := 16
 			);
   port (
 			--input ports 
 			wclk          	: in std_logic;
 			rclk          	: in std_logic;
 			reset_n       	: in std_logic;
-			data_in       	: in std_logic_vector(data_width-1 downto 0);
+			data_in       	: in std_logic_vector(datain_width-1 downto 0);
 			data_in_valid 	: in std_logic; -- data_in leading signal which indicates valid incomong data
 			sample_width  	: in std_logic_vector(1 downto 0); -- "00"-16bit, "01"-14bit, "10"-12bit
 			xen				: in std_logic; -- data read enable
 		   --output ports  
-			wusedw        	: out std_logic_vector(fifo_wsize-1 downto 0);
+			wusedw        	: out std_logic_vector(infifo_wsize-1 downto 0);
 			fr_start  		: in std_logic;
 			ch_en				: in std_logic_vector(1 downto 0);
 			mimo_en			: in std_logic;
@@ -55,12 +60,10 @@ architecture arch of decompress_top is
 signal xen_sync				: std_logic;
 		
 --inst0 signals
-signal inst0_wrusedw			: std_logic_vector(fifo_wsize-1 downto 0);
-signal inst0_rdusedw			: std_logic_vector(fifo_wsize-2 downto 0);
+signal inst0_wrusedw			: std_logic_vector(infifo_wsize-1 downto 0);
+signal inst0_rdusedw			: std_logic_vector(infifo_rsize-1 downto 0);
 signal inst0_q					: std_logic_vector(63 downto 0);
 	
-signal inst0_rdempty 		: std_logic;
-signal inst0_decmpr_data 	: std_logic_vector(data_rwidth-1 downto 0);
 --inst1 signals
 signal isnt1_bulk_size		: std_logic_vector(15 downto 0);
 signal isnt1_bulk_size_2x	: std_logic_vector(15 downto 0);
@@ -79,9 +82,9 @@ signal isnt2_data_out		: std_logic_vector(127 downto 0);
 signal isnt2_data_out_valid: std_logic;
 
 --inst3
-signal inst3_wrusedw			: std_logic_vector(fifo_wsize-3 downto 0);
-signal inst3_wrusedw_max	: std_logic_vector(fifo_wsize-3 downto 0);
-signal inst3_wrusedw_limit	: unsigned(fifo_wsize-3 downto 0);
+signal inst3_wrusedw			: std_logic_vector(decompr_fifo_wsize-1 downto 0);
+signal inst3_wrusedw_max	: std_logic_vector(decompr_fifo_wsize-1 downto 0);
+signal inst3_wrusedw_limit	: unsigned(decompr_fifo_wsize-1 downto 0);
 signal inst3_q					: std_logic_vector(63 downto 0);
 signal inst3_rdempty			: std_logic;
 signal inst3_fifo_rdreq_mux: std_logic;
@@ -116,7 +119,7 @@ isnt1_bulk_size <= x"0003" when sample_width = "10" else
 						 
 isnt1_bulk_size_2x <= isnt1_bulk_size(14 downto 0) & '0';
 
-inst3_wrusedw_max <= ((fifo_wsize-3)=>'1', others=>'0');
+inst3_wrusedw_max <= ((decompr_fifo_wsize-1)=>'1', others=>'0');
 
 process(rclk, reset_n) 
 begin 
@@ -136,10 +139,10 @@ end process;
 fifo_inst_inst0 : entity work.fifo_inst
   generic map(
 		dev_family	    => dev_family,
-		wrwidth         => 32,
-		wrusedw_witdth  => fifo_wsize,  
-		rdwidth         => 64,
-		rdusedw_width   => fifo_wsize-1,
+		wrwidth         => infifo_wrwidth,
+		wrusedw_witdth  => infifo_wsize,  
+		rdwidth         => infifo_rdwidth,
+		rdusedw_width   => infifo_rsize,
 		show_ahead      => "OFF"
   ) 
   port map(
@@ -163,7 +166,7 @@ wusedw <= inst0_wrusedw;
 
 fifo_bulk_read_inst1 : entity work.fifo_bulk_read
    generic map(
-      fifo_rd_size   => fifo_wsize-1
+      fifo_rd_size   => infifo_rsize
    )
    port map(
 
@@ -199,10 +202,10 @@ bit_unpack_64_inst2 : entity work.bit_unpack_64
 fifo_inst_inst3 : entity work.fifo_inst
   generic map(
 		dev_family	    => dev_family,
-		wrwidth         => 128,
-		wrusedw_witdth  => fifo_wsize-2,  
-		rdwidth         => 64,
-		rdusedw_width   => fifo_wsize-1,
+		wrwidth         => decompr_fifo_wrwidth,
+		wrusedw_witdth  => decompr_fifo_wsize,  
+		rdwidth         => decompr_fifo_rdwidth,
+		rdusedw_width   => decompr_fifo_rsize,
 		show_ahead      => "OFF"
   ) 
   port map(

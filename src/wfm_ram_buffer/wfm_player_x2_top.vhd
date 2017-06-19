@@ -8,37 +8,50 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use work.FIFO_PACK.all;
 
 -- ----------------------------------------------------------------------------
 -- Entity declaration
 -- ----------------------------------------------------------------------------
 entity wfm_player_x2_top is
 	generic(
-			dev_family				: string  := "Cyclone V GX"; 
+			dev_family				   : string  := "Cyclone V GX"; 
 			--DDR2 controller parameters
-			cntrl_rate				: integer := 1; --1 - full rate, 2 - half rate
-			cntrl_bus_size			: integer := 32;
-			cntrl_addr_size		: integer := 14;
-			cntrl_ba_size			: integer := 3;
-			addr_size				: integer := 24;
-			lcl_bus_size			: integer := 32;
-			lcl_burst_length		: integer := 2;
-			cmd_fifo_size			: integer := 9;
+			cntrl_rate				   : integer := 1; --1 - full rate, 2 - half rate
+			cntrl_bus_size			   : integer := 32;
+			cntrl_addr_size		   : integer := 14;
+			cntrl_ba_size			   : integer := 3;
+         --multiport front end parameters
+         mpfe_0_addr_size        : integer := 27;
+         mpfe_0_bus_size         : integer := 32;
+         mpfe_0_burst_length     : integer := 2;
+         
+         mpfe_1_addr_size        : integer := 26;
+         mpfe_1_bus_size         : integer := 64;
+         mpfe_1_burst_length     : integer := 2;
+         
+			--addr_size				   : integer := 24;
+			--lcl_bus_size			   : integer := 32;
+			--lcl_burst_length      : integer := 2;
+         
+			cmd_fifo_size			   : integer := 9;
 			--WFM0 player parameters
-			wfm0_infifo_size		: integer := 11;
-			wfm0_outfifo_size		: integer := 11;
-			wfm0_data_width		: integer := 32;
-			wfm0_iq_width			: integer := 12;
-			wfm0_dcmpr_fifo_size	: integer := 10;
+			wfm0_infifo_size		   : integer := 11;
+			wfm0_outfifo_size		   : integer := 11;
+			wfm0_data_width		   : integer := 32;
+			wfm0_iq_width			   : integer := 12;
+			wfm0_dcmpr_infifo_size	: integer := 10;
+         wfm0_dcmpr_outfifo_size	: integer := 10;
 			--WFM1 player parameters
-			wfm1_infifo_size		: integer := 11;
-			wfm1_outfifo_size		: integer := 11;
-			wfm1_data_width		: integer := 32;
-			wfm1_iq_width			: integer := 12;
-			wfm1_dcmpr_fifo_size	: integer := 10;
+			wfm1_infifo_size		   : integer := 11;
+			wfm1_outfifo_size		   : integer := 11;
+			wfm1_data_width		   : integer := 32;
+			wfm1_iq_width			   : integer := 12;
+			wfm1_dcmpr_infifo_size	: integer := 10;
+         wfm1_dcmpr_outfifo_size	: integer := 10;
 			--outfifo buffer size
-			outfifo_size_0			: integer := 10;  -- outfifo buffer size
-			outfifo_size_1			: integer := 10  -- outfifo buffer size
+			outfifo_size_0			   : integer := 10;  -- outfifo buffer size
+			outfifo_size_1			   : integer := 10  -- outfifo buffer size
 			
 );
   port (
@@ -139,22 +152,22 @@ architecture arch of wfm_player_x2_top is
 --declare signals,  components here
 
 --WFM0 inst0 signals
-signal inst0_wcmd_addr		: std_logic_vector(addr_size-1 downto 0);
+signal inst0_wcmd_addr		: std_logic_vector(mpfe_0_addr_size-1 downto 0);
 signal inst0_wcmd_wr			: std_logic;
 signal inst0_wcmd_brst_en	: std_logic;
-signal inst0_wcmd_data		: std_logic_vector(lcl_bus_size-1 downto 0);
-signal inst0_rcmd_addr		: std_logic_vector(addr_size-1 downto 0);
+signal inst0_wcmd_data		: std_logic_vector(mpfe_0_bus_size-1 downto 0);
+signal inst0_rcmd_addr		: std_logic_vector(mpfe_0_addr_size-1 downto 0);
 signal inst0_rcmd_wr			: std_logic;
 signal inst0_rcmd_brst_en 	: std_logic;
 signal inst0_wcmd_reset_n	: std_logic_vector(2 downto 0);
 signal inst0_rcmd_reset_n	: std_logic_vector(2 downto 0);
 
 --WFM1 inst1 signals
-signal inst1_wcmd_addr		: std_logic_vector(addr_size-1 downto 0);
+signal inst1_wcmd_addr		: std_logic_vector(mpfe_1_addr_size-1 downto 0);
 signal inst1_wcmd_wr			: std_logic;
 signal inst1_wcmd_brst_en	: std_logic;
-signal inst1_wcmd_data		: std_logic_vector(lcl_bus_size-1 downto 0);
-signal inst1_rcmd_addr		: std_logic_vector(addr_size-1 downto 0);
+signal inst1_wcmd_data		: std_logic_vector(mpfe_1_bus_size-1 downto 0);
+signal inst1_rcmd_addr		: std_logic_vector(mpfe_1_addr_size-1 downto 0);
 signal inst1_rcmd_wr			: std_logic;
 signal inst1_rcmd_brst_en 	: std_logic;
 signal inst1_wcmd_reset_n	: std_logic_vector(2 downto 0);
@@ -165,23 +178,23 @@ signal inst3_reset_n					: std_logic;
 signal inst3_wcmd_rdy_0				: std_logic;
 signal inst3_rcmd_rdy_0				: std_logic;		
 signal inst3_local_ready_0			: std_logic;
-signal inst3_local_rdata_0			: std_logic_vector(lcl_bus_size-1 downto 0);
+signal inst3_local_rdata_0			: std_logic_vector(mpfe_0_bus_size-1 downto 0);
 signal inst3_local_rdata_valid_0	: std_logic;
 signal inst3_wcmd_rdy_1				: std_logic;
 signal inst3_rcmd_rdy_1				: std_logic;
 signal inst3_local_ready_1			: std_logic;
-signal inst3_local_rdata_1			: std_logic_vector(lcl_bus_size-1 downto 0);
+signal inst3_local_rdata_1			: std_logic_vector(mpfe_1_bus_size-1 downto 0);
 signal inst3_local_rdata_valid_1	: std_logic;
 signal inst3_local_init_done		: std_logic;             
 signal inst3_phy_clk					: std_logic;
 
 --inst4 signals
-signal inst4_wusedw					: std_logic_vector(outfifo_size_0-1 downto 0);
+signal inst4_wusedw					: std_logic_vector(wfm0_dcmpr_infifo_size-1 downto 0);
 signal inst4_reset_n					: std_logic;
 
 
 --inst5 signals
-signal inst5_wusedw					: std_logic_vector(outfifo_size_0-1 downto 0);
+signal inst5_wusedw					: std_logic_vector(wfm1_dcmpr_infifo_size-1 downto 0);
 signal inst5_reset_n					: std_logic;
 
 --general signals
@@ -194,108 +207,117 @@ signal wfm1_load_sync				: std_logic_vector(2 downto 0);
 
 component DDR3_avmm_2x32_ctrl is
 		generic(
-			dev_family	     	: string  := "Cyclone V GX";
-			cntrl_rate			: integer := 1; --1 - full rate, 2 - half rate
-			cntrl_addr_size	: integer := 14;
-			cntrl_ba_size		: integer := 3;
-			cntrl_bus_size		: integer := 32;
-			addr_size			: integer := 27;
-			lcl_bus_size		: integer := 32;
-			lcl_burst_length	: integer := 2;
-			cmd_fifo_size		: integer := 9;
-			outfifo_size_0		: integer := 10;  -- outfifo buffer size
-			outfifo_size_1		: integer := 10  -- outfifo buffer size
+			dev_family	     	   : string  := "Cyclone V GX";
+			cntrl_rate			   : integer := 1; --1 - full rate, 2 - half rate
+			cntrl_addr_size	   : integer := 14;
+			cntrl_ba_size		   : integer := 3;
+			cntrl_bus_size		   : integer := 32;
+         --multiport front end parameters
+         mpfe_0_addr_size     : integer := 27;
+         mpfe_0_bus_size      : integer := 32;
+         mpfe_0_burst_length  : integer := 2;         
+         mpfe_1_addr_size     : integer := 26;
+         mpfe_1_bus_size      : integer := 64;
+         mpfe_1_burst_length  : integer := 2;
+         
+--			addr_size			   : integer := 27;
+--			lcl_bus_size		   : integer := 32;
+--			lcl_burst_length	   : integer := 2;
+			cmd_fifo_size		   : integer := 9;
+			outfifo_size_0		   : integer := 10;  -- outfifo buffer size
+			outfifo_size_1		   : integer := 10  -- outfifo buffer size
 		);
 		port (
 
-      pll_ref_clk       	: in std_logic;
-      global_reset_n   		: in std_logic;
-		soft_reset_n			: in std_logic;
-		--Port 0 
-		wcmd_clk_0				: in std_logic;
-		wcmd_reset_n_0			: in  std_logic;
-		wcmd_rdy_0				: out std_logic;
-		wcmd_addr_0				: in std_logic_vector(addr_size-1 downto 0);
-		wcmd_wr_0				: in std_logic;
-		wcmd_brst_en_0			: in std_logic; --1- writes in burst, 0- single write
-		wcmd_data_0				: in std_logic_vector(lcl_bus_size-1 downto 0);
-		rcmd_clk_0				: in std_logic;
-		rcmd_reset_n_0			: in  std_logic;
-		rcmd_rdy_0				: out std_logic;
-		rcmd_addr_0				: in std_logic_vector(addr_size-1 downto 0);
-		rcmd_wr_0				: in std_logic;
-		rcmd_brst_en_0			: in std_logic; --1- reads in burst, 0- single read
-		outbuf_wrusedw_0		: in std_logic_vector(outfifo_size_0-1 downto 0);
-		
-		local_ready_0			: out std_logic;
-		local_rdata_0			: out std_logic_vector(lcl_bus_size-1 downto 0);
-		local_rdata_valid_0	: out std_logic;
+      pll_ref_clk       	   : in std_logic;
+      global_reset_n   		   : in std_logic;
+		soft_reset_n			   : in std_logic;
+		--Port 0    
+		wcmd_clk_0				   : in std_logic;
+		wcmd_reset_n_0			   : in  std_logic;
+		wcmd_rdy_0				   : out std_logic;
+		wcmd_addr_0				   : in std_logic_vector(mpfe_0_addr_size-1 downto 0);
+		wcmd_wr_0				   : in std_logic;
+		wcmd_brst_en_0			   : in std_logic; --1- writes in burst, 0- single write
+		wcmd_data_0				   : in std_logic_vector(mpfe_0_bus_size-1 downto 0);
+		rcmd_clk_0				   : in std_logic;
+		rcmd_reset_n_0			   : in  std_logic;
+		rcmd_rdy_0				   : out std_logic;
+		rcmd_addr_0				   : in std_logic_vector(mpfe_0_addr_size-1 downto 0);
+		rcmd_wr_0				   : in std_logic;
+		rcmd_brst_en_0			   : in std_logic; --1- reads in burst, 0- single read
+		outbuf_wrusedw_0		   : in std_logic_vector(outfifo_size_0-1 downto 0);
+         
+		local_ready_0			   : out std_logic;
+		local_rdata_0			   : out std_logic_vector(mpfe_0_bus_size-1 downto 0);
+		local_rdata_valid_0	   : out std_logic;
 		
 		--Port 1 
-		wcmd_clk_1				: in std_logic;
-		wcmd_reset_n_1			: in  std_logic;
-		wcmd_rdy_1				: out std_logic;
-		wcmd_addr_1				: in std_logic_vector(addr_size-1 downto 0);
-		wcmd_wr_1				: in std_logic;
-		wcmd_brst_en_1			: in std_logic; --1- writes in burst, 0- single write
-		wcmd_data_1				: in std_logic_vector(lcl_bus_size-1 downto 0);
-		rcmd_clk_1				: in std_logic;
-		rcmd_reset_n_1			: in  std_logic;
-		rcmd_rdy_1				: out std_logic;
-		rcmd_addr_1				: in std_logic_vector(addr_size-1 downto 0);
-		rcmd_wr_1				: in std_logic;
-		rcmd_brst_en_1			: in std_logic; --1- reads in burst, 0- single read
-		outbuf_wrusedw_1		: in std_logic_vector(outfifo_size_0-1 downto 0);
-
-		local_ready_1			: out std_logic;
-		local_rdata_1			: out std_logic_vector(lcl_bus_size-1 downto 0);
-		local_rdata_valid_1	: out std_logic;
-		local_init_done		: out std_logic;
+		wcmd_clk_1				   : in std_logic;
+		wcmd_reset_n_1			   : in  std_logic;
+		wcmd_rdy_1				   : out std_logic;
+		wcmd_addr_1				   : in std_logic_vector(mpfe_1_addr_size-1 downto 0);
+		wcmd_wr_1				   : in std_logic;
+		wcmd_brst_en_1			   : in std_logic; --1- writes in burst, 0- single write
+		wcmd_data_1				   : in std_logic_vector(mpfe_1_bus_size-1 downto 0);
+		rcmd_clk_1				   : in std_logic;
+		rcmd_reset_n_1			   : in  std_logic;
+		rcmd_rdy_1				   : out std_logic;
+		rcmd_addr_1				   : in std_logic_vector(mpfe_1_addr_size-1 downto 0);
+		rcmd_wr_1				   : in std_logic;
+		rcmd_brst_en_1			   : in std_logic; --1- reads in burst, 0- single read
+		outbuf_wrusedw_1		   : in std_logic_vector(outfifo_size_0-1 downto 0);
+   
+		local_ready_1			   : out std_logic;
+		local_rdata_1			   : out std_logic_vector(mpfe_1_bus_size-1 downto 0);
+		local_rdata_valid_1	   : out std_logic;
+		local_init_done		   : out std_logic;
 
 		--External memory signals
-		mem_a                : out   std_logic_vector(13 downto 0);                    --             memory.mem_a
-		mem_ba               : out   std_logic_vector(2 downto 0);                     --                   .mem_ba
-		mem_ck               : out   std_logic_vector(0 downto 0);                     --                   .mem_ck
-		mem_ck_n             : out   std_logic_vector(0 downto 0);                     --                   .mem_ck_n
-		mem_cke              : out   std_logic_vector(0 downto 0);                     --                   .mem_cke
-		mem_cs_n             : out   std_logic_vector(0 downto 0);                     --                   .mem_cs_n
-		mem_dm               : out   std_logic_vector(3 downto 0);                     --                   .mem_dm
-		mem_ras_n            : out   std_logic_vector(0 downto 0);                     --                   .mem_ras_n
-		mem_cas_n            : out   std_logic_vector(0 downto 0);                     --                   .mem_cas_n
-		mem_we_n             : out   std_logic_vector(0 downto 0);                     --                   .mem_we_n
-		mem_reset_n          : out   std_logic;                                        --                   .mem_reset_n
-		mem_dq               : inout std_logic_vector(31 downto 0) := (others => '0'); --                   .mem_dq
-		mem_dqs              : inout std_logic_vector(3 downto 0)  := (others => '0'); --                   .mem_dqs
-		mem_dqs_n            : inout std_logic_vector(3 downto 0)  := (others => '0'); --                   .mem_dqs_n
-		mem_odt              : out   std_logic_vector(0 downto 0);                
-		phy_clk					: out std_logic;
-		oct_rzqin            : in    std_logic                     := '0';             --                oct.rzqin
-		--aux_full_rate_clk	: out std_logic;
-		--aux_half_rate_clk	: out std_logic;
-		--reset_request_n		: out std_logic;
-		begin_test				: in std_logic;
-		insert_error			: in std_logic;
-		pnf_per_bit         	: out std_logic_vector(31 downto 0);   
-		pnf_per_bit_persist 	: out std_logic_vector(31 downto 0);
-		pass                	: out std_logic;
-		fail                	: out std_logic; 
-		test_complete       	: out std_logic
+		mem_a                   : out   std_logic_vector(13 downto 0);                    --             memory.mem_a
+		mem_ba                  : out   std_logic_vector(2 downto 0);                     --                   .mem_ba
+		mem_ck                  : out   std_logic_vector(0 downto 0);                     --                   .mem_ck
+		mem_ck_n                : out   std_logic_vector(0 downto 0);                     --                   .mem_ck_n
+		mem_cke                 : out   std_logic_vector(0 downto 0);                     --                   .mem_cke
+		mem_cs_n                : out   std_logic_vector(0 downto 0);                     --                   .mem_cs_n
+		mem_dm                  : out   std_logic_vector(3 downto 0);                     --                   .mem_dm
+		mem_ras_n               : out   std_logic_vector(0 downto 0);                     --                   .mem_ras_n
+		mem_cas_n               : out   std_logic_vector(0 downto 0);                     --                   .mem_cas_n
+		mem_we_n                : out   std_logic_vector(0 downto 0);                     --                   .mem_we_n
+		mem_reset_n             : out   std_logic;                                        --                   .mem_reset_n
+		mem_dq                  : inout std_logic_vector(31 downto 0) := (others => '0'); --                   .mem_dq
+		mem_dqs                 : inout std_logic_vector(3 downto 0)  := (others => '0'); --                   .mem_dqs
+		mem_dqs_n               : inout std_logic_vector(3 downto 0)  := (others => '0'); --                   .mem_dqs_n
+		mem_odt                 : out   std_logic_vector(0 downto 0);                
+		phy_clk					   : out std_logic;
+		oct_rzqin               : in    std_logic                     := '0';             --                oct.rzqin
+		--aux_full_rate_clk	   : out std_logic;
+		--aux_half_rate_clk	   : out std_logic;
+		--reset_request_n		   : out std_logic;
+		begin_test				   : in std_logic;
+		insert_error			   : in std_logic;
+		pnf_per_bit         	   : out std_logic_vector(31 downto 0);   
+		pnf_per_bit_persist 	   : out std_logic_vector(31 downto 0);
+		pass                	   : out std_logic;
+		fail                	   : out std_logic; 
+		test_complete       	   : out std_logic
  
         );
 end component;
 
 component wfm_player is
 	generic(
-			dev_family			: string  := "Cyclone IV E"; 
-			wfm_infifo_size	: integer := 11;
-			wfm_outfifo_size	: integer := 11;
-			data_width			: integer := 32;
-			iq_width				: integer := 12;
-			addr_size			: integer := 24;
-			cntrl_bus_size		: integer := 16;
-			lcl_burst_length	: integer := 2;
-			lcl_bus_size		: integer := 32;
-			cntrl_rate			: integer := 1 --1 - full rate, 2 - half rate
+		dev_family				: string  := "Cyclone IV E";
+      --Parameters for FIFO buffer before external memory
+      wfm_infifo_wrwidth   : integer := 32;
+      wfm_infifo_wrsize		: integer := 11;
+      wfm_infifo_rdwidth   : integer := 32;
+      wfm_infifo_rdsize		: integer := 11;      
+      --Avalon MM interface of external memory controller parameters 
+		avmm_addr_size		   : integer := 24;
+		avmm_burst_length		: integer := 2;
+		avmm_bus_size			: integer := 32
+                 
 );
   port (
 		ddr2_phy_clk			: in std_logic;
@@ -304,21 +326,21 @@ component wfm_player is
 		wfm_load					: in std_logic;
 		wfm_play_stop			: in std_logic; -- 1- play, 0- stop
 
-		wfm_data					: in std_logic_vector(data_width-1 downto 0);
+		wfm_data					: in std_logic_vector(wfm_infifo_wrwidth-1 downto 0);
 		wfm_wr					: in std_logic;
-		wfm_infifo_wrusedw 	: out std_logic_vector(wfm_infifo_size-1 downto 0);
+		wfm_infifo_wrusedw 	: out std_logic_vector(wfm_infifo_wrsize-1 downto 0);
 
 		wcmd_clk					: in std_logic;
 		wcmd_reset_n			: in  std_logic;
 		wcmd_rdy					: in std_logic;
-		wcmd_addr				: out std_logic_vector(addr_size-1 downto 0);
+		wcmd_addr				: out std_logic_vector(avmm_addr_size-1 downto 0);
 		wcmd_wr					: out std_logic;
 		wcmd_brst_en			: out std_logic; --1- writes in burst, 0- single write
-		wcmd_data				: out std_logic_vector(lcl_bus_size-1 downto 0);
+		wcmd_data				: out std_logic_vector(avmm_bus_size-1 downto 0);
 		rcmd_clk					: in std_logic;
 		rcmd_reset_n			: in std_logic;
 		rcmd_rdy					: in std_logic;
-		rcmd_addr				: out std_logic_vector(addr_size-1 downto 0);
+		rcmd_addr				: out std_logic_vector(avmm_addr_size-1 downto 0);
 		rcmd_wr					: out std_logic;
 		rcmd_brst_en			: out std_logic --1- reads in burst, 0- single read
 		
@@ -327,23 +349,29 @@ end component;
 
 component decompress_top is
   generic (
-			dev_family 	: string  := "Cyclone IV E";
-			data_width 	: integer := 32;
-			data_rwidth	: integer:= 32;
-			fifo_rsize	: integer := 9;
-			fifo_wsize	: integer := 10;
-         iq_width		: integer := 16);
+			dev_family 	         : string  := "Cyclone V";
+			datain_width 	      : integer := 64; --IN data width
+         infifo_wrwidth       : integer := 64; --Should be same as datain_width
+         infifo_rdwidth       : integer := 64;
+			infifo_rsize	      : integer := 9;
+			infifo_wsize	      : integer := 9;
+         decompr_fifo_wrwidth : integer := 128;
+         decompr_fifo_rdwidth : integer := 64;
+         decompr_fifo_rsize   : integer := 7;
+         decompr_fifo_wsize   : integer := 8;
+			iq_width		         : integer := 16
+         );
   port (
 			--input ports 
 			wclk          	: in std_logic;
 			rclk          	: in std_logic;
 			reset_n       	: in std_logic;
-			data_in       	: in std_logic_vector(data_width-1 downto 0);
+			data_in       	: in std_logic_vector(datain_width-1 downto 0);
 			data_in_valid 	: in std_logic; -- data_in leading signal which indicates valid incomong data
 			sample_width  	: in std_logic_vector(1 downto 0); -- "00"-16bit, "01"-14bit, "10"-12bit
 			xen 				: in std_logic; --data read enable
 		   --output ports  
-			wusedw        	: out std_logic_vector(fifo_wsize-1 downto 0);
+			wusedw        	: out std_logic_vector(infifo_wsize-1 downto 0);
 			fr_start  		: in std_logic;
 			ch_en				: in std_logic_vector(1 downto 0);
 			mimo_en			: in std_logic;
@@ -411,15 +439,18 @@ end process;
 -- ----------------------------------------------------------------------------
 wfm_player_inst0 : wfm_player
 	generic map (
-			dev_family			=> dev_family, 
-			wfm_infifo_size	=> wfm0_infifo_size,
-			wfm_outfifo_size	=> wfm0_outfifo_size,
-			data_width			=> wfm0_data_width, 
-			iq_width				=> wfm0_iq_width, 
-			addr_size			=> addr_size, 
-			cntrl_bus_size		=> cntrl_bus_size,
-			lcl_burst_length	=> lcl_burst_length,
-			cntrl_rate			=> cntrl_rate 
+      dev_family				=> dev_family,
+      --Parameters for FIFO
+      wfm_infifo_wrwidth   => wfm0_data_width,
+      wfm_infifo_wrsize		=> wfm0_infifo_size,
+      wfm_infifo_rdwidth   => mpfe_0_bus_size,
+      wfm_infifo_rdsize		=> FIFORD_SIZE(wfm0_data_width, 
+                              mpfe_0_bus_size, 
+                              wfm0_infifo_size),
+      --Avalon MM interface
+      avmm_addr_size		   => mpfe_0_addr_size,
+      avmm_burst_length		=> mpfe_0_burst_length,
+      avmm_bus_size			=> mpfe_0_bus_size
 )
   port map(
 
@@ -481,16 +512,18 @@ end process;
 -- ----------------------------------------------------------------------------
 wfm_player_inst1 : wfm_player
 	generic map (
-			dev_family			=> dev_family, 
-			wfm_infifo_size	=> wfm1_infifo_size,
-			wfm_outfifo_size	=> wfm1_outfifo_size,
-			data_width			=> wfm1_data_width, 
-			iq_width				=> wfm1_iq_width, 
-			addr_size			=> addr_size, 
-			cntrl_bus_size		=> cntrl_bus_size,
-			lcl_burst_length	=> lcl_burst_length,
-			lcl_bus_size		=> lcl_bus_size,
-			cntrl_rate			=> cntrl_rate 
+      dev_family				=> dev_family,
+      --Parameters for FIFO
+      wfm_infifo_wrwidth   => wfm1_data_width,
+      wfm_infifo_wrsize		=> wfm1_infifo_size,
+      wfm_infifo_rdwidth   => mpfe_1_bus_size,
+      wfm_infifo_rdsize		=> FIFORD_SIZE(wfm1_data_width, 
+                              mpfe_1_bus_size, 
+                              wfm1_infifo_size),
+      --Avalon MM interface
+      avmm_addr_size		   => mpfe_1_addr_size,
+      avmm_burst_length		=> mpfe_1_burst_length,
+      avmm_bus_size			=> mpfe_1_bus_size
 )
   port map(
 
@@ -523,17 +556,20 @@ wfm_player_inst1 : wfm_player
 
 DDR3_avmm_2x32_ctrl_inst3 : DDR3_avmm_2x32_ctrl
 		generic map(
-			dev_family	     	=> dev_family,
-			cntrl_rate			=> cntrl_rate,
-			cntrl_addr_size	=> cntrl_addr_size,
-			cntrl_ba_size		=> cntrl_ba_size,
-			cntrl_bus_size		=> cntrl_bus_size ,
-			addr_size			=> addr_size,
-			lcl_bus_size		=> lcl_bus_size,
-			lcl_burst_length	=> lcl_burst_length,
-			cmd_fifo_size		=> cmd_fifo_size,
-			outfifo_size_0		=> outfifo_size_0,
-			outfifo_size_1		=> outfifo_size_1
+			dev_family	     	   => dev_family,
+			cntrl_rate			   => cntrl_rate,
+			cntrl_addr_size	   => cntrl_addr_size,
+			cntrl_ba_size		   => cntrl_ba_size,
+			cntrl_bus_size		   => cntrl_bus_size ,
+         mpfe_0_addr_size     => mpfe_0_addr_size,
+         mpfe_0_bus_size      => mpfe_0_bus_size,
+         mpfe_0_burst_length  => mpfe_0_burst_length,        
+         mpfe_1_addr_size     => mpfe_1_addr_size,
+         mpfe_1_bus_size      => mpfe_1_bus_size,
+         mpfe_1_burst_length  => mpfe_1_burst_length,
+			cmd_fifo_size		   => cmd_fifo_size,
+			outfifo_size_0		   => wfm0_dcmpr_infifo_size,
+			outfifo_size_1		   => wfm1_dcmpr_infifo_size
 		)
 		port map(
 
@@ -631,12 +667,21 @@ inst4_reset_n<= not wfm0_load_sync(2);
 		 
 decompress_top_inst4 : decompress_top
   generic map (
-			dev_family 	=> dev_family,
-			data_width 	=> lcl_bus_size,
-			data_rwidth	=> 64,
-			fifo_rsize	=> (outfifo_size_0 - 2),
-			fifo_wsize	=> outfifo_size_0,
-         iq_width    => wfm0_iq_width
+         dev_family 	         => dev_family,
+			datain_width 	      => mpfe_0_bus_size,
+         infifo_wrwidth       => mpfe_0_bus_size,
+         infifo_rdwidth       => 64,
+         infifo_wsize	      => wfm0_dcmpr_infifo_size,
+			infifo_rsize	      => FIFORD_SIZE(mpfe_0_bus_size, 
+                                 64, 
+                                 wfm0_dcmpr_infifo_size),
+         decompr_fifo_wrwidth => 128,
+         decompr_fifo_rdwidth => 64,
+         decompr_fifo_wsize   => wfm0_dcmpr_infifo_size-1,
+         decompr_fifo_rsize   => FIFORD_SIZE(128, 
+                                 64, 
+                                 wfm0_dcmpr_infifo_size-1),
+			iq_width		         => wfm0_iq_width
 			)
   port map (
 			--input ports 
@@ -676,12 +721,21 @@ inst5_reset_n<= not wfm1_load_sync(2);
 		 
 decompress_top_inst5 : decompress_top
   generic map (
-			dev_family 	=> dev_family,
-			data_width 	=> lcl_bus_size,
-			data_rwidth	=> 64,
-			fifo_rsize	=> (outfifo_size_1 - 2),
-			fifo_wsize	=> outfifo_size_1,
-         iq_width    => wfm1_iq_width
+         dev_family 	         => dev_family,
+			datain_width 	      => mpfe_1_bus_size,
+         infifo_wrwidth       => mpfe_1_bus_size,
+         infifo_rdwidth       => 64,
+         infifo_wsize	      => wfm1_dcmpr_infifo_size,
+			infifo_rsize	      => FIFORD_SIZE(mpfe_1_bus_size, 
+                                 64, 
+                                 wfm1_dcmpr_infifo_size),
+         decompr_fifo_wrwidth => 128,
+         decompr_fifo_rdwidth => 64,
+         decompr_fifo_wsize   => wfm1_dcmpr_infifo_size-1,
+         decompr_fifo_rsize   => FIFORD_SIZE(128, 
+                                 64, 
+                                 wfm1_dcmpr_infifo_size-1),
+			iq_width		         => wfm1_iq_width
 			)
   port map (
 			--input ports 
