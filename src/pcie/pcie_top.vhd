@@ -44,62 +44,64 @@ entity pcie_top is
 		ctrl0_OUT_wrreq		: in std_logic;
 		ctrl0_OUT_data			: in std_logic_vector(31 downto 0);
 		--Stream 0 data fifo (PC -> FPGA) 
-		strm0_IN_rdclk			: in std_logic;
-		strm0_IN_rdempty		: out std_logic;
-		strm0_IN_rdusedw		: out std_logic_vector(8 downto 0);
-		strm0_IN_rdreq			: in std_logic;
+      --FIFO insterface (not used)
+--		strm0_IN_rdclk			: in std_logic;
+--		strm0_IN_rdempty		: out std_logic;
+--		strm0_IN_rdusedw		: out std_logic_vector(8 downto 0);
+--		strm0_IN_rdreq			: in std_logic;
+      --Direct pcie data
 		strm0_IN_q				: out std_logic_vector(31 downto 0);
 		strm0_IN_ext_q_valid	: out std_logic;
 		strm0_IN_ext_rdy		: in std_logic;
 		--Stream 0 data fifo (FPGA -> PC) 
-		strm0_OUT_SW			: in std_logic;
+--		strm0_OUT_SW			: in std_logic;
 		strm0_OUT_wrclk		: in std_logic;
 		strm0_OUT_aclr_n		: in std_logic;
 		strm0_OUT_wrfull		: out std_logic;
 		strm0_OUT_wrusedw		: out std_logic_vector(11 downto 0);
 		strm0_OUT_wrreq		: in std_logic;
 		strm0_OUT_data			: in std_logic_vector(63 downto 0);
-		strm0_OUT_EXT_rdreq	: out std_logic;
-		strm0_OUT_EXT_rdempty: in std_logic;
-		strm0_OUT_EXT_q		: in std_logic_vector(31 downto 0);		
+--		strm0_OUT_EXT_rdreq	: out std_logic;
+--		strm0_OUT_EXT_rdempty: in std_logic;
+--		strm0_OUT_EXT_q		: in std_logic_vector(31 downto 0);		
 		--Stream 1 data fifo (PC -> FPGA) 
-		strm1_IN_rdclk			: in std_logic;
-		strm1_IN_rdempty		: out std_logic;
-		strm1_IN_rdusedw		: out std_logic_vector(8 downto 0);
-		strm1_IN_rdreq			: in std_logic;
+--		strm1_IN_rdclk			: in std_logic;
+--		strm1_IN_rdempty		: out std_logic;
+--		strm1_IN_rdusedw		: out std_logic_vector(8 downto 0);
+--		strm1_IN_rdreq			: in std_logic;
 		strm1_IN_q				: out std_logic_vector(31 downto 0);
 		strm1_IN_ext_q_valid	: out std_logic;
 		strm1_IN_ext_rdy		: in std_logic;
 		--Stream 1 data fifo (FPGA -> PC) 
-		strm1_OUT_SW			: in std_logic;
+--		strm1_OUT_SW			: in std_logic;
 		strm1_OUT_wrclk		: in std_logic;
 		strm1_OUT_aclr_n		: in std_logic;
 		strm1_OUT_wrfull		: out std_logic;
 		strm1_OUT_wrusedw		: out std_logic_vector(11 downto 0);
 		strm1_OUT_wrreq		: in std_logic;
 		strm1_OUT_data			: in std_logic_vector(63 downto 0);
-		strm1_OUT_EXT_rdreq	: out std_logic;
-		strm1_OUT_EXT_rdempty: in std_logic;
-		strm1_OUT_EXT_q		: in std_logic_vector(31 downto 0);
+--		strm1_OUT_EXT_rdreq	: out std_logic;
+--		strm1_OUT_EXT_rdempty: in std_logic;
+--		strm1_OUT_EXT_q		: in std_logic_vector(31 downto 0);
 		--Stream 2 data fifo (PC -> FPGA) 
-		strm2_IN_rdclk			: in std_logic;
-		strm2_IN_rdempty		: out std_logic;
-		strm2_IN_rdusedw		: out std_logic_vector(8 downto 0);
-		strm2_IN_rdreq			: in std_logic;
+--		strm2_IN_rdclk			: in std_logic;
+--		strm2_IN_rdempty		: out std_logic;
+--		strm2_IN_rdusedw		: out std_logic_vector(8 downto 0);
+--		strm2_IN_rdreq			: in std_logic;
 		strm2_IN_q				: out std_logic_vector(31 downto 0);
 		strm2_IN_ext_q_valid	: out std_logic;
 		strm2_IN_ext_rdy		: in std_logic;
 		--Stream 2 data fifo (FPGA -> PC) 
-		strm2_OUT_SW			: in std_logic;
+--		strm2_OUT_SW			: in std_logic;
 		strm2_OUT_wrclk		: in std_logic;
 		strm2_OUT_aclr_n		: in std_logic;
 		strm2_OUT_wrfull		: out std_logic;
 		strm2_OUT_wrusedw		: out std_logic_vector(11 downto 0);
 		strm2_OUT_wrreq		: in std_logic;
-		strm2_OUT_data			: in std_logic_vector(63 downto 0);
-		strm2_OUT_EXT_rdreq	: out std_logic;
-		strm2_OUT_EXT_rdempty: in std_logic;
-		strm2_OUT_EXT_q		: in std_logic_vector(31 downto 0)
+		strm2_OUT_data			: in std_logic_vector(63 downto 0)
+--		strm2_OUT_EXT_rdreq	: out std_logic;
+--		strm2_OUT_EXT_rdempty: in std_logic;
+--		strm2_OUT_EXT_q		: in std_logic_vector(31 downto 0)
 		
 		
 	);
@@ -110,7 +112,6 @@ end pcie_top;
 -- ----------------------------------------------------------------------------
 architecture arch of pcie_top is
 --declare signals,  components here
-signal my_sig_name : std_logic_vector (7 downto 0); 
 
 
 component xillybus
@@ -283,22 +284,22 @@ end component;
   
 begin
 
-	user_r_stream0_read_32_data	<= inst5_q 								when strm0_OUT_SW='1' else strm0_OUT_EXT_q;
-	user_r_stream0_read_32_empty	<= inst5_rdempty 						when strm0_OUT_SW='1' else strm0_OUT_EXT_rdempty;
-	strm0_OUT_EXT_rdreq				<= user_r_stream0_read_32_rden 	when strm0_OUT_SW='0' else '0';
-	
-	user_r_stream1_read_32_data	<= inst7_q 								when strm1_OUT_SW='1' else strm1_OUT_EXT_q;
-	user_r_stream1_read_32_empty	<= inst7_rdempty 						when strm1_OUT_SW='1' else strm1_OUT_EXT_rdempty;
-	strm1_OUT_EXT_rdreq				<= user_r_stream1_read_32_rden 	when strm1_OUT_SW='0' else '0';
-	
-	--only external data currently is connected
-	user_r_stream2_read_32_data	<= inst9_q								when strm2_OUT_SW='1' else strm2_OUT_EXT_q;
-	user_r_stream2_read_32_empty	<= inst9_rdempty 						when strm2_OUT_SW='1' else strm2_OUT_EXT_rdempty;
-	strm2_OUT_EXT_rdreq				<= user_r_stream2_read_32_rden 	when strm2_OUT_SW='0' else '0';
+--	user_r_stream0_read_32_data	<= inst5_q 								when strm0_OUT_SW='1' else strm0_OUT_EXT_q;
+--	user_r_stream0_read_32_empty	<= inst5_rdempty 						when strm0_OUT_SW='1' else strm0_OUT_EXT_rdempty;
+--	strm0_OUT_EXT_rdreq				<= user_r_stream0_read_32_rden 	when strm0_OUT_SW='0' else '0';
+--	
+--	user_r_stream1_read_32_data	<= inst7_q 								when strm1_OUT_SW='1' else strm1_OUT_EXT_q;
+--	user_r_stream1_read_32_empty	<= inst7_rdempty 						when strm1_OUT_SW='1' else strm1_OUT_EXT_rdempty;
+--	strm1_OUT_EXT_rdreq				<= user_r_stream1_read_32_rden 	when strm1_OUT_SW='0' else '0';
+--	
+--	--only external data currently is connected
+--	user_r_stream2_read_32_data	<= inst9_q								when strm2_OUT_SW='1' else strm2_OUT_EXT_q;
+--	user_r_stream2_read_32_empty	<= inst9_rdempty 						when strm2_OUT_SW='1' else strm2_OUT_EXT_rdempty;
+--	strm2_OUT_EXT_rdreq				<= user_r_stream2_read_32_rden 	when strm2_OUT_SW='0' else '0';
 
-  inst1_xillybus : xillybus
-    port map (
-	 
+   inst1_xillybus : xillybus
+   port map (
+   
       -- Ports related to /dev/xillybus_control0_read_32
       -- FPGA to CPU signals:
       user_r_control0_read_32_rden 		=> user_r_control0_read_32_rden,
@@ -306,83 +307,83 @@ begin
       user_r_control0_read_32_data 		=> user_r_control0_read_32_data,
       user_r_control0_read_32_eof 		=> user_r_control0_read_32_eof,
       user_r_control0_read_32_open 		=> user_r_control0_read_32_open,
-
+   
       -- Ports related to /dev/xillybus_control0_write_32
       -- CPU to FPGA signals:
       user_w_control0_write_32_wren 	=> user_w_control0_write_32_wren,
       user_w_control0_write_32_full 	=> user_w_control0_write_32_full,
       user_w_control0_write_32_data 	=> user_w_control0_write_32_data,
       user_w_control0_write_32_open 	=> user_w_control0_write_32_open,
-
+   
       -- Ports related to /dev/xillybus_mem_8
       -- FPGA to CPU signals:
-      user_r_mem_8_rden 		=> user_r_mem_8_rden,
-      user_r_mem_8_empty 		=> user_r_mem_8_empty,
-      user_r_mem_8_data 		=> user_r_mem_8_data,
-      user_r_mem_8_eof 			=> user_r_mem_8_eof,
-      user_r_mem_8_open 		=> user_r_mem_8_open,
+      user_r_mem_8_rden 		         => user_r_mem_8_rden,
+      user_r_mem_8_empty 		         => user_r_mem_8_empty,
+      user_r_mem_8_data 		         => user_r_mem_8_data,
+      user_r_mem_8_eof 			         => user_r_mem_8_eof,
+      user_r_mem_8_open 		         => user_r_mem_8_open,
       -- CPU to FPGA signals:
-      user_w_mem_8_wren => user_w_mem_8_wren,
-      user_w_mem_8_full => user_w_mem_8_full,
-      user_w_mem_8_data => user_w_mem_8_data,
-      user_w_mem_8_open => user_w_mem_8_open,
+      user_w_mem_8_wren                => user_w_mem_8_wren,
+      user_w_mem_8_full                => user_w_mem_8_full,
+      user_w_mem_8_data                => user_w_mem_8_data,
+      user_w_mem_8_open                => user_w_mem_8_open,
       -- Address signals:
-      user_mem_8_addr 			=> user_mem_8_addr,
-      user_mem_8_addr_update 	=> user_mem_8_addr_update,
-
+      user_mem_8_addr 			         => user_mem_8_addr,
+      user_mem_8_addr_update 	         => user_mem_8_addr_update,
+   
       -- Ports related to /dev/xillybus_stream0_read_32
       -- FPGA to CPU signals:
-      user_r_stream0_read_32_rden 	=> user_r_stream0_read_32_rden,
-      user_r_stream0_read_32_empty 	=> user_r_stream0_read_32_empty,
-      user_r_stream0_read_32_data 	=> user_r_stream0_read_32_data,
-      user_r_stream0_read_32_eof 	=> user_r_stream0_read_32_eof,
-      user_r_stream0_read_32_open 	=> user_r_stream0_read_32_open,
-
+      user_r_stream0_read_32_rden 	   => user_r_stream0_read_32_rden,
+      user_r_stream0_read_32_empty 	   => user_r_stream0_read_32_empty,
+      user_r_stream0_read_32_data 	   => user_r_stream0_read_32_data,
+      user_r_stream0_read_32_eof 	   => user_r_stream0_read_32_eof,
+      user_r_stream0_read_32_open 	   => user_r_stream0_read_32_open,
+   
       -- Ports related to /dev/xillybus_stream0_write_32
       -- CPU to FPGA signals:
-      user_w_stream0_write_32_wren => user_w_stream0_write_32_wren,
-      user_w_stream0_write_32_full => user_w_stream0_write_32_full,
-      user_w_stream0_write_32_data => user_w_stream0_write_32_data,
-      user_w_stream0_write_32_open => user_w_stream0_write_32_open,
-
+      user_w_stream0_write_32_wren     => user_w_stream0_write_32_wren,
+      user_w_stream0_write_32_full     => user_w_stream0_write_32_full,
+      user_w_stream0_write_32_data     => user_w_stream0_write_32_data,
+      user_w_stream0_write_32_open     => user_w_stream0_write_32_open,
+   
       -- Ports related to /dev/xillybus_stream1_read_32
       -- FPGA to CPU signals:
-      user_r_stream1_read_32_rden 	=> user_r_stream1_read_32_rden,
-      user_r_stream1_read_32_empty 	=> user_r_stream1_read_32_empty,
-      user_r_stream1_read_32_data 	=> user_r_stream1_read_32_data,
-      user_r_stream1_read_32_eof 	=> user_r_stream1_read_32_eof,
-      user_r_stream1_read_32_open 	=> user_r_stream1_read_32_open,
-
+      user_r_stream1_read_32_rden 	   => user_r_stream1_read_32_rden,
+      user_r_stream1_read_32_empty 	   => user_r_stream1_read_32_empty,
+      user_r_stream1_read_32_data 	   => user_r_stream1_read_32_data,
+      user_r_stream1_read_32_eof 	   => user_r_stream1_read_32_eof,
+      user_r_stream1_read_32_open 	   => user_r_stream1_read_32_open,
+   
       -- Ports related to /dev/xillybus_stream1_write_32
       -- CPU to FPGA signals:
-      user_w_stream1_write_32_wren => user_w_stream1_write_32_wren,
-      user_w_stream1_write_32_full => user_w_stream1_write_32_full,
-      user_w_stream1_write_32_data => user_w_stream1_write_32_data,
-      user_w_stream1_write_32_open => user_w_stream1_write_32_open,
-		
-		-- Ports related to /dev/xillybus_stream2_read_32
+      user_w_stream1_write_32_wren     => user_w_stream1_write_32_wren,
+      user_w_stream1_write_32_full     => user_w_stream1_write_32_full,
+      user_w_stream1_write_32_data     => user_w_stream1_write_32_data,
+      user_w_stream1_write_32_open     => user_w_stream1_write_32_open,
+      
+      -- Ports related to /dev/xillybus_stream2_read_32
       -- FPGA to CPU signals:
-      user_r_stream2_read_32_rden 	=> user_r_stream2_read_32_rden,
-      user_r_stream2_read_32_empty 	=> user_r_stream2_read_32_empty,
-      user_r_stream2_read_32_data 	=> user_r_stream2_read_32_data,
-      user_r_stream2_read_32_eof 	=> user_r_stream2_read_32_eof,
-      user_r_stream2_read_32_open 	=> user_r_stream2_read_32_open,
-
+      user_r_stream2_read_32_rden 	   => user_r_stream2_read_32_rden,
+      user_r_stream2_read_32_empty 	   => user_r_stream2_read_32_empty,
+      user_r_stream2_read_32_data 	   => user_r_stream2_read_32_data,
+      user_r_stream2_read_32_eof 	   => user_r_stream2_read_32_eof,
+      user_r_stream2_read_32_open 	   => user_r_stream2_read_32_open,
+   
       -- Ports related to /dev/xillybus_stream2_write_32
       -- CPU to FPGA signals:
-      user_w_stream2_write_32_wren => user_w_stream2_write_32_wren,
-      user_w_stream2_write_32_full => user_w_stream2_write_32_full,
-      user_w_stream2_write_32_data => user_w_stream2_write_32_data,
-      user_w_stream2_write_32_open => user_w_stream2_write_32_open,
-
+      user_w_stream2_write_32_wren     => user_w_stream2_write_32_wren,
+      user_w_stream2_write_32_full     => user_w_stream2_write_32_full,
+      user_w_stream2_write_32_data     => user_w_stream2_write_32_data,
+      user_w_stream2_write_32_open     => user_w_stream2_write_32_open,
+   
       -- General signals
-      pcie_perstn 	=> pcie_perstn,
-      pcie_refclk 	=> pcie_refclk,
-      pcie_rx 			=> pcie_rx,
-      bus_clk 			=> bus_clk,
-      pcie_tx 			=> pcie_tx,
-      quiesce 			=> quiesce,
-      user_led 		=> user_led_sign 
+      pcie_perstn 	                  => pcie_perstn,
+      pcie_refclk 	                  => pcie_refclk,
+      pcie_rx 			                  => pcie_rx,
+      bus_clk 			                  => bus_clk,
+      pcie_tx 			                  => pcie_tx,
+      quiesce 			                  => quiesce,
+      user_led 		                  => user_led_sign 
       );
 		
 		
@@ -499,6 +500,30 @@ strm0_IN_q 							<= user_w_stream0_write_32_data;
 user_w_stream0_write_32_full	<= not strm0_IN_ext_rdy;
 
 --strm0_OUT fifo		
+--inst5 : fifo_inst
+--GENERIC MAP(
+--			dev_family 		=> dev_family,
+--			rdusedw_width 	=> 13,
+--			rdwidth 			=> pcie_strm0_dataw,
+--			show_ahead 		=> "OFF",
+--			wrusedw_witdth => 12,
+--			wrwidth 			=> 64
+--			)
+--PORT MAP(
+--			reset_n 			=> strm0_OUT_aclr_n,
+--			wrclk 			=> strm0_OUT_wrclk,
+--			wrreq 			=> strm0_OUT_wrreq,
+--			data 				=> strm0_OUT_data,
+--			rdclk 			=> bus_clk,
+--			rdreq 			=> inst5_rdreq, --user_r_stream0_read_32_rden,
+--			wrfull 			=> strm0_OUT_wrfull,
+--			wrempty			=> open,
+--			wrusedw			=> strm0_OUT_wrusedw, 
+--			q 					=> inst5_q, --user_r_stream0_read_32_data,
+--			rdempty 			=> inst5_rdempty, --user_r_stream0_read_32_empty,
+--			rdusedw 			=> open
+--			);	
+
 inst5 : fifo_inst
 GENERIC MAP(
 			dev_family 		=> dev_family,
@@ -514,16 +539,16 @@ PORT MAP(
 			wrreq 			=> strm0_OUT_wrreq,
 			data 				=> strm0_OUT_data,
 			rdclk 			=> bus_clk,
-			rdreq 			=> inst5_rdreq, --user_r_stream0_read_32_rden,
+			rdreq 			=> user_r_stream0_read_32_rden,
 			wrfull 			=> strm0_OUT_wrfull,
 			wrempty			=> open,
 			wrusedw			=> strm0_OUT_wrusedw, 
-			q 					=> inst5_q, --user_r_stream0_read_32_data,
-			rdempty 			=> inst5_rdempty, --user_r_stream0_read_32_empty,
+			q 					=> user_r_stream0_read_32_data,
+			rdempty 			=> user_r_stream0_read_32_empty,
 			rdusedw 			=> open
 			);	
 
-inst5_rdreq <= user_r_stream0_read_32_rden when strm0_OUT_SW='1' else '0';
+--inst5_rdreq <= user_r_stream0_read_32_rden when strm0_OUT_SW='1' else '0';
 
 user_r_stream0_read_32_eof	 <= '0';				
 		
@@ -560,6 +585,31 @@ user_w_stream1_write_32_full	<= not strm1_IN_ext_rdy;
 
 	
 --strm1_OUT fifo		
+--inst7 : fifo_inst
+--GENERIC MAP(
+--			dev_family 		=> dev_family,
+--			rdusedw_width 	=> 13,
+--			rdwidth 			=> pcie_strm1_dataw,
+--			show_ahead 		=> "OFF",
+--			wrusedw_witdth => 12,
+--			wrwidth 			=> 64
+--			)
+--PORT MAP(
+--			reset_n 			=> strm1_OUT_aclr_n,
+--			wrclk 			=> strm1_OUT_wrclk,
+--			wrreq 			=> strm1_OUT_wrreq,
+--			data 				=> strm1_OUT_data,
+--			rdclk 			=> bus_clk,
+--			rdreq 			=> inst7_rdreq, --user_r_stream1_read_32_rden,
+--			wrfull 			=> strm1_OUT_wrfull,
+--			wrempty			=> open,
+--			wrusedw			=> strm1_OUT_wrusedw, 
+--			q 					=> inst7_q, --user_r_stream1_read_32_data,
+--			rdempty 			=> inst7_rdempty, --user_r_stream1_read_32_empty,
+--			rdusedw 			=> open
+--			);
+         
+         
 inst7 : fifo_inst
 GENERIC MAP(
 			dev_family 		=> dev_family,
@@ -575,16 +625,16 @@ PORT MAP(
 			wrreq 			=> strm1_OUT_wrreq,
 			data 				=> strm1_OUT_data,
 			rdclk 			=> bus_clk,
-			rdreq 			=> inst7_rdreq, --user_r_stream1_read_32_rden,
+			rdreq 			=> user_r_stream1_read_32_rden,
 			wrfull 			=> strm1_OUT_wrfull,
 			wrempty			=> open,
 			wrusedw			=> strm1_OUT_wrusedw, 
-			q 					=> inst7_q, --user_r_stream1_read_32_data,
-			rdempty 			=> inst7_rdempty, --user_r_stream1_read_32_empty,
+			q 					=> user_r_stream1_read_32_data,
+			rdempty 			=> user_r_stream1_read_32_empty,
 			rdusedw 			=> open
 			);
 		
-inst7_rdreq <= user_r_stream1_read_32_rden when strm1_OUT_SW='1' else '0';	
+--sinst7_rdreq <= user_r_stream1_read_32_rden when strm1_OUT_SW='1' else '0';	
 		
 user_r_stream1_read_32_eof	 <= '0';	
 
@@ -622,6 +672,31 @@ user_w_stream2_write_32_full	<= not strm2_IN_ext_rdy;
 
 	
 --strm2_OUT fifo		
+--inst9 : fifo_inst
+--GENERIC MAP(
+--			dev_family 		=> dev_family,
+--			rdusedw_width 	=> 13,
+--			rdwidth 			=> pcie_strm2_dataw,
+--			show_ahead 		=> "OFF",
+--			wrusedw_witdth => 12,
+--			wrwidth 			=> 64
+--			)
+--PORT MAP(
+--			reset_n 			=> strm2_OUT_aclr_n,
+--			wrclk 			=> strm2_OUT_wrclk,
+--			wrreq 			=> strm2_OUT_wrreq,
+--			data 				=> strm2_OUT_data,
+--			rdclk 			=> bus_clk,
+--			rdreq 			=> inst9_rdreq, --user_r_stream2_read_32_rden,
+--			wrfull 			=> strm2_OUT_wrfull,
+--			wrempty			=> open,
+--			wrusedw			=> strm2_OUT_wrusedw, 
+--			q 					=> inst9_q, --user_r_stream2_read_32_data,
+--			rdempty 			=> inst9_rdempty, --user_r_stream2_read_32_empty,
+--			rdusedw 			=> open
+--			);
+         
+         
 inst9 : fifo_inst
 GENERIC MAP(
 			dev_family 		=> dev_family,
@@ -637,16 +712,16 @@ PORT MAP(
 			wrreq 			=> strm2_OUT_wrreq,
 			data 				=> strm2_OUT_data,
 			rdclk 			=> bus_clk,
-			rdreq 			=> inst9_rdreq, --user_r_stream2_read_32_rden,
+			rdreq 			=> user_r_stream2_read_32_rden,
 			wrfull 			=> strm2_OUT_wrfull,
 			wrempty			=> open,
 			wrusedw			=> strm2_OUT_wrusedw, 
-			q 					=> inst9_q, --user_r_stream1_read_32_data,
-			rdempty 			=> inst9_rdempty, --user_r_stream1_read_32_empty,
+			q 					=> user_r_stream2_read_32_data,
+			rdempty 			=> user_r_stream2_read_32_empty,
 			rdusedw 			=> open
 			);
 		
-inst9_rdreq <= user_r_stream2_read_32_rden when strm2_OUT_SW='1' else '0';	
+--inst9_rdreq <= user_r_stream2_read_32_rden when strm2_OUT_SW='1' else '0';	
 		
 user_r_stream2_read_32_eof	 <= '0';
 		
