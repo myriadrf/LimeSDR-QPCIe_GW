@@ -1,12 +1,22 @@
-#-----------------------------------------------------------------------
-#Time settings
-#-----------------------------------------------------------------------
-#To avoid warnings with truncated timing values
-set_time_format -unit ns -decimal_places 4 
+# ----------------------------------------------------------------------------
+# FILE: 	lms_trx_pcie_timing.sdc
+# DESCRIPTION:	Timing constrains file for TimeQuest
+# DATE:	June 2, 2017
+# AUTHOR(s):	Lime Microsystems
+# REVISIONS:
+# ----------------------------------------------------------------------------
+# NOTES:
+# 
+# ----------------------------------------------------------------------------
 
-#-----------------------------------------------------------------------
+# ----------------------------------------------------------------------------
+#Time settings
+# ----------------------------------------------------------------------------
+set_time_format -unit ns -decimal_places 3 
+
+# ----------------------------------------------------------------------------
 #Timing parameters
-#-----------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 #CLK100_FPGA
 	#Clock period 100MHz
 set CLK100_FPGA_prd			10.000
@@ -41,9 +51,9 @@ set NIOS_DACSPI1_SCLK_prd	200.000
 
 set NIOS_PLLCFG_SCLK_div 	[expr {int($NIOS_PLLCFG_SCLK_prd / $CLK100_FPGA_prd)}]
 set NIOS_DACSPI1_SCLK_div 	[expr {int($NIOS_DACSPI1_SCLK_prd / $CLK100_FPGA_prd)}]
-#-----------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 #Base clocks
-#-----------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 #FPGA pll, 100MHz
 create_clock -period $CLK100_FPGA_prd 		-name CLK100_FPGA 		[get_ports CLK100_FPGA]
 #LMK clk, 30.72MHz
@@ -55,13 +65,13 @@ create_clock -period $CLK125_FPGA_TOP_prd	-name CLK125_FPGA_BOT	[get_ports CLK12
 create_clock -period $CLK125_FPGA_BOT_prd	-name CLK125_FPGA_TOP	[get_ports CLK125_FPGA_TOP]
 #PCIE
 create_clock -period $PCIE_REFCLK_prd 		-name PCIE_REFCLK 		[get_ports PCIE_REFCLK]
-#-----------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 #Virtual clocks
-#-----------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 
-#-----------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 #Generated clocks
-#-----------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 #FPGA pll
 	#FPGA PLL VCO   
 create_generated_clock 	-name FPGA_PLL_VCOPH \
@@ -103,59 +113,21 @@ create_generated_clock 	-name NIOS_DACSPI1_SCLK \
 								-source [get_ports {CLK100_FPGA}] \
 [get_registers {nios_cpu_top:inst175|nios_cpu:u0|nios_cpu_dac_spi1:dac_spi1|SCLK_reg}]
 
-#-----------------------------------------------------------------------
-#====================Other clock constraints====================================
+# ----------------------------------------------------------------------------
+#Other clock constraints
+# ----------------------------------------------------------------------------
 # clock uncertainty is already derived in other sdc files
 #derive_clock_uncertainty
 derive_pll_clocks
-#-----------------------------------------------------------------------
-#====================Input constraints====================================
-#-----------------------------------------------------------------------
-#====================Ootput constraints====================================
-
-
-
-# Set asynchronous design clocks.											
-set_clock_groups -asynchronous 	-group {PCIE_REFCLK} \
-											-group {inst46|inst1_xillybus|pcie|pcie_reconfig|pcie|altpcie_av_hip_ast_hwtcl|altpcie_av_hip_128bit_atom|g_cavhip.arriav_hd_altpe2_hip_top|coreclkout} \
-											-group {FX3_SPI_SCLK} \
-											-group {CLK_LMK_FPGA_IN} \
-                                 -group {FPGA_PLL_VCOPH} \
-											-group {FPGA_PLL_C0}	\
-											-group {FPGA_PLL_C1} \
-											-group {altera_reserved_tck} \
-											-group {CLK100_FPGA} \
-											-group {CLK125_FPGA_BOT} \
-											-group {CLK125_FPGA_TOP} \
-											-group {LMS1_MCLK1} \
-                                 -group {LMS1_MCLK1_GLOBAL} \
-											-group {LMS1_TXPLL_VCOPH} \
-											-group {LMS1_TXPLL_C0} \
-											-group {LMS1_TXPLL_C1} \
-											-group {LMS1_MCLK2} \
-                                 -group {LMS1_MCLK2_GLOBAL} \
-											-group {LMS1_RXPLL_VCOPH} \
-											-group {LMS1_RXPLL_C0} \
-											-group {LMS1_RXPLL_C1} \
-											-group {LMS2_MCLK1} \
-                                 -group {LMS2_MCLK1_GLOBAL} \
-											-group {LMS2_TXPLL_C0} \
-											-group {LMS2_TXPLL_C1} \
-											-group {LMS2_MCLK2} \
-                                 -group {LMS2_MCLK2_GLOBAL} \
-											-group {LMS2_RXPLL_VCOPH} \
-											-group {LMS2_RXPLL_C0} \
-											-group {LMS2_RXPLL_C1} \
-											-group {NIOS_PLLCFG_SCLK} \
-											-group {NIOS_DACSPI1_SCLK} \
-											-group {ADC_CLKOUT}
 											
+
+# ----------------------------------------------------------------------------											
+#Timing Exceptions
+# ----------------------------------------------------------------------------
+#False paths
 set_false_path -from [get_clocks {FPGA_PLL_C1}] -to [get_clocks {ADC_CLKOUT}]
 set_false_path -from [get_clocks {NIOS_DACSPI1_SCLK}] -to [get_clocks {ADC_CLKOUT}]
-#-----------------------------------------------------------------------											
-#============================Timing Exceptions====================================
-#-----------------------------------------------------------------------
-#============================False paths========================================
+
 #Clock outputs 
 set_false_path -to [get_ports ADC_CLK]
 set_false_path -to [get_ports DAC_CLK_WRT]
@@ -202,24 +174,6 @@ set_false_path -to [get_ports LMS2_TXNRX2]
 
 set_false_path -from [get_ports virtddioq[*]]
 set_false_path -from [get_ports virtfsync]
-
-set_false_path -from [get_registers rx_path_top:inst127|diq2fifo:diq2fifo_inst0|lms7002_ddin:inst0_lms7002_ddin|altddio_in:ALTDDIO_IN_component|ddio_in_aii:auto_generated|dataout_h[*]]
-set_false_path -from [get_registers rx_path_top:inst127|diq2fifo:diq2fifo_inst0|lms7002_ddin:inst0_lms7002_ddin|altddio_in:ALTDDIO_IN_component|ddio_in_aii:auto_generated|dataout_l[*]]
-set_false_path -to [get_registers rx_path_top:inst127|diq2fifo:diq2fifo_inst0|lms7002_ddin:inst0_lms7002_ddin|altddio_in:ALTDDIO_IN_component|ddio_in_aii:auto_generated|dataout_l[*]]
-
-#Between sych registers
-set_false_path -from [get_registers {stream_switch:inst41|dest_sel_syncreg[1]}]
-
-set_false_path -from [get_registers {data_cap_buffer:inst27|wclk2_reset_n_sync[1]}]
-set_false_path -from [get_registers {rx_path:inst10|rx_pct_data_v2:inst3|en_reg1}]
-set_false_path -from [get_registers {LTE_tx_path:inst38|synchronizer:inst28|signal_d1}]
-set_false_path -from [get_registers {rx_path:inst12|rx_pct_data_v2:inst3|en_reg1}]
-set_false_path -from [get_registers {wfm_player_x2_top:inst39|inst3_reset_n}]
-
-
-
-
-
 
 # False Paths on JTAG (for SignalTap)
 if {[get_collection_size [get_ports -nowarn {altera_reserved*}]] > 0} {
