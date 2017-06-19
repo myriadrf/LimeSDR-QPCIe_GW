@@ -31,6 +31,7 @@ ENTITY rx_chain IS
 		sdin :  IN  STD_LOGIC;
 		sen :  IN  STD_LOGIC;
 		memrstn :  IN  STD_LOGIC;
+      mac_en      : in std_logic := '1';
 		HBD_ratio :  IN  STD_LOGIC_VECTOR(7 DOWNTO 0);
 		RXI :  IN  STD_LOGIC_VECTOR(17 DOWNTO 0);
 		RXQ :  IN  STD_LOGIC_VECTOR(17 DOWNTO 0);
@@ -146,6 +147,8 @@ COMPONENT pulse_gen
 	);
 END COMPONENT;
 
+signal   sen_int : std_logic; 
+
 SIGNAL	dc_byp :  STD_LOGIC;
 SIGNAL	dccorr :  STD_LOGIC_VECTOR(2 DOWNTO 0);
 SIGNAL	gc_byp :  STD_LOGIC;
@@ -167,6 +170,9 @@ SIGNAL	SYNTHESIZED_WIRE_2 :  STD_LOGIC_VECTOR(0 TO 15);
 SIGNAL	GDFX_TEMP_SIGNAL_0 :  STD_LOGIC_VECTOR(9 DOWNTO 0);
 
 BEGIN 
+
+sen_int <= sen when mac_en = '1' else '1';
+
 SYNTHESIZED_WIRE_0 <= "00000000000000000000000000000000";
 SYNTHESIZED_WIRE_1 <= "0000000000000000";
 SYNTHESIZED_WIRE_2 <= "0000000000000000";
@@ -225,7 +231,7 @@ b2v_inst4 : rxtspcfg
 PORT MAP(mimo_en => H,
 		 sdin => sdin,
 		 sclk => sclk,
-		 sen => sen,
+		 sen => sen_int,
 		 lreset => memrstn,
 		 mreset => memrstn,
 		 rxen => H,

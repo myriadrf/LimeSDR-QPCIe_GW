@@ -15,25 +15,28 @@ use ieee.numeric_std.all;
 entity tx_chain is 
    port
    (
-      clk         :  in std_logic;
-      nrst        :  in std_logic;
-      maddress    :  in std_logic_vector(9 downto 0);
-      sclk        :  in std_logic;
-      sdin        :  in std_logic;
-      sen         :  in std_logic;
-      sdout       :  out std_logic;
-      memrstn     :  in std_logic;
-      TXI         :  in std_logic_vector(17 downto 0);
-      TXQ         :  in std_logic_vector(17 downto 0);
-      TYI         :  out std_logic_vector(13 downto 0);
-      TYQ         :  out std_logic_vector(13 downto 0)
+      clk         : in std_logic;
+      nrst        : in std_logic;
+      maddress    : in std_logic_vector(9 downto 0);
+      sclk        : in std_logic;
+      sdin        : in std_logic;
+      sen         : in std_logic;
+      sdout       : out std_logic;
+      memrstn     : in std_logic;
+      mac_en      : in std_logic := '1';
+      TXI         : in std_logic_vector(17 downto 0);
+      TXQ         : in std_logic_vector(17 downto 0);
+      TYI         : out std_logic_vector(13 downto 0);
+      TYQ         : out std_logic_vector(13 downto 0)
    );
 end tx_chain;
 
 -- ----------------------------------------------------------------------------
 -- Architecture
 -- ----------------------------------------------------------------------------
-architecture arch of tx_chain is 
+architecture arch of tx_chain is
+
+signal sen_int : std_logic; 
    
 --inst0 signals
 signal inst0_dc_byp     : std_logic;
@@ -192,6 +195,9 @@ end component;
 
 begin 
 
+
+   sen_int <= sen when mac_en = '1' else '1';
+
 -- ----------------------------------------------------------------------------
 -- SPI control registers
 -- ----------------------------------------------------------------------------
@@ -200,7 +206,7 @@ port map(
    mimo_en     => '1',
    sdin        => sdin,
    sclk        => sclk,
-   sen         => sen,
+   sen         => sen_int,
    lreset      => memrstn,
    mreset      => memrstn,
    txen        => '1',
