@@ -75,9 +75,9 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
  28 .quartus_project_dir 0000003f  00000000  00000000  00012ef1  2**0
                   CONTENTS, READONLY
- 29 .jdi          00004c99  00000000  00000000  00012f30  2**0
+ 29 .jdi          00004c91  00000000  00000000  00012f30  2**0
                   CONTENTS, READONLY
- 30 .sopcinfo     000940a9  00000000  00000000  00017bc9  2**0
+ 30 .sopcinfo     000940a9  00000000  00000000  00017bc1  2**0
                   CONTENTS, READONLY
 SYMBOL TABLE:
 00008000 l    d  .entry	00000000 .entry
@@ -2121,9 +2121,9 @@ int main(void)
 
 
     // I2C initialiazation
-    I2C_init(I2C_OPENCORES_0_BASE, ALT_CPU_FREQ, 400000);
-    9354:	018001b4 	movhi	r6,6
-    9358:	3186a004 	addi	r6,r6,6784
+    I2C_init(I2C_OPENCORES_0_BASE, ALT_CPU_FREQ, 100000);
+    9354:	018000b4 	movhi	r6,2
+    9358:	31a1a804 	addi	r6,r6,-31072
     935c:	01417db4 	movhi	r5,1526
     9360:	29784004 	addi	r5,r5,-7936
     9364:	01000074 	movhi	r4,1
