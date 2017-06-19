@@ -1372,6 +1372,16 @@ set_instance_assignment -name ENABLE_BENEFICIAL_SKEW_OPTIMIZATION_FOR_NON_GLOBAL
 set_instance_assignment -name PLL_COMPENSATION_MODE DIRECT -to inst63|DDR3_avmm_2x32_ctrl_inst3|ddr3_av_2x32_inst4|ddr3_av_2x32_inst|pll0|fbout -tag __ddr3_av_2x32_p0
 set_instance_assignment -name VIRTUAL_PIN ON -to "rx_path_top:inst127|fsync"
 set_instance_assignment -name VIRTUAL_PIN ON -to "rx_path_top:inst127|DIQ"
+set_location_assignment PIN_AH22 -to I2C_SDA
+set_location_assignment PIN_AG23 -to I2C_SCL
+set_instance_assignment -name IO_STANDARD "1.5 V" -to I2C_SDA
+set_instance_assignment -name IO_STANDARD "1.5 V" -to I2C_SCL
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to I2C_SCL
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to I2C_SDA
+set_instance_assignment -name SLEW_RATE 1 -to I2C_SCL
+set_instance_assignment -name SLEW_RATE 1 -to I2C_SDA
+set_global_assignment -name SEED 2
+set_global_assignment -name VHDL_FILE src/spi/lmlicfg_wrapp.vhd
 set_global_assignment -name VHDL_FILE src/packages/synth/FIFO_PACK.vhd
 set_global_assignment -name QIP_FILE ip/ddr3_av_x64_tester/ddr3_av_x64_tester/synthesis/ddr3_av_x64_tester.qip
 set_global_assignment -name VHDL_FILE src/correctors/tx_chain.vhd
@@ -1585,15 +1595,6 @@ set_global_assignment -name VHDL_FILE src/tx_path_top/tx_path/synth/sync_fifo_rw
 set_global_assignment -name TCL_SCRIPT_FILE DDR3_TOP_assigments.tcl
 set_global_assignment -name QIP_FILE ip/lpm_mux/lpm_mux13.qip
 set_global_assignment -name BDF_FILE lms7_trx_pcie_top.bdf
-set_location_assignment PIN_AH22 -to I2C_SDA
-set_location_assignment PIN_AG23 -to I2C_SCL
-set_instance_assignment -name IO_STANDARD "1.5 V" -to I2C_SDA
-set_instance_assignment -name IO_STANDARD "1.5 V" -to I2C_SCL
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to I2C_SCL
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to I2C_SDA
-set_instance_assignment -name SLEW_RATE 1 -to I2C_SCL
-set_instance_assignment -name SLEW_RATE 1 -to I2C_SDA
 set_global_assignment -name VHDL_FILE src/spi/memcfg.vhd
 set_global_assignment -name SDC_FILE Clock_groups.sdc
-set_global_assignment -name SEED 2
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
