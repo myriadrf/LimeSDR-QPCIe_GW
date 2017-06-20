@@ -200,8 +200,8 @@ signal inst5_reset_n					: std_logic;
 --general signals
 signal wfm_load_int					: std_logic;
 signal wfm_load_int_reg				: std_logic_vector(2 downto 0);
-signal wfm0_load_sync				: std_logic_vector(2 downto 0);
-signal wfm1_load_sync				: std_logic_vector(2 downto 0);
+signal wfm0_load_sync				: std_logic;
+signal wfm1_load_sync				: std_logic;
 
 
 
@@ -631,17 +631,10 @@ DDR3_avmm_2x32_ctrl_inst3 : DDR3_avmm_2x32_ctrl
 -- ----------------------------------------------------------------------------
 -- To synchronize wfm_load(0) signal to wfm0_iq_clk
 -- ----------------------------------------------------------------------------
-process (reset_n, wfm0_iq_clk) is 
-begin 
-	if reset_n='0' then 
-		wfm0_load_sync<=(others=>'0');
-	elsif (wfm0_iq_clk'event and wfm0_iq_clk='1') then 
-		wfm0_load_sync<=wfm0_load_sync(1 downto 0) & wfm_load(0);
-	end if; 		
-end process;
+sync_reg4 : entity work.sync_reg 
+port map(wfm0_iq_clk, '1', wfm_load(0), wfm0_load_sync);
 	
-	
-inst4_reset_n<= not wfm0_load_sync(2);
+inst4_reset_n<= not wfm0_load_sync;
 		 
 decompress_top_inst4 : decompress_top
   generic map (
@@ -685,16 +678,10 @@ decompress_top_inst4 : decompress_top
 -- ----------------------------------------------------------------------------
 -- To synchronize wfm_load(1) signal to wfm1_iq_clk
 -- ----------------------------------------------------------------------------
-process (reset_n, wfm1_iq_clk) is 
-begin 
-	if reset_n='0' then 
-		wfm1_load_sync<=(others=>'0');
-	elsif (wfm1_iq_clk'event and wfm1_iq_clk='1') then 
-		wfm1_load_sync<=wfm1_load_sync(1 downto 0) & wfm_load(1);
-	end if; 		
-end process;
+sync_reg5 : entity work.sync_reg 
+port map(wfm1_iq_clk, '1', wfm_load(1), wfm1_load_sync);
 
-inst5_reset_n<= not wfm1_load_sync(2);
+inst5_reset_n<= not wfm1_load_sync;
 	
 		 
 decompress_top_inst5 : decompress_top
