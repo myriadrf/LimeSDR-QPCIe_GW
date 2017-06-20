@@ -159,8 +159,8 @@ signal inst0_wcmd_data		: std_logic_vector(mpfe_0_bus_size-1 downto 0);
 signal inst0_rcmd_addr		: std_logic_vector(mpfe_0_addr_size-1 downto 0);
 signal inst0_rcmd_wr			: std_logic;
 signal inst0_rcmd_brst_en 	: std_logic;
-signal inst0_wcmd_reset_n	: std_logic_vector(2 downto 0);
-signal inst0_rcmd_reset_n	: std_logic_vector(2 downto 0);
+signal inst0_wcmd_reset_n	: std_logic;
+signal inst0_rcmd_reset_n	: std_logic;
 
 --WFM1 inst1 signals
 signal inst1_wcmd_addr		: std_logic_vector(mpfe_1_addr_size-1 downto 0);
@@ -170,8 +170,8 @@ signal inst1_wcmd_data		: std_logic_vector(mpfe_1_bus_size-1 downto 0);
 signal inst1_rcmd_addr		: std_logic_vector(mpfe_1_addr_size-1 downto 0);
 signal inst1_rcmd_wr			: std_logic;
 signal inst1_rcmd_brst_en 	: std_logic;
-signal inst1_wcmd_reset_n	: std_logic_vector(2 downto 0);
-signal inst1_rcmd_reset_n	: std_logic_vector(2 downto 0);
+signal inst1_wcmd_reset_n	: std_logic;
+signal inst1_rcmd_reset_n	: std_logic;
 
 --DDR3 controller inst3 signals
 signal inst3_reset_n					: std_logic;
@@ -411,28 +411,17 @@ end process;
 -- ----------------------------------------------------------------------------
 -- To synchronize inst3_local_init_done signal to wfm0_wcmd_clk
 -- ----------------------------------------------------------------------------
-process (reset_n, wfm0_wcmd_clk) is 
-begin 
-	if reset_n='0' then 
-		inst0_wcmd_reset_n<=(others=>'0');
-	elsif (wfm0_wcmd_clk'event and wfm0_wcmd_clk='1') then 
-		inst0_wcmd_reset_n<=inst0_wcmd_reset_n(1 downto 0) & inst3_local_init_done;
-	end if; 		
-end process;
+sync_reg0 : entity work.sync_reg 
+port map(wfm0_wcmd_clk, '1', inst3_local_init_done, inst0_wcmd_reset_n);
 
-wfm0_rdy<=inst0_wcmd_reset_n(2);
+wfm0_rdy<=inst0_wcmd_reset_n;
 
 -- ----------------------------------------------------------------------------
 -- To synchronize inst3_local_init_done signal to wfm0_rcmd_clk
 -- ----------------------------------------------------------------------------
-process (reset_n, wfm0_rcmd_clk) is 
-begin 
-	if reset_n='0' then 
-		inst0_rcmd_reset_n<=(others=>'0');
-	elsif (wfm0_rcmd_clk'event and wfm0_rcmd_clk='1') then 
-		inst0_rcmd_reset_n<=inst0_rcmd_reset_n(1 downto 0) & inst3_local_init_done;
-	end if; 		
-end process;
+sync_reg1 : entity work.sync_reg 
+port map(wfm0_rcmd_clk, '1', inst3_local_init_done, inst0_rcmd_reset_n);
+
 
 -- ----------------------------------------------------------------------------
 -- WFM player inst0
@@ -465,14 +454,14 @@ wfm_player_inst0 : wfm_player
 		wfm_infifo_wrusedw 	=> wfm0_infifo_wrusedw,
 
 		wcmd_clk					=> wfm0_wcmd_clk,
-		wcmd_reset_n			=> inst0_wcmd_reset_n(2),
+		wcmd_reset_n			=> inst0_wcmd_reset_n,
 		wcmd_rdy					=> inst3_wcmd_rdy_0,
 		wcmd_addr				=> inst0_wcmd_addr,
 		wcmd_wr					=> inst0_wcmd_wr,
 		wcmd_brst_en			=> inst0_wcmd_brst_en,
 		wcmd_data				=> inst0_wcmd_data,
 		rcmd_clk					=> wfm0_rcmd_clk,
-		rcmd_reset_n			=> inst0_rcmd_reset_n(2),
+		rcmd_reset_n			=> inst0_rcmd_reset_n,
 		rcmd_rdy					=> inst3_rcmd_rdy_0,
 		rcmd_addr				=> inst0_rcmd_addr,
 		rcmd_wr					=> inst0_rcmd_wr,
@@ -484,29 +473,18 @@ wfm_player_inst0 : wfm_player
 -- ----------------------------------------------------------------------------
 -- To synchronize inst3_local_init_done signal to wfm1_wcmd_clk
 -- ----------------------------------------------------------------------------
-process (reset_n, wfm1_wcmd_clk) is 
-begin 
-	if reset_n='0' then 
-		inst1_wcmd_reset_n<=(others=>'0');
-	elsif (wfm1_wcmd_clk'event and wfm1_wcmd_clk='1') then 
-		inst1_wcmd_reset_n<=inst1_wcmd_reset_n(1 downto 0) & inst3_local_init_done;
-	end if; 		
-end process;
+sync_reg2 : entity work.sync_reg 
+port map(wfm1_wcmd_clk, '1', inst3_local_init_done, inst1_wcmd_reset_n);
 
-wfm1_rdy<=inst1_wcmd_reset_n(2);
+wfm1_rdy<=inst1_wcmd_reset_n;
 
 -- ----------------------------------------------------------------------------
 -- To synchronize inst3_local_init_done signal to wfm1_rcmd_clk
 -- ----------------------------------------------------------------------------
-process (reset_n, wfm1_rcmd_clk) is 
-begin 
-	if reset_n='0' then 
-		inst1_rcmd_reset_n<=(others=>'0');
-	elsif (wfm1_rcmd_clk'event and wfm1_rcmd_clk='1') then 
-		inst1_rcmd_reset_n<=inst1_rcmd_reset_n(1 downto 0) & inst3_local_init_done;
-	end if; 		
-end process;
-		  
+sync_reg3 : entity work.sync_reg 
+port map(wfm1_rcmd_clk, '1', inst3_local_init_done, inst1_rcmd_reset_n);
+
+
 -- ----------------------------------------------------------------------------
 -- WFM player inst1
 -- ----------------------------------------------------------------------------
@@ -538,14 +516,14 @@ wfm_player_inst1 : wfm_player
 		wfm_infifo_wrusedw 	=> wfm1_infifo_wrusedw,
 
 		wcmd_clk					=> wfm1_wcmd_clk,
-		wcmd_reset_n			=> inst1_wcmd_reset_n(2) ,
+		wcmd_reset_n			=> inst1_wcmd_reset_n,
 		wcmd_rdy					=> inst3_wcmd_rdy_1,
 		wcmd_addr				=> inst1_wcmd_addr,
 		wcmd_wr					=> inst1_wcmd_wr,
 		wcmd_brst_en			=> inst1_wcmd_brst_en,
 		wcmd_data				=> inst1_wcmd_data,
 		rcmd_clk					=> wfm1_rcmd_clk,
-		rcmd_reset_n			=> inst1_rcmd_reset_n(2),
+		rcmd_reset_n			=> inst1_rcmd_reset_n,
 		rcmd_rdy					=> inst3_rcmd_rdy_1,
 		rcmd_addr				=> inst1_rcmd_addr,
 		rcmd_wr					=> inst1_rcmd_wr,
@@ -578,14 +556,14 @@ DDR3_avmm_2x32_ctrl_inst3 : DDR3_avmm_2x32_ctrl
 		soft_reset_n			=> inst3_reset_n,
 		--Port 0 
 		wcmd_clk_0				=> wfm0_wcmd_clk,
-		wcmd_reset_n_0			=> inst0_wcmd_reset_n(2),
+		wcmd_reset_n_0			=> inst0_wcmd_reset_n,
 		wcmd_rdy_0				=> inst3_wcmd_rdy_0,
 		wcmd_addr_0				=> inst0_wcmd_addr,
 		wcmd_wr_0				=> inst0_wcmd_wr,
 		wcmd_brst_en_0			=> inst0_wcmd_brst_en,
 		wcmd_data_0				=> inst0_wcmd_data,
 		rcmd_clk_0				=> wfm0_rcmd_clk,
-		rcmd_reset_n_0			=> inst0_rcmd_reset_n(2),
+		rcmd_reset_n_0			=> inst0_rcmd_reset_n,
 		rcmd_rdy_0				=> inst3_rcmd_rdy_0,
 		rcmd_addr_0				=> inst0_rcmd_addr,
 		rcmd_wr_0				=> inst0_rcmd_wr,
@@ -598,14 +576,14 @@ DDR3_avmm_2x32_ctrl_inst3 : DDR3_avmm_2x32_ctrl
 		
 		--Port 1 
 		wcmd_clk_1				=> wfm1_wcmd_clk,
-		wcmd_reset_n_1			=> inst1_wcmd_reset_n(2),
+		wcmd_reset_n_1			=> inst1_wcmd_reset_n,
 		wcmd_rdy_1				=> inst3_wcmd_rdy_1,
 		wcmd_addr_1				=> inst1_wcmd_addr,
 		wcmd_wr_1				=> inst1_wcmd_wr,
 		wcmd_brst_en_1			=> inst1_wcmd_brst_en,
 		wcmd_data_1				=> inst1_wcmd_data,
 		rcmd_clk_1				=> wfm1_rcmd_clk,
-		rcmd_reset_n_1			=> inst1_rcmd_reset_n(2),
+		rcmd_reset_n_1			=> inst1_rcmd_reset_n,
 		rcmd_rdy_1				=> inst3_rcmd_rdy_1,
 		rcmd_addr_1				=> inst1_rcmd_addr,
 		rcmd_wr_1				=> inst1_rcmd_wr,
