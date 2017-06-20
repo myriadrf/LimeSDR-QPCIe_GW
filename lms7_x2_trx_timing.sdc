@@ -124,6 +124,10 @@ derive_pll_clocks
 # ----------------------------------------------------------------------------											
 #Timing Exceptions
 # ----------------------------------------------------------------------------
+#For synchronizer chain in design (sync_reg and bus_sync_reg)
+set_false_path -to [get_keepers *sync_reg[0]*]
+set_false_path -to [get_keepers *sync_reg0[*]*]
+
 #False paths
 set_false_path -from [get_clocks {FPGA_PLL_C1}] -to [get_clocks {ADC_CLKOUT}]
 set_false_path -from [get_clocks {NIOS_DACSPI1_SCLK}] -to [get_clocks {ADC_CLKOUT}]
