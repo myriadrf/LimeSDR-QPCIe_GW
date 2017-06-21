@@ -125,7 +125,7 @@
   <parameter name="number_of_reconfig_interfaces" value="5" />
  </module>
  <module name="clk_0" kind="clock_source" version="16.1" enabled="1">
-  <parameter name="clockFrequency" value="125000000" />
+  <parameter name="clockFrequency" value="100000000" />
   <parameter name="clockFrequencyKnown" value="true" />
   <parameter name="inputClockFrequency" value="0" />
   <parameter name="resetSynchronousEdges" value="NONE" />

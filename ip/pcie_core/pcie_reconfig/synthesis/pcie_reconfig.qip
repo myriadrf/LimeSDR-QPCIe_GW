@@ -2,7 +2,7 @@ set_global_assignment -entity "pcie_reconfig" -library "pcie_reconfig" -name IP_
 set_global_assignment -entity "pcie_reconfig" -library "pcie_reconfig" -name IP_TOOL_VERSION "16.1"
 set_global_assignment -entity "pcie_reconfig" -library "pcie_reconfig" -name IP_TOOL_ENV "Qsys"
 set_global_assignment -library "pcie_reconfig" -name SOPCINFO_FILE [file join $::quartus(qip_path) "../../pcie_reconfig.sopcinfo"]
-set_global_assignment -entity "pcie_reconfig" -library "pcie_reconfig" -name SLD_INFO "QSYS_NAME pcie_reconfig HAS_SOPCINFO 1 GENERATION_ID 1487583304"
+set_global_assignment -entity "pcie_reconfig" -library "pcie_reconfig" -name SLD_INFO "QSYS_NAME pcie_reconfig HAS_SOPCINFO 1 GENERATION_ID 1498041210"
 set_global_assignment -library "pcie_reconfig" -name MISC_FILE [file join $::quartus(qip_path) "../pcie_reconfig.cmp"]
 set_global_assignment -library "pcie_reconfig" -name SLD_FILE [file join $::quartus(qip_path) "pcie_reconfig.debuginfo"]
 set_global_assignment -entity "pcie_reconfig" -library "pcie_reconfig" -name IP_TARGETED_DEVICE_FAMILY "Cyclone V"
@@ -15,7 +15,7 @@ set_global_assignment -entity "pcie_reconfig" -library "pcie_reconfig" -name IP_
 set_global_assignment -entity "pcie_reconfig" -library "pcie_reconfig" -name IP_COMPONENT_REPORT_HIERARCHY "On"
 set_global_assignment -entity "pcie_reconfig" -library "pcie_reconfig" -name IP_COMPONENT_INTERNAL "Off"
 set_global_assignment -entity "pcie_reconfig" -library "pcie_reconfig" -name IP_COMPONENT_VERSION "MS4w"
-set_global_assignment -entity "pcie_reconfig" -library "pcie_reconfig" -name IP_COMPONENT_PARAMETER "QVVUT19HRU5FUkFUSU9OX0lE::MTQ4NzU4MzMwNA==::QXV0byBHRU5FUkFUSU9OX0lE"
+set_global_assignment -entity "pcie_reconfig" -library "pcie_reconfig" -name IP_COMPONENT_PARAMETER "QVVUT19HRU5FUkFUSU9OX0lE::MTQ5ODA0MTIxMA==::QXV0byBHRU5FUkFUSU9OX0lE"
 set_global_assignment -entity "pcie_reconfig" -library "pcie_reconfig" -name IP_COMPONENT_PARAMETER "QVVUT19ERVZJQ0VfRkFNSUxZ::Q3ljbG9uZSBW::QXV0byBERVZJQ0VfRkFNSUxZ"
 set_global_assignment -entity "pcie_reconfig" -library "pcie_reconfig" -name IP_COMPONENT_PARAMETER "QVVUT19ERVZJQ0U=::NUNHWEZDN0Q3RjMxQzg=::QXV0byBERVZJQ0U="
 set_global_assignment -entity "pcie_reconfig" -library "pcie_reconfig" -name IP_COMPONENT_PARAMETER "QVVUT19ERVZJQ0VfU1BFRURHUkFERQ==::OF9INw==::QXV0byBERVZJQ0VfU1BFRURHUkFERQ=="
@@ -822,7 +822,7 @@ set_global_assignment -entity "alt_xcvr_reconfig" -library "pcie_reconfig" -name
 set_global_assignment -entity "alt_xcvr_reconfig" -library "pcie_reconfig" -name IP_COMPONENT_PARAMETER "Z3VpX2VuYWJsZV9wbGw=::MA==::RW5hYmxlIFBMTCByZWNvbmZpZ3VyYXRpb24gc3VwcG9ydCBibG9jaw=="
 set_global_assignment -entity "alt_xcvr_reconfig" -library "pcie_reconfig" -name IP_COMPONENT_PARAMETER "Z3VpX2NhbF9zdGF0dXNfcG9ydA==::ZmFsc2U=::Q3JlYXRlIG9wdGlvbmFsIGNhbGlicmF0aW9uIHN0YXR1cyBwb3J0cw=="
 
-set_global_assignment -library "pcie_reconfig" -name VERILOG_FILE [file join $::quartus(qip_path) "pcie_reconfig.v"]
+set_global_assignment -library "pcie_reconfig" -name VHDL_FILE [file join $::quartus(qip_path) "pcie_reconfig.vhd"]
 set_global_assignment -library "pcie_reconfig" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/altera_reset_controller.v"]
 set_global_assignment -library "pcie_reconfig" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/altera_reset_synchronizer.v"]
 set_global_assignment -library "pcie_reconfig" -name SDC_FILE [file join $::quartus(qip_path) "submodules/altera_reset_controller.sdc"]
