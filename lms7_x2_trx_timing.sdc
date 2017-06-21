@@ -128,6 +128,13 @@ derive_pll_clocks
 set_false_path -to [get_keepers *sync_reg[0]*]
 set_false_path -to [get_keepers *sync_reg0[*]*]
 
+
+#For asynchronous resets in IP (Signal is synchronised inside IP)
+set_false_path -from [get_registers *wfm_player_x2_top*\|*inst3_reset_n*]
+set_false_path -from [get_registers adc_top:inst130|sync_reg:sync_reg0|sync_reg[1]]
+
+
+
 #False paths
 set_false_path -from [get_clocks {FPGA_PLL_C1}] -to [get_clocks {ADC_CLKOUT}]
 set_false_path -from [get_clocks {NIOS_DACSPI1_SCLK}] -to [get_clocks {ADC_CLKOUT}]
