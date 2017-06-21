@@ -102,6 +102,9 @@ signal B_diq_l_reg		   : std_logic_vector(iq_width downto 0);
 
 signal intrlv_dis_sync     : std_logic;
 
+signal reset_n_sync_wclk   : std_logic;
+signal reset_n_sync_rclk   : std_logic;
+
 begin
 
 
@@ -110,6 +113,12 @@ port map(rclk, '1', xen, inst4_reset_n);
 
 sync_reg1 : entity work.sync_reg 
 port map(rclk, '1', intrlv_dis, intrlv_dis_sync);
+
+sync_reg2 : entity work.sync_reg 
+port map(rclk, '1', reset_n, reset_n_sync_rclk);
+
+sync_reg3 : entity work.sync_reg 
+port map(wclk, '1', reset_n, reset_n_sync_wclk);
 
 
 
@@ -147,7 +156,7 @@ fifo_inst_inst0 : entity work.fifo_inst
   ) 
   port map(
       --input ports 
-      reset_n       => reset_n,
+      reset_n       => reset_n_sync_wclk,
       wrclk         => wclk,
       wrreq         => data_in_valid,
       data          => data_in,
@@ -210,7 +219,7 @@ fifo_inst_inst3 : entity work.fifo_inst
   ) 
   port map(
       --input ports 
-      reset_n       => reset_n,
+      reset_n       => reset_n_sync_rclk,
       wrclk         => rclk,
       wrreq         => isnt2_data_out_valid,
       data          => isnt2_data_out,
