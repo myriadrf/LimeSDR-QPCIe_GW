@@ -42,6 +42,7 @@ set_clock_groups -asynchronous 	-group {PCIE_REFCLK} \
 											-group {LMS2_RXPLL_C1} \
 											-group {NIOS_PLLCFG_SCLK} \
 											-group {NIOS_DACSPI1_SCLK} \
+                                 -group {NIOS_FPGASPI0_SCLK} \
 											-group {ADC_CLKOUT}
                                  
 set_false_path -from [get_clocks *xillybus*\|*core*] \
@@ -56,6 +57,9 @@ set_false_path -from [get_clocks *DDR3_avmm_2x32_ctrl*\|*pll_afi_half_clk*] \
                             
 set_false_path -from [get_clocks *DDR3_avmm_2x32_ctrl*\|*pll_afi_half_clk*] \
                -to [get_clocks FPGA_PLL_C1]
+               
+              
+
                
                
                
