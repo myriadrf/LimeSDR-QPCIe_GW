@@ -49,8 +49,12 @@ set NIOS_PLLCFG_SCLK_prd	100.000
 	#Clock period 5MHz
 set NIOS_DACSPI1_SCLK_prd	200.000
 
-set NIOS_PLLCFG_SCLK_div 	[expr {int($NIOS_PLLCFG_SCLK_prd / $CLK100_FPGA_prd)}]
-set NIOS_DACSPI1_SCLK_div 	[expr {int($NIOS_DACSPI1_SCLK_prd / $CLK100_FPGA_prd)}]
+#set NIOS_PLLCFG_SCLK_div 	[expr {int($NIOS_PLLCFG_SCLK_prd / $CLK100_FPGA_prd)}]
+#set NIOS_DACSPI1_SCLK_div 	[expr {int($NIOS_DACSPI1_SCLK_prd / $CLK100_FPGA_prd)}]
+
+set NIOS_PLLCFG_SCLK_div 	4
+set NIOS_DACSPI1_SCLK_div 	8
+set NIOS_FPGASPI0_SCLK     8
 # ----------------------------------------------------------------------------
 #Base clocks
 # ----------------------------------------------------------------------------
@@ -63,8 +67,6 @@ create_clock -period $FX3_SPI_SCLK_prd 	-name FX3_SPI_SCLK 		[get_ports FX3_SPI_
 #RAM clk
 create_clock -period $CLK125_FPGA_TOP_prd	-name CLK125_FPGA_BOT	[get_ports CLK125_FPGA_BOT]
 create_clock -period $CLK125_FPGA_BOT_prd	-name CLK125_FPGA_TOP	[get_ports CLK125_FPGA_TOP]
-#PCIE
-create_clock -period $PCIE_REFCLK_prd 		-name PCIE_REFCLK 		[get_ports PCIE_REFCLK]
 # ----------------------------------------------------------------------------
 #Virtual clocks
 # ----------------------------------------------------------------------------
@@ -105,21 +107,28 @@ create_generated_clock 	-name DAC_CLK_WRT \
 #NIOS II generated clocks 
 create_generated_clock 	-name NIOS_PLLCFG_SCLK \
 								-divide_by $NIOS_PLLCFG_SCLK_div \
-								-source [get_ports {CLK100_FPGA}] \
+								-source [get_ports {CLK_LMK_FPGA_IN}] \
 [get_registers {nios_cpu_top:inst175|nios_cpu:u0|nios_cpu_PLLCFG_SPI:pllcfg_spi|SCLK_reg}]
 
 create_generated_clock 	-name NIOS_DACSPI1_SCLK \
 								-divide_by $NIOS_DACSPI1_SCLK_div \
-								-source [get_ports {CLK100_FPGA}] \
+								-source [get_ports {CLK_LMK_FPGA_IN}] \
 [get_registers {nios_cpu_top:inst175|nios_cpu:u0|nios_cpu_dac_spi1:dac_spi1|SCLK_reg}]
+
+create_generated_clock 	-name NIOS_FPGASPI0_SCLK \
+								-divide_by $NIOS_FPGASPI0_SCLK \
+								-source [get_ports {CLK_LMK_FPGA_IN}] \
+                        [get_registers *nios_cpu*\|*fpga_spi*\|*SCLK_reg*]
+
+
+
 
 # ----------------------------------------------------------------------------
 #Other clock constraints
 # ----------------------------------------------------------------------------
 # clock uncertainty is already derived in other sdc files
-#derive_clock_uncertainty
+derive_clock_uncertainty
 derive_pll_clocks
-											
 
 # ----------------------------------------------------------------------------											
 #Timing Exceptions
@@ -159,6 +168,10 @@ set_false_path -from [get_ports FPGA_SPI0_MISO_LMS2]
 set_false_path -from [get_ports FX3_SPI_FPGA_SS]
 set_false_path -from [get_ports FX3_SPI_MOSI]
 set_false_path -from [get_ports LM75_OS]
+set_false_path -from [get_ports I2C_SCL]
+set_false_path -from [get_ports I2C_SDA]
+
+
 
 #Currently we dont care about these slow outputs
 set_false_path -from [get_ports FPGA_SPI0_MISO]
@@ -182,6 +195,8 @@ set_false_path -to [get_ports LMS2_RXEN]
 set_false_path -to [get_ports LMS2_TXEN]
 set_false_path -to [get_ports LMS2_TXNRX1]
 set_false_path -to [get_ports LMS2_TXNRX2]
+set_false_path -to [get_ports I2C_SCL]
+set_false_path -to [get_ports I2C_SDA]
 
 set_false_path -from [get_ports virtddioq[*]]
 set_false_path -from [get_ports virtfsync]
