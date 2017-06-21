@@ -1381,19 +1381,21 @@ set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to I2C_SDA
 set_instance_assignment -name SLEW_RATE 1 -to I2C_SCL
 set_instance_assignment -name SLEW_RATE 1 -to I2C_SDA
 set_global_assignment -name SEED 2
+set_global_assignment -name QIP_FILE ip/ddr3_av_2x32/ddr3_av_2x32.qip
+set_global_assignment -name SDC_FILE PCIe_timing.sdc
+set_global_assignment -name QIP_FILE ip/pcie_core/pcie_reconfig/synthesis/pcie_reconfig.qip
+set_global_assignment -name SDC_FILE LMS2_timing.sdc
+set_global_assignment -name SDC_FILE LMS1_timing.sdc
+set_global_assignment -name SDC_FILE ADS4246_timing.sdc
+set_global_assignment -name QIP_FILE nios_cpu/synthesis/nios_cpu.qip
+set_global_assignment -name SDC_FILE lms7_x2_trx_timing.sdc
+set_global_assignment -name SDC_FILE DAC5672_timing.sdc
+set_global_assignment -name SDC_FILE Clock_groups.sdc
 set_global_assignment -name VHDL_FILE src/spi/lmlicfg_wrapp.vhd
 set_global_assignment -name VHDL_FILE src/packages/synth/FIFO_PACK.vhd
 set_global_assignment -name QIP_FILE ip/ddr3_av_x64_tester/ddr3_av_x64_tester/synthesis/ddr3_av_x64_tester.qip
 set_global_assignment -name VHDL_FILE src/correctors/tx_chain.vhd
 set_global_assignment -name VHDL_FILE symbols/rx_chain.vhd
-set_global_assignment -name SDC_FILE LMS2_timing.sdc
-set_global_assignment -name SDC_FILE LMS1_timing.sdc
-set_global_assignment -name SDC_FILE ADS4246_timing.sdc
-set_global_assignment -name QIP_FILE ip/pcie_core/pcie_reconfig/synthesis/pcie_reconfig.qip
-set_global_assignment -name QIP_FILE ip/ddr3_av_2x32/ddr3_av_2x32.qip
-set_global_assignment -name QIP_FILE nios_cpu/synthesis/nios_cpu.qip
-set_global_assignment -name SDC_FILE lms7_x2_trx_timing.sdc
-set_global_assignment -name SDC_FILE DAC5672_timing.sdc
 set_global_assignment -name VHDL_FILE src/fifo_bulk_read/synth/fifo_bulk_read.vhd
 set_global_assignment -name QIP_FILE ip/clkctrl_c5/clkctrl_c5/synthesis/clkctrl_c5.qip
 set_global_assignment -name VHDL_FILE src/tx_pll_top_cyc5/synth/tx_pll_top_cyc5.vhd
@@ -1596,5 +1598,4 @@ set_global_assignment -name TCL_SCRIPT_FILE DDR3_TOP_assigments.tcl
 set_global_assignment -name QIP_FILE ip/lpm_mux/lpm_mux13.qip
 set_global_assignment -name BDF_FILE lms7_trx_pcie_top.bdf
 set_global_assignment -name VHDL_FILE src/spi/memcfg.vhd
-set_global_assignment -name SDC_FILE Clock_groups.sdc
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
