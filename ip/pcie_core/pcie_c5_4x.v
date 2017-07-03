@@ -6,6 +6,7 @@ module pcie_c5_4x (
 		input          pld_clk,            //            pld_clk.clk
 		output         coreclkout,         //     coreclkout_hip.clk
 		input          refclk,             //             refclk.clk
+      input          clk100,
 		input          rx_in0,             //         hip_serial.rx_in0
 		input          rx_in1,             //                   .rx_in1
 		input          rx_in2,             //                   .rx_in2
@@ -245,7 +246,7 @@ module pcie_c5_4x (
 	// mgmt_clk_clk MUST go to refclk on certain V-series devices, and for
 	// others 100 MHz is always OK. So the conclusion is that refclk is used
 	// to run the reconfiguration logic.
-        .reconfig_clk_clk                 (refclk),                 //   reconfig_clk.clk
+        .reconfig_clk_clk                 (clk100),                 //   reconfig_clk.clk
 	// It has been verified that reconfig_reset_reset_n is indeed active
 	// low, and noone said anything about what drives this reset. So the
 	// global PCIe reset (which is synchronized in the block)

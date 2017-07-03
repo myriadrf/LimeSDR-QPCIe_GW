@@ -25,6 +25,7 @@ entity pcie_top is
 		--PCIE external pins
 		pcie_perstn 			: IN std_logic;
 		pcie_refclk 			: IN std_logic;
+      clk100               : IN std_logic;
 		pcie_rx 					: IN std_logic_vector(3 DOWNTO 0);
 		pcie_tx 					: OUT std_logic_vector(3 DOWNTO 0);
 		--pcie internal data clock
@@ -117,6 +118,7 @@ architecture arch of pcie_top is
 component xillybus
     port (
 		pcie_perstn 						: IN std_logic;
+      clk100                        : IN std_logic;
       pcie_refclk 						: IN std_logic;
       pcie_rx 								: IN std_logic_vector(3 DOWNTO 0);
       bus_clk 								: OUT std_logic;
@@ -379,6 +381,7 @@ begin
       -- General signals
       pcie_perstn 	                  => pcie_perstn,
       pcie_refclk 	                  => pcie_refclk,
+      clk100                           => clk100,
       pcie_rx 			                  => pcie_rx,
       bus_clk 			                  => bus_clk,
       pcie_tx 			                  => pcie_tx,

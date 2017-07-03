@@ -29,13 +29,16 @@ set LMS1_MCLK2_period_5MHz 200.00
 set LMS1_LMS7_Tsu				1.0
 set LMS1_LMS7_Th				0.2
 
+set LMS7_Tco_max				4.05
+set LMS7_Tco_min				2.9
+
 #Tsu and Th based delays
-set LMS7_IN_MAX_DELAY [expr -$LMS1_LMS7_Tsu]
-set LMS7_IN_MIN_DELAY [expr $LMS1_LMS7_Th - $LMS1_MCLK2_period/2]
+#set LMS7_IN_MAX_DELAY [expr -$LMS1_LMS7_Tsu]
+#set LMS7_IN_MIN_DELAY [expr $LMS1_LMS7_Th - $LMS1_MCLK2_period/2]
 
 #Tco based
-#set LMS7_IN_MAX_DELAY [expr $LMS7_Tco_max]
-#set LMS7_IN_MIN_DELAY [expr $LMS7_Tco_min]
+set LMS7_IN_MAX_DELAY [expr $LMS7_Tco_max]
+set LMS7_IN_MIN_DELAY [expr $LMS7_Tco_min]
 
 # ----------------------------------------------------------------------------
 #Base clocks

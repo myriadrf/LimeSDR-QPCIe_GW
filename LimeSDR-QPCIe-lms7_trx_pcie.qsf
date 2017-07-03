@@ -54,7 +54,6 @@ set_global_assignment -name RESERVE_ALL_UNUSED_PINS_WEAK_PULLUP "AS INPUT TRI-ST
 set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "2.5 V"
 set_global_assignment -name USE_DLL_FREQUENCY_FOR_DQS_DELAY_CHAIN ON
 set_global_assignment -name UNIPHY_SEQUENCER_DQS_CONFIG_ENABLE ON
-set_global_assignment -name OPTIMIZE_MULTI_CORNER_TIMING ON
 set_global_assignment -name ECO_REGENERATE_REPORT ON
 set_location_assignment PIN_AB14 -to CLK125_FPGA_BOT
 set_location_assignment PIN_AC14 -to "CLK125_FPGA_BOT(n)"
@@ -429,8 +428,6 @@ set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst46|ddr3_inst|p0|umemphy|
 set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst46|ddr3_inst|p0|umemphy|uread_datapath|reset_n_fifo_write_side[1] -tag __ddr3_p0
 set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst46|ddr3_inst|p0|umemphy|ureset|phy_reset_mem_stable_n -tag __ddr3_p0
 set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst46|ddr3_inst|p0|umemphy|ureset|phy_reset_n -tag __ddr3_p0
-set_instance_assignment -name GLOBAL_SIGNAL "DUAL-REGIONAL CLOCK" -to inst46|ddr3_inst|pll0|pll_avl_clk -tag __ddr3_p0
-set_instance_assignment -name GLOBAL_SIGNAL "DUAL-REGIONAL CLOCK" -to inst46|ddr3_inst|pll0|pll_config_clk -tag __ddr3_p0
 set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst46|ddr3_inst|s0|sequencer_rw_mgr_inst|rw_mgr_inst|rw_mgr_core_inst|rw_soft_reset_n -tag __ddr3_p0
 set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst49|ddr3_inst|p0|umemphy|uio_pads|dq_ddio[0].read_capture_clk_buffer -tag __ddr3_p0
 set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst49|ddr3_inst|p0|umemphy|uio_pads|dq_ddio[1].read_capture_clk_buffer -tag __ddr3_p0
@@ -440,8 +437,6 @@ set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst49|ddr3_inst|p0|umemphy|
 set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst49|ddr3_inst|p0|umemphy|uread_datapath|reset_n_fifo_write_side[1] -tag __ddr3_p0
 set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst49|ddr3_inst|p0|umemphy|ureset|phy_reset_mem_stable_n -tag __ddr3_p0
 set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst49|ddr3_inst|p0|umemphy|ureset|phy_reset_n -tag __ddr3_p0
-set_instance_assignment -name GLOBAL_SIGNAL "DUAL-REGIONAL CLOCK" -to inst49|ddr3_inst|pll0|pll_avl_clk -tag __ddr3_p0
-set_instance_assignment -name GLOBAL_SIGNAL "DUAL-REGIONAL CLOCK" -to inst49|ddr3_inst|pll0|pll_config_clk -tag __ddr3_p0
 set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst49|ddr3_inst|s0|sequencer_rw_mgr_inst|rw_mgr_inst|rw_mgr_core_inst|rw_soft_reset_n -tag __ddr3_p0
 set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to ADC_CLKOUT
 set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to ADC_DA[0]
@@ -929,8 +924,6 @@ set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_TOP_ODT[0] 
 set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_TOP_RASn[0] -tag __ddr3_av_2x32_p0
 set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_TOP_RESETn -tag __ddr3_av_2x32_p0
 set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_TOP_WEn[0] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name PLL_COMPENSATION_MODE DIRECT -to inst46|ddr3_inst|pll0|fbout -tag __ddr3_p0
-set_instance_assignment -name PLL_COMPENSATION_MODE DIRECT -to inst49|ddr3_inst|pll0|fbout -tag __ddr3_p0
 set_instance_assignment -name IO_STANDARD HCSL -to PCIE_REFCLK
 set_location_assignment PIN_W8 -to PCIE_REFCLK
 set_location_assignment PIN_W7 -to "PCIE_REFCLK(n)"
@@ -1020,10 +1013,6 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to LMS2_ENABLE_IQSEL2
 set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to LMS2_FCLK1
 set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to LMS2_FCLK2
 set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to LMS2_MCLK1
-set_location_assignment FRACTIONALPLL_X89_Y1_N0 -to "lms_fixed_pll:inst64|lms_fixed_pll_0002:lms_fixed_pll_inst|altera_pll:altera_pll_i|general[0].gpll~FRACTIONAL_PLL"
-set_instance_assignment -name MATCH_PLL_COMPENSATION_CLOCK ON -to "lms_fixed_pll:inst64|lms_fixed_pll_0002:lms_fixed_pll_inst|altera_pll:altera_pll_i|outclk_wire[1]"
-set_location_assignment FRACTIONALPLL_X89_Y1_N0 -to "rx_pll:inst64|rx_pll_0002:rx_pll_inst|altera_pll:altera_pll_i|altera_cyclonev_pll:cyclonev_pll|altera_cyclonev_pll_base:fpll_0|fpll"
-set_instance_assignment -name MATCH_PLL_COMPENSATION_CLOCK ON -to "rx_pll:inst64|rx_pll_0002:rx_pll_inst|altera_pll:altera_pll_i|altera_cyclonev_pll:cyclonev_pll|counter[1].output_counter"
 set_location_assignment PIN_AC30 -to LMS2_TXNRX2
 set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to altera_reserved_tck
 set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to LMS2_TXNRX2
@@ -1138,8 +1127,6 @@ set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_BOT_DQS_P[2
 set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_BOT_DQS_P[3] -tag __ddr3_av_2x32_p0
 set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_BOT_DQS_N[2] -tag __ddr3_av_2x32_p0
 set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_BOT_DQS_N[3] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name GLOBAL_SIGNAL "DUAL-REGIONAL CLOCK" -to inst19|ddr3_av_2x32_inst3|ddr3_av_2x32_inst|pll0|pll_avl_clk -tag __ddr3_av_2x32_p0
-set_instance_assignment -name GLOBAL_SIGNAL "DUAL-REGIONAL CLOCK" -to inst19|ddr3_av_2x32_inst3|ddr3_av_2x32_inst|pll0|pll_config_clk -tag __ddr3_av_2x32_p0
 set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst19|ddr3_av_2x32_inst3|ddr3_av_2x32_inst|p0|umemphy|ureset|phy_reset_mem_stable_n -tag __ddr3_av_2x32_p0
 set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst19|ddr3_av_2x32_inst3|ddr3_av_2x32_inst|p0|umemphy|ureset|phy_reset_n -tag __ddr3_av_2x32_p0
 set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst19|ddr3_av_2x32_inst3|ddr3_av_2x32_inst|s0|sequencer_rw_mgr_inst|rw_mgr_inst|rw_mgr_core_inst|rw_soft_reset_n -tag __ddr3_av_2x32_p0
@@ -1156,7 +1143,6 @@ set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst19|ddr3_av_2x32_inst3|dd
 set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst19|ddr3_av_2x32_inst3|ddr3_av_2x32_inst|p0|umemphy|uread_datapath|reset_n_fifo_write_side[3] -tag __ddr3_av_2x32_p0
 set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst19|ddr3_av_2x32_inst3|ddr3_av_2x32_inst|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[3] -tag __ddr3_av_2x32_p0
 set_instance_assignment -name ENABLE_BENEFICIAL_SKEW_OPTIMIZATION_FOR_NON_GLOBAL_CLOCKS ON -to inst19|ddr3_av_2x32_inst3|ddr3_av_2x32_inst -tag __ddr3_av_2x32_p0
-set_instance_assignment -name PLL_COMPENSATION_MODE DIRECT -to inst19|ddr3_av_2x32_inst3|ddr3_av_2x32_inst|pll0|fbout -tag __ddr3_av_2x32_p0
 set_location_assignment PIN_AK26 -to DDR3_BOT_DQ[31]
 set_location_assignment PIN_AG24 -to DDR3_BOT_DQ[30]
 set_location_assignment PIN_AD19 -to DDR3_BOT_DQ[29]
@@ -1214,8 +1200,6 @@ set_location_assignment PIN_L20 -to FPGA_SPI0_MISO_ADC
 set_instance_assignment -name IO_STANDARD "1.8 V" -to FPGA_SPI0_MISO_ADC
 set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to FPGA_SPI0_MISO_LMS2
 set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to FPGA_SPI0_MISO_LMS1
-set_global_assignment -name OPTIMIZE_HOLD_TIMING "ALL PATHS"
-set_global_assignment -name ADVANCED_PHYSICAL_OPTIMIZATION OFF
 set_location_assignment PIN_C25 -to DDR3_TOP_DQ[31]
 set_location_assignment PIN_D23 -to DDR3_TOP_DQ[30]
 set_location_assignment PIN_C21 -to DDR3_TOP_DQ[29]
@@ -1380,7 +1364,7 @@ set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to I2C_SCL
 set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to I2C_SDA
 set_instance_assignment -name SLEW_RATE 1 -to I2C_SCL
 set_instance_assignment -name SLEW_RATE 1 -to I2C_SDA
-set_global_assignment -name SEED 2
+set_global_assignment -name SEED 1
 set_global_assignment -name QIP_FILE ip/ddr3_av_2x32/ddr3_av_2x32.qip
 set_global_assignment -name SDC_FILE PCIe_timing.sdc
 set_global_assignment -name QIP_FILE ip/pcie_core/pcie_reconfig/synthesis/pcie_reconfig.qip
@@ -1598,4 +1582,5 @@ set_global_assignment -name TCL_SCRIPT_FILE DDR3_TOP_assigments.tcl
 set_global_assignment -name QIP_FILE ip/lpm_mux/lpm_mux13.qip
 set_global_assignment -name BDF_FILE lms7_trx_pcie_top.bdf
 set_global_assignment -name VHDL_FILE src/spi/memcfg.vhd
+set_global_assignment -name AUTO_GLOBAL_CLOCK ON
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

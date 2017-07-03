@@ -103,7 +103,18 @@ tx_fifo_wr 		<= data_in_valid when dest_sel_syncreg(1)='0' else '0';
 tx_fifo_data	<= data_in;
 
 
-wfm_rdy_int		<= '1' when ((wfm_fifo_wrwords - unsigned(wfm_fifo_wrusedw)) > (wfm_limit*8/32)+5 and wfm_rdy='1' )else '0'; 
+--wfm_rdy_int		<= '1' when ((wfm_fifo_wrwords - unsigned(wfm_fifo_wrusedw)) > (wfm_limit*8/32)+5 and wfm_rdy='1' )else '0'; 
+
+process(clk)
+begin 
+   if (clk'event AND clk='1') then 
+      if ((wfm_fifo_wrwords - unsigned(wfm_fifo_wrusedw) > (wfm_limit*8/32)+5) and wfm_rdy='1') then 
+         wfm_rdy_int		<= '1';
+      else 
+         wfm_rdy_int		<= '0';
+      end if;
+   end if;
+end process;
 
 data_in_rdy		<= tx_fifo_rdy when dest_sel_syncreg(1)='0' else wfm_rdy_int;
   

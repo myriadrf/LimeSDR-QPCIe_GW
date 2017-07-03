@@ -38,13 +38,14 @@ end pct_payload_extrct;
 -- ----------------------------------------------------------------------------
 architecture arch of pct_payload_extrct is
 --declare signals,  components here
-signal wr_cnt 			: unsigned (15 downto 0);
-signal wr_cnt_max		: unsigned (15 downto 0);
+signal wr_cnt 			            : unsigned (11 downto 0);
+signal wr_cnt_max		            : unsigned (11 downto 0);
 
-signal hdr_payload_reg	: std_logic_vector(data_w-1 downto 0);
+signal hdr_payload_reg	         : std_logic_vector(data_w-1 downto 0);
  
-signal payload_dest_reg	: std_logic_vector(1 downto 0);
-signal payload_size_reg	: std_logic_vector(15 downto 0);
+signal payload_dest_reg	         : std_logic_vector(1 downto 0);
+signal payload_size_reg	         : std_logic_vector(15 downto 0);
+signal payload_size_recalc_reg	: unsigned(15 downto 0);
 
 
 
@@ -91,19 +92,33 @@ payload_dest_reg<=hdr_payload_reg(6 downto 5);
 payload_size_reg<=hdr_payload_reg(23 downto 8);
 
 
+process(reset_n, clk)
+begin
+   if reset_n='0' then
+      payload_size_recalc_reg <= (others=>'0');
+   elsif(clk'event AND clk = '1' ) then 
+      payload_size_recalc_reg <= unsigned(payload_size_reg)+header_size;
+   end if;
+end process;
+
+
 -- ----------------------------------------------------------------------------
 -- payload_wr signal process
 -- ----------------------------------------------------------------------------
-process (wr_cnt,payload_size_reg, pct_wr)
+process (clk)
 begin 
-		if wr_cnt>3 and wr_cnt<=(to_integer(unsigned(payload_size_reg))+header_size)*8/data_w - 1 then 
+   if (clk'event AND clk = '1' ) then 
+		if wr_cnt>3 and wr_cnt<=(to_integer(payload_size_recalc_reg))*8/data_w - 1 then 
 			pct_payload_valid<= pct_wr;
 		else 
 			pct_payload_valid<= '0';
-		end if;		 
+		end if;
+      
+      pct_payload_data<=pct_data;
+      
+   end if;   
 end process;
 
-pct_payload_data<=pct_data;
 pct_payload_dest<=payload_dest_reg;
 
 end arch;   
