@@ -27,6 +27,7 @@ entity tx_path_top is
       iq_rdclk          : in std_logic;
       reset_n           : in std_logic;
       en                : in std_logic;
+		xen					: in std_logic;
       
       rx_sample_clk     : in std_logic;
       rx_sample_nr      : in std_logic_vector(63 downto 0);
@@ -43,11 +44,15 @@ entity tx_path_top is
 		ch_en			      : in std_logic_vector(1 downto 0); --"11" - Ch. A, "10" - Ch. B, "11" - Ch. A and Ch. B. 
 		fidm			      : in std_logic; -- External Frame ID mode. Frame start at fsync = 0, when 0. Frame start at fsync = 1, when 1.
       sample_width      : in std_logic_vector(1 downto 0); --"10"-12bit, "01"-14bit, "00"-16bit;
+		par_mode_en			: in std_logic;
+		
       --Tx interface data 
       DIQ		 	      : out std_logic_vector(iq_width-1 downto 0);
 		fsync	 	         : out std_logic;
-      DIQ_h             : out std_logic_vector(iq_width downto 0);
-      DIQ_l             : out std_logic_vector(iq_width downto 0);
+      DIQAB_h           : out std_logic_vector(iq_width downto 0);
+      DIQAB_l           : out std_logic_vector(iq_width downto 0);
+		DIQB_h            : out std_logic_vector(iq_width downto 0);
+      DIQB_l            : out std_logic_vector(iq_width downto 0);
       --fifo ports 
       in_pct_wrreq      : in std_logic;
       in_pct_data       : in std_logic_vector(in_pct_data_w-1 downto 0);
@@ -66,6 +71,9 @@ signal en_sync_rx_sample_clk        : std_logic;
 signal en_sync_iq_rdclk             : std_logic;
 signal pct_loss_flg_clr_sync_iq_rdclk : std_logic;
 
+
+signal xen_sync_iq_rdclk           	: std_logic;
+signal par_mode_en_sync_iq_rdclk    : std_logic;
 signal mode_sync_iq_rdclk           : std_logic;
 signal trxiqpulse_sync_iq_rdclk     : std_logic; 
 signal ddr_en_sync_iq_rdclk         : std_logic;
@@ -117,7 +125,12 @@ sync_reg6 : entity work.sync_reg
 
 sync_reg7 : entity work.sync_reg 
  port map(iq_rdclk, '1', pct_loss_flg_clr, pct_loss_flg_clr_sync_iq_rdclk); 
+
+sync_reg8 : entity work.sync_reg 
+ port map(iq_rdclk, '1', xen, xen_sync_iq_rdclk);  
  
+sync_reg9 : entity work.sync_reg 
+ port map(iq_rdclk, '1', par_mode_en, par_mode_en_sync_iq_rdclk);  
  
 bus_sync_reg0 : entity work.bus_sync_reg
  generic map (2) 
@@ -238,16 +251,20 @@ diq2fifo_inst1 : entity work.fifo2diq
 	port map (
       clk            => iq_rdclk,
       reset_n        => en_sync_iq_rdclk,
+		en					=> xen_sync_iq_rdclk,
       mode			   => mode_sync_iq_rdclk,
 		trxiqpulse	   => trxiqpulse_sync_iq_rdclk,
 		ddr_en 		   => ddr_en_sync_iq_rdclk,
 		mimo_en		   => mimo_en_sync_iq_rdclk,
 		ch_en			   => ch_en_sync_iq_rdclk,
 		fidm			   => fidm_sync_iq_rdclk,
+		par_mode_en		=> par_mode_en_sync_iq_rdclk, 
       DIQ		 	   => DIQ,
 		fsync	 	      => fsync,
-      DIQ_h          => DIQ_h,
-      DIQ_l          => DIQ_l,
+      DIQA_h         => DIQAB_h,
+      DIQA_l         => DIQAB_l,
+		DIQB_h			=> DIQB_h,
+		DIQB_l			=> DIQB_l,
       fifo_rdempty   => inst0_smpl_buff_rdempty,
       fifo_rdreq     => inst1_fifo_rdreq,
       fifo_q         => inst1_fifo_q 

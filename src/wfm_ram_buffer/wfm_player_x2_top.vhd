@@ -370,12 +370,13 @@ component decompress_top is
 			data_in_valid 	: in std_logic; -- data_in leading signal which indicates valid incomong data
 			sample_width  	: in std_logic_vector(1 downto 0); -- "00"-16bit, "01"-14bit, "10"-12bit
 			xen 				: in std_logic; --data read enable
+         wfm_play       : in std_logic;
 		   --output ports  
 			wusedw        	: out std_logic_vector(infifo_wsize-1 downto 0);
 			fr_start  		: in std_logic;
 			ch_en				: in std_logic_vector(1 downto 0);
 			mimo_en			: in std_logic;
-         intrlv_dis     : in std_logic; -- 0 - interleaved data, 1 - paralel data
+         par_mode_en    : in std_logic; -- 0 - interleaved data, 1 - paralel data
 			A_diq_h			: out std_logic_vector(iq_width downto 0);				
 			A_diq_l			: out std_logic_vector(iq_width downto 0);
 			B_diq_h			: out std_logic_vector(iq_width downto 0);				
@@ -663,12 +664,13 @@ decompress_top_inst4 : decompress_top
 			data_in_valid 	=> inst3_local_rdata_valid_0,
 			sample_width  	=> wfm0_sample_width,
 			xen				=> wfm0_xen,
+         wfm_play       => wfm_play_stop(0),
 		   --output ports  
 			wusedw        	=> inst4_wusedw,
 			fr_start  		=> wfm0_fr_start,
 			ch_en				=> wfm0_ch_en,
 			mimo_en			=> wfm0_mimo_en,
-         intrlv_dis     => wfm0_intrlv_dis,
+         par_mode_en    => wfm0_intrlv_dis,
 			A_diq_h			=> wfm0_Aiq_h,
 			A_diq_l			=> wfm0_Aiq_l,
 			B_diq_h			=> wfm0_Biq_h,
@@ -711,12 +713,13 @@ decompress_top_inst5 : decompress_top
 			data_in_valid 	=> inst3_local_rdata_valid_1,
 			sample_width  	=> wfm1_sample_width,
 			xen				=> wfm1_xen,
+         wfm_play       => wfm_play_stop(1),
 		   --output ports  
 			wusedw        	=> inst5_wusedw,
 			fr_start  		=> wfm1_fr_start,
 			ch_en				=> wfm1_ch_en,
 			mimo_en			=> wfm1_mimo_en,
-         intrlv_dis     => wfm1_intrlv_dis,
+         par_mode_en    => wfm1_intrlv_dis,
 			A_diq_h			=> wfm1_Aiq_h,
 			A_diq_l			=> wfm1_Aiq_l,
 			B_diq_h			=> wfm1_Biq_h,

@@ -37,12 +37,13 @@ entity decompress_top is
 			data_in_valid 	: in std_logic; -- data_in leading signal which indicates valid incomong data
 			sample_width  	: in std_logic_vector(1 downto 0); -- "00"-16bit, "01"-14bit, "10"-12bit
 			xen				: in std_logic; -- data read enable
+         wfm_play       : in std_logic;
 		   --output ports  
 			wusedw        	: out std_logic_vector(infifo_wsize-1 downto 0);
 			fr_start  		: in std_logic;
 			ch_en				: in std_logic_vector(1 downto 0);
 			mimo_en			: in std_logic;
-         intrlv_dis     : in std_logic; -- 0 - interleaved data, 1 - paralel data
+         par_mode_en    : in std_logic; -- 0 - interleaved data, 1 - paralel data
 			A_diq_h			: out std_logic_vector(iq_width downto 0);				
 			A_diq_l			: out std_logic_vector(iq_width downto 0);
 			B_diq_h			: out std_logic_vector(iq_width downto 0);				
@@ -90,8 +91,10 @@ signal inst3_rdempty			: std_logic;
 signal inst3_fifo_rdreq_mux: std_logic;
 --isnt4
 signal inst4_reset_n			: std_logic;
-signal inst4_diq_h			: std_logic_vector(iq_width downto 0);
-signal inst4_diq_l			: std_logic_vector(iq_width downto 0);
+signal inst4_diqab_h			: std_logic_vector(iq_width downto 0);
+signal inst4_diqab_l			: std_logic_vector(iq_width downto 0);
+signal inst4_diqb_h			: std_logic_vector(iq_width downto 0);
+signal inst4_diqb_l			: std_logic_vector(iq_width downto 0);
 signal inst4_fifo_rdreq		: std_logic;
 signal inst4_fifo_q			: std_logic_vector(iq_width*4-1 downto 0);
 
@@ -101,6 +104,7 @@ signal B_diq_h_reg			: std_logic_vector(iq_width downto 0);
 signal B_diq_l_reg		   : std_logic_vector(iq_width downto 0);
 
 signal intrlv_dis_sync     : std_logic;
+signal par_mode_en_sync    : std_logic;
 
 signal reset_n_sync_wclk   : std_logic;
 signal reset_n_sync_rclk   : std_logic;
@@ -109,10 +113,10 @@ begin
 
 
 sync_reg0 : entity work.sync_reg 
-port map(rclk, '1', xen, inst4_reset_n);
+port map(rclk, '1', wfm_play, inst4_reset_n);
 
 sync_reg1 : entity work.sync_reg 
-port map(rclk, '1', intrlv_dis, intrlv_dis_sync);
+port map(rclk, '1', par_mode_en, par_mode_en_sync);
 
 sync_reg2 : entity work.sync_reg 
 port map(rclk, '1', reset_n, reset_n_sync_rclk);
@@ -227,13 +231,13 @@ fifo_inst_inst3 : entity work.fifo_inst
 		wrempty		  => open,
       wrusedw       => inst3_wrusedw,
       rdclk 	     => rclk,
-      rdreq         => inst3_fifo_rdreq_mux,
+      rdreq         => inst4_fifo_rdreq,
       q             => inst3_q,
       rdempty       => inst3_rdempty,
       rdusedw       => open    
         ); 
         
-  inst3_fifo_rdreq_mux <= inst4_fifo_rdreq when intrlv_dis = '0' else not inst3_rdempty;
+--  inst3_fifo_rdreq_mux <= inst4_fifo_rdreq when intrlv_dis = '0' else not inst3_rdempty;
 		  
 		  
 inst4_fifo_q <=   inst3_q(63 downto 64-iq_width) & 
@@ -249,16 +253,20 @@ diq2fifo_inst4 : entity work.fifo2diq
 	port map (
       clk            => rclk,
       reset_n        => inst4_reset_n ,
+      en             => xen, 
       mode			   => '0',
 		trxiqpulse	   => '0',
 		ddr_en 		   => '1',
 		mimo_en		   => mimo_en,
 		ch_en			   => "11",
 		fidm			   => fr_start,
+      par_mode_en    => par_mode_en_sync,
       DIQ		 	   => open,
 		fsync	 	      => open,
-		DIQ_H				=> inst4_diq_h,
-		DIQ_L				=> inst4_diq_l,
+		DIQA_h		   => inst4_diqab_h,
+		DIQA_l		   => inst4_diqab_l,
+      DIQB_h         => inst4_diqb_h,
+      DIQB_l         => inst4_diqb_l,
       fifo_rdempty   => inst3_rdempty,
       fifo_rdreq     => inst4_fifo_rdreq,
       fifo_q         => inst4_fifo_q
@@ -266,34 +274,34 @@ diq2fifo_inst4 : entity work.fifo2diq
         ); 
         
         
-process(rclk, reset_n)
-begin
-   if reset_n = '0' then 
-      A_diq_h_reg <= (others=>'0');
-      A_diq_l_reg <= (others=>'0');
-      B_diq_h_reg <= (others=>'0');
-      B_diq_l_reg <= (others=>'0');
-   elsif (rclk'event AND rclk='1') then 
-      if intrlv_dis_sync = '0' then 
-         A_diq_h_reg <= inst4_diq_h;
-         A_diq_l_reg <= inst4_diq_l;
-         B_diq_h_reg <= (others=>'0');
-         B_diq_l_reg <= (others=>'0');
-      else 
-         A_diq_h_reg <= '0' & inst3_q(15 downto 16-iq_width);
-         A_diq_l_reg <= '0' & inst3_q(31 downto 32-iq_width);
-         B_diq_h_reg <= '1' & inst3_q(47 downto 48-iq_width);
-         B_diq_l_reg <= '1' & inst3_q(63 downto 64-iq_width);
-      end if;
-   end if;
-end process;        
+--process(rclk, reset_n)
+--begin
+--   if reset_n = '0' then 
+--      A_diq_h_reg <= (others=>'0');
+--      A_diq_l_reg <= (others=>'0');
+--      B_diq_h_reg <= (others=>'0');
+--      B_diq_l_reg <= (others=>'0');
+--   elsif (rclk'event AND rclk='1') then 
+--      if intrlv_dis_sync = '0' then 
+--         A_diq_h_reg <= inst4_diq_h;
+--         A_diq_l_reg <= inst4_diq_l;
+--         B_diq_h_reg <= (others=>'0');
+--         B_diq_l_reg <= (others=>'0');
+--      else 
+--         A_diq_h_reg <= '0' & inst3_q(15 downto 16-iq_width);
+--         A_diq_l_reg <= '0' & inst3_q(31 downto 32-iq_width);
+--         B_diq_h_reg <= '1' & inst3_q(47 downto 48-iq_width);
+--         B_diq_l_reg <= '1' & inst3_q(63 downto 64-iq_width);
+--      end if;
+--   end if;
+--end process;        
 
 
 
-A_diq_h <= A_diq_h_reg;			
-A_diq_l <= A_diq_l_reg;
-B_diq_h <= B_diq_h_reg;				
-B_diq_l <= B_diq_l_reg;	
+A_diq_h <= inst4_diqab_h;			
+A_diq_l <= inst4_diqab_l;
+B_diq_h <= inst4_diqb_h;				
+B_diq_l <= inst4_diqb_l;	
 	
 
 end arch;   

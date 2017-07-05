@@ -20,6 +20,7 @@ entity txiq is
    port (
       clk         : in std_logic;
       reset_n     : in std_logic;
+      en          : in std_logic;
       --Mode settings
       trxiqpulse	: in std_logic; -- trxiqpulse on: 1; trxiqpulse off: 0
 		ddr_en 		: in std_logic; -- DDR: 1; SDR: 0
@@ -27,11 +28,12 @@ entity txiq is
 		ch_en			: in std_logic_vector(1 downto 0); --"01" - Ch. A, "10" - Ch. B, "11" - Ch. A and Ch. B.  
 		fidm			: in std_logic; -- External Frame ID mode. Frame start at fsync = 0, when 0. Frame start at fsync = 1, when 1.
       --Tx interface data 
-      DIQ_h		 	: out std_logic_vector(iq_width downto 0);
-		DIQ_l	 	   : out std_logic_vector(iq_width downto 0);
+      DIQ_h		: out std_logic_vector(iq_width downto 0);
+		DIQ_l	 	: out std_logic_vector(iq_width downto 0);
       --fifo ports 
       fifo_rdempty: in std_logic;
       fifo_rdreq  : out std_logic;
+      fifo_q_valid: in std_logic;
       fifo_q      : in std_logic_vector(iq_width*4-1 downto 0)        
         );
 end txiq;
@@ -261,14 +263,16 @@ fifo_rdreq <= int_fifo_rdreq AND NOT fifo_rdempty;
 -- ----------------------------------------------------------------------------
 -- Internal valdid data signal (delayed int_fifo_rdreq version)
 -- ----------------------------------------------------------------------------
-process(clk, reset_n)
- begin
-   if reset_n = '0' then
-      int_fifo_q_valid  <= '0';
-   elsif (clk'event AND clk = '1') then
-      int_fifo_q_valid <= int_fifo_rdreq;
-   end if;
- end process;
+-- process(clk, reset_n)
+ -- begin
+   -- if reset_n = '0' then
+      -- int_fifo_q_valid  <= '0';
+   -- elsif (clk'event AND clk = '1') then
+      -- int_fifo_q_valid <= int_fifo_rdreq;
+   -- end if;
+ -- end process;
+ 
+ int_fifo_q_valid <= fifo_q_valid;
  
 -- ----------------------------------------------------------------------------
 -- Shift reg array with synchronous load 

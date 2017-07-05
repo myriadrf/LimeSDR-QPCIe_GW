@@ -91,14 +91,18 @@ entity lms7_rxtx_top is
       tx_pct_wclk             : in std_logic;
       tx_io_reset_n           : in std_logic;
       tx_logic_reset_n        : in std_logic;
+      tx_xen                  : in std_logic;
       tx_sync_dis             : in std_logic;
+      tx_par_mode_en          : in std_logic;
       tx_pct_wrreq            : in std_logic;
       tx_pct_full             : out std_logic;
       tx_pct_data             : in std_logic_vector(31 downto 0);
       tx_diq                  : out std_logic_vector(tx_diq_width-1 downto 0);
       tx_diq_fsync            : out std_logic;     
-      tx_diq_h                : out std_logic_vector(tx_diq_width downto 0);
-      tx_diq_l                : out std_logic_vector(tx_diq_width downto 0)      
+      tx_diqab_h              : out std_logic_vector(tx_diq_width downto 0);
+      tx_diqab_l              : out std_logic_vector(tx_diq_width downto 0);
+      tx_diqb_h               : out std_logic_vector(tx_diq_width downto 0);
+      tx_diqb_l               : out std_logic_vector(tx_diq_width downto 0)      
       
       
 
@@ -238,14 +242,18 @@ limelight_top_inst2 : entity work.limelight_top
       tx_pct_wclk             => tx_pct_wclk,
       tx_io_reset_n           => inst0_pll_locked,
       tx_logic_reset_n        => tx_logic_reset_n,
+      tx_xen                  => tx_xen,
+      tx_par_mode_en          => tx_par_mode_en,
       tx_sync_dis             => tx_sync_dis,
       tx_pct_wrreq            => tx_pct_wrreq,
       tx_pct_full             => tx_pct_full,
       tx_pct_data             => tx_pct_data,
       tx_diq                  => tx_diq,
       tx_diq_fsync            => tx_diq_fsync,
-      tx_diq_h                => tx_diq_h,
-      tx_diq_l                => tx_diq_l  
+      tx_diqab_h              => tx_diqab_h,
+      tx_diqab_l              => tx_diqab_l,
+      tx_diqb_h               => tx_diqb_h,
+      tx_diqb_l               => tx_diqb_l   
         );
         
 tx_pll_c0      <= inst0_c0;

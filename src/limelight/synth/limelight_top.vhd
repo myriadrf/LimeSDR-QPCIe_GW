@@ -70,14 +70,18 @@ entity limelight_top is
       tx_pct_wclk             : in std_logic;
       tx_io_reset_n           : in std_logic;
       tx_logic_reset_n        : in std_logic;
+      tx_xen                  : in std_logic;
+      tx_par_mode_en          : in std_logic;
       tx_sync_dis             : in std_logic;
       tx_pct_wrreq            : in std_logic;
       tx_pct_full             : out std_logic;
       tx_pct_data             : in std_logic_vector(31 downto 0);
       tx_diq                  : out std_logic_vector(tx_diq_width-1 downto 0);
       tx_diq_fsync            : out std_logic;     
-      tx_diq_h                : out std_logic_vector(tx_diq_width downto 0);
-      tx_diq_l                : out std_logic_vector(tx_diq_width downto 0)      
+      tx_diqab_h              : out std_logic_vector(tx_diq_width downto 0);
+      tx_diqab_l              : out std_logic_vector(tx_diq_width downto 0);
+      tx_diqb_h               : out std_logic_vector(tx_diq_width downto 0);
+      tx_diqb_l               : out std_logic_vector(tx_diq_width downto 0)      
       
       
 
@@ -91,8 +95,8 @@ end limelight_top;
 architecture arch of limelight_top is
 --declare signals,  components here
 --inst0
-signal inst0_DIQ_h         : std_logic_vector (rx_diq_width downto 0); 
-signal inst0_DIQ_l         : std_logic_vector (rx_diq_width downto 0);
+signal inst0_DIQ_h       : std_logic_vector (rx_diq_width downto 0); 
+signal inst0_DIQ_l       : std_logic_vector (rx_diq_width downto 0);
 signal inst0_smpl_nr_cnt   : std_logic_vector(63 downto 0);
 signal inst0_pct_fifo_wrreq: std_logic;
 signal inst0_pct_fifo_wdata: std_logic_vector(63 downto 0);
@@ -102,8 +106,10 @@ signal inst0_pct_fifo_wdata: std_logic_vector(63 downto 0);
 signal inst1_pct_loss_flg  : std_logic;
 signal inst1_DIQ           : std_logic_vector(tx_diq_width-1 downto 0);
 signal inst1_fsync         : std_logic;
-signal inst1_DIQ_h         : std_logic_vector(tx_diq_width downto 0);
-signal inst1_DIQ_l         : std_logic_vector(tx_diq_width downto 0);
+signal inst1_DIQAB_h       : std_logic_vector(tx_diq_width downto 0);
+signal inst1_DIQAB_l       : std_logic_vector(tx_diq_width downto 0);
+signal inst1_DIQB_h        : std_logic_vector (rx_diq_width downto 0); 
+signal inst1_DIQB_l        : std_logic_vector (rx_diq_width downto 0);
 signal inst1_in_pct_full   : std_logic;
 
 
@@ -180,6 +186,7 @@ tx_path_top_inst1 : entity work.tx_path_top
       iq_rdclk          => tx_clk,
       reset_n           => tx_logic_reset_n,
       en                => tx_logic_reset_n,
+      xen               => tx_xen,
       
       rx_sample_clk     => rx_clk,
       rx_sample_nr      => inst0_smpl_nr_cnt,
@@ -196,11 +203,14 @@ tx_path_top_inst1 : entity work.tx_path_top
       ch_en             => lml_ch_en,
       fidm              => lml_fidm,
       sample_width      => lml_smpl_width,
+      par_mode_en       => tx_par_mode_en, 
       --Tx interface data 
       DIQ               => inst1_DIQ,
       fsync             => inst1_fsync,
-      DIQ_h             => inst1_DIQ_h,
-      DIQ_l             => inst1_DIQ_l,
+      DIQAB_h           => inst1_DIQAB_h,
+      DIQAB_l           => inst1_DIQAB_l,
+      DIQB_h            => inst1_DIQB_h,
+      DIQB_l            => inst1_DIQB_l,
       --fifo ports 
       in_pct_wrreq      => tx_pct_wrreq,
       in_pct_data       => tx_pct_data,
@@ -218,8 +228,10 @@ rx_smpl_nr_out    <= inst0_smpl_nr_cnt;
 
 tx_diq            <= inst1_DIQ;      
 tx_diq_fsync      <= inst1_fsync;
-tx_diq_h          <= inst1_DIQ_h;
-tx_diq_l          <= inst1_DIQ_l;
+tx_diqab_h        <= inst1_DIQAB_h;
+tx_diqab_l        <= inst1_DIQAB_l;
+tx_diqb_h         <= inst1_DIQB_h;
+tx_diqb_l         <= inst1_DIQB_l;
 tx_pct_full       <= inst1_in_pct_full;
 
   
