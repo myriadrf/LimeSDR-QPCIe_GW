@@ -38,7 +38,8 @@ entity adc_top is
       data_ch_b         : out std_logic_vector(data_width*2-1 downto 0); --Sampled data ch B 
       --Interleaved samples of both channels
       data_ch_ab        : out std_logic_vector(data_width*2*smpls_to_capture-1 downto 0); -- ... B1 A1 B0 A0 
-      data_ch_ab_valid  : out std_logic
+      data_ch_ab_valid  : out std_logic;
+      test_out          : out std_logic_vector(55 downto 0)
 
         );
 end adc_top;
@@ -138,6 +139,9 @@ process(reg_chain)
          data_ch_ab(i*data_width*4 + data_width*4-1 downto i*data_width*4) <= reg_chain(smpls_to_capture/2-1-i);
       end loop;
 end process;
+
+test_out <= "00000000000000111111111111110000000000000011111111111111";
+
 
 process(clk, reset_n_sync)
 begin

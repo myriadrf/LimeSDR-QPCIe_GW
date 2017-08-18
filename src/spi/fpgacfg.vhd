@@ -33,7 +33,7 @@ entity fpgacfg is
 		mreset	: in std_logic; 	-- Memory reset signal, resets configuration memory only (use only one reset)
       mac_en   : in std_logic := '1';
 		HW_VER	: in std_logic_vector(3 downto 0);
-		BOM_VER	: in std_logic_vector(2 downto 0);
+		BOM_VER	: in std_logic_vector(3 downto 0);
 		
 		oen: out std_logic; --nc
 		stateo: out std_logic_vector(5 downto 0);
@@ -189,7 +189,7 @@ begin
 				case inst_reg(4 downto 0) is	-- mux read-only outputs
 					when "00001" => dout_reg <= x"0001";
 					when "00010" => dout_reg <= (15 downto 8 => '0') & std_logic_vector(to_unsigned(COMPILE_REV, 8));
-					when "00011" => dout_reg <= (15 downto 7 => '0') & BOM_VER & HW_VER;
+					when "00011" => dout_reg <= (15 downto 8 => '0') & BOM_VER & HW_VER;
 					when others  => dout_reg <= mem(to_integer(unsigned(inst_reg(4 downto 0))));
 				end case;
 			end if;			      
@@ -215,7 +215,7 @@ begin
 			mem(0)	<= "0000000000001111"; -- 00 frre, Board ID (LimeSDR-qPCIE)
 			mem(1)	<= "0000000000000000"; -- 00 free, GW version
 			mem(2)	<= "0000000000000000"; -- 00 free, GW revision
-			mem(3)	<= "0000000000000000"; --  9 free, BOM_VER[6:4],HW_VER[3:0]
+			mem(3)	<= "0000000000000000"; --  9 free, BOM_VER[7:4],HW_VER[3:0]
 			--FPGA direct clocking
 			mem(4)	<= "0000000000000000"; --  0 free, phase_reg_sel
 			mem(5)	<= "0000000000000000"; --  0 free, drct_clk_en, 

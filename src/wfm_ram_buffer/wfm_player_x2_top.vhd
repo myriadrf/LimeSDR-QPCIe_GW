@@ -70,6 +70,7 @@ entity wfm_player_x2_top is
 		wfm0_wr					: in std_logic;
 		wfm0_rdy					: out std_logic;
 		wfm0_infifo_wrusedw 	: out std_logic_vector(wfm0_infifo_size-1 downto 0);
+      wfm0_infifo_wfull    : out std_logic;
 		
 		wfm0_sample_width    : in std_logic_vector(1 downto 0); -- "00"-16bit, "01"-14bit, "10"-12bit
 		wfm0_fr_start			: in std_logic;
@@ -95,6 +96,7 @@ entity wfm_player_x2_top is
 		wfm1_wr					: in std_logic;
 		wfm1_rdy					: out std_logic;
 		wfm1_infifo_wrusedw 	: out std_logic_vector(wfm1_infifo_size-1 downto 0);
+      wfm1_infifo_wfull    : out std_logic;
 		
 		wfm1_sample_width    : in std_logic_vector(1 downto 0); -- "00"-16bit, "01"-14bit, "10"-12bit
 		wfm1_fr_start			: in std_logic;
@@ -150,6 +152,9 @@ end wfm_player_x2_top;
 -- ----------------------------------------------------------------------------
 architecture arch of wfm_player_x2_top is
 --declare signals,  components here
+
+signal wfm0_rdy_int        : std_logic;
+signal wfm1_rdy_int        : std_logic;
 
 --WFM0 inst0 signals
 signal inst0_wcmd_addr		: std_logic_vector(mpfe_0_addr_size-1 downto 0);
@@ -329,6 +334,7 @@ component wfm_player is
 		wfm_data					: in std_logic_vector(wfm_infifo_wrwidth-1 downto 0);
 		wfm_wr					: in std_logic;
 		wfm_infifo_wrusedw 	: out std_logic_vector(wfm_infifo_wrsize-1 downto 0);
+      wfm_infifo_wfull     : out std_logic;
 
 		wcmd_clk					: in std_logic;
 		wcmd_reset_n			: in  std_logic;
@@ -415,7 +421,24 @@ end process;
 sync_reg0 : entity work.sync_reg 
 port map(wfm0_wcmd_clk, '1', inst3_local_init_done, inst0_wcmd_reset_n);
 
-wfm0_rdy<=inst0_wcmd_reset_n;
+
+--wfm0_rdy_int is deaserted synchronous with wfm0_wr signal;
+process(wfm0_wcmd_clk) 
+begin 
+   if (wfm0_wcmd_clk'event AND wfm0_wcmd_clk = '1') then 
+      if inst3_local_init_done = '1' then 
+         wfm0_rdy_int <= '1';
+      elsif (wfm0_wr = '1' AND inst3_local_init_done = '0') then
+         wfm0_rdy_int <= '0';
+      else 
+         wfm0_rdy_int <= wfm0_rdy_int;
+      end if;
+   end if;
+end process;
+
+wfm0_rdy<= wfm0_rdy_int;
+
+--wfm0_rdy<=inst0_wcmd_reset_n;
 
 -- ----------------------------------------------------------------------------
 -- To synchronize inst3_local_init_done signal to wfm0_rcmd_clk
@@ -453,9 +476,10 @@ wfm_player_inst0 : wfm_player
 		wfm_data					=> wfm0_data,
 		wfm_wr					=> wfm0_wr,
 		wfm_infifo_wrusedw 	=> wfm0_infifo_wrusedw,
+      wfm_infifo_wfull     => wfm0_infifo_wfull,
 
 		wcmd_clk					=> wfm0_wcmd_clk,
-		wcmd_reset_n			=> inst0_wcmd_reset_n,
+		wcmd_reset_n			=> reset_n,
 		wcmd_rdy					=> inst3_wcmd_rdy_0,
 		wcmd_addr				=> inst0_wcmd_addr,
 		wcmd_wr					=> inst0_wcmd_wr,
@@ -477,7 +501,23 @@ wfm_player_inst0 : wfm_player
 sync_reg2 : entity work.sync_reg 
 port map(wfm1_wcmd_clk, '1', inst3_local_init_done, inst1_wcmd_reset_n);
 
-wfm1_rdy<=inst1_wcmd_reset_n;
+--wfm1_rdy_int is deaserted synchronous with wfm1_wr signal;
+process(wfm1_wcmd_clk) 
+begin 
+   if (wfm1_wcmd_clk'event AND wfm1_wcmd_clk = '1') then 
+      if inst3_local_init_done = '1' then 
+         wfm1_rdy_int <= '1';
+      elsif (wfm1_wr = '1' AND inst3_local_init_done = '0') then
+         wfm1_rdy_int <= '0';
+      else 
+         wfm1_rdy_int <= wfm1_rdy_int;
+      end if;
+   end if;
+end process;
+
+wfm1_rdy <= wfm1_rdy_int;
+
+--wfm1_rdy<=inst1_wcmd_reset_n;
 
 -- ----------------------------------------------------------------------------
 -- To synchronize inst3_local_init_done signal to wfm1_rcmd_clk
@@ -515,9 +555,10 @@ wfm_player_inst1 : wfm_player
 		wfm_data					=> wfm1_data,
 		wfm_wr					=> wfm1_wr,
 		wfm_infifo_wrusedw 	=> wfm1_infifo_wrusedw,
+      wfm_infifo_wfull     => wfm1_infifo_wfull,
 
 		wcmd_clk					=> wfm1_wcmd_clk,
-		wcmd_reset_n			=> inst1_wcmd_reset_n,
+		wcmd_reset_n			=> reset_n,
 		wcmd_rdy					=> inst3_wcmd_rdy_1,
 		wcmd_addr				=> inst1_wcmd_addr,
 		wcmd_wr					=> inst1_wcmd_wr,
@@ -553,8 +594,8 @@ DDR3_avmm_2x32_ctrl_inst3 : DDR3_avmm_2x32_ctrl
 		port map(
 
       pll_ref_clk       	=> pll_ref_clk,
-      global_reset_n   		=> inst3_reset_n,
-		soft_reset_n			=> inst3_reset_n,
+      global_reset_n   		=> reset_n,--inst3_reset_n,
+		soft_reset_n			=> reset_n,--inst3_reset_n,
 		--Port 0 
 		wcmd_clk_0				=> wfm0_wcmd_clk,
 		wcmd_reset_n_0			=> inst0_wcmd_reset_n,

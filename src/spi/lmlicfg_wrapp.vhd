@@ -87,7 +87,7 @@ component fpgacfg is
       mreset         : in std_logic;   -- Memory reset signal, resets configuration memory only (use only one reset)
       mac_en         : in std_logic := '1';
       HW_VER         : in std_logic_vector(3 downto 0);
-      BOM_VER        : in std_logic_vector(2 downto 0);
+      BOM_VER        : in std_logic_vector(3 downto 0);
       
       oen            : out std_logic; --nc
       stateo         : out std_logic_vector(5 downto 0);

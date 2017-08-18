@@ -36,6 +36,7 @@ entity wfm_player is
 		wfm_data					: in std_logic_vector(wfm_infifo_wrwidth-1 downto 0);
 		wfm_wr					: in std_logic;
 		wfm_infifo_wrusedw 	: out std_logic_vector(wfm_infifo_wrsize-1 downto 0);
+      wfm_infifo_wfull     : out std_logic; 
 
 		wcmd_clk					: in std_logic;
 		wcmd_reset_n			: in  std_logic;
@@ -61,17 +62,20 @@ end wfm_player;
 architecture arch of wfm_player is
 --declare signals,  components here
 
-signal wfm_infifo_rdusedw 	: std_logic_vector(wfm_infifo_rdsize-1 downto 0);
-signal wfm_infifo_rdreq		: std_logic;
-signal wfm_infifo_q			: std_logic_vector(avmm_bus_size-1 downto 0);
-signal wfm_infifo_rdempty	: std_logic;
+signal wcmd_reset_n_int                : std_logic;
+signal wfm_infifo_rdusedw 	            : std_logic_vector(wfm_infifo_rdsize-1 downto 0);
+signal wfm_infifo_rdreq		            : std_logic;
+signal wfm_infifo_q			            : std_logic_vector(avmm_bus_size-1 downto 0);
+signal wfm_infifo_rdempty	            : std_logic;
 
 signal wfm_load_wcmd0, wfm_load_wcmd1, wfm_load_wcmd2 : std_logic;
 
-signal wcmd_last_addr            : std_logic_vector(avmm_addr_size-1 downto 0);
+signal wcmd_last_addr                  : std_logic_vector(avmm_addr_size-1 downto 0);
 
 signal wfm_load_wcmd_ext	            : std_logic;
 signal wfm_play_stop_sync_rcmd_clk     : std_logic;
+
+signal wfm_load_rising_wcmd            : std_logic;
 
 component wfm_wcmd_fsm is
 	generic(
@@ -169,11 +173,11 @@ generic map (
 		show_ahead			=> "ON"
 )
 port map (
-      reset_n       		=> wcmd_reset_n, 
+      reset_n       		=> wcmd_reset_n_int, 
       wrclk         		=> wcmd_clk, 
       wrreq         		=> wfm_wr, 
       data          		=> wfm_data, 
-      wrfull        		=> open, 
+      wrfull        		=> wfm_infifo_wfull, 
 		wrempty		  		=> open, 
       wrusedw       		=> wfm_infifo_wrusedw, 
       rdclk 	     		=> wcmd_clk, 
@@ -198,7 +202,7 @@ wfm_wcmd_fsm_inst : wfm_wcmd_fsm
 )
 	port map (
 		wcmd_clk					=> wcmd_clk, 
-		wcmd_reset_n			=> wcmd_reset_n, 
+		wcmd_reset_n			=> wcmd_reset_n_int, 
 		wcmd_rdy					=> wcmd_rdy, 
 		wcmd_addr				=> wcmd_addr, 
 		wcmd_wr					=> wcmd_wr, 
@@ -232,6 +236,23 @@ process(wcmd_clk, wcmd_reset_n)begin
 		end if; 
 	end if;	
 end process;
+
+
+--to detect rising edge on wfm_load signal
+process(wcmd_clk, wcmd_reset_n)begin
+   if (wcmd_reset_n = '0')then
+      wfm_load_rising_wcmd  <= '0';
+	elsif(wcmd_clk'event and wcmd_clk = '1')then 
+      if wfm_load_wcmd1 = '0' and wfm_load_wcmd0 = '1' then 
+         wfm_load_rising_wcmd <= '1';
+      else 
+         wfm_load_rising_wcmd  <= '0';
+      end if;
+	end if;	
+end process;
+
+--internaly modules in wcmd domain is reset on rising edge of wfm_load signal 
+wcmd_reset_n_int <= not wfm_load_rising_wcmd;
 
 
 -- ----------------------------------------------------------------------------

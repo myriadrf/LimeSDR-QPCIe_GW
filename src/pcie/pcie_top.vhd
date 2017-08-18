@@ -54,6 +54,7 @@ entity pcie_top is
 		strm0_IN_q				: out std_logic_vector(31 downto 0);
 		strm0_IN_ext_q_valid	: out std_logic;
 		strm0_IN_ext_rdy		: in std_logic;
+      strm0_IN_open        : out std_logic;
 		--Stream 0 data fifo (FPGA -> PC) 
 --		strm0_OUT_SW			: in std_logic;
 		strm0_OUT_wrclk		: in std_logic;
@@ -73,6 +74,7 @@ entity pcie_top is
 		strm1_IN_q				: out std_logic_vector(31 downto 0);
 		strm1_IN_ext_q_valid	: out std_logic;
 		strm1_IN_ext_rdy		: in std_logic;
+      strm1_IN_open        : out std_logic;
 		--Stream 1 data fifo (FPGA -> PC) 
 --		strm1_OUT_SW			: in std_logic;
 		strm1_OUT_wrclk		: in std_logic;
@@ -92,6 +94,7 @@ entity pcie_top is
 		strm2_IN_q				: out std_logic_vector(31 downto 0);
 		strm2_IN_ext_q_valid	: out std_logic;
 		strm2_IN_ext_rdy		: in std_logic;
+      strm2_IN_open        : out std_logic;
 		--Stream 2 data fifo (FPGA -> PC) 
 --		strm2_OUT_SW			: in std_logic;
 		strm2_OUT_wrclk		: in std_logic;
@@ -391,6 +394,11 @@ begin
 		
 		
 	pcie_bus_clk<=bus_clk;
+   
+   strm0_IN_open <= user_w_stream1_write_32_open;
+   strm1_IN_open <= user_w_stream1_write_32_open;
+   strm2_IN_open <= user_w_stream2_write_32_open;
+   
 		
 		
 --  A simple inferred RAM
