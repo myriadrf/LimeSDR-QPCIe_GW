@@ -173,7 +173,7 @@ generic map (
 		show_ahead			=> "ON"
 )
 port map (
-      reset_n       		=> wcmd_reset_n_int, 
+      reset_n       		=> wcmd_reset_n, 
       wrclk         		=> wcmd_clk, 
       wrreq         		=> wfm_wr, 
       data          		=> wfm_data, 
@@ -202,7 +202,7 @@ wfm_wcmd_fsm_inst : wfm_wcmd_fsm
 )
 	port map (
 		wcmd_clk					=> wcmd_clk, 
-		wcmd_reset_n			=> wcmd_reset_n_int, 
+		wcmd_reset_n			=> wcmd_reset_n, 
 		wcmd_rdy					=> wcmd_rdy, 
 		wcmd_addr				=> wcmd_addr, 
 		wcmd_wr					=> wcmd_wr, 
