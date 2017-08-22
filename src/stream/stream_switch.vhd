@@ -49,7 +49,6 @@ signal wfm_fifo_wrwords 					: unsigned (wfm_fifo_wrusedw_size-1 downto 0);
 signal wfm_rdy_int							: std_logic;
 signal dest_sel_syncreg						: std_logic_vector(2 downto 0);
 
-
 component pct_payload_extrct is
 	generic (data_w			: integer := 32;
 				header_size		: integer := 16; --pct header size in bytes 
@@ -116,31 +115,28 @@ tx_fifo_data	<= data_in;
 --   end if;
 --end process;
 
-process(clk)
-begin 
-   if reset_n = '0' then 
-      wfm_rdy_int <= '0';
-   elsif (clk'event AND clk='1') then 
-      if wfm_rdy='1' then 
-         if ((wfm_fifo_wrwords - unsigned(wfm_fifo_wrusedw) > (wfm_limit*8/32)+5)) then 
-            wfm_rdy_int		<= '1';
-         else 
-            if data_in_valid = '1' then 
-               wfm_rdy_int <= '0';
-            else 
-               wfm_rdy_int <= '1';
-            end if;
-            
-         end if;
-      else 
-         wfm_rdy_int		<= '0';
-      end if;
-   end if;
-end process;
-
-
-
-
+--process(clk,reset_n)
+--begin 
+--   if reset_n = '0' then 
+--      wfm_rdy_int <= '0';
+--   elsif (clk'event AND clk='1') then 
+--      if wfm_rdy='1' then 
+--         if ((wfm_fifo_wrwords - unsigned(wfm_fifo_wrusedw) > (wfm_limit*8/32)+5)) then 
+--            wfm_rdy_int		<= '1';
+--         else 
+--            if data_in_valid = '1' then 
+--               wfm_rdy_int <= '0';
+--            else 
+--               wfm_rdy_int <= '1';
+--            end if;
+--            
+--         end if;
+--      else 
+--         wfm_rdy_int		<= '0';
+--      end if;
+--   end if;
+--end process;
+   
 data_in_rdy		<= tx_fifo_rdy when dest_sel_syncreg(1)='0' else wfm_rdy;
   
 end arch;
