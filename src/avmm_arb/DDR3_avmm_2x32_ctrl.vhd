@@ -208,6 +208,7 @@ signal inst4_local_init_done 			: std_logic;
 signal inst4_local_cal_success 		: std_logic;
 signal inst4_local_cal_fail 			: std_logic;
 signal inst4_pll_locked 				: std_logic;
+signal inst4_soft_reset_n           : std_logic;
 
 component avmm_arb_top is
 	generic(
@@ -532,11 +533,13 @@ mux_avl_wdata_1		<= inst1_local_wdata			when begin_test='0' else inst3_avl_wdata
 mux_avl_be_1			<= inst1_local_be				when begin_test='0' else inst3_avl_be;
 mux_avl_size_1			<= inst1_local_size			when begin_test='0' else inst3_avl_size;
 
+inst4_soft_reset_n <= inst4_pll_locked AND soft_reset_n;
+
 	ddr3_av_2x32_inst4: component ddr3_av_2x32
 		port map (
 			pll_ref_clk                => pll_ref_clk,                --        pll_ref_clk.clk
 			global_reset_n             => global_reset_n,             --       global_reset.reset_n
-			soft_reset_n               => inst4_pll_locked,           --         soft_reset.reset_n
+			soft_reset_n               => inst4_soft_reset_n,           --         soft_reset.reset_n
 			afi_clk                    => open, -- afi_clk,           --            afi_clk.clk
 			afi_half_clk               => inst4_afi_half_clk,         --       afi_half_clk.clk
 			afi_reset_n                => open, --afi_reset_n,        --          afi_reset.reset_n
