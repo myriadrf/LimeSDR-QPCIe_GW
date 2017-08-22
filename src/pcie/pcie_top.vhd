@@ -395,7 +395,7 @@ begin
 		
 	pcie_bus_clk<=bus_clk;
    
-   strm0_IN_open <= user_w_stream1_write_32_open;
+   strm0_IN_open <= user_w_stream0_write_32_open;
    strm1_IN_open <= user_w_stream1_write_32_open;
    strm2_IN_open <= user_w_stream2_write_32_open;
    
