@@ -34,11 +34,14 @@ puts {
 set library_file_list {
                            source_library { ../general/sync_reg.vhd
                                             ../general/bus_sync_reg.vhd
+                                            ../general/reset_n_synch.vhd
                                             ../altera_inst/fifo_inst.vhd
                                             ../general/edge_pulse/synth/edge_pulse.vhd
+                                            synth/wfm_player_rst_ctrl.vhd
                                             synth/wfm_rcmd_fsm.vhd
                                             synth/wfm_wcmd_fsm.vhd
                                             synth/wfm_player.vhd
+                                            sim/wfm_player_rst_ctrl_tb.vhd
                                             sim/wfm_player_tb.vhd
                                             
                                             
