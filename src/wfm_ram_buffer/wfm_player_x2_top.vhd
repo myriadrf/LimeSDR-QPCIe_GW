@@ -152,7 +152,8 @@ end wfm_player_x2_top;
 -- ----------------------------------------------------------------------------
 architecture arch of wfm_player_x2_top is
 --declare signals,  components here
-
+signal wfm0_load           : std_logic;
+signal wfm1_load           : std_logic;
 signal wfm0_rdy_int        : std_logic;
 signal wfm1_rdy_int        : std_logic;
 
@@ -350,15 +351,15 @@ component wfm_player is
                  
 );
   port (
-		ddr2_phy_clk			: in std_logic;
-		ddr2_phy_reset_n		: in std_logic;
 
 		wfm_load					: in std_logic;
 		wfm_play_stop			: in std_logic; -- 1- play, 0- stop
 
-		wfm_data					: in std_logic_vector(wfm_infifo_wrwidth-1 downto 0);
-		wfm_wr					: in std_logic;
-		wfm_infifo_wrusedw 	: out std_logic_vector(wfm_infifo_wrsize-1 downto 0);
+      wfm_infifo_wrclk     : in std_logic;
+      wfm_infifo_reset_n   : in std_logic;
+      wfm_infifo_data      : in std_logic_vector(wfm_infifo_wrwidth-1 downto 0);
+      wfm_infifo_wrreq     : in std_logic;
+      wfm_infifo_wrusedw   : out std_logic_vector(wfm_infifo_wrsize-1 downto 0);
       wfm_infifo_wfull     : out std_logic;
 
 		wcmd_clk					: in std_logic;
@@ -446,6 +447,7 @@ wfm_player_rst_ctrl_0 : entity work.wfm_player_rst_ctrl
       clk                    => inst3_phy_clk,
       global_reset_n         => reset_n,     
       wfm_load               => wfm_load(0),
+      wfm_load_ext           => wfm0_load,
       wfm_play_stop          => wfm_play_stop(0),     
       ram_init_done          => inst3_local_init_done,
       ram_global_reset_n     => rst0_ram_global_reset_n,
@@ -462,13 +464,13 @@ wfm_player_rst_ctrl_0 : entity work.wfm_player_rst_ctrl
 -- To synchronize reset signal to wfm0_wcmd_clk
 -- ----------------------------------------------------------------------------
 sync_reg1 : entity work.sync_reg 
-port map(wfm0_wcmd_clk, '1', rst0_wfm_player_wcmd_reset_n, inst0_wcmd_reset_n);
+port map(wfm0_wcmd_clk, reset_n, rst0_wfm_player_wcmd_reset_n, inst0_wcmd_reset_n);
 
 -- ----------------------------------------------------------------------------
 -- To synchronize reset signal to wfm0_rcmd_clk
 -- ----------------------------------------------------------------------------
 sync_reg2 : entity work.sync_reg 
-port map(wfm0_rcmd_clk, '1', rst0_wfm_player_rcmd_reset_n, inst0_rcmd_reset_n);
+port map(wfm0_rcmd_clk, reset_n, rst0_wfm_player_rcmd_reset_n, inst0_rcmd_reset_n);
 
 
 -- ----------------------------------------------------------------------------
@@ -491,14 +493,13 @@ wfm_player_inst0 : wfm_player
 )
   port map(
 
-		ddr2_phy_clk			=> inst3_phy_clk, --not used
-		ddr2_phy_reset_n		=> inst3_local_init_done, -- not used
-
-		wfm_load					=> wfm_load(0),
+		wfm_load					=> wfm0_load,
 		wfm_play_stop			=> wfm_play_stop(0),
-
-		wfm_data					=> wfm0_data,
-		wfm_wr					=> wfm0_wr,
+      
+      wfm_infifo_wrclk     => wfm0_wcmd_clk,
+      wfm_infifo_reset_n   => inst0_wcmd_reset_n,
+		wfm_infifo_data		=> wfm0_data,
+		wfm_infifo_wrreq		=> wfm0_wr,
 		wfm_infifo_wrusedw 	=> wfm0_infifo_wrusedw,
       wfm_infifo_wfull     => wfm0_infifo_wfull,
 
@@ -543,6 +544,7 @@ wfm_player_rst_ctrl_1 : entity work.wfm_player_rst_ctrl
       clk                    => inst3_phy_clk,
       global_reset_n         => reset_n,     
       wfm_load               => wfm_load(1),
+      wfm_load_ext           => wfm1_load,
       wfm_play_stop          => wfm_play_stop(1),     
       ram_init_done          => inst3_local_init_done,
       ram_global_reset_n     => rst1_ram_global_reset_n,
@@ -559,13 +561,13 @@ wfm_player_rst_ctrl_1 : entity work.wfm_player_rst_ctrl
 -- To synchronize reset signal to wfm1_wcmd_clk
 -- ----------------------------------------------------------------------------
 sync_reg3 : entity work.sync_reg 
-port map(wfm1_wcmd_clk, '1', rst1_wfm_player_wcmd_reset_n, inst1_wcmd_reset_n);
+port map(wfm1_wcmd_clk, reset_n, rst1_wfm_player_wcmd_reset_n, inst1_wcmd_reset_n);
 
 -- ----------------------------------------------------------------------------
 -- To synchronize reset signal to wfm1_rcmd_clk
 -- ----------------------------------------------------------------------------
 sync_reg4 : entity work.sync_reg 
-port map(wfm1_rcmd_clk, '1', rst1_wfm_player_rcmd_reset_n, inst1_rcmd_reset_n);
+port map(wfm1_rcmd_clk, reset_n, rst1_wfm_player_rcmd_reset_n, inst1_rcmd_reset_n);
 
 
 -- ----------------------------------------------------------------------------
@@ -588,14 +590,13 @@ wfm_player_inst1 : wfm_player
 )
   port map(
 
-		ddr2_phy_clk			=> inst3_phy_clk, --not used
-		ddr2_phy_reset_n		=> inst3_local_init_done, --not used
-
-		wfm_load					=> wfm_load(1),
+		wfm_load					=> wfm1_load,
 		wfm_play_stop			=> wfm_play_stop(1),
-
-		wfm_data					=> wfm1_data,
-		wfm_wr					=> wfm1_wr,
+      
+      wfm_infifo_wrclk     => wfm1_wcmd_clk,
+      wfm_infifo_reset_n   => inst1_wcmd_reset_n,
+		wfm_infifo_data		=> wfm1_data,
+		wfm_infifo_wrreq	   => wfm1_wr,
 		wfm_infifo_wrusedw 	=> wfm1_infifo_wrusedw,
       wfm_infifo_wfull     => wfm1_infifo_wfull,
 
@@ -719,7 +720,7 @@ DDR3_avmm_2x32_ctrl_inst3 : DDR3_avmm_2x32_ctrl
 -- To synchronize wfm_load(0) signal to wfm0_iq_clk
 -- ----------------------------------------------------------------------------
 sync_reg5 : entity work.sync_reg 
-port map(wfm0_iq_clk, '1', rst0_dcmpr_reset_n, inst4_reset_n);
+port map(wfm0_iq_clk, reset_n, rst0_dcmpr_reset_n, inst4_reset_n);
 	
 decompress_top_inst4 : decompress_top
   generic map (
@@ -765,7 +766,7 @@ decompress_top_inst4 : decompress_top
 -- To synchronize wfm_load(1) signal to wfm1_iq_clk
 -- ----------------------------------------------------------------------------
 sync_reg6 : entity work.sync_reg 
-port map(wfm1_iq_clk, '1', rst1_dcmpr_reset_n, inst5_reset_n);
+port map(wfm1_iq_clk, reset_n, rst1_dcmpr_reset_n, inst5_reset_n);
 	
 		 
 decompress_top_inst5 : decompress_top
