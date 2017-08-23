@@ -19,6 +19,7 @@ entity wfm_player_rst_ctrl is
       global_reset_n          : in std_logic;
       
       wfm_load                : in std_logic;
+      wfm_load_ext            : out std_logic;
       wfm_play_stop           : in std_logic;
       
       ram_init_done           : in std_logic;
@@ -42,7 +43,11 @@ end wfm_player_rst_ctrl;
 -- ----------------------------------------------------------------------------
 architecture arch of wfm_player_rst_ctrl is
 --declare signals,  components here
-signal wfm_load_pulse_on_rising : std_logic;
+signal wfm_load_synch            : std_logic;
+signal wfm_load_ext_sig          : std_logic;
+signal ram_init_done_synch       : std_logic;
+signal wfm_load_pulse_on_rising  : std_logic;
+signal global_reset_n_synch      : std_logic; 
 
 --ram internal signals
 signal ram_global_reset_n_int       : std_logic;
@@ -59,15 +64,42 @@ signal dcmpr_reset_n_int            : std_logic;
   
 begin
 
+--Synchronizing an Asynchronous Reset
+reset_n_synch_inst0 : entity work.reset_n_synch
+port map(clk, global_reset_n, global_reset_n_synch);
 
+--Synchronizing an asynchronous wfm_load signal   
+sync_reg0 : entity work.sync_reg 
+port map(clk, global_reset_n_synch, wfm_load, wfm_load_synch);
+
+sync_reg1 : entity work.sync_reg 
+port map(clk, global_reset_n_synch, ram_init_done, ram_init_done_synch);
+   
 --to detect rising edge of wfm_load
-edge_pulse_inst0 : entity work.edge_pulse(arch_rising) 
+edge_pulse_inst1 : entity work.edge_pulse(arch_rising) 
 port map(
    clk         => clk,
-   reset_n     => global_reset_n, 
-   sig_in      => wfm_load,
+   reset_n     => global_reset_n_synch, 
+   sig_in      => wfm_load_synch,
    pulse_out   => wfm_load_pulse_on_rising
 );
+
+
+
+process(global_reset_n_synch, clk)
+begin 
+   if global_reset_n_synch = '0' then 
+      wfm_load_ext_sig <= '0';
+   elsif (clk'event AND clk = '1') then 
+      if wfm_load_pulse_on_rising = '1' then 
+         wfm_load_ext_sig <= '1';
+      elsif wfm_load_synch = '0' then 
+         wfm_load_ext_sig <= '0';
+      else 
+         wfm_load_ext_sig <= wfm_load_ext_sig;
+      end if;
+   end if;
+end process;
 
 
 
@@ -77,26 +109,26 @@ port map(
 ram_global_reset_n_int  <= global_reset_n;
 ram_soft_reset_n_int    <= not wfm_load_pulse_on_rising;
 ram_wcmd_reset_n_int    <= not wfm_load_pulse_on_rising;
-ram_rcmd_reset_n_int    <= ram_init_done;
+ram_rcmd_reset_n_int    <= ram_init_done_synch;
 
 -- ----------------------------------------------------------------------------
 -- wfm player part
 -- ----------------------------------------------------------------------------
-wfm_player_reset_n_int      <= global_reset_n;
+wfm_player_reset_n_int      <= not wfm_load_pulse_on_rising;
 wfm_player_wcmd_reset_n_int <= not wfm_load_pulse_on_rising;
-wfm_player_rcmd_reset_n_int <= ram_init_done;
+wfm_player_rcmd_reset_n_int <= ram_init_done_synch;
 
 -- ----------------------------------------------------------------------------
 -- data decompres reset part
 -- ----------------------------------------------------------------------------
-dcmpr_reset_n_int <= not wfm_load;
+dcmpr_reset_n_int <= not wfm_load_synch;
 
 -- ----------------------------------------------------------------------------
 -- Output registers
 -- ----------------------------------------------------------------------------
- process(global_reset_n, clk)
+ process(global_reset_n_synch, clk)
     begin
-      if global_reset_n='0' then        
+      if global_reset_n_synch='0' then        
          ram_soft_reset_n        <= '0'; 
          ram_wcmd_reset_n        <= '0';
          ram_rcmd_reset_n        <= '0';     
@@ -104,6 +136,7 @@ dcmpr_reset_n_int <= not wfm_load;
          wfm_player_wcmd_reset_n <= '0';
          wfm_player_rcmd_reset_n <= '0';
          dcmpr_reset_n           <= '0';
+         wfm_load_ext            <= '0';
       elsif (clk'event and clk = '1') then 
          ram_soft_reset_n        <= ram_soft_reset_n_int; 
          ram_wcmd_reset_n        <= ram_wcmd_reset_n_int;
@@ -112,6 +145,7 @@ dcmpr_reset_n_int <= not wfm_load;
          wfm_player_wcmd_reset_n <= wfm_player_wcmd_reset_n_int;
          wfm_player_rcmd_reset_n <= wfm_player_rcmd_reset_n_int;
          dcmpr_reset_n           <= dcmpr_reset_n_int;
+         wfm_load_ext            <= wfm_load_ext_sig;
  	    end if;
     end process;
     
