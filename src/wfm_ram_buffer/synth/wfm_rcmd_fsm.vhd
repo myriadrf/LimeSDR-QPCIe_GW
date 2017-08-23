@@ -40,6 +40,7 @@ end wfm_rcmd_fsm;
 -- ----------------------------------------------------------------------------
 architecture arch of wfm_rcmd_fsm is
 --declare signals,  components here
+signal wfm_load_reg           : std_logic;
 signal wfm_load_rising        : std_logic;
 signal wfm_load_falling       : std_logic;
 signal wcmd_last_addr_latch   : std_logic_vector(addr_size-1 downto 0);
@@ -54,6 +55,16 @@ signal current_state, next_state : state_type;
  
 begin
    
+--extra register to delay wfm_load signal and to be safe that wcmd_last_addr is not changing
+process(rcmd_clk, rcmd_reset_n)
+begin
+   if rcmd_reset_n = '0' then 
+      wfm_load_reg <= '0';
+   elsif (rcmd_clk'event AND rcmd_clk='1') then 
+      wfm_load_reg <= wfm_load;
+   end if;
+end process;
+   
 -- ----------------------------------------------------------------------------
 -- To detect rising and falling edges of wfm_load signal
 -- ----------------------------------------------------------------------------   
@@ -61,7 +72,7 @@ edge_pulse_inst0 : entity work.edge_pulse(arch_rising)
    port map(
    clk         => rcmd_clk,
    reset_n     => rcmd_reset_n, 
-   sig_in      => wfm_load,
+   sig_in      => wfm_load_reg,
    pulse_out   => wfm_load_rising
 );
 
@@ -69,7 +80,7 @@ edge_pulse_inst1 : entity work.edge_pulse(arch_falling)
    port map(
    clk         => rcmd_clk,
    reset_n     => rcmd_reset_n, 
-   sig_in      => wfm_load,
+   sig_in      => wfm_load_reg,
    pulse_out   => wfm_load_falling
 );
 
