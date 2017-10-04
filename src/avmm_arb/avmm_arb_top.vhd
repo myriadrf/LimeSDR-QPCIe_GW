@@ -21,7 +21,7 @@ entity avmm_arb_top is
 		lcl_bus_size		: integer := 63;
 		lcl_burst_length	: integer := 2;
 		cmd_fifo_size		: integer := 9;
-		outfifo_size		: integer :=10 -- outfifo buffer size
+		outfifo_size		: integer := 10 -- outfifo buffer size
 		);
   port (
       clk       			: in std_logic;

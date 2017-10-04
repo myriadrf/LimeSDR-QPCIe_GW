@@ -13291,11 +13291,6 @@ agreement for further details.
 	(pt 3160 2648)
 )
 (connector
-	(text "L" (rect 3024 2648 3029 2660)(font "Arial" ))
-	(pt 2984 2664)
-	(pt 3160 2664)
-)
-(connector
 	(text "L" (rect 3024 2664 3029 2676)(font "Arial" ))
 	(pt 2984 2680)
 	(pt 3160 2680)
@@ -14858,6 +14853,11 @@ agreement for further details.
 	(text "wfm1_rdy" (rect 3889 3464 3938 3476)(font "Arial" ))
 	(pt 3856 3480)
 	(pt 3976 3480)
+)
+(connector
+	(text "data_src" (rect 3024 2648 3066 2660)(font "Arial" ))
+	(pt 2984 2664)
+	(pt 3160 2664)
 )
 (junction (pt 15512 4080))
 (junction (pt 15512 4576))
