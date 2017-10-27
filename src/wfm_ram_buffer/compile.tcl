@@ -41,8 +41,11 @@ set library_file_list {
                                             synth/wfm_rcmd_fsm.vhd
                                             synth/wfm_wcmd_fsm.vhd
                                             synth/wfm_player.vhd
+                                            synth/pct_payload_extrct.vhd
+                                            synth/stream_switch.vhd
                                             sim/wfm_player_rst_ctrl_tb.vhd
                                             sim/wfm_player_tb.vhd
+                                            sim/stream_switch_tb.vhd
                                             
                                             
                                             

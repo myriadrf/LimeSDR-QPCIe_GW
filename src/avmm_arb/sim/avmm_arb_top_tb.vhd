@@ -139,36 +139,75 @@ avmm_arb_top_dut0 : entity work.avmm_arb_top
       local_be          => dut0_local_be,
       local_size        => dut0_local_size
         );
-        
-      dut0_wcmd_addr    <= (others=>'0');
-      dut0_wcmd_wr      <= '1';        
+           
       
       dut0_rcmd_addr    <= (others=>'0');
-      dut0_rcmd_wr      <= dut0_rcmd_rdy;
-      
-      
-      dut0_local_ready  <= not dut1_avs_waitrequest;
+      dut0_rcmd_wr      <= '0';
       
       
       
       
-      
-        
-avmm_slave_bfm_dut1 : entity work.avmm_slave_bfm
-		port map (
-			clk                    => clk0,                    --       clk.clk
-			reset                  => reset,                 -- clk_reset.reset
-			avs_writedata          => dut0_local_wdata,        --        s0.writedata
-			avs_beginbursttransfer => dut0_local_burstbegin,   --          .beginbursttransfer
-			avs_burstcount         => dut0_local_size,         --          .burstcount
-			avs_readdata           => dut1_avs_readdata,       --          .readdata
-			avs_address            => dut0_local_addr,         --          .address
-			avs_waitrequest        => dut1_avs_waitrequest,    --          .waitrequest_n
-			avs_write              => '1',    --          .write
-			avs_read               => dut0_local_read_req,     --          .read
-			avs_byteenable         => dut0_local_be,           --          .byteenable
-			avs_readdatavalid      => dut1_avs_readdatavalid   --          .readdatavalid
-		);
+   --generate wcmd wr signal   
+   process(clk1, reset_n)
+   begin
+      if reset_n = '0' then 
+         dut0_wcmd_wr <= '0';
+      elsif (clk1'event AND clk1='1') then 
+         if dut0_wcmd_rdy = '1' then 
+            --dut0_wcmd_wr <= NOT dut0_wcmd_wr
+            dut0_wcmd_wr <= '1';
+         else 
+            dut0_wcmd_wr <= '0';
+         end if;
+      end if;
+   end process;
+   
+      --generate wcmd dut0_wcmd_brst_en signal   
+      process
+   begin
+      dut0_wcmd_brst_en <= '1';
+      wait until rising_edge(clk1);
+      wait until rising_edge(clk1);
+      dut0_wcmd_brst_en <= '0';
+      wait until rising_edge(clk1);
+   end process;
+   
+   
+   
+   --generate wcmd addres signal   
+   process(clk1, reset_n)
+   begin
+      if reset_n = '0' then 
+         dut0_wcmd_addr <= (others=>'0');
+      elsif (clk1'event AND clk1='1') then 
+         if dut0_wcmd_wr = '1' then 
+            dut0_wcmd_addr <= std_logic_vector(unsigned(dut0_wcmd_addr)+1);
+         end if;
+      end if;
+   end process;
+   
+         --generate wcmd data signal   
+   process(clk1, reset_n)
+   begin
+      if reset_n = '0' then 
+         dut0_wcmd_data <= (others=>'0');
+      elsif (clk1'event AND clk1='1') then 
+         if dut0_wcmd_wr = '1' then 
+            dut0_wcmd_data <= std_logic_vector(unsigned(dut0_wcmd_data)+1);
+         end if;
+      end if;
+   end process;
+   
+   process
+   begin
+      dut0_local_ready  <= '0';
+      for i in 0 to 2 loop
+         wait until rising_edge(clk1);
+         dut0_local_ready  <= '1';
+      end loop;
+   end process;
+   
+   
 
 end tb_behave;
 

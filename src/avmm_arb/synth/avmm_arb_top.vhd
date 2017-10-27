@@ -103,43 +103,6 @@ component fifo_inst is
         );
 end component;
 
-component avmm_arb is
-	generic(
-		cntrl_rate			: integer := 1; --1 - full rate, 2 - half rate
-		cntrl_bus_size		: integer := 16;
-		addr_size			: integer := 24;
-		lcl_bus_size		: integer := 63;
-		lcl_burst_length	: integer := 2;
-		cmd_fifo_size		: integer := 9;
-		outfifo_size		: integer :=10
-		);
-  port (
-      clk       			: in std_logic;
-      reset_n   			: in std_logic;
-
-		wcmd_fifo_wraddr	: in std_logic_vector(addr_size downto 0);
-		wcmd_fifo_wrdata	: in std_logic_vector(lcl_bus_size-1 downto 0);
-		wcmd_fifo_rdusedw	: in std_logic_vector(cmd_fifo_size-1 downto 0);
-		wcmd_fifo_rdempty	: in std_logic;
-		wcmd_fifo_rdreq	: out std_logic;
-		rcmd_fifo_rdaddr	: in std_logic_vector(addr_size downto 0);
-		rcmd_fifo_rdusedw	: in std_logic_vector(cmd_fifo_size-1 downto 0);
-		rcmd_fifo_rdempty	: in std_logic;
-		rcmd_fifo_rdreq	: out std_logic;
-		outbuf_wrusedw		: in std_logic_vector(outfifo_size-1 downto 0);
-		
-		local_ready			: in std_logic;
-		local_addr			: out std_logic_vector(addr_size-1 downto 0);
-		local_write_req	: out std_logic;
-		local_read_req		: out std_logic;
-		local_burstbegin	: out std_logic;
-		local_wdata			: out std_logic_vector(lcl_bus_size-1 downto 0);
-		local_be				: out std_logic_vector(lcl_bus_size/8*cntrl_rate-1 downto 0);
-		local_size			: out std_logic_vector(1 downto 0)	
-        );
-end component;
-
-  
 begin
 
 
@@ -206,7 +169,7 @@ port map (
 -- ---------------------------------------------------------------------------
 -- Avalon Memory Master arbitrator instance
 -- ---------------------------------------------------------------------------
-avmm_arb_inst :  avmm_arb
+avmm_arb_inst :  entity work.avmm_arb
 	generic map(
 		cntrl_rate			=> cntrl_rate, --1 - full rate, 2 - half rate
 		cntrl_bus_size		=> cntrl_bus_size,

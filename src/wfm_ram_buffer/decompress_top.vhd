@@ -109,6 +109,18 @@ signal par_mode_en_sync    : std_logic;
 signal reset_n_sync_wclk   : std_logic;
 signal reset_n_sync_rclk   : std_logic;
 
+signal tst_data_in_cnt		: unsigned(15 downto 0);
+signal tst_data_in_vect		: std_logic_vector(63 downto 0);
+signal tst_data_in_vect_reg: std_logic_vector(63 downto 0);
+signal tst_data_in_cmp_fail: std_logic;	
+
+attribute noprune : boolean;
+attribute noprune of tst_data_in_cnt: signal is true;
+attribute noprune of tst_data_in_vect: signal is true;
+attribute noprune of tst_data_in_cmp_fail: signal is true;
+attribute noprune of tst_data_in_vect_reg: signal is true;
+
+
 begin
 
 
@@ -175,6 +187,49 @@ fifo_inst_inst0 : entity work.fifo_inst
         );
 		  
 wusedw <= inst0_wrusedw;
+
+-- ----------------------------------------------------------------------------
+--for testing
+
+process(wclk, reset_n_sync_wclk) 
+begin 
+	if reset_n_sync_wclk = '0' then 
+		tst_data_in_cnt 			<= (others => '0');
+		tst_data_in_cmp_fail 	<= '0';
+	elsif (wclk'event AND wclk = '1') then
+		tst_data_in_vect_reg <= tst_data_in_vect;
+		if data_in_valid = '1' then
+			if tst_data_in_cnt < x"FFFD" then 
+				tst_data_in_cnt <= tst_data_in_cnt + 2;
+			else 
+				tst_data_in_cnt <= (others => '0');
+			end if;
+		else 
+			tst_data_in_cnt <= tst_data_in_cnt;
+		end if;
+		
+		if data_in_valid = '1' then
+			if tst_data_in_vect /= data_in then 
+				tst_data_in_cmp_fail <= '1';
+			else 
+				tst_data_in_cmp_fail <= '0';
+			end if;
+		else
+			tst_data_in_cmp_fail <= tst_data_in_cmp_fail;
+		end if;
+	end if;
+end process;
+
+
+tst_data_in_vect <= 	std_logic_vector(tst_data_in_cnt + 1 ) & 
+							std_logic_vector(tst_data_in_cnt) & 
+							std_logic_vector(tst_data_in_cnt + 1 ) & 
+							std_logic_vector(tst_data_in_cnt);
+
+
+
+
+-- ----------------------------------------------------------------------------
 
 
 fifo_bulk_read_inst1 : entity work.fifo_bulk_read

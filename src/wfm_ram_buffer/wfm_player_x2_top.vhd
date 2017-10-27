@@ -444,7 +444,7 @@ wfm0_rdy<= wfm0_rdy_int;
 wfm_player_rst_ctrl_0 : entity work.wfm_player_rst_ctrl
    port map(
 
-      clk                    => inst3_phy_clk,
+      clk                    => pll_ref_clk,
       global_reset_n         => reset_n,     
       wfm_load               => wfm_load(0),
       wfm_load_ext           => wfm0_load,
@@ -457,14 +457,18 @@ wfm_player_rst_ctrl_0 : entity work.wfm_player_rst_ctrl
       wfm_player_reset_n     => rst0_wfm_player_reset_n,
       wfm_player_wcmd_reset_n=> rst0_wfm_player_wcmd_reset_n,
       wfm_player_rcmd_reset_n=> rst0_wfm_player_rcmd_reset_n,      
-      dcmpr_reset_n          => rst0_dcmpr_reset_n
+      dcmpr_reset_n          => rst0_dcmpr_reset_n,
+      clk0                   => wfm0_wcmd_clk,
+      clk0_reset_n           => open,
+      clk0_reset_n_pulse     => inst0_wcmd_reset_n
+      
       );
 
 -- ----------------------------------------------------------------------------
 -- To synchronize reset signal to wfm0_wcmd_clk
 -- ----------------------------------------------------------------------------
-sync_reg1 : entity work.sync_reg 
-port map(wfm0_wcmd_clk, reset_n, rst0_wfm_player_wcmd_reset_n, inst0_wcmd_reset_n);
+--sync_reg1 : entity work.sync_reg 
+--port map(wfm0_wcmd_clk, reset_n, rst0_wfm_player_wcmd_reset_n, inst0_wcmd_reset_n);
 
 -- ----------------------------------------------------------------------------
 -- To synchronize reset signal to wfm0_rcmd_clk
@@ -541,7 +545,7 @@ wfm1_rdy <= wfm1_rdy_int;
 wfm_player_rst_ctrl_1 : entity work.wfm_player_rst_ctrl
    port map(
 
-      clk                    => inst3_phy_clk,
+      clk                    => pll_ref_clk,
       global_reset_n         => reset_n,     
       wfm_load               => wfm_load(1),
       wfm_load_ext           => wfm1_load,
@@ -554,14 +558,18 @@ wfm_player_rst_ctrl_1 : entity work.wfm_player_rst_ctrl
       wfm_player_reset_n     => rst1_wfm_player_reset_n,
       wfm_player_wcmd_reset_n=> rst1_wfm_player_wcmd_reset_n,
       wfm_player_rcmd_reset_n=> rst1_wfm_player_rcmd_reset_n,      
-      dcmpr_reset_n          => rst1_dcmpr_reset_n
+      dcmpr_reset_n          => rst1_dcmpr_reset_n,
+      clk0                   => wfm1_wcmd_clk,
+      clk0_reset_n           => open,
+      clk0_reset_n_pulse     => inst1_wcmd_reset_n
+            
       );
 
 -- ----------------------------------------------------------------------------
 -- To synchronize reset signal to wfm1_wcmd_clk
 -- ----------------------------------------------------------------------------
-sync_reg3 : entity work.sync_reg 
-port map(wfm1_wcmd_clk, reset_n, rst1_wfm_player_wcmd_reset_n, inst1_wcmd_reset_n);
+--sync_reg3 : entity work.sync_reg 
+--port map(wfm1_wcmd_clk, reset_n, rst1_wfm_player_wcmd_reset_n, inst1_wcmd_reset_n);
 
 -- ----------------------------------------------------------------------------
 -- To synchronize reset signal to wfm1_rcmd_clk

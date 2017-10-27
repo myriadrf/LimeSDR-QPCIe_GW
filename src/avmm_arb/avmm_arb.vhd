@@ -76,8 +76,8 @@ cmd_status<=rcmd_fifo_rdempty & wcmd_fifo_rdempty;
 --burst size
 -- ----------------------------------------------------------------------------
 process(wcmd_fifo_wraddr, current_state, rcmd_fifo_rdaddr) begin
-	if(wcmd_fifo_wraddr(addr_size)='1' and (current_state=burst_wr or  current_state=hold_wr or current_state=wr)) then
-		size<=std_logic_vector(to_unsigned(lcl_burst_length, size'length));
+	if(current_state=burst_wr or  current_state=hold_wr or current_state=wr) then
+		size<="01";
 	elsif(rcmd_fifo_rdaddr(addr_size)='1' and (current_state=burst_rd or current_state=rd_hold or current_state=rd)) then
 		size<=std_logic_vector(to_unsigned(lcl_burst_length, size'length));
 	else
@@ -199,9 +199,7 @@ fsm : process(current_state, cmd_status, wcmd_fifo_rdusedw, local_ready, wcmd_fi
 	  
 		when idle => 							--idle state, waiting for command
 			if local_ready='1' then  
-				if cmd_status(0)='0' and 
-					((unsigned(wcmd_fifo_rdusedw)>=lcl_burst_length and wcmd_fifo_wraddr(addr_size)='1') 
-					or wcmd_fifo_wraddr(addr_size)='0') then	
+				if cmd_status(0)='0' then 
 					next_state<=burst_wr;
 				elsif	cmd_status="01" and unsigned(outbuf_wrusedw)<128 then 
 					next_state<=burst_rd;
@@ -213,21 +211,17 @@ fsm : process(current_state, cmd_status, wcmd_fifo_rdusedw, local_ready, wcmd_fi
 			end if;
 
 		when burst_wr =>
-			if wcmd_fifo_wraddr(addr_size)='1' then 
-					next_state<=wr;
-			else 
-				if local_ready='1' and cmd_status(0)='0' and wcmd_fifo_wraddr(addr_size)='0' then 
+				if local_ready='1' and cmd_status(0)='0' then 
 					next_state<=burst_wr;
-				elsif  local_ready='0'	then 	
+				elsif   local_ready='0'	then 	
 					next_state<=hold_wr;
 				else 
 					next_state<=idle;
 				end if;
-			end if;
 
 		when hold_wr =>
 			if local_ready='1' then 
-				if cmd_status(0)='0' and wcmd_fifo_wraddr(addr_size)='0' then 
+				if cmd_status(0)='0' then 
 					next_state<=burst_wr;
 				else 
 					next_state<=idle;

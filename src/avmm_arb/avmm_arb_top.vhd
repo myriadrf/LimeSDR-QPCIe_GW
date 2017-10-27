@@ -76,7 +76,31 @@ signal rcmdfifo_rdreq				: std_logic;
 signal rcmdfifo_q						: std_logic_vector(addr_size downto 0);
 signal rcmdfifo_rdusedw 			: std_logic_vector(cmd_fifo_size-1 downto 0);
 signal rcmdfifo_rdempty				: std_logic;
-signal rcmdfifo_data 				: std_logic_vector(addr_size downto 0); 
+signal rcmdfifo_data 				: std_logic_vector(addr_size downto 0);
+
+--testing 
+signal local_write_req_int       : std_logic;
+signal local_wdata_int			   : std_logic_vector(lcl_bus_size-1 downto 0);
+signal local_addr_int            : std_logic_vector(addr_size-1 downto 0);
+signal local_size_int            : std_logic_vector(1 downto 0);
+signal local_burstbegin_int      : std_logic;
+
+signal tst_data_in_cnt		      : unsigned(15 downto 0);
+signal tst_data_in_vect		      : std_logic_vector(63 downto 0);
+signal tst_data_in_vect_reg      : std_logic_vector(63 downto 0);
+signal tst_data_in_cmp_fail      : std_logic;
+signal tst_addr_cnt              : unsigned(addr_size-1 downto 0);
+signal tst_addr_cmp_fail         : std_logic;	
+
+
+attribute noprune : boolean;
+attribute noprune of tst_data_in_cnt: signal is true;
+attribute noprune of tst_data_in_vect: signal is true;
+attribute noprune of tst_data_in_cmp_fail: signal is true;
+attribute noprune of tst_data_in_vect_reg: signal is true;
+attribute noprune of tst_addr_cnt: signal is true;
+attribute noprune of tst_addr_cmp_fail: signal is true;
+ 
 
 component fifo_inst is
   generic(dev_family	     : string  := "Cyclone IV E";
@@ -232,14 +256,94 @@ avmm_arb_inst :  avmm_arb
 		outbuf_wrusedw		=> outbuf_wrusedw, 
 
 		local_ready			=> local_ready,
-		local_addr			=> local_addr,
-		local_write_req	=> local_write_req,
+		local_addr			=> local_addr_int,
+		local_write_req	=> local_write_req_int,
 		local_read_req		=> local_read_req,
-		local_burstbegin	=> local_burstbegin,
-		local_wdata			=> local_wdata,
+		local_burstbegin	=> local_burstbegin_int,
+		local_wdata			=> local_wdata_int,
 		local_be				=> local_be,
-		local_size			=> local_size	
+		local_size			=> local_size_int	
         );
+        
+        
+     local_write_req    <= local_write_req_int;
+     local_wdata        <= local_wdata_int;
+     local_addr         <= local_addr_int;
+     local_size         <= local_size_int;
+     local_burstbegin   <= local_burstbegin_int;
+     
+     
+     
+     
+-- ----------------------------------------------------------------------------
+--for testing
+
+process(clk, reset_n) 
+begin 
+	if reset_n = '0' then 
+		tst_data_in_cnt 			<= (others => '0');
+		tst_data_in_cmp_fail 	<= '0';
+	elsif (clk'event AND clk = '1') then
+		tst_data_in_vect_reg <= tst_data_in_vect;
+		if local_ready = '1' AND local_write_req_int = '1' then
+			if tst_data_in_cnt < x"FFFD" then 
+				tst_data_in_cnt <= tst_data_in_cnt + 2;
+			else 
+				tst_data_in_cnt <= (others => '0');
+			end if;
+		else 
+			tst_data_in_cnt <= tst_data_in_cnt;
+		end if;
+		
+		if local_ready = '1' AND local_write_req_int = '1' then
+			if tst_data_in_vect /= local_wdata_int then 
+				tst_data_in_cmp_fail <= '1';
+			else 
+				tst_data_in_cmp_fail <= '0';
+			end if;
+		else
+			tst_data_in_cmp_fail <= tst_data_in_cmp_fail;
+		end if;
+	end if;
+end process;
+
+
+tst_data_in_vect <= 	std_logic_vector(tst_data_in_cnt + 1 ) & 
+							std_logic_vector(tst_data_in_cnt) & 
+							std_logic_vector(tst_data_in_cnt + 1 ) & 
+							std_logic_vector(tst_data_in_cnt);
+ 
+
+process(clk, reset_n) 
+begin 
+	if reset_n = '0' then 
+		tst_addr_cnt 			<= (others => '0');
+      tst_addr_cmp_fail    <= '0';
+	elsif (clk'event AND clk = '1') then
+      if local_write_req_int = '1' AND local_burstbegin_int = '1' then 
+         if local_size_int = "01" then 
+            tst_addr_cnt <= tst_addr_cnt + 1;
+         else 
+            tst_addr_cnt <= tst_addr_cnt + 2;
+         end if;
+      else 
+         tst_addr_cnt <= tst_addr_cnt;
+      end if; 
+      
+      if local_write_req_int = '1' AND local_burstbegin_int = '1' then 
+         if local_addr_int /= std_logic_vector(tst_addr_cnt) then 
+            tst_addr_cmp_fail <= '1';
+         else 
+            tst_addr_cmp_fail <= '0';
+         end if;
+      else
+         tst_addr_cmp_fail <= tst_addr_cmp_fail;
+      end if;
+  
+	end if;
+end process; 
+        
+      
 
 end arch;   
 

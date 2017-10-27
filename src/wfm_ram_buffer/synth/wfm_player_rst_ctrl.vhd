@@ -32,7 +32,11 @@ entity wfm_player_rst_ctrl is
       wfm_player_wcmd_reset_n : out std_logic;
       wfm_player_rcmd_reset_n : out std_logic;
       
-      dcmpr_reset_n           : out std_logic
+      dcmpr_reset_n           : out std_logic;
+      
+      clk0                    : in std_logic;
+      clk0_reset_n            : out std_logic;
+      clk0_reset_n_pulse      : out std_logic
 
 
         );
@@ -61,7 +65,11 @@ signal wfm_player_rcmd_reset_n_int  : std_logic;
 
 --data decompres signals
 signal dcmpr_reset_n_int            : std_logic;
-  
+
+--clk0 domain signals
+signal wfm_load_clk0                   : std_logic;
+signal wfm_load_pulse_on_rising_clk0   : std_logic; 
+ 
 begin
 
 --Synchronizing an Asynchronous Reset
@@ -84,7 +92,36 @@ port map(
    pulse_out   => wfm_load_pulse_on_rising
 );
 
+-- ----------------------------------------------------------------------------
+-- clk0 domain signals
+-- ----------------------------------------------------------------------------
+--Synchronizing an asynchronous wfm_load signal   
+sync_reg0_clk0 : entity work.sync_reg 
+port map(clk0, global_reset_n, wfm_load, wfm_load_clk0);
 
+--to detect rising edge of wfm_load
+edge_pulse_inst0_clk0 : entity work.edge_pulse(arch_rising) 
+port map(
+   clk         => clk0,
+   reset_n     => global_reset_n, 
+   sig_in      => wfm_load_clk0,
+   pulse_out   => wfm_load_pulse_on_rising_clk0
+);
+
+--output registers
+process(global_reset_n, clk0)
+begin 
+   if global_reset_n_synch = '0' then
+      clk0_reset_n         <= '0';      
+      clk0_reset_n_pulse   <= '0';
+   elsif (clk0'event AND clk0 = '1') then 
+      clk0_reset_n         <= wfm_load_clk0;      
+      clk0_reset_n_pulse   <= NOT wfm_load_pulse_on_rising_clk0;
+   end if;
+end process;
+-- ----------------------------------------------------------------------------
+               
+         
 
 process(global_reset_n_synch, clk)
 begin 
@@ -122,6 +159,9 @@ wfm_player_rcmd_reset_n_int <= ram_init_done_synch;
 -- data decompres reset part
 -- ----------------------------------------------------------------------------
 dcmpr_reset_n_int <= not wfm_load_synch;
+
+
+
 
 -- ----------------------------------------------------------------------------
 -- Output registers

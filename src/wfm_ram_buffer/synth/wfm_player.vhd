@@ -75,6 +75,20 @@ signal wfm_play_stop_sync_rcmd_clk     : std_logic;
 
 signal sync_reg1_reset_n               : std_logic;
 
+signal wfm_infifo_q_tst_data				: unsigned(15 downto 0);
+signal wfm_infifo_q_tst_data_vect	 	: std_logic_vector(63 downto 0);
+signal wfm_infifo_q_tst_data_reg 	 	: std_logic_vector(63 downto 0);
+signal tst_data_in_cmp_fail            : std_logic;
+
+signal inst1_wcmd_wr							: std_logic;
+
+
+attribute noprune : boolean;
+attribute noprune of wfm_infifo_q_tst_data: signal is true;
+attribute noprune of wfm_infifo_q_tst_data_vect: signal is true;
+attribute noprune of tst_data_in_cmp_fail: signal is true;
+
+
 begin
 
 sync_reg0 : entity work.sync_reg 
@@ -123,6 +137,51 @@ wcmd_data <= wfm_infifo_q;
 
 
 -- ----------------------------------------------------------------------------
+--For testing
+-- ----------------------------------------------------------------------------
+process(wcmd_clk, wcmd_reset_n)
+begin
+   if wcmd_reset_n = '0' then
+		wfm_infifo_q_tst_data      <= (others =>'0');
+      wfm_infifo_q_tst_data_reg  <=(others=>'0');
+      tst_data_in_cmp_fail       <='0';
+   elsif (wcmd_clk'event AND wcmd_clk = '1') then
+		if inst1_wcmd_wr = '1' then
+			if wfm_infifo_q_tst_data < x"FFFD" then 
+				wfm_infifo_q_tst_data <= wfm_infifo_q_tst_data + 2;
+			else 
+				wfm_infifo_q_tst_data <= (others =>'0');
+			end if;
+		else 
+			wfm_infifo_q_tst_data <= wfm_infifo_q_tst_data;
+		end if;
+
+
+		if inst1_wcmd_wr = '1' then
+			if wfm_infifo_q /= wfm_infifo_q_tst_data_vect then 
+				tst_data_in_cmp_fail <= '1';
+			else 
+				tst_data_in_cmp_fail <= '0';
+			end if;
+		else
+			tst_data_in_cmp_fail <= tst_data_in_cmp_fail;
+		end if;
+      
+      wfm_infifo_q_tst_data_reg <= wfm_infifo_q_tst_data_vect;
+
+		
+   end if;
+end process;
+
+
+wfm_infifo_q_tst_data_vect <= std_logic_vector(wfm_infifo_q_tst_data + 1 ) & 
+                              std_logic_vector(wfm_infifo_q_tst_data) & 
+                              std_logic_vector(wfm_infifo_q_tst_data + 1 ) & 
+                              std_logic_vector(wfm_infifo_q_tst_data);
+                              
+
+
+-- ----------------------------------------------------------------------------
 -- Make sure that wfm_load_wcmd goes low only when wfm_infifo is empty
 -- ----------------------------------------------------------------------------
 process(wcmd_clk, wcmd_reset_n)
@@ -156,7 +215,7 @@ wfm_wcmd_fsm_inst : entity work.wfm_wcmd_fsm
 		wcmd_reset_n			=> wcmd_reset_n, 
 		wcmd_rdy					=> wcmd_rdy, 
 		wcmd_addr				=> wcmd_addr, 
-		wcmd_wr					=> wcmd_wr, 
+		wcmd_wr					=> inst1_wcmd_wr, 
 		wcmd_brst_en			=> wcmd_brst_en,
 		wcmd_last_addr			=> wcmd_last_addr,
 
@@ -165,6 +224,8 @@ wfm_wcmd_fsm_inst : entity work.wfm_wcmd_fsm
 		wfm_infifo_rd			=> wfm_infifo_rdreq, 
 		wfm_infifo_rdusedw 	=> wfm_infifo_rdusedw     
         );
+		  
+wcmd_wr <= inst1_wcmd_wr;
        
 -- ----------------------------------------------------------------------------
 -- WFM player read command FSM
