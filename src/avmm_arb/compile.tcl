@@ -34,6 +34,7 @@ puts {
 set library_file_list {
                            source_library { 
                                             ../altera_inst/fifo_inst.vhd
+                                            synth/avalon_traffic_gen_avl_use_be_avl_use_burstbegin.sv
                                             synth/avmm_arb.vhd
                                             synth/avmm_arb_v2.vhd
                                             synth/avmm_arb_top.vhd

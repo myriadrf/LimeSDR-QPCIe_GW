@@ -55,22 +55,22 @@ agreement for further details.
 	(port
 		(pt 0 488)
 		(input)
-		(text "avl_addr_0[26..0]" (rect 0 0 70 12)(font "Arial" (font_size 8)))
-		(text "avl_addr_0[26..0]" (rect 4 477 106 488)(font "Arial" (font_size 8)))
+		(text "avl_addr_0[25..0]" (rect 0 0 70 12)(font "Arial" (font_size 8)))
+		(text "avl_addr_0[25..0]" (rect 4 477 106 488)(font "Arial" (font_size 8)))
 		(line (pt 0 488)(pt 160 488)(line_width 3))
 	)
 	(port
 		(pt 0 536)
 		(input)
-		(text "avl_wdata_0[31..0]" (rect 0 0 74 12)(font "Arial" (font_size 8)))
-		(text "avl_wdata_0[31..0]" (rect 4 525 112 536)(font "Arial" (font_size 8)))
+		(text "avl_wdata_0[63..0]" (rect 0 0 75 12)(font "Arial" (font_size 8)))
+		(text "avl_wdata_0[63..0]" (rect 4 525 112 536)(font "Arial" (font_size 8)))
 		(line (pt 0 536)(pt 160 536)(line_width 3))
 	)
 	(port
 		(pt 0 552)
 		(input)
-		(text "avl_be_0[3..0]" (rect 0 0 57 12)(font "Arial" (font_size 8)))
-		(text "avl_be_0[3..0]" (rect 4 541 88 552)(font "Arial" (font_size 8)))
+		(text "avl_be_0[7..0]" (rect 0 0 57 12)(font "Arial" (font_size 8)))
+		(text "avl_be_0[7..0]" (rect 4 541 88 552)(font "Arial" (font_size 8)))
 		(line (pt 0 552)(pt 160 552)(line_width 3))
 	)
 	(port
@@ -363,8 +363,8 @@ agreement for further details.
 	(port
 		(pt 0 520)
 		(output)
-		(text "avl_rdata_0[31..0]" (rect 0 0 71 12)(font "Arial" (font_size 8)))
-		(text "avl_rdata_0[31..0]" (rect 4 509 112 520)(font "Arial" (font_size 8)))
+		(text "avl_rdata_0[63..0]" (rect 0 0 73 12)(font "Arial" (font_size 8)))
+		(text "avl_rdata_0[63..0]" (rect 4 509 112 520)(font "Arial" (font_size 8)))
 		(line (pt 0 520)(pt 160 520)(line_width 3))
 	)
 	(port

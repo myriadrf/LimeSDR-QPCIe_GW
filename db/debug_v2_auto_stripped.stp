@@ -751,12 +751,12 @@
         <trigger_in_editor/>
         <trigger_out_editor/>
       </presentation>
-      <trigger CRC="E0F3AC5A" attribute_mem_mode="false" gap_record="true" global_temp="1" is_expanded="true" name="trigger: 2017/10/05 12:06:31  #1" position="center" power_up_trigger_mode="false" record_data_gap="true" segment_size="1" storage_mode="off" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="true" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_type="circular">
+      <trigger CRC="E0F3AC5A" attribute_mem_mode="false" gap_record="true" global_temp="1" is_expanded="true" name="trigger: 2017/10/05 12:06:31  #1" position="center" power_up_trigger_mode="false" record_data_gap="true" segment_size="1" storage_mode="off" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="false" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_type="circular">
         <power_up_trigger position="pre" storage_qualifier_disabled="no"/>
         <events use_custom_flow_control="no">
-          <level enabled="yes" name="condition1" type="basic"><power_up enabled="yes">
-            </power_up>
-            <op_node/>
+          <level enabled="yes" name="condition1" type="basic">
+            <power_up enabled="yes">
+            </power_up><op_node/>
           </level>
         </events>
         <storage_qualifier_events>
@@ -1553,12 +1553,12 @@
         <trigger_in_editor/>
         <trigger_out_editor/>
       </presentation>
-      <trigger CRC="E0F3AABA" attribute_mem_mode="false" gap_record="true" global_temp="1" is_expanded="true" name="trigger: 2017/10/05 12:07:19  #1" position="pre" power_up_trigger_mode="false" record_data_gap="true" segment_size="1" storage_mode="off" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="true" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_type="circular">
+      <trigger CRC="E0F3AABA" attribute_mem_mode="false" gap_record="true" global_temp="1" is_expanded="true" name="trigger: 2017/10/05 12:07:19  #1" position="pre" power_up_trigger_mode="false" record_data_gap="true" segment_size="1" storage_mode="off" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="false" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_type="circular">
         <power_up_trigger position="pre" storage_qualifier_disabled="no"/>
         <events use_custom_flow_control="no">
-          <level enabled="yes" name="condition1" type="basic"><power_up enabled="yes">
-            </power_up>
-            <op_node/>
+          <level enabled="yes" name="condition1" type="basic">
+            <power_up enabled="yes">
+            </power_up><op_node/>
           </level>
         </events>
         <storage_qualifier_events>
@@ -2843,13 +2843,12 @@
         <trigger_in_editor/>
         <trigger_out_editor/>
       </presentation>
-      <trigger CRC="A70A9020" attribute_mem_mode="false" gap_record="true" global_temp="1" is_expanded="true" name="trigger: 2017/10/24 15:36:16  #0" position="center" power_up_trigger_mode="false" record_data_gap="true" segment_size="1" storage_mode="off" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="true" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_type="circular">
+      <trigger CRC="A70A9020" attribute_mem_mode="false" gap_record="true" global_temp="1" is_expanded="true" name="trigger: 2017/10/24 15:36:16  #0" position="center" power_up_trigger_mode="false" record_data_gap="true" segment_size="1" storage_mode="off" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="false" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_type="circular">
         <power_up_trigger position="pre" storage_qualifier_disabled="no"/>
         <events use_custom_flow_control="no">
           <level enabled="yes" name="condition1" type="basic">'stream_switch:inst64|data_match_fail' == rising edge
             <power_up enabled="yes">
-            </power_up>
-            <op_node/>
+            </power_up><op_node/>
           </level>
           <custom_flow_control>
             <runtime_configurable comparison_operator="yes" counter_action="no" flag_action="no" logical_operator="yes" numerical_value="yes" state_transition="yes"/>
@@ -4859,12 +4858,13 @@ trigger;]]>
         <trigger_in_editor/>
         <trigger_out_editor/>
       </presentation>
-      <trigger CRC="E60FEEB4" attribute_mem_mode="false" gap_record="true" global_temp="1" is_expanded="true" name="trigger: 2017/10/27 13:46:16  #0" position="center" power_up_trigger_mode="false" record_data_gap="true" segment_size="256" storage_mode="off" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="true" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_type="circular">
+      <trigger CRC="E60FEEB4" attribute_mem_mode="false" gap_record="true" global_temp="1" is_expanded="true" name="trigger: 2017/10/27 13:46:16  #0" position="center" power_up_trigger_mode="false" record_data_gap="true" segment_size="256" storage_mode="off" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="false" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_type="circular">
         <power_up_trigger position="pre" storage_qualifier_disabled="no"/>
         <events use_custom_flow_control="no">
           <level enabled="yes" name="condition1" type="basic">'wfm_player_x2_top:inst39|DDR3_avmm_2x32_ctrl:DDR3_avmm_2x32_ctrl_inst3|ddr3_av_2x32:ddr3_av_2x32_inst4|avl_addr_1[0]' == low &amp;&amp; 'wfm_player_x2_top:inst39|DDR3_avmm_2x32_ctrl:DDR3_avmm_2x32_ctrl_inst3|ddr3_av_2x32:ddr3_av_2x32_inst4|avl_addr_1[10]' == high &amp;&amp; 'wfm_player_x2_top:inst39|DDR3_avmm_2x32_ctrl:DDR3_avmm_2x32_ctrl_inst3|ddr3_av_2x32:ddr3_av_2x32_inst4|avl_addr_1[11]' == high &amp;&amp; 'wfm_player_x2_top:inst39|DDR3_avmm_2x32_ctrl:DDR3_avmm_2x32_ctrl_inst3|ddr3_av_2x32:ddr3_av_2x32_inst4|avl_addr_1[12]' == low &amp;&amp; 'wfm_player_x2_top:inst39|DDR3_avmm_2x32_ctrl:DDR3_avmm_2x32_ctrl_inst3|ddr3_av_2x32:ddr3_av_2x32_inst4|avl_addr_1[13]' == low &amp;&amp; 'wfm_player_x2_top:inst39|DDR3_avmm_2x32_ctrl:DDR3_avmm_2x32_ctrl_inst3|ddr3_av_2x32:ddr3_av_2x32_inst4|avl_addr_1[14]' == low &amp;&amp; 'wfm_player_x2_top:inst39|DDR3_avmm_2x32_ctrl:DDR3_avmm_2x32_ctrl_inst3|ddr3_av_2x32:ddr3_av_2x32_inst4|avl_addr_1[15]' == low &amp;&amp; 'wfm_player_x2_top:inst39|DDR3_avmm_2x32_ctrl:DDR3_avmm_2x32_ctrl_inst3|ddr3_av_2x32:ddr3_av_2x32_inst4|avl_addr_1[16]' == high &amp;&amp; 'wfm_player_x2_top:inst39|DDR3_avmm_2x32_ctrl:DDR3_avmm_2x32_ctrl_inst3|ddr3_av_2x32:ddr3_av_2x32_inst4|avl_addr_1[17]' == high &amp;&amp; 'wfm_player_x2_top:inst39|DDR3_avmm_2x32_ctrl:DDR3_avmm_2x32_ctrl_inst3|ddr3_av_2x32:ddr3_av_2x32_inst4|avl_addr_1[18]' == low &amp;&amp; 'wfm_player_x2_top:inst39|DDR3_avmm_2x32_ctrl:DDR3_avmm_2x32_ctrl_inst3|ddr3_av_2x32:ddr3_av_2x32_inst4|avl_addr_1[19]' == low &amp;&amp; 'wfm_player_x2_top:inst39|DDR3_avmm_2x32_ctrl:DDR3_avmm_2x32_ctrl_inst3|ddr3_av_2x32:ddr3_av_2x32_inst4|avl_addr_1[1]' == low &amp;&amp; 'wfm_player_x2_top:inst39|DDR3_avmm_2x32_ctrl:DDR3_avmm_2x32_ctrl_inst3|ddr3_av_2x32:ddr3_av_2x32_inst4|avl_addr_1[20]' == low &amp;&amp; 'wfm_player_x2_top:inst39|DDR3_avmm_2x32_ctrl:DDR3_avmm_2x32_ctrl_inst3|ddr3_av_2x32:ddr3_av_2x32_inst4|avl_addr_1[21]' == low &amp;&amp; 'wfm_player_x2_top:inst39|DDR3_avmm_2x32_ctrl:DDR3_avmm_2x32_ctrl_inst3|ddr3_av_2x32:ddr3_av_2x32_inst4|avl_addr_1[22]' == low &amp;&amp; 'wfm_player_x2_top:inst39|DDR3_avmm_2x32_ctrl:DDR3_avmm_2x32_ctrl_inst3|ddr3_av_2x32:ddr3_av_2x32_inst4|avl_addr_1[23]' == low &amp;&amp; 'wfm_player_x2_top:inst39|DDR3_avmm_2x32_ctrl:DDR3_avmm_2x32_ctrl_inst3|ddr3_av_2x32:ddr3_av_2x32_inst4|avl_addr_1[24]' == low &amp;&amp; 'wfm_player_x2_top:inst39|DDR3_avmm_2x32_ctrl:DDR3_avmm_2x32_ctrl_inst3|ddr3_av_2x32:ddr3_av_2x32_inst4|avl_addr_1[25]' == low &amp;&amp; 'wfm_player_x2_top:inst39|DDR3_avmm_2x32_ctrl:DDR3_avmm_2x32_ctrl_inst3|ddr3_av_2x32:ddr3_av_2x32_inst4|avl_addr_1[2]' == high &amp;&amp; 'wfm_player_x2_top:inst39|DDR3_avmm_2x32_ctrl:DDR3_avmm_2x32_ctrl_inst3|ddr3_av_2x32:ddr3_av_2x32_inst4|avl_addr_1[3]' == high &amp;&amp; 'wfm_player_x2_top:inst39|DDR3_avmm_2x32_ctrl:DDR3_avmm_2x32_ctrl_inst3|ddr3_av_2x32:ddr3_av_2x32_inst4|avl_addr_1[4]' == high &amp;&amp; 'wfm_player_x2_top:inst39|DDR3_avmm_2x32_ctrl:DDR3_avmm_2x32_ctrl_inst3|ddr3_av_2x32:ddr3_av_2x32_inst4|avl_addr_1[5]' == low &amp;&amp; 'wfm_player_x2_top:inst39|DDR3_avmm_2x32_ctrl:DDR3_avmm_2x32_ctrl_inst3|ddr3_av_2x32:ddr3_av_2x32_inst4|avl_addr_1[6]' == low &amp;&amp; 'wfm_player_x2_top:inst39|DDR3_avmm_2x32_ctrl:DDR3_avmm_2x32_ctrl_inst3|ddr3_av_2x32:ddr3_av_2x32_inst4|avl_addr_1[7]' == low &amp;&amp; 'wfm_player_x2_top:inst39|DDR3_avmm_2x32_ctrl:DDR3_avmm_2x32_ctrl_inst3|ddr3_av_2x32:ddr3_av_2x32_inst4|avl_addr_1[8]' == low &amp;&amp; 'wfm_player_x2_top:inst39|DDR3_avmm_2x32_ctrl:DDR3_avmm_2x32_ctrl_inst3|ddr3_av_2x32:ddr3_av_2x32_inst4|avl_addr_1[9]' == high &amp;&amp; 'wfm_player_x2_top:inst39|decompress_top:decompress_top_inst5|tst_data_in_cmp_fail' == rising edge
             <power_up enabled="yes">
-            </power_up><op_node/>
+            </power_up>
+            <op_node/>
           </level>
         </events>
         <storage_qualifier_events>
@@ -6702,13 +6702,12 @@ trigger;]]>
         <trigger_in_editor/>
         <trigger_out_editor/>
       </presentation>
-      <trigger CRC="1DB427A" attribute_mem_mode="false" gap_record="true" global_temp="1" is_expanded="true" name="trigger: 2017/10/25 16:01:03  #0" position="pre" power_up_trigger_mode="false" record_data_gap="true" segment_size="1" storage_mode="off" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="true" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_type="circular">
+      <trigger CRC="1DB427A" attribute_mem_mode="false" gap_record="true" global_temp="1" is_expanded="true" name="trigger: 2017/10/25 16:01:03  #0" position="pre" power_up_trigger_mode="false" record_data_gap="true" segment_size="1" storage_mode="off" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="false" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_type="circular">
         <power_up_trigger position="pre" storage_qualifier_disabled="no"/>
         <events use_custom_flow_control="no">
           <level enabled="yes" name="condition1" type="basic">'wfm_player_x2_top:inst39|wfm_player:wfm_player_inst1|tst_data_in_cmp_fail' == rising edge
             <power_up enabled="yes">
-            </power_up>
-            <op_node/>
+            </power_up><op_node/>
           </level>
         </events>
         <storage_qualifier_events>
@@ -8953,13 +8952,12 @@ trigger;]]>
         <trigger_in_editor/>
         <trigger_out_editor/>
       </presentation>
-      <trigger CRC="A683F8DC" attribute_mem_mode="false" gap_record="true" global_temp="1" is_expanded="true" name="trigger: 2017/10/27 12:29:50  #1" position="center" power_up_trigger_mode="false" record_data_gap="true" segment_size="64" storage_mode="off" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="true" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_type="circular">
+      <trigger CRC="A683F8DC" attribute_mem_mode="false" gap_record="true" global_temp="1" is_expanded="true" name="trigger: 2017/10/27 12:29:50  #1" position="center" power_up_trigger_mode="false" record_data_gap="true" segment_size="64" storage_mode="off" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="false" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_type="circular">
         <power_up_trigger position="pre" storage_qualifier_disabled="no"/>
         <events use_custom_flow_control="no">
           <level enabled="yes" name="condition1" type="basic">'wfm_player_x2_top:inst39|DDR3_avmm_2x32_ctrl:DDR3_avmm_2x32_ctrl_inst3|avmm_arb_top:avmm_arb_top_inst1|tst_addr_cmp_fail' == rising edge
             <power_up enabled="yes">
-            </power_up>
-            <op_node/>
+            </power_up><op_node/>
           </level>
         </events>
         <storage_qualifier_events>

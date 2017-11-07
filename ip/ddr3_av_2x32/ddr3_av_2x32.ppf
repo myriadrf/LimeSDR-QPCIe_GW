@@ -29,11 +29,11 @@
   <pin name="mem_odt" direction="output" scope="external" />
   <pin name="avl_ready_0" direction="output" scope="external" />
   <pin name="avl_burstbegin_0" direction="input" scope="external" />
-  <pin name="avl_addr_0[26..0]" direction="input" scope="external" />
+  <pin name="avl_addr_0[25..0]" direction="input" scope="external" />
   <pin name="avl_rdata_valid_0" direction="output" scope="external" />
-  <pin name="avl_rdata_0[31..0]" direction="output" scope="external" />
-  <pin name="avl_wdata_0[31..0]" direction="input" scope="external" />
-  <pin name="avl_be_0[3..0]" direction="input" scope="external" />
+  <pin name="avl_rdata_0[63..0]" direction="output" scope="external" />
+  <pin name="avl_wdata_0[63..0]" direction="input" scope="external" />
+  <pin name="avl_be_0[7..0]" direction="input" scope="external" />
   <pin name="avl_read_req_0" direction="input" scope="external" />
   <pin name="avl_write_req_0" direction="input" scope="external" />
   <pin name="avl_size_0[1..0]" direction="input" scope="external" />

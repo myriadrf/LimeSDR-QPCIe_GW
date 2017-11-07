@@ -325,11 +325,11 @@ component ddr3_av_2x32 is
 		mem_odt                    : out   std_logic_vector(0 downto 0);                     --                   .mem_odt
 		avl_ready_0                : out   std_logic;                                        --              avl_0.waitrequest_n
 		avl_burstbegin_0           : in    std_logic                     := '0';             --                   .beginbursttransfer
-		avl_addr_0                 : in    std_logic_vector(26 downto 0) := (others => '0'); --                   .address
+		avl_addr_0                 : in    std_logic_vector(25 downto 0) := (others => '0'); --                   .address
 		avl_rdata_valid_0          : out   std_logic;                                        --                   .readdatavalid
-		avl_rdata_0                : out   std_logic_vector(31 downto 0);                    --                   .readdata
-		avl_wdata_0                : in    std_logic_vector(31 downto 0) := (others => '0'); --                   .writedata
-		avl_be_0                   : in    std_logic_vector(3 downto 0)  := (others => '0'); --                   .byteenable
+		avl_rdata_0                : out   std_logic_vector(63 downto 0);                    --                   .readdata
+		avl_wdata_0                : in    std_logic_vector(63 downto 0) := (others => '0'); --                   .writedata
+		avl_be_0                   : in    std_logic_vector(7 downto 0)  := (others => '0'); --                   .byteenable
 		avl_read_req_0             : in    std_logic                     := '0';             --                   .read
 		avl_write_req_0            : in    std_logic                     := '0';             --                   .write
 		avl_size_0                 : in    std_logic_vector(1 downto 0)  := (others => '0'); --                   .burstcount
@@ -468,7 +468,7 @@ avmm_arb_top_inst1 : avmm_arb_top
 -- ----------------------------------------------------------------------------
 -- Port 0 tester
 -- ----------------------------------------------------------------------------
-ddr3_av_2x32_tester_inst2 : ddr3_av_2x32_tester
+ddr3_av_2x32_tester_inst2 : ddr3_av_x64_tester
 	port map (
 		avl_ready           => inst4_avl_ready_0,
 		avl_addr            => inst2_avl_addr,

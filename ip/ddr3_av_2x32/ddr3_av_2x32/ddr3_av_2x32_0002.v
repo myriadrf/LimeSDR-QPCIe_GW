@@ -31,11 +31,11 @@ module ddr3_av_2x32_0002 (
 		output wire [0:0]  mem_odt,                    //                   .mem_odt
 		output wire        avl_ready_0,                //              avl_0.waitrequest_n
 		input  wire        avl_burstbegin_0,           //                   .beginbursttransfer
-		input  wire [26:0] avl_addr_0,                 //                   .address
+		input  wire [25:0] avl_addr_0,                 //                   .address
 		output wire        avl_rdata_valid_0,          //                   .readdatavalid
-		output wire [31:0] avl_rdata_0,                //                   .readdata
-		input  wire [31:0] avl_wdata_0,                //                   .writedata
-		input  wire [3:0]  avl_be_0,                   //                   .byteenable
+		output wire [63:0] avl_rdata_0,                //                   .readdata
+		input  wire [63:0] avl_wdata_0,                //                   .writedata
+		input  wire [7:0]  avl_be_0,                   //                   .byteenable
 		input  wire        avl_read_req_0,             //                   .read
 		input  wire        avl_write_req_0,            //                   .write
 		input  wire [1:0]  avl_size_0,                 //                   .burstcount
@@ -317,9 +317,9 @@ module ddr3_av_2x32_0002 (
 		.AVL_ADDR_WIDTH                          (26),
 		.AVL_DATA_WIDTH                          (64),
 		.AVL_SIZE_WIDTH                          (2),
-		.AVL_DATA_WIDTH_PORT_0                   (32),
-		.AVL_ADDR_WIDTH_PORT_0                   (27),
-		.AVL_NUM_SYMBOLS_PORT_0                  (4),
+		.AVL_DATA_WIDTH_PORT_0                   (64),
+		.AVL_ADDR_WIDTH_PORT_0                   (26),
+		.AVL_NUM_SYMBOLS_PORT_0                  (8),
 		.LSB_WFIFO_PORT_0                        (0),
 		.MSB_WFIFO_PORT_0                        (0),
 		.LSB_RFIFO_PORT_0                        (0),
@@ -471,7 +471,7 @@ module ddr3_av_2x32_0002 (
 		.ENUM_MMR_CFG_MEM_BL                     ("MP_BL_8"),
 		.ENUM_OUTPUT_REGD                        ("DISABLED"),
 		.ENUM_PDN_EXIT_CYCLES                    ("SLOW_EXIT"),
-		.ENUM_PORT0_WIDTH                        ("PORT_32_BIT"),
+		.ENUM_PORT0_WIDTH                        ("PORT_64_BIT"),
 		.ENUM_PORT1_WIDTH                        ("PORT_64_BIT"),
 		.ENUM_PORT2_WIDTH                        ("PORT_32_BIT"),
 		.ENUM_PORT3_WIDTH                        ("PORT_32_BIT"),
@@ -537,7 +537,7 @@ module ddr3_av_2x32_0002 (
 		.ENUM_RCFG_USER_PRIORITY_3               ("PRIORITY_1"),
 		.ENUM_RCFG_USER_PRIORITY_4               ("PRIORITY_1"),
 		.ENUM_RCFG_USER_PRIORITY_5               ("PRIORITY_1"),
-		.ENUM_RD_DWIDTH_0                        ("DWIDTH_32"),
+		.ENUM_RD_DWIDTH_0                        ("DWIDTH_64"),
 		.ENUM_RD_DWIDTH_1                        ("DWIDTH_64"),
 		.ENUM_RD_DWIDTH_2                        ("DWIDTH_0"),
 		.ENUM_RD_DWIDTH_3                        ("DWIDTH_0"),
@@ -607,7 +607,7 @@ module ddr3_av_2x32_0002 (
 		.ENUM_WFIFO2_RDY_ALMOST_FULL             ("NOT_FULL"),
 		.ENUM_WFIFO3_CPORT_MAP                   ("CMD_PORT_0"),
 		.ENUM_WFIFO3_RDY_ALMOST_FULL             ("NOT_FULL"),
-		.ENUM_WR_DWIDTH_0                        ("DWIDTH_32"),
+		.ENUM_WR_DWIDTH_0                        ("DWIDTH_64"),
 		.ENUM_WR_DWIDTH_1                        ("DWIDTH_64"),
 		.ENUM_WR_DWIDTH_2                        ("DWIDTH_0"),
 		.ENUM_WR_DWIDTH_3                        ("DWIDTH_0"),

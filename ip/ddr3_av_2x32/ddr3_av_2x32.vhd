@@ -34,11 +34,11 @@ entity ddr3_av_2x32 is
 		mem_odt                    : out   std_logic_vector(0 downto 0);                     --                   .mem_odt
 		avl_ready_0                : out   std_logic;                                        --              avl_0.waitrequest_n
 		avl_burstbegin_0           : in    std_logic                     := '0';             --                   .beginbursttransfer
-		avl_addr_0                 : in    std_logic_vector(26 downto 0) := (others => '0'); --                   .address
+		avl_addr_0                 : in    std_logic_vector(25 downto 0) := (others => '0'); --                   .address
 		avl_rdata_valid_0          : out   std_logic;                                        --                   .readdatavalid
-		avl_rdata_0                : out   std_logic_vector(31 downto 0);                    --                   .readdata
-		avl_wdata_0                : in    std_logic_vector(31 downto 0) := (others => '0'); --                   .writedata
-		avl_be_0                   : in    std_logic_vector(3 downto 0)  := (others => '0'); --                   .byteenable
+		avl_rdata_0                : out   std_logic_vector(63 downto 0);                    --                   .readdata
+		avl_wdata_0                : in    std_logic_vector(63 downto 0) := (others => '0'); --                   .writedata
+		avl_be_0                   : in    std_logic_vector(7 downto 0)  := (others => '0'); --                   .byteenable
 		avl_read_req_0             : in    std_logic                     := '0';             --                   .read
 		avl_write_req_0            : in    std_logic                     := '0';             --                   .write
 		avl_size_0                 : in    std_logic_vector(1 downto 0)  := (others => '0'); --                   .burstcount
@@ -108,11 +108,11 @@ architecture rtl of ddr3_av_2x32 is
 			mem_odt                    : out   std_logic_vector(0 downto 0);                     -- mem_odt
 			avl_ready_0                : out   std_logic;                                        -- waitrequest_n
 			avl_burstbegin_0           : in    std_logic                     := 'X';             -- beginbursttransfer
-			avl_addr_0                 : in    std_logic_vector(26 downto 0) := (others => 'X'); -- address
+			avl_addr_0                 : in    std_logic_vector(25 downto 0) := (others => 'X'); -- address
 			avl_rdata_valid_0          : out   std_logic;                                        -- readdatavalid
-			avl_rdata_0                : out   std_logic_vector(31 downto 0);                    -- readdata
-			avl_wdata_0                : in    std_logic_vector(31 downto 0) := (others => 'X'); -- writedata
-			avl_be_0                   : in    std_logic_vector(3 downto 0)  := (others => 'X'); -- byteenable
+			avl_rdata_0                : out   std_logic_vector(63 downto 0);                    -- readdata
+			avl_wdata_0                : in    std_logic_vector(63 downto 0) := (others => 'X'); -- writedata
+			avl_be_0                   : in    std_logic_vector(7 downto 0)  := (others => 'X'); -- byteenable
 			avl_read_req_0             : in    std_logic                     := 'X';             -- read
 			avl_write_req_0            : in    std_logic                     := 'X';             -- write
 			avl_size_0                 : in    std_logic_vector(1 downto 0)  := (others => 'X'); -- burstcount
@@ -395,7 +395,7 @@ end architecture rtl; -- of ddr3_av_2x32
 -- Retrieval info: 	<generic name="NUM_OF_PORTS" value="2" />
 -- Retrieval info: 	<generic name="ENABLE_BONDING" value="false" />
 -- Retrieval info: 	<generic name="ENABLE_USER_ECC" value="false" />
--- Retrieval info: 	<generic name="AVL_DATA_WIDTH_PORT" value="32,64,32,32,32,32" />
+-- Retrieval info: 	<generic name="AVL_DATA_WIDTH_PORT" value="64,64,32,32,32,32" />
 -- Retrieval info: 	<generic name="PRIORITY_PORT" value="1,1,1,1,1,1" />
 -- Retrieval info: 	<generic name="WEIGHT_PORT" value="0,0,0,0,0,0" />
 -- Retrieval info: 	<generic name="CPORT_TYPE_PORT" value="Bidirectional,Bidirectional,Bidirectional,Bidirectional,Bidirectional,Bidirectional" />

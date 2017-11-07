@@ -9248,12 +9248,12 @@ agreement for further details.
 		(type "PARAMETER_SIGNED_DEC")	)
 	(parameter
 		"mpfe_0_addr_size"
-		"27"
+		"26"
 		""
 		(type "PARAMETER_SIGNED_DEC")	)
 	(parameter
 		"mpfe_0_bus_size"
-		"32"
+		"64"
 		""
 		(type "PARAMETER_SIGNED_DEC")	)
 	(parameter
