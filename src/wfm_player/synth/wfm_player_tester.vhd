@@ -76,6 +76,8 @@ signal fsm_reset_n         : std_logic;
   
 begin
    
+   wfm_outfifo_rdreq <= not wfm_outfifo_rdempty;
+   
    edge_pulse_inst0 : entity work.edge_pulse(arch_rising)
    port map(
       clk         => clk,
@@ -249,7 +251,7 @@ fsm : process(current_state, idle_cnt, wfm_load_hi_cnt, wfm_load_proc1_cnt, wfm_
          end if;
       
       when wfm_load_proc1 =>
-         if wfm_load_proc1_cnt > 16 then 
+         if wfm_load_proc1_cnt > 15 then 
             next_state <= wfm_load_low;
          else
             next_state <= wfm_load_proc1;
@@ -263,7 +265,7 @@ fsm : process(current_state, idle_cnt, wfm_load_hi_cnt, wfm_load_proc1_cnt, wfm_
          end if;
          
       when wfm_load_proc2 =>
-         if wfm_load_proc2_cnt > 16 then 
+         if wfm_load_proc2_cnt > 14 then 
             next_state <= idle;
          else
             next_state <= wfm_load_proc2;

@@ -24,8 +24,8 @@ end wfm_player_tb;
 -- ----------------------------------------------------------------------------
 
 architecture tb_behave of wfm_player_tb is
-   constant clk0_period          : time := 10 ns;
-   constant clk1_period          : time := 2.5 ns;
+   constant clk0_period          : time := 6.25 ns;
+   constant clk1_period          : time := 6.25 ns;
    constant clk2_period          : time := 20 ns; 
    --signals
    signal clk0,clk1,clk2         : std_logic;

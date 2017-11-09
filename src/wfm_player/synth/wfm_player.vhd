@@ -44,6 +44,7 @@ entity wfm_player is
       --wfm player control signals
       wfm_load                   : in std_logic;
       wfm_play_stop              : in std_logic;
+      wfm_sample_width           : in std_logic_vector(1 downto 0); --"10"-12bit, "01"-14bit, "00"-16bit;
       
       --Avalon interface to external memory
       avl_ready                  : in std_logic;
@@ -93,7 +94,7 @@ signal inst0_q                : std_logic_vector(avl_data_width-1 downto 0);
 --inst1
 signal inst1_wrfull           : std_logic;
 signal inst1_wrempty          : std_logic;
-signal inst1_wrusedw          : std_logic_vector(FIFOWR_SIZE (avl_data_width, 
+signal inst1_wrusedw          : std_logic_vector(FIFOWR_SIZE (128, 
                                                       wfm_outfifo_rdata_width, 
                                                       wfm_outfifo_rdusedw_width)-1 downto 0);
                                                       
@@ -110,11 +111,16 @@ signal inst2_ready            : std_logic;
 signal inst2_wdata_req        : std_logic; 
 signal inst2_read_addr_reset_n: std_logic;
 
+--inst3
+
+signal inst3_data_out_valid   : std_logic;
+signal inst3_data_out         : std_logic_vector(127 downto 0);
+
 
 type state_type is (idle, check_wfm_infifo, do_write, do_burst_write, do_write_idle, check_wfm_outfifo, do_read);
 signal current_state, next_state : state_type;
 
-constant wfm_outfifo_wrwords_size   : integer := 2**(FIFOWR_SIZE(avl_data_width, 
+constant wfm_outfifo_wrwords_size   : integer := 2**(FIFOWR_SIZE(128, 
                                                       wfm_outfifo_rdata_width, 
                                                       wfm_outfifo_rdusedw_width)-1)-1;
                                                       
@@ -131,7 +137,7 @@ signal burst_wr_cnt                 : unsigned(FIFORD_SIZE(wfm_infifo_wdata_widt
 signal do_write_idle_cnt            : unsigned(7 downto 0);
 
 signal read_max_addr                : std_logic_vector(avl_addr_width-1 downto 0);
-
+signal read_burst_max_addr          : std_logic_vector(avl_addr_width-1 downto 0);
 
 --in this case component declaration is a must                                                     
 COMPONENT avalon_traffic_gen
@@ -203,8 +209,10 @@ begin
    wfm_outfifo_inst1  : entity work.fifo_inst
    generic map(
       dev_family     => dev_family,
-      wrwidth        => avl_data_width,
-      wrusedw_witdth => FIFOWR_SIZE (avl_data_width, wfm_outfifo_rdata_width, wfm_outfifo_rdusedw_width), 
+--      wrwidth        => avl_data_width,
+--      wrusedw_witdth => FIFOWR_SIZE (avl_data_width, wfm_outfifo_rdata_width, wfm_outfifo_rdusedw_width),
+      wrwidth        => 128,
+      wrusedw_witdth => FIFOWR_SIZE(128, wfm_outfifo_rdata_width, wfm_outfifo_rdusedw_width), 
       rdwidth        => wfm_outfifo_rdata_width,
       rdusedw_width  => wfm_outfifo_rdusedw_width,
       show_ahead     => "OFF"
@@ -212,8 +220,8 @@ begin
   port map(
       reset_n        => wfm_outfifo_reset_n,
       wrclk          => clk,
-      wrreq          => avl_rddata_valid,
-      data           => avl_rddata,
+      wrreq          => inst3_data_out_valid,
+      data           => inst3_data_out,
       wrfull         => inst1_wrfull,
       wrempty        => inst1_wrempty,
       wrusedw        => inst1_wrusedw,
@@ -260,7 +268,8 @@ begin
       ready                => inst2_ready,
       wdata_req            => inst2_wdata_req        
       );
-      
+    
+   --always all bytes are enabled 
    inst2_be <= (others=>'1');
    
    edge_pulse_inst3 : entity work.edge_pulse(arch_rising)
@@ -270,6 +279,20 @@ begin
       sig_in      => wfm_load,
       pulse_out   => wfm_load_rising
    );
+   
+   
+bit_unpack_64_inst3 : entity work.bit_unpack_64
+  port map (
+        --input ports 
+        clk             => clk,
+        reset_n         => wfm_outfifo_reset_n,
+        data_in         => avl_rddata,
+        data_in_valid   => avl_rddata_valid,
+        sample_width    => wfm_sample_width,
+        --output ports
+        data_out        => inst3_data_out,
+        data_out_valid  => inst3_data_out_valid
+        );
 
 -- ----------------------------------------------------------------------------
 --write logic part
@@ -379,8 +402,12 @@ begin
    if reset_n = '0' then 
       inst2_read_addr_reset_n    <= '0';
       read_max_addr              <= (others=>'0');
+      read_burst_max_addr        <= (others=>'0');
    elsif (clk'event AND clk='1') then
-      read_max_addr <= std_logic_vector(unsigned(write_max_words)-1);
+      --read_max_addr is used to know when last read command is executed in non burst cmd
+      read_max_addr <= std_logic_vector(unsigned(write_max_words)- 1);
+      --read_max_addr is used to know when last read burst command can be executed
+      read_burst_max_addr <= std_logic_vector(unsigned(write_max_words)- 2);
       if wfm_load_rising = '0' then 
          inst2_read_addr_reset_n <= '1'; 
       else 
@@ -395,9 +422,11 @@ process(clk, inst2_read_addr_reset_n)
    if inst2_read_addr_reset_n = '0' then 
       inst2_read_addr   <= (others=>'0');
    elsif (clk'event AND clk='1') then
-      if current_state = do_read AND inst2_ready = '1' then
-         if unsigned(inst2_read_addr) < unsigned(read_max_addr) then 
-            inst2_read_addr <= std_logic_vector(unsigned(inst2_read_addr)+1);
+      if wfm_play_stop = '0' then 
+         inst2_read_addr   <= (others=>'0');
+      elsif current_state = do_read AND inst2_ready = '1' then
+         if unsigned(inst2_read_addr) < unsigned(read_burst_max_addr) then 
+            inst2_read_addr <= std_logic_vector(unsigned(inst2_read_addr) + 2 );
          else 
             inst2_read_addr   <= (others=>'0');
          end if;
@@ -418,8 +447,19 @@ begin
    end if;
 end process;
 
---Currently read commands are executed only in non burst commands
-inst2_read_burstcount <= std_logic_vector(to_unsigned(1,avl_burst_count_width));
+--here it is decided read burst count value
+process(current_state, write_max_words(0), inst2_read_addr, read_max_addr)
+   begin
+   --if we have uneven number of write_max_words then we know that last read 
+   --will be with burst count of one
+   if (inst2_read_addr = read_max_addr AND write_max_words(0) = '1') then 
+      inst2_read_burstcount <= std_logic_vector(to_unsigned(1,avl_burst_count_width));
+   else 
+      inst2_read_burstcount <= std_logic_vector(to_unsigned(avl_max_burst_count,avl_burst_count_width));
+   end if;
+end process;
+
+
 
 -- ----------------------------------------------------------------------------
 --state machine to control when to read from FIFO
