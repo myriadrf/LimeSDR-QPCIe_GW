@@ -135,7 +135,9 @@ derive_pll_clocks
 # ----------------------------------------------------------------------------
 #For synchronizer chain in design (sync_reg and bus_sync_reg)
 set_false_path -to [get_keepers *sync_reg[0]*]
+set_false_path -to [get_registers *sync_reg[0]*]
 set_false_path -to [get_keepers *sync_reg0[*]*]
+set_false_path -to [get_registers *sync_reg0[*]*]
 
 
 #For asynchronous resets in IP (Signal is synchronised inside IP)
