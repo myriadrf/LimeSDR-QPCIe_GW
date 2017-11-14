@@ -1,9 +1,9 @@
 -- ----------------------------------------------------------------------------	
--- FILE: 	adc_top.vhd
--- DESCRIPTION:	Top ADC module
--- DATE:	Jan 27, 2016
--- AUTHOR(s):	Lime Microsystems
--- REVISIONS:
+-- FILE        : adc_top.vhd
+-- DESCRIPTION : Top ADC module
+-- DATE        : Jan 27, 2016
+-- AUTHOR(s)   : Lime Microsystems
+-- REVISIONS   :
 -- ----------------------------------------------------------------------------	
 library ieee;
 use ieee.std_logic_1164.all;
@@ -29,6 +29,7 @@ entity adc_top is
       sen               : IN STD_LOGIC;
       memrstn           : IN STD_LOGIC;
       sdout             : OUT STD_LOGIC;
+      mac_en            : in std_logic := '1';
       
       ch_a              : in std_logic_vector(data_width-1 downto 0); 	--Input to DDR cells from pins
       ch_b              : in std_logic_vector(data_width-1 downto 0); 	--Input to DDR cells from pins
@@ -93,22 +94,27 @@ inst1_RXI <= inst0_data_ch_a & "0000";
 inst1_RXQ <= inst0_data_ch_b & "0000";       
         
 rx_chain_inst1 : entity work.rx_chain 
-	port map
-	(
-		clk         => clk,
-		nrst        => reset_n_sync,
-		sclk        => sclk,
-		sdin        => sdin,
-		sen         => sen,
-		memrstn     => memrstn,
-		HBD_ratio   => (others=>'0'),
-		RXI         => inst1_RXI,
-		RXQ         => inst1_RXQ,
-		sdout       => sdout,
-		xen         => open,
-		RYI         => inst1_RYI,
-		RYQ         => inst1_RYQ
-	);
+   port map
+   (
+      clk         => clk,
+      nrst        => reset_n_sync,
+      sclk        => sclk,
+      sdin        => sdin,
+      sen         => sen,
+      memrstn     => memrstn,
+      mac_en      => mac_en,
+      HBD_ratio   => (others=>'0'),
+      RXI         => inst1_RXI,
+      RXQ         => inst1_RXQ,
+      sdout       => sdout,
+      xen         => open,
+      RYI         => inst1_RYI,
+      RYQ         => inst1_RYQ
+   );
+
+--for testing rx_chain is bypassed
+--inst1_RYI <= inst1_RXI;
+--inst1_RYQ <= inst1_RXQ;
 
         
 -- ----------------------------------------------------------------------------
