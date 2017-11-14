@@ -169,7 +169,79 @@ SIGNAL	SYNTHESIZED_WIRE_2 :  STD_LOGIC_VECTOR(0 TO 15);
 
 SIGNAL	GDFX_TEMP_SIGNAL_0 :  STD_LOGIC_VECTOR(9 DOWNTO 0);
 
+
+signal mod_en_sync     : std_logic;
+signal gc_byp_sync     : std_logic;
+signal ph_byp_sync     : std_logic;
+signal dc_byp_sync     : std_logic;
+signal dccorr_sync     : std_logic_vector(2 downto 0);
+signal gci_sync        : std_logic_vector(10 DOWNTO 0);
+signal gcq_sync        : std_logic_vector(10 DOWNTO 0);
+signal iqcorrctr_sync  : std_logic_vector(11 DOWNTO 0);
+
+
+
+
+
+
+
 BEGIN 
+
+sync_reg0 : entity work.sync_reg 
+port map(clk, '1', mod_en, mod_en_sync);
+
+sync_reg1 : entity work.sync_reg 
+port map(clk, '1', gc_byp, gc_byp_sync);
+
+sync_reg2 : entity work.sync_reg 
+port map(clk, '1', ph_byp, ph_byp_sync);
+
+sync_reg3 : entity work.sync_reg 
+port map(clk, '1', dc_byp, dc_byp_sync);
+
+bus_sync_reg0 : entity work.bus_sync_reg
+   generic map(
+      bus_width   => 3
+   )
+   port map(
+      clk         => clk,
+      reset_n     => '1',
+      async_in    => dccorr,
+      sync_out    => dccorr_sync
+        );
+        
+bus_sync_reg1 : entity work.bus_sync_reg
+   generic map(
+      bus_width   => 11
+   )
+   port map(
+      clk         => clk,
+      reset_n     => '1',
+      async_in    => gci,
+      sync_out    => gci_sync
+        );
+        
+bus_sync_reg2 : entity work.bus_sync_reg
+   generic map(
+      bus_width   => 11
+   )
+   port map(
+      clk         => clk,
+      reset_n     => '1',
+      async_in    => gcq,
+      sync_out    => gcq_sync
+        );
+        
+bus_sync_reg3 : entity work.bus_sync_reg
+   generic map(
+      bus_width   => 12
+   )
+   port map(
+      clk         => clk,
+      reset_n     => '1',
+      async_in    => iqcorrctr,
+      sync_out    => iqcorrctr_sync
+        );
 
 sen_int <= sen when mac_en = '1' else '1';
 
@@ -183,9 +255,9 @@ GDFX_TEMP_SIGNAL_0 <= (L & L & L & L & L & L & L & H & L & H);
 b2v_inst : gcorr
 PORT MAP(clk => clk,
 		 nrst => nrst,
-		 en => mod_en,
-		 byp => gc_byp,
-		 gc => gci,
+		 en => mod_en_sync,
+		 byp => gc_byp_sync,
+		 gc => gci_sync,
 		 x => RXI,
 		 y => i_iqcorr);
 
@@ -193,9 +265,9 @@ PORT MAP(clk => clk,
 b2v_inst1 : gcorr
 PORT MAP(clk => clk,
 		 nrst => nrst,
-		 en => mod_en,
-		 byp => gc_byp,
-		 gc => gcq,
+		 en => mod_en_sync,
+		 byp => gc_byp_sync,
+		 gc => gcq_sync,
 		 x => RXQ,
 		 y => q_iqcorr);
 
@@ -206,9 +278,9 @@ PORT MAP(clk => clk,
 b2v_inst2 : iqcorr
 PORT MAP(clk => clk,
 		 nrst => nrst,
-		 en => mod_en,
-		 byp => ph_byp,
-		 pcw => iqcorrctr,
+		 en => mod_en_sync,
+		 byp => ph_byp_sync,
+		 pcw => iqcorrctr_sync,
 		 xi => i_iqcorr,
 		 xq => q_iqcorr,
 		 yi => i_dccorr,
@@ -218,9 +290,9 @@ PORT MAP(clk => clk,
 b2v_inst3 : dccorra
 PORT MAP(clk => clk,
 		 nrst => nrst,
-		 en => mod_en,
-		 bypass => dc_byp,
-		 avg => dccorr,
+		 en => mod_en_sync,
+		 bypass => dc_byp_sync,
+		 avg => dccorr_sync,
 		 xi => i_dccorr,
 		 xq => q_dccorr,
 		 yi => RYI,
