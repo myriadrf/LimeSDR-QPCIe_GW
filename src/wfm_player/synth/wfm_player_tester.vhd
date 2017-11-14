@@ -222,21 +222,21 @@ process(current_state)
 --state machine to control when to read from FIFO
 -- ----------------------------------------------------------------------------
 fsm_f : process(clk, reset_n) begin
-	if(reset_n = '0')then
-		current_state <= idle;
-	elsif(clk'event and clk = '1')then 
-		current_state <= next_state;
-	end if;	
+   if(reset_n = '0')then
+      current_state <= idle;
+   elsif(clk'event and clk = '1')then 
+      current_state <= next_state;
+   end if;	
 end process;
 
 -- ----------------------------------------------------------------------------
 --state machine combo
 -- ----------------------------------------------------------------------------
 fsm : process(current_state, idle_cnt, wfm_load_hi_cnt, wfm_load_proc1_cnt, wfm_load_proc2_cnt, wfm_load_low_cnt) begin
-	next_state <= current_state;
-	case current_state is
-	  
-		when idle =>               --idle state
+   next_state <= current_state;
+   case current_state is
+   
+      when idle =>               --idle state
          if idle_cnt > 510 then
             next_state <= wfm_load_hi;
          else 
@@ -271,10 +271,10 @@ fsm : process(current_state, idle_cnt, wfm_load_hi_cnt, wfm_load_proc1_cnt, wfm_
             next_state <= wfm_load_proc2;
          end if;  
          
-		when others => 
-			next_state<=idle;
+      when others => 
+         next_state<=idle;
          
-	end case;
+   end case;
 end process;
   
 end arch;   

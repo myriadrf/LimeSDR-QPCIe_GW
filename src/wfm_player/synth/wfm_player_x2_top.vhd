@@ -219,21 +219,6 @@ signal wfm_0_load_wfm_0_infifo_wclk_rising   : std_logic;
 signal wfm_1_load_wfm_1_infifo_wclk          : std_logic;
 signal wfm_1_load_wfm_1_infifo_wclk_rising   : std_logic;
 
-
---for testing
-signal data_in_valid       : std_logic;
-signal tst_data_in_cnt		: unsigned(15 downto 0);
-signal tst_data_in_vect		: std_logic_vector(63 downto 0);
-signal tst_data_in_vect_reg: std_logic_vector(63 downto 0);
-signal tst_data_in_cmp_fail: std_logic;	
-
-attribute noprune : boolean;
-attribute noprune of tst_data_in_cnt: signal is true;
-attribute noprune of tst_data_in_vect: signal is true;
-attribute noprune of tst_data_in_cmp_fail: signal is true;
-attribute noprune of tst_data_in_vect_reg: signal is true;
-attribute noprune of data_in_valid: signal is true;
-
 --inst3
 signal inst3_fifo_rdreq       : std_logic;
 signal inst3_fifo_q           : std_logic_vector(wfm_0_iq_width*4-1 downto 0);
@@ -522,67 +507,7 @@ inst1_wfm_infifo_reset_n <= not wfm_1_load_wfm_1_infifo_wclk_rising;
       
    inst2_soft_reset_n <= reset_n;
    
-   
--- ----------------------------------------------------------------------------
---for testing
--- ----------------------------------------------------------------------------
-   process(wfm_1_outfifo_rclk, wfm_1_play_stop_inst2_afi_half_clk)
-   begin
-      if wfm_1_play_stop_inst2_afi_half_clk = '0' then 
-         inst1_wfm_outfifo_rdreq <= '0';
-         data_in_valid           <= '0';
-      elsif (wfm_1_outfifo_rclk'event AND wfm_1_outfifo_rclk='1') then
-         if inst1_wfm_outfifo_rdempty = '0' then 
-            inst1_wfm_outfifo_rdreq <= '1';
-         else 
-            inst1_wfm_outfifo_rdreq <= '0';
-         end if;
-         
-         data_in_valid <= inst4_fifo_rdreq;
-         
-      end if;
-   end process;
-   
-   
 
-process(wfm_1_outfifo_rclk, wfm_1_play_stop_inst2_afi_half_clk) 
-begin 
-	if wfm_1_play_stop_inst2_afi_half_clk = '0' then 
-		tst_data_in_cnt 			<= (others => '0');
-		tst_data_in_cmp_fail 	<= '0';
-	elsif (wfm_1_outfifo_rclk'event AND wfm_1_outfifo_rclk = '1') then
-		tst_data_in_vect_reg <= tst_data_in_vect;
-		if data_in_valid = '1' then
-			if tst_data_in_cnt < x"FFFD" then 
-				tst_data_in_cnt <= tst_data_in_cnt + 2;
-			else 
-				tst_data_in_cnt <= (others => '0');
-			end if;
-		else 
-			tst_data_in_cnt <= tst_data_in_cnt;
-		end if;
-		
-		if data_in_valid = '1' then
-			if tst_data_in_vect /= inst1_wfm_outfifo_q then 
-				tst_data_in_cmp_fail <= '1';
-			else 
-				tst_data_in_cmp_fail <= '0';
-			end if;
-		else
-			tst_data_in_cmp_fail <= tst_data_in_cmp_fail;
-		end if;
-	end if;
-end process;
-
-
-tst_data_in_vect <= 	std_logic_vector(tst_data_in_cnt + 1 ) & 
-							std_logic_vector(tst_data_in_cnt) & 
-							std_logic_vector(tst_data_in_cnt + 1 ) & 
-							std_logic_vector(tst_data_in_cnt);
-   
-------------------------------------------------------------------------------   
-   
-      
 ext_mem_inst2 : ddr3_av_2x32
    port map(
       pll_ref_clk                => clk,                                --        pll_ref_clk.clk
