@@ -2,7 +2,7 @@
 <cof>
 	<eprom_name>EPCS128</eprom_name>
 	<flash_loader_device>5CGXFC7D7</flash_loader_device>
-	<output_filename>output_files/LimeSDR-QPCIe-lms7_trx_pcie.jic</output_filename>
+	<output_filename>output_files/LimeSDR-QPCIe-lms7_trx_HW_1.1.jic</output_filename>
 	<n_pages>1</n_pages>
 	<width>1</width>
 	<mode>7</mode>
@@ -10,7 +10,7 @@
 		<user_name>Page_0</user_name>
 		<page_flags>1</page_flags>
 		<bit0>
-			<sof_filename>output_files/LimeSDR-QPCIe-lms7_trx_pcie.sof<compress_bitstream>1</compress_bitstream></sof_filename> 
+			<sof_filename>output_files/LimeSDR-QPCIe-lms7_trx.sof<compress_bitstream>1</compress_bitstream></sof_filename> 
 		</bit0>
 	</sof_data>
 	<version>9</version>
