@@ -27,7 +27,6 @@ set_clock_groups -asynchronous 	-group {PCIE_REFCLK} \
 											-group {LMS1_TXPLL_C0} \
 											-group {LMS1_TXPLL_C1} \
 											-group {LMS1_MCLK2} \
-                                 -group {LMS1_MCLK2_GLOBAL} \
 											-group {LMS1_RXPLL_VCOPH} \
 											-group {LMS1_RXPLL_C0} \
 											-group {LMS1_RXPLL_C1} \
@@ -36,7 +35,6 @@ set_clock_groups -asynchronous 	-group {PCIE_REFCLK} \
 											-group {LMS2_TXPLL_C0} \
 											-group {LMS2_TXPLL_C1} \
 											-group {LMS2_MCLK2} \
-                                 -group {LMS2_MCLK2_GLOBAL} \
 											-group {LMS2_RXPLL_VCOPH} \
 											-group {LMS2_RXPLL_C0} \
 											-group {LMS2_RXPLL_C1} \
