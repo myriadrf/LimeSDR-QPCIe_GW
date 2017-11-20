@@ -1,3 +1,6 @@
 [submodule "limesdr-qpcie_xillybus_core"]
 	path = limesdr-qpcie_xillybus_core
 	url = vytautasb@192.168.17.118:/cad/projects/git_repos/limesdr-qpcie_xillybus_core.git
+[submodule "limesdr-qpcie_lms7_trx_bs"]
+	path = limesdr-qpcie_lms7_trx_bs
+	url = vytautasb@192.168.17.118:/cad/projects/git_repos/limesdr-qpcie_lms7_trx_bs.git
