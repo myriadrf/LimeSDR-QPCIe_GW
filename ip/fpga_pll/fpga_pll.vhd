@@ -14,7 +14,6 @@ entity fpga_pll is
 		rst               : in  std_logic                     := '0';             --             reset.reset
 		outclk_0          : out std_logic;                                        --           outclk0.clk
 		outclk_1          : out std_logic;                                        --           outclk1.clk
-		outclk_2          : out std_logic;                                        --           outclk2.clk
 		locked            : out std_logic;                                        --            locked.export
 		reconfig_to_pll   : in  std_logic_vector(63 downto 0) := (others => '0'); --   reconfig_to_pll.reconfig_to_pll
 		reconfig_from_pll : out std_logic_vector(63 downto 0)                     -- reconfig_from_pll.reconfig_from_pll
@@ -28,7 +27,6 @@ architecture rtl of fpga_pll is
 			rst               : in  std_logic                     := 'X';             -- reset
 			outclk_0          : out std_logic;                                        -- clk
 			outclk_1          : out std_logic;                                        -- clk
-			outclk_2          : out std_logic;                                        -- clk
 			locked            : out std_logic;                                        -- export
 			reconfig_to_pll   : in  std_logic_vector(63 downto 0) := (others => 'X'); -- reconfig_to_pll
 			reconfig_from_pll : out std_logic_vector(63 downto 0)                     -- reconfig_from_pll
@@ -43,7 +41,6 @@ begin
 			rst               => rst,               --             reset.reset
 			outclk_0          => outclk_0,          --           outclk0.clk
 			outclk_1          => outclk_1,          --           outclk1.clk
-			outclk_2          => outclk_2,          --           outclk2.clk
 			locked            => locked,            --            locked.export
 			reconfig_to_pll   => reconfig_to_pll,   --   reconfig_to_pll.reconfig_to_pll
 			reconfig_from_pll => reconfig_from_pll  -- reconfig_from_pll.reconfig_from_pll
@@ -80,7 +77,7 @@ end architecture rtl; -- of fpga_pll
 -- Retrieval info: 	<generic name="debug_print_output" value="false" />
 -- Retrieval info: 	<generic name="debug_use_rbc_taf_method" value="false" />
 -- Retrieval info: 	<generic name="device_family" value="Cyclone V" />
--- Retrieval info: 	<generic name="device" value="Unknown" />
+-- Retrieval info: 	<generic name="device" value="5CEBA2F17A7" />
 -- Retrieval info: 	<generic name="gui_device_speed_grade" value="2" />
 -- Retrieval info: 	<generic name="gui_pll_mode" value="Integer-N PLL" />
 -- Retrieval info: 	<generic name="gui_reference_clock_frequency" value="30.72" />
@@ -91,7 +88,7 @@ end architecture rtl; -- of fpga_pll
 -- Retrieval info: 	<generic name="gui_dsm_out_sel" value="1st_order" />
 -- Retrieval info: 	<generic name="gui_use_locked" value="true" />
 -- Retrieval info: 	<generic name="gui_en_adv_params" value="false" />
--- Retrieval info: 	<generic name="gui_number_of_clocks" value="3" />
+-- Retrieval info: 	<generic name="gui_number_of_clocks" value="2" />
 -- Retrieval info: 	<generic name="gui_multiply_factor" value="1" />
 -- Retrieval info: 	<generic name="gui_frac_multiply_factor" value="1" />
 -- Retrieval info: 	<generic name="gui_divide_factor_n" value="1" />

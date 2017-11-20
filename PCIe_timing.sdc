@@ -30,4 +30,4 @@ create_clock -period $PCIE_REFCLK_prd 		-name PCIE_REFCLK 		[get_ports PCIE_REFC
 #Timing Exceptions
 # ----------------------------------------------------------------------------
 # HIP testin pins SDC constraints
-set_false_path -from [get_pins -compatibility_mode *hip_ctrl*]
+#set_false_path -from [get_pins -compatibility_mode *hip_ctrl*]

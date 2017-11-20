@@ -19,24 +19,24 @@ set_time_format -unit ns -decimal_places 3
 # ----------------------------------------------------------------------------
 #LMS7002
 	#LMS_MCLK2 period
-set MCLK2_period		6.25
-set MCLK1_period  	6.25
+set MCLK2_period		        6.25
+set MCLK1_period  	        6.25
 set LMS2_MCLK1_period_5MHz 200.00
 set LMS2_MCLK2_period_5MHz 200.00
 	#Setup and hold times from datasheet
-set LMS7_Tsu	1
-set LMS7_Th		.2
+set LMS7_Tsu				     1.0
+set LMS7_Th				        0.2
 
-set LMS7_Tco_max		0.5
-set LMS7_Tco_min		0.5
+set LMS7_Tco_max				  4.05
+set LMS7_Tco_min				  2.9
 
 #Tsu and Th based delays
-set LMS7_IN_MAX_DELAY [expr -$LMS7_Tsu]
-set LMS7_IN_MIN_DELAY [expr $LMS7_Th - $MCLK2_period/2]
+#set LMS7_IN_MAX_DELAY [expr -$LMS7_Tsu]
+#set LMS7_IN_MIN_DELAY [expr $LMS7_Th - $MCLK2_period/2]
 
 #Tco based
-#set LMS7_IN_MAX_DELAY [expr $LMS7_Tco_max]
-#set LMS7_IN_MIN_DELAY [expr $LMS7_Tco_min]
+set LMS7_IN_MAX_DELAY [expr $LMS7_Tco_max]
+set LMS7_IN_MIN_DELAY [expr $LMS7_Tco_min]
 
 # ----------------------------------------------------------------------------
 #Base clocks
@@ -98,13 +98,19 @@ create_generated_clock 	-name LMS2_FCLK1_PLL \
 #								[get_ports LMS2_FCLK1] -add
 #LMS2 RXPLL
 
-create_generated_clock 	-name LMS2_MCLK2_GLOBAL \
-								-master [get_clocks LMS2_MCLK2] \
-                        -source [get_pins -compatibility_mode *inst121*|rx_pll*|clkctrl*|inclk*] \
-                        [get_pins -compatibility_mode *inst121*|rx_pll*|clkctrl*|outclk*]
+#create_generated_clock 	-name LMS2_MCLK2_GLOBAL \
+#								-master [get_clocks LMS2_MCLK2] \
+#                        -source [get_pins -compatibility_mode *inst121*|rx_pll*|clkctrl*|inclk*] \
+#                        [get_pins -compatibility_mode *inst121*|rx_pll*|clkctrl*|outclk*]
+#                        
+#create_generated_clock 	-name LMS2_RXPLL_VCOPH \
+#								-master [get_clocks LMS2_MCLK2_GLOBAL] \
+#								-source  [get_pins -compatibility_mode *inst121|rx*|*refclkin*]\
+#								-divide_by 1 -multiply_by 2 \
+#								[get_pins -compatibility_mode *inst121|rx*|*vcoph[0]*]
                         
 create_generated_clock 	-name LMS2_RXPLL_VCOPH \
-								-master [get_clocks LMS2_MCLK2_GLOBAL] \
+								-master [get_clocks LMS2_MCLK2] \
 								-source  [get_pins -compatibility_mode *inst121|rx*|*refclkin*]\
 								-divide_by 1 -multiply_by 2 \
 								[get_pins -compatibility_mode *inst121|rx*|*vcoph[0]*]
@@ -199,17 +205,27 @@ set_output_delay	-min -$LMS7_Th \
 #Exceptions
 # ----------------------------------------------------------------------------
 #Cut path between rising to falling and falling to rising edges
-set_false_path -setup -rise_from [get_clocks LMS2_MCLK2_VIRT] -fall_to \
-[get_clocks LMS2_RXPLL_C1]
+#set_false_path -setup -rise_from [get_clocks LMS2_MCLK2_VIRT] -fall_to \
+#[get_clocks LMS2_RXPLL_C1]
+#
+#set_false_path -setup -fall_from [get_clocks LMS2_MCLK2_VIRT] -rise_to \
+#[get_clocks LMS2_RXPLL_C1]
+#
+#set_false_path -hold -rise_from [get_clocks LMS2_MCLK2_VIRT] -rise_to \
+#[get_clocks LMS2_RXPLL_C1]
+#
+#set_false_path -hold -fall_from [get_clocks LMS2_MCLK2_VIRT] -fall_to \
+#[get_clocks LMS2_RXPLL_C1]
 
-set_false_path -setup -fall_from [get_clocks LMS2_MCLK2_VIRT] -rise_to \
-[get_clocks LMS2_RXPLL_C1]
-
-set_false_path -hold -rise_from [get_clocks LMS2_MCLK2_VIRT] -rise_to \
-[get_clocks LMS2_RXPLL_C1]
-
-set_false_path -hold -fall_from [get_clocks LMS2_MCLK2_VIRT] -fall_to \
-[get_clocks LMS2_RXPLL_C1]
+set_multicycle_path \
+   -setup 2 \
+   -rise_from [get_clocks LMS2_MCLK2_VIRT] \
+   -rise_to [get_clocks LMS2_RXPLL_C1] 
+   
+set_multicycle_path \
+   -setup 2 \
+   -fall_from [get_clocks LMS2_MCLK2_VIRT] \
+   -fall_to [get_clocks LMS2_RXPLL_C1] 
 	
 #Clock groups					
 #Clock groups are set in top .sdc file

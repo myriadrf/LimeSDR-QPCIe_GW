@@ -141,7 +141,6 @@ set_false_path -to [get_registers *sync_reg0[*]*]
 
 
 #For asynchronous resets in IP (Signal is synchronised inside IP)
-set_false_path -from [get_registers *wfm_player_x2_top*\|*inst3_reset_n*]
 set_false_path -from [get_registers adc_top:inst130|sync_reg:sync_reg0|sync_reg[1]]
 
 
@@ -172,6 +171,9 @@ set_false_path -from [get_ports FX3_SPI_MOSI]
 set_false_path -from [get_ports LM75_OS]
 set_false_path -from [get_ports I2C_SCL]
 set_false_path -from [get_ports I2C_SDA]
+set_false_path -from [get_ports BOM_VER[*]]
+set_false_path -from [get_ports HW_VER[*]]
+
 
 
 

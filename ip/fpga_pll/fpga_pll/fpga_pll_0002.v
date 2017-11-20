@@ -13,9 +13,6 @@ module  fpga_pll_0002(
 	// interface 'outclk1'
 	output wire outclk_1,
 
-	// interface 'outclk2'
-	output wire outclk_2,
-
 	// interface 'locked'
 	output wire locked,
 
@@ -32,14 +29,14 @@ module  fpga_pll_0002(
 		.pll_fractional_cout(32),
 		.pll_dsm_out_sel("1st_order"),
 		.operation_mode("direct"),
-		.number_of_clocks(3),
+		.number_of_clocks(2),
 		.output_clock_frequency0("160.000000 MHz"),
 		.phase_shift0("0 ps"),
 		.duty_cycle0(50),
 		.output_clock_frequency1("160.000000 MHz"),
 		.phase_shift1("0 ps"),
 		.duty_cycle1(50),
-		.output_clock_frequency2("320.000000 MHz"),
+		.output_clock_frequency2("0 MHz"),
 		.phase_shift2("0 ps"),
 		.duty_cycle2(50),
 		.output_clock_frequency3("0 MHz"),
@@ -116,7 +113,7 @@ module  fpga_pll_0002(
 		.c_cnt_prst2(1),
 		.c_cnt_ph_mux_prst2(0),
 		.c_cnt_in_src2("ph_mux_clk"),
-		.c_cnt_bypass_en2("false"),
+		.c_cnt_bypass_en2("true"),
 		.c_cnt_odd_div_duty_en2("false"),
 		.c_cnt_hi_div3(1),
 		.c_cnt_lo_div3(1),
@@ -235,7 +232,7 @@ module  fpga_pll_0002(
 		.pll_slf_rst("false")
 	) altera_pll_i (
 		.rst	(rst),
-		.outclk	({outclk_2, outclk_1, outclk_0}),
+		.outclk	({outclk_1, outclk_0}),
 		.locked	(locked),
 		.reconfig_to_pll	(reconfig_to_pll),
 		.fboutclk	( ),

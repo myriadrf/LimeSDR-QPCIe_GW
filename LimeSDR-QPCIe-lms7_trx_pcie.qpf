@@ -19,14 +19,14 @@
 #
 # Quartus Prime
 # Version 16.1.1 Build 200 11/30/2016 SJ Lite Edition
-# Date created = 15:52:34  May 10, 2017
+# Date created = 10:14:24  November 20, 2017
 #
 # -------------------------------------------------------------------------- #
 
 QUARTUS_VERSION = "16.1"
-DATE = "15:52:34  May 10, 2017"
+DATE = "10:14:24  November 20, 2017"
 
 # Revisions
 
+PROJECT_REVISION = "LimeSDR-QPCIe-lms7_trx"
 PROJECT_REVISION = "LimeSDR-QPCIe-lms7_trx_pcie"
-PROJECT_REVISION = "lms7_x2_trx"

@@ -111,26 +111,27 @@ pll_areset_n   <= not pll_areset;
 ----------------------------------------------------------------------------
 -- Global clock controll block
 ----------------------------------------------------------------------------
-clkctrl_c5_inst0 : clkctrl_c5
-	port map(
-		inclk  => pll_inclk,
-		ena    => '1',
-		outclk => pll_inclk_global
-	);
+--clkctrl_c5_inst0 : clkctrl_c5
+--	port map(
+--		inclk  => pll_inclk,
+--		ena    => '1',
+--		outclk => pll_inclk_global
+--	);
  
 ----------------------------------------------------------------------------
 -- PLL instance
 ---------------------------------------------------------------------------- 
 rx_pll_inst1 : rx_pll
 	port map(
-		refclk            => pll_inclk_global, 
+		refclk            => pll_inclk,
+--      refclk            => pll_inclk_global,  
 		rst               => pll_areset,
 		outclk_0          => inst1_outclk_0,
 		outclk_1          => inst1_outclk_1,
 		locked            => inst1_locked,
 		reconfig_to_pll   => rcnfg_to_pll,
 		reconfig_from_pll => rcnfg_from_pll
-	);  
+	);
 
 -- ----------------------------------------------------------------------------
 -- c0 direct output lcell delay chain 
@@ -263,8 +264,15 @@ PORT MAP (
 --c1             <= c1_global;
 --pll_locked     <= locked_mux;
 
+clkctrl_c5_inst4 : clkctrl_c5
+	port map(
+		inclk  => inst1_outclk_1,
+		ena    => '1',
+		outclk => c1_global
+	);
+
 c0             <= inst2_dataout(0);
-c1             <= inst1_outclk_1;
+c1             <= c1_global;
 pll_locked     <= inst1_locked;
 
 

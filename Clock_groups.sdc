@@ -45,24 +45,4 @@ set_clock_groups -asynchronous 	-group {PCIE_REFCLK} \
                                  -group {NIOS_FPGASPI0_SCLK} \
 											-group {ADC_CLKOUT}
                                  
-set_false_path -from [get_clocks *xillybus*\|*core*] \
-               -to [get_clocks *DDR3_avmm_2x32_ctrl*\|*pll_afi_half_clk*]
-               
-               
-set_false_path -from [get_clocks *DDR3_avmm_2x32_ctrl*\|*pll_afi_half_clk*] \
-               -to [get_clocks LMS2_TXPLL_C1]
-               
-set_false_path -from [get_clocks *DDR3_avmm_2x32_ctrl*\|*pll_afi_half_clk*] \
-               -to [get_clocks LMS1_TXPLL_C1]
-                            
-set_false_path -from [get_clocks *DDR3_avmm_2x32_ctrl*\|*pll_afi_half_clk*] \
-               -to [get_clocks FPGA_PLL_C1]
-               
-#set_false_path -from {inst20|ext_mem_inst2|ddr3_av_2x32_inst|pll0|pll5~PLL_OUTPUT_COUNTER|divclk} \
-#               -to {FPGA_PLL_C1}
-               
-              
-
-               
-               
-               
+ 

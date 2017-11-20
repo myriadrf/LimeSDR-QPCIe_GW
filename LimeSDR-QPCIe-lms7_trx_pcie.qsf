@@ -1378,10 +1378,11 @@ set_instance_assignment -name IO_STANDARD "1.5 V" -to BOM_VER[3]
 set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
-set_global_assignment -name SEED 2
+set_global_assignment -name SEED 1
 set_global_assignment -name OPTIMIZE_POWER_DURING_FITTING "NORMAL COMPILATION"
 set_global_assignment -name OPTIMIZE_TIMING "NORMAL COMPILATION"
 set_global_assignment -name PHYSICAL_SYNTHESIS_COMBO_LOGIC OFF
+set_global_assignment -name VHDL_FILE src/tx_path_top/tx_path/synth/lms_txio.vhd
 set_global_assignment -name SDC_FILE PCIe_timing.sdc
 set_global_assignment -name QIP_FILE ip/ddr3_av_2x32/ddr3_av_2x32.qip
 set_global_assignment -name QIP_FILE ip/pcie_core/pcie_reconfig/synthesis/pcie_reconfig.qip
@@ -1398,7 +1399,6 @@ set_global_assignment -name SYSTEMVERILOG_FILE src/avalon_traffic_gen/synth/av_t
 set_global_assignment -name SYSTEMVERILOG_FILE src/avalon_traffic_gen/synth/av_trf_gen_drv_def.sv
 set_global_assignment -name VHDL_FILE src/wfm_player/synth/wfm_player_x2_top.vhd
 set_global_assignment -name VHDL_FILE src/wfm_player/synth/wfm_player.vhd
-set_global_assignment -name QIP_FILE ip/ddr3_av_2x32_tester/ddr3_av_2x32_tester/synthesis/ddr3_av_2x32_tester.qip
 set_global_assignment -name VHDL_FILE src/wfm_ram_buffer/synth/stream_switch.vhd
 set_global_assignment -name VHDL_FILE src/general/reset_n_synch.vhd
 set_global_assignment -name VHDL_FILE src/wfm_ram_buffer/synth/wfm_wcmd_fsm.vhd
@@ -1466,7 +1466,6 @@ set_global_assignment -name VHDL_FILE src/tx_modules/sample_nr_cnt_mimo.vhd
 set_global_assignment -name VHDL_FILE src/general/synchronizer.vhd
 set_global_assignment -name BDF_FILE symbols/LTE_tx_path.bdf
 set_global_assignment -name VHDL_FILE src/tx_modules/rd_tx_fifo.vhd
-set_global_assignment -name VHDL_FILE src/data_manipulation/decompress.vhd
 set_global_assignment -name VHDL_FILE src/avmm_arb/avmm_arb.vhd
 set_global_assignment -name VHDL_FILE src/ddr3_av_2x32/ddr3_av_2x32_test_top.vhd
 set_global_assignment -name VHDL_FILE src/rx_path/rx_path.vhd
@@ -1590,10 +1589,8 @@ set_global_assignment -name BDF_FILE lms7_x2_trx_top.bdf
 set_global_assignment -name QIP_FILE ip/altio_out/altio_out.qip
 set_global_assignment -name VHDL_FILE src/avmm_arb/avmm_arb_top.vhd
 set_global_assignment -name VHDL_FILE src/avmm_arb/DDR3_avmm_2x32_ctrl.vhd
-set_global_assignment -name VHDL_FILE src/wfm_ram_buffer/decompress_top.vhd
 set_global_assignment -name VHDL_FILE src/adpd/fifo_buff.vhd
 set_global_assignment -name VHDL_FILE src/adpd/data_cap_buffer.vhd
-set_global_assignment -name VHDL_FILE src/tx_modules/rd_tx_fifo_v2.vhd
 set_global_assignment -name VHDL_FILE src/general/sync_reg.vhd
 set_global_assignment -name VHDL_FILE src/general/deinterleave.vhd
 set_global_assignment -name MIF_FILE ip/test_ram/test_ram.mif
@@ -1603,12 +1600,20 @@ set_global_assignment -name VHDL_FILE src/tx_path_top/tx_path/synth/tx_path_top.
 set_global_assignment -name VHDL_FILE src/tx_path_top/tx_path/synth/sync_fifo_rw.vhd
 set_global_assignment -name TCL_SCRIPT_FILE DDR3_TOP_assigments.tcl
 set_global_assignment -name QIP_FILE ip/lpm_mux/lpm_mux13.qip
-set_global_assignment -name BDF_FILE lms7_trx_pcie_top.bdf
 set_global_assignment -name VHDL_FILE src/spi/memcfg.vhd
 set_global_assignment -name VHDL_FILE src/general/signal_delay.vhd
 set_global_assignment -name SIGNALTAP_FILE signal_tap/debug_v2.stp
 set_global_assignment -name BDF_FILE lms7_x2_trx_top_only_switch.bdf
-set_global_assignment -name QIP_FILE ip/ddr3_av_x64_tester/ddr3_av_x64_tester/synthesis/ddr3_av_x64_tester.qip
 set_global_assignment -name SIGNALTAP_FILE signal_tap/debug_v3.stp
-set_instance_assignment -name GLOBAL_SIGNAL REGIONAL_CLOCK -to LMS1_MCLK2
+set_instance_assignment -name GLOBAL_SIGNAL GLOBAL_CLOCK -to ADC_CLKOUT
+set_instance_assignment -name GLOBAL_SIGNAL GLOBAL_CLOCK -to LMS2_MCLK2
+set_instance_assignment -name GLOBAL_SIGNAL GLOBAL_CLOCK -to LMS2_MCLK1
+set_instance_assignment -name GLOBAL_SIGNAL GLOBAL_CLOCK -to LMS1_MCLK1
+set_location_assignment FRACTIONALPLL_X89_Y1_N0 -to "lms7_rxtx_top:inst120|rx_pll_top_cyc5:rx_pll_top_cyc5_inst1|rx_pll:rx_pll_inst1|rx_pll_0002:rx_pll_inst|altera_pll:altera_pll_i|altera_cyclonev_pll:cyclonev_pll|altera_cyclonev_pll_base:fpll_0|fpll" -comment LMS1_RX_PLL
+set_location_assignment FRACTIONALPLL_X0_Y1_N0 -to "wfm_player_x2_top:inst20|ddr3_av_2x32:ext_mem_inst2|ddr3_av_2x32_0002:ddr3_av_2x32_inst|ddr3_av_2x32_pll0:pll0|pll1~FRACTIONAL_PLL" -comment DDR3_BOT_PLL
+set_location_assignment FRACTIONALPLL_X0_Y74_N0 -to "wfm_player_x2_top:inst2|ddr3_av_2x32:ext_mem_inst2|ddr3_av_2x32_0002:ddr3_av_2x32_inst|ddr3_av_2x32_pll0:pll0|pll1~FRACTIONAL_PLL" -comment DDR3_TOP_PLL
+set_location_assignment FRACTIONALPLL_X0_Y32_N0 -to "lms7_rxtx_top:inst121|rx_pll_top_cyc5:rx_pll_top_cyc5_inst1|rx_pll:rx_pll_inst1|rx_pll_0002:rx_pll_inst|altera_pll:altera_pll_i|altera_cyclonev_pll:cyclonev_pll|altera_cyclonev_pll_base:fpll_0|fpll" -comment LMS2_RX_PLL
+set_location_assignment FRACTIONALPLL_X0_Y15_N0 -to "lms7_rxtx_top:inst121|tx_pll_top_cyc5:tx_pll_top_cyc5_inst0|tx_pll:tx_pll_inst1|tx_pll_0002:tx_pll_inst|altera_pll:altera_pll_i|altera_cyclonev_pll:cyclonev_pll|altera_cyclonev_pll_base:fpll_0|fpll" -comment LMS2_TX_PLL
+set_location_assignment FRACTIONALPLL_X0_Y56_N0 -to "fpga_pll:inst34|fpga_pll_0002:fpga_pll_inst|altera_pll:altera_pll_i|altera_cyclonev_pll:cyclonev_pll|altera_cyclonev_pll_base:fpll_0|fpll" -comment FPGA_PLL
+set_location_assignment FRACTIONALPLL_X89_Y74_N0 -to "lms7_rxtx_top:inst120|tx_pll_top_cyc5:tx_pll_top_cyc5_inst0|tx_pll:tx_pll_inst1|tx_pll_0002:tx_pll_inst|altera_pll:altera_pll_i|altera_cyclonev_pll:cyclonev_pll|altera_cyclonev_pll_base:fpll_0|fpll" -comment LMS2_TX_PLL
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

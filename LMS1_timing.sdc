@@ -115,13 +115,19 @@ create_generated_clock 	-name LMS1_FCLK1_PLL \
 
 #LMS1 RXPLL
 
-create_generated_clock 	-name LMS1_MCLK2_GLOBAL \
-								-master [get_clocks LMS1_MCLK2] \
-                        -source [get_pins -compatibility_mode *inst120*|rx_pll*|clkctrl*|inclk*] \
-                        [get_pins -compatibility_mode *inst120*|rx_pll*|clkctrl*|outclk*]
+#create_generated_clock 	-name LMS1_MCLK2_GLOBAL \
+#								-master [get_clocks LMS1_MCLK2] \
+#                        -source [get_pins -compatibility_mode *inst120*|rx_pll*|clkctrl*|inclk*] \
+#                        [get_pins -compatibility_mode *inst120*|rx_pll*|clkctrl*|outclk*]
+                        
+#create_generated_clock 	-name LMS1_RXPLL_VCOPH \
+#								-master [get_clocks LMS1_MCLK2_GLOBAL] \
+#								-source  [get_pins -compatibility_mode *inst120|rx*|*refclkin*]\
+#								-divide_by 1 -multiply_by 2 \
+#								[get_pins -compatibility_mode *inst120|rx*|*vcoph[0]*]
                         
 create_generated_clock 	-name LMS1_RXPLL_VCOPH \
-								-master [get_clocks LMS1_MCLK2_GLOBAL] \
+								-master [get_clocks LMS1_MCLK2] \
 								-source  [get_pins -compatibility_mode *inst120|rx*|*refclkin*]\
 								-divide_by 1 -multiply_by 2 \
 								[get_pins -compatibility_mode *inst120|rx*|*vcoph[0]*]
@@ -217,17 +223,27 @@ set_output_delay	-min -$LMS1_LMS7_Th \
 #Exceptions
 # ----------------------------------------------------------------------------
 #Cut path between rising to falling and falling to rising edges
-set_false_path -setup -rise_from [get_clocks LMS1_MCLK2_VIRT] -fall_to \
-[get_clocks LMS1_RXPLL_C1]
+#set_false_path -setup -rise_from [get_clocks LMS1_MCLK2_VIRT] -fall_to \
+#[get_clocks LMS1_RXPLL_C1]
+#
+#set_false_path -setup -fall_from [get_clocks LMS1_MCLK2_VIRT] -rise_to \
+#[get_clocks LMS1_RXPLL_C1]
+#
+#set_false_path -hold -rise_from [get_clocks LMS1_MCLK2_VIRT] -rise_to \
+#[get_clocks LMS1_RXPLL_C1]
+#
+#set_false_path -hold -fall_from [get_clocks LMS1_MCLK2_VIRT] -fall_to \
+#[get_clocks LMS1_RXPLL_C1]
 
-set_false_path -setup -fall_from [get_clocks LMS1_MCLK2_VIRT] -rise_to \
-[get_clocks LMS1_RXPLL_C1]
-
-set_false_path -hold -rise_from [get_clocks LMS1_MCLK2_VIRT] -rise_to \
-[get_clocks LMS1_RXPLL_C1]
-
-set_false_path -hold -fall_from [get_clocks LMS1_MCLK2_VIRT] -fall_to \
-[get_clocks LMS1_RXPLL_C1]
+set_multicycle_path \
+   -setup 2 \
+   -rise_from [get_clocks LMS1_MCLK2_VIRT] \
+   -rise_to [get_clocks LMS1_RXPLL_C1] 
+   
+set_multicycle_path \
+   -setup 2 \
+   -fall_from [get_clocks LMS1_MCLK2_VIRT] \
+   -fall_to [get_clocks LMS1_RXPLL_C1] 
 
 #Clock groups					
 #Clock groups are set in top .sdc file
