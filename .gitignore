@@ -64,6 +64,7 @@ alt_sld_fab_wrapper_hw.tcl
 #--------------
 # generated folders
 #--------------
+db/
 simulation/
 incremental_db/
 workspace/
