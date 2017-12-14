@@ -240,9 +240,7 @@ set_location_assignment PIN_G28 -to FPGA_LED1
 set_location_assignment PIN_G27 -to FPGA_LED2
 set_location_assignment PIN_J27 -to FPGA_LED3
 set_location_assignment PIN_T25 -to FPGA_SPI0_SCLK
-set_location_assignment PIN_T30 -to FPGA_SPI0_POT1_SS
 set_location_assignment PIN_R26 -to FPGA_SPI0_MOSI
-set_location_assignment PIN_W29 -to FPGA_SPI0_MISO
 set_location_assignment PIN_E25 -to FPGA_SPI0_ADF_SS
 set_location_assignment PIN_G23 -to FPGA_SPI0_DAC_SS
 set_location_assignment PIN_AJ9 -to EXT_GND
@@ -1038,9 +1036,7 @@ set_instance_assignment -name IO_STANDARD "1.5 V" -to FPGA_SPI0_ADF_SS
 set_instance_assignment -name IO_STANDARD "1.5 V" -to FPGA_SPI0_DAC_SS
 set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to FPGA_SPI0_LMS1_SS
 set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to FPGA_SPI0_LMS2_SS
-set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to FPGA_SPI0_MISO
 set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to FPGA_SPI0_MOSI
-set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to FPGA_SPI0_POT1_SS
 set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to FPGA_SPI0_SCLK
 set_instance_assignment -name IO_STANDARD "1.5 V" -to FPGA_SW0
 set_instance_assignment -name IO_STANDARD "1.5 V" -to FPGA_SW1
@@ -1610,4 +1606,32 @@ set_instance_assignment -name GLOBAL_SIGNAL GLOBAL_CLOCK -to ADC_CLKOUT
 set_instance_assignment -name GLOBAL_SIGNAL GLOBAL_CLOCK -to LMS2_MCLK2
 set_instance_assignment -name GLOBAL_SIGNAL GLOBAL_CLOCK -to LMS2_MCLK1
 set_instance_assignment -name GLOBAL_SIGNAL GLOBAL_CLOCK -to LMS1_MCLK1
+set_location_assignment PIN_AA13 -to SR_SCLK_LS
+set_instance_assignment -name IO_STANDARD "1.5 V" -to SR_SCLK_LS
+set_location_assignment PIN_B26 -to SR_LATCH_LS
+set_instance_assignment -name IO_STANDARD "1.5 V" -to SR_LATCH_LS
+set_location_assignment PIN_AJ5 -to SR_DIN_LS
+set_instance_assignment -name IO_STANDARD "1.5 V" -to SR_DIN_LS
+set_location_assignment PIN_T23 -to GNSS_TPULSE
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to GNSS_TPULSE
+set_location_assignment PIN_AK15 -to FPGA_SPI2_SCLK_LS
+set_instance_assignment -name IO_STANDARD "1.5 V" -to FPGA_SPI2_SCLK_LS
+set_location_assignment PIN_AJ17 -to FPGA_SPI2_LMS_RX_DET_SS
+set_instance_assignment -name IO_STANDARD "1.5 V" -to FPGA_SPI2_LMS_RX_DET_SS
+set_location_assignment PIN_C27 -to FPGA_SPI2_LMS2_RX2_I_MISO
+set_instance_assignment -name IO_STANDARD "1.5 V" -to FPGA_SPI2_LMS2_RX2_I_MISO
+set_location_assignment PIN_F6 -to FPGA_SPI2_LMS2_RX2_Q_MISO
+set_instance_assignment -name IO_STANDARD "1.5 V" -to FPGA_SPI2_LMS2_RX2_Q_MISO
+set_location_assignment PIN_G9 -to FPGA_SPI2_LMS2_RX1_Q_MISO
+set_instance_assignment -name IO_STANDARD "1.5 V" -to FPGA_SPI2_LMS2_RX1_Q_MISO
+set_location_assignment PIN_H15 -to FPGA_SPI2_LMS2_RX1_I_MISO
+set_instance_assignment -name IO_STANDARD "1.5 V" -to FPGA_SPI2_LMS2_RX1_I_MISO
+set_location_assignment PIN_A3 -to FPGA_SPI2_LMS1_RX1_Q_MISO
+set_instance_assignment -name IO_STANDARD "1.5 V" -to FPGA_SPI2_LMS1_RX1_Q_MISO
+set_location_assignment PIN_J7 -to FPGA_SPI2_LMS1_RX1_I_MISO
+set_instance_assignment -name IO_STANDARD "1.5 V" -to FPGA_SPI2_LMS1_RX1_I_MISO
+set_location_assignment PIN_T30 -to FPGA_LED5_R
+set_location_assignment PIN_W29 -to FPGA_LED5_G
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to FPGA_LED5_R
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to FPGA_LED5_G
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
