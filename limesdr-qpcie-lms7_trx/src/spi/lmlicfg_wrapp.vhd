@@ -69,89 +69,12 @@ signal fpgacfg_inst0_wfm_load       : std_logic_vector(2 downto 0);
 signal fpgacfg_inst0_wfm0_ch_en     : std_logic_vector(15 downto 0);
 signal fpgacfg_inst0_wfm0_smpl_width: std_logic_vector(1 downto 0);
 
-component fpgacfg is
-   port (
-      -- Address and location of this module
-      -- Will be hard wired at the top level
-      maddress       : in std_logic_vector(9 downto 0);
-      mimo_en        : in std_logic;   -- MIMO enable, from TOP SPI (always 1)
-   
-      -- Serial port IOs
-      sdin           : in std_logic;   -- Data in
-      sclk           : in std_logic;   -- Data clock
-      sen            : in std_logic;   -- Enable signal (active low)
-      sdout          : out std_logic;  -- Data out
-   
-      -- Signals coming from the pins or top level serial interface
-      lreset         : in std_logic;   -- Logic reset signal, resets logic cells only  (use only one reset)
-      mreset         : in std_logic;   -- Memory reset signal, resets configuration memory only (use only one reset)
-      mac_en         : in std_logic := '1';
-      HW_VER         : in std_logic_vector(3 downto 0);
-      BOM_VER        : in std_logic_vector(3 downto 0);
-      
-      oen            : out std_logic; --nc
-      stateo         : out std_logic_vector(5 downto 0);
-      
-      
-      --FPGA direct clocking
-      phase_reg_sel  : out std_logic_vector(15 downto 0);
-      clk_ind        : out std_logic_vector(4 downto 0);
-      cnt_ind        : out std_logic_vector(4 downto 0);
-      load_phase_reg : out std_logic;
-      drct_clk_en    : out std_logic_vector(15 downto 0);
-      --Interface Config   
-      ch_en          : out std_logic_vector(15 downto 0);
-      smpl_width     : out std_logic_vector(1 downto 0);
-      mimo_int_en    : out std_logic;
-      synch_dis      : out std_logic;
-      dlb_en         : out std_logic;
-      smpl_nr_clr    : out std_logic_vector(2 downto 0);
-      txpct_loss_clr : out std_logic_vector(2 downto 0);
-      rx_en          : out std_logic_vector(2 downto 0);
-      tx_en          : out std_logic_vector(2 downto 0);
-      wfm_play       : out std_logic_vector(2 downto 0);
-      wfm_load       : out std_logic_vector(2 downto 0);
-      wfm0_ch_en     : out std_logic_vector(15 downto 0);
-      wfm0_smpl_width: out std_logic_vector(1 downto 0);
-      wfm1_ch_en     : out std_logic_vector(15 downto 0);
-      wfm1_smpl_width: out std_logic_vector(1 downto 0);
-      SPI_SS         : out std_logic_vector(15 downto 0);
-      
-      LMS1_SS        : out std_logic;
-      LMS2_SS        : out std_logic;
---      ADF_SS         : out std_logic;
---      DAC_SS         : out std_logic;
---      POT1_SS        : out std_logic;
-      
-      LMS1_RESET        : out std_logic;
-      LMS1_CORE_LDO_EN  : out std_logic;
-      LMS1_TXNRX1       : out std_logic;
-      LMS1_TXNRX2       : out std_logic;
-      LMS1_TXEN         : out std_logic;
-      LMS1_RXEN         : out std_logic;
-      LMS2_RESET        : out std_logic;
-      LMS2_CORE_LDO_EN  : out std_logic;
-      LMS2_TXNRX1       : out std_logic;
-      LMS2_TXNRX2       : out std_logic;
-      LMS2_TXEN         : out std_logic;
-      LMS2_RXEN         : out std_logic;
-      GPIO              : out std_logic_vector(6 downto 0);
-      FPGA_LED1_CTRL    : out std_logic_vector(2 downto 0);
-      FPGA_LED2_CTRL    : out std_logic_vector(2 downto 0);
-      FX3_LED_CTRL      : out std_logic_vector(2 downto 0);
-      FCLK_ENA          : out std_logic_vector(1 downto 0);
-      data_src          : out std_logic;
-      mac               : out std_logic_vector(1 downto 0)
-   
-   );
-   
-end component;
 
 
 begin
 
 
-fpgacfg_inst0 :  fpgacfg
+fpgacfg_inst0 :  entity work.fpgacfg
    port map(
       -- Address and location of this module
       -- Will be hard wired at the top level

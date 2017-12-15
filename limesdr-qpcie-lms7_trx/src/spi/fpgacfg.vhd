@@ -81,7 +81,7 @@ entity fpgacfg is
 		LMS2_TXNRX2			: out std_logic;
 		LMS2_TXEN			: out std_logic;
 		LMS2_RXEN			: out std_logic;
-		GPIO					: out std_logic_vector(6 downto 0);
+		GPIO					: out std_logic_vector(15 downto 0);
 		FPGA_LED1_CTRL		: out std_logic_vector(2 downto 0);
 		FPGA_LED2_CTRL		: out std_logic_vector(2 downto 0);
 		FX3_LED_CTRL		: out std_logic_vector(2 downto 0);
@@ -238,7 +238,7 @@ begin
 			mem(20)	<= "0000000000000011"; --  0 free, (Reserved LMS control)
 			mem(21)	<= "0000000000000000"; --  0 free, (Reserved LMS control)
 			mem(22)	<= "0000000000000000"; --  0 free, (Reserved LMS control)
-			mem(23)	<= "0000000001000100"; --  0 free, (Reserved), GPIO[6:0]	
+			mem(23)	<= "0000000000000000"; --  0 free, (Reserved), GPIO[15:0]	
 			
 			mem(26)	<= "0000000000000000"; --  0 free, Reserved[15:8],FPGA_LED2_G,FPGA_LED2_R,FPGA_LED2_OVRD,Reserved,FPGA_LED1_G,FPGA_LED1_R,FPGA_LED1_OVRD
 			mem(27)	<= "0000000000000000"; --  0 free, Reserved[15:0]
@@ -308,7 +308,7 @@ begin
 		LMS2_TXNRX2			<= mem(19)(12);
 		LMS2_TXEN			<= mem(19)(13);
 		LMS2_RXEN			<= mem(19)(14);
-		GPIO					<= mem(23) (6 downto 0);
+		GPIO					<= mem(23) (15 downto 0);
 		FPGA_LED1_CTRL		<= mem(26)(2 downto 0);
 		FPGA_LED2_CTRL		<= mem(26)(6 downto 4);
 		FX3_LED_CTRL		<= mem(28)(2 downto 0);
