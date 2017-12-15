@@ -46,21 +46,61 @@ begin
 -- ----------------------------------------------------------------------------
 -- Remaping data into desired order
 -- ----------------------------------------------------------------------------
-data_remaped(0)   <= data(0);
-data_remaped(1)   <= data(1);
-data_remaped(2)   <= data(2);
-data_remaped(3)   <= data(3);
-data_remaped(4)   <= data(4);
-data_remaped(5)   <= data(5);
-data_remaped(6)   <= data(6);
-data_remaped(7)   <= data(7);
-data_remaped(8)   <= data(8);
-data_remaped(9)   <= data(9);
-data_remaped(10)  <= data(10);
-data_remaped(11)  <= data(11);
-data_remaped(12)  <= data(12);
-data_remaped(13)  <= data(13);
-data_remaped(14)  <= data(14);
+--Original order
+--data_remaped(0)   <= data(0);
+--data_remaped(1)   <= data(1);
+--data_remaped(2)   <= data(2);
+--data_remaped(3)   <= data(3);
+--data_remaped(4)   <= data(4);
+--data_remaped(5)   <= data(5);
+--data_remaped(6)   <= data(6);
+--data_remaped(7)   <= data(7);
+--data_remaped(8)   <= data(8);
+--data_remaped(9)   <= data(9);
+--data_remaped(10)  <= data(10);
+--data_remaped(11)  <= data(11);
+--data_remaped(12)  <= data(12);
+--data_remaped(13)  <= data(13);
+--data_remaped(14)  <= data(14);
+--data_remaped(15)  <= data(15);
+
+--Signals has to be remaped in new order to folow SPI map
+--    Shift reg order     Bit to remap                            Signals on SPI MAP
+--15  LMS2_TX2_2_LB_SH    15  -> 15       LMS2_TX2_2_LB_SH    15  LMS2_TX2_2_LB_SH
+--14  LMS2_TX1_2_LB_AT    14  -> 10       LMS2_TX1_2_LB_AT    14  LMS2_TX2_2_LB_AT
+--13  LMS2_TX1_2_LB_SH    13  -> 11       LMS2_TX1_2_LB_SH    13  LMS2_TX2_2_LB_H
+--12  LMS2_TX2_2_LB_AT    12  -> 14       LMS2_TX2_2_LB_AT    12  LMS2_TX2_2_LB_L
+--11  LMS2_TX1_2_LB_H     11  -> 9        LMS2_TX1_2_LB_H     11  LMS2_TX1_2_LB_SH
+--10  LMS2_TX1_2_LB_L     10  -> 8        LMS2_TX1_2_LB_L     10  LMS2_TX1_2_LB_AT
+--9   LMS2_TX2_2_LB_H     9   -> 13       LMS2_TX2_2_LB_H     9   LMS2_TX1_2_LB_H
+--8   LMS2_TX2_2_LB_L     8   -> 12       LMS2_TX2_2_LB_L     8   LMS2_TX1_2_LB_L
+--                            
+--7   LMS1_TX2_2_LB_L     7   -> 4        LMS1_TX2_2_LB_L     7   LMS1_TX2_2_LB_SH
+--6   LMS1_TX2_2_LB_H     6   -> 5        LMS1_TX2_2_LB_H     6   LMS1_TX2_2_LB_AT
+--5   LMS1_TX1_2_LB_L     5   -> 0        LMS1_TX1_2_LB_L     5   LMS1_TX2_2_LB_H
+--4   LMS1_TX1_2_LB_H     4   -> 1        LMS1_TX1_2_LB_H     4   LMS1_TX2_2_LB_L
+--3   LMS1_TX1_2_LB_AT    3   -> 2        LMS1_TX1_2_LB_AT    3   LMS1_TX1_2_LB_SH
+--2   LMS1_TX1_2_LB_SH    2   -> 3        LMS1_TX1_2_LB_SH    2   LMS1_TX1_2_LB_AT
+--1   LMS1_TX2_2_LB_SH    1   -> 7        LMS1_TX2_2_LB_SH    1   LMS1_TX1_2_LB_H
+--0   LMS1_TX2_2_LB_AT    0   -> 6        LMS1_TX2_2_LB_AT    0   LMS1_TX1_2_LB_L
+
+
+--New remaped signals by SPI map
+data_remaped(0)   <= data(6);
+data_remaped(1)   <= data(7);
+data_remaped(2)   <= data(3);
+data_remaped(3)   <= data(2);
+data_remaped(4)   <= data(1);
+data_remaped(5)   <= data(0);
+data_remaped(6)   <= data(5);
+data_remaped(7)   <= data(4);
+data_remaped(8)   <= data(12);
+data_remaped(9)   <= data(13);
+data_remaped(10)  <= data(8);
+data_remaped(11)  <= data(9);
+data_remaped(12)  <= data(14);
+data_remaped(13)  <= data(11);
+data_remaped(14)  <= data(10);
 data_remaped(15)  <= data(15);
  
 -- ----------------------------------------------------------------------------
