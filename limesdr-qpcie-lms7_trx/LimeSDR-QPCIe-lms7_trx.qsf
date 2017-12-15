@@ -244,8 +244,8 @@ set_location_assignment PIN_R26 -to FPGA_SPI0_MOSI
 set_location_assignment PIN_E25 -to FPGA_SPI0_ADF_SS
 set_location_assignment PIN_G23 -to FPGA_SPI0_DAC_SS
 set_location_assignment PIN_AJ9 -to EXT_GND
-set_global_assignment -name ENABLE_SIGNALTAP OFF
-set_global_assignment -name USE_SIGNALTAP_FILE signal_tap/debug_v3.stp
+set_global_assignment -name ENABLE_SIGNALTAP ON
+set_global_assignment -name USE_SIGNALTAP_FILE signal_tap/debug.stp
 set_location_assignment PIN_H24 -to FPGA_LED4
 set_location_assignment PIN_J22 -to FAN_CTRL
 set_location_assignment PIN_N30 -to ADC_CLK
@@ -468,226 +468,6 @@ set_location_assignment FRACTIONALPLL_X0_Y32_N0 -to "lms7_rxtx_top:inst121|rx_pl
 set_location_assignment FRACTIONALPLL_X0_Y15_N0 -to "lms7_rxtx_top:inst121|tx_pll_top_cyc5:tx_pll_top_cyc5_inst0|tx_pll:tx_pll_inst1|tx_pll_0002:tx_pll_inst|altera_pll:altera_pll_i|altera_cyclonev_pll:cyclonev_pll|altera_cyclonev_pll_base:fpll_0|fpll" -comment LMS2_TX_PLL
 set_location_assignment FRACTIONALPLL_X0_Y56_N0 -to "fpga_pll:inst34|fpga_pll_0002:fpga_pll_inst|altera_pll:altera_pll_i|altera_cyclonev_pll:cyclonev_pll|altera_cyclonev_pll_base:fpll_0|fpll" -comment FPGA_PLL
 set_location_assignment FRACTIONALPLL_X89_Y74_N0 -to "lms7_rxtx_top:inst120|tx_pll_top_cyc5:tx_pll_top_cyc5_inst0|tx_pll:tx_pll_inst1|tx_pll_0002:tx_pll_inst|altera_pll:altera_pll_i|altera_cyclonev_pll:cyclonev_pll|altera_cyclonev_pll_base:fpll_0|fpll" -comment LMS2_TX_PLL
-set_global_assignment -name QXP_FILE "../limesdr-qpcie_xillybus_core/xillybus_core.qxp"
-set_global_assignment -name VERILOG_FILE "../limesdr-qpcie_xillybus_core/xillybus.v"
-set_global_assignment -name VHDL_FILE src/tx_path_top/tx_path/synth/lms_txio.vhd
-set_global_assignment -name SDC_FILE PCIe_timing.sdc
-set_global_assignment -name QIP_FILE ip/ddr3_av_2x32/ddr3_av_2x32.qip
-set_global_assignment -name QIP_FILE ip/pcie_core/pcie_reconfig/synthesis/pcie_reconfig.qip
-set_global_assignment -name SDC_FILE LMS2_timing.sdc
-set_global_assignment -name SDC_FILE LMS1_timing.sdc
-set_global_assignment -name SDC_FILE ADS4246_timing.sdc
-set_global_assignment -name QIP_FILE nios_cpu/synthesis/nios_cpu.qip
-set_global_assignment -name SDC_FILE lms7_x2_trx_timing.sdc
-set_global_assignment -name SDC_FILE DAC5672_timing.sdc
-set_global_assignment -name SDC_FILE Clock_groups.sdc
-set_global_assignment -name SDC_FILE src/wfm_player/wfm_player_x2_top.sdc
-set_global_assignment -name SYSTEMVERILOG_FILE src/avalon_traffic_gen/synth/avalon_traffic_gen.sv
-set_global_assignment -name SYSTEMVERILOG_FILE src/avalon_traffic_gen/synth/av_trf_gen_scfifo_wrapper.sv
-set_global_assignment -name SYSTEMVERILOG_FILE src/avalon_traffic_gen/synth/av_trf_gen_drv_def.sv
-set_global_assignment -name VHDL_FILE src/wfm_player/synth/wfm_player_x2_top.vhd
-set_global_assignment -name VHDL_FILE src/wfm_player/synth/wfm_player.vhd
-set_global_assignment -name VHDL_FILE src/wfm_ram_buffer/synth/stream_switch.vhd
-set_global_assignment -name VHDL_FILE src/general/reset_n_synch.vhd
-set_global_assignment -name VHDL_FILE src/wfm_ram_buffer/synth/wfm_wcmd_fsm.vhd
-set_global_assignment -name VHDL_FILE src/wfm_ram_buffer/synth/wfm_rcmd_fsm.vhd
-set_global_assignment -name VHDL_FILE src/wfm_ram_buffer/synth/wfm_player_rst_ctrl.vhd
-set_global_assignment -name VHDL_FILE src/general/edge_pulse/synth/edge_pulse.vhd
-set_global_assignment -name VHDL_FILE src/tx_path_top/fifo2diq/synth/txiq_par.vhd
-set_global_assignment -name VHDL_FILE src/spi/lmlicfg_wrapp.vhd
-set_global_assignment -name VHDL_FILE src/packages/synth/FIFO_PACK.vhd
-set_global_assignment -name VHDL_FILE src/correctors/tx_chain.vhd
-set_global_assignment -name VHDL_FILE symbols/rx_chain.vhd
-set_global_assignment -name VHDL_FILE src/fifo_bulk_read/synth/fifo_bulk_read.vhd
-set_global_assignment -name QIP_FILE ip/clkctrl_c5/clkctrl_c5/synthesis/clkctrl_c5.qip
-set_global_assignment -name VHDL_FILE src/tx_pll_top_cyc5/synth/tx_pll_top_cyc5.vhd
-set_global_assignment -name VHDL_FILE src/rx_pll_top_cyc5/synth/rx_pll_top_cyc5.vhd
-set_global_assignment -name VHDL_FILE src/lms7_rxtx/synth/lms7_rxtx_top.vhd
-set_global_assignment -name VHDL_FILE src/limelight/synth/limelight_top.vhd
-set_global_assignment -name VHDL_FILE src/adc/synth/adc_top.vhd
-set_global_assignment -name VHDL_FILE src/adc/synth/ADS4246_check.vhd
-set_global_assignment -name VHDL_FILE src/adc/synth/ADS4246_ch.vhd
-set_global_assignment -name VHDL_FILE src/adc/synth/ADS4246.vhd
-set_global_assignment -name VHDL_FILE src/tx_path_top/packets2data/synth/packets2data_top.vhd
-set_global_assignment -name VHDL_FILE src/tx_path_top/packets2data/synth/packets2data.vhd
-set_global_assignment -name VHDL_FILE src/tx_path_top/packets2data/synth/p2d_wr_fsm.vhd
-set_global_assignment -name VHDL_FILE src/tx_path_top/packets2data/synth/p2d_sync_fsm.vhd
-set_global_assignment -name VHDL_FILE src/tx_path_top/packets2data/synth/p2d_rd_fsm.vhd
-set_global_assignment -name VHDL_FILE src/tx_path_top/packets2data/synth/p2d_clr_fsm.vhd
-set_global_assignment -name VHDL_FILE src/tx_path_top/handshake_sync/synth/handshake_sync.vhd
-set_global_assignment -name VHDL_FILE src/tx_path_top/fifo2diq/synth/txiq.vhd
-set_global_assignment -name VHDL_FILE src/tx_path_top/fifo2diq/synth/fifo2diq.vhd
-set_global_assignment -name VHDL_FILE src/tx_path_top/bit_unpack/synth/unpack_64_to_64.vhd
-set_global_assignment -name VHDL_FILE src/tx_path_top/bit_unpack/synth/unpack_64_to_56.vhd
-set_global_assignment -name VHDL_FILE src/tx_path_top/bit_unpack/synth/unpack_64_to_48.vhd
-set_global_assignment -name VHDL_FILE src/tx_path_top/bit_unpack/synth/bit_unpack_64.vhd
-set_global_assignment -name VHDL_FILE src/altera_inst/lpm_cnt_inst.vhd
-set_global_assignment -name VHDL_FILE src/rx_path_top/smpl_cnt/synth/smpl_cnt.vhd
-set_global_assignment -name VHDL_FILE src/rx_path_top/diq2fifo/synth/test_data_dd.vhd
-set_global_assignment -name VHDL_FILE src/rx_path_top/diq2fifo/synth/rxiq_siso_sdr.vhd
-set_global_assignment -name VHDL_FILE src/rx_path_top/diq2fifo/synth/rxiq_siso_ddr.vhd
-set_global_assignment -name VHDL_FILE src/rx_path_top/diq2fifo/synth/rxiq_siso.vhd
-set_global_assignment -name VHDL_FILE src/rx_path_top/diq2fifo/synth/rxiq_pulse_ddr.vhd
-set_global_assignment -name VHDL_FILE src/rx_path_top/diq2fifo/synth/rxiq_mimo_ddr.vhd
-set_global_assignment -name VHDL_FILE src/rx_path_top/diq2fifo/synth/rxiq_mimo.vhd
-set_global_assignment -name VHDL_FILE src/rx_path_top/diq2fifo/synth/rxiq.vhd
-set_global_assignment -name VHDL_FILE src/rx_path_top/diq2fifo/synth/lms7002_ddin.vhd
-set_global_assignment -name VHDL_FILE src/rx_path_top/diq2fifo/synth/diq2fifo.vhd
-set_global_assignment -name VHDL_FILE src/rx_path_top/data2packets/synth/data2packets_top.vhd
-set_global_assignment -name VHDL_FILE src/rx_path_top/data2packets/synth/data2packets_fsm.vhd
-set_global_assignment -name VHDL_FILE src/rx_path_top/data2packets/synth/data2packets.vhd
-set_global_assignment -name VHDL_FILE src/rx_path_top/bit_pack/synth/pack_56_to_64.vhd
-set_global_assignment -name VHDL_FILE src/rx_path_top/bit_pack/synth/pack_48_to_64.vhd
-set_global_assignment -name VHDL_FILE src/rx_path_top/bit_pack/synth/bit_pack.vhd
-set_global_assignment -name VHDL_FILE src/general/capture_valid.vhd
-set_global_assignment -name VHDL_FILE src/general/bus_sync_reg.vhd
-set_global_assignment -name VHDL_FILE src/pulse_divider/synth/pulse_gen.vhd
-set_global_assignment -name VHDL_FILE src/pulse_divider/synth/pulse_div.vhd
-set_global_assignment -name VHDL_FILE src/adpd/data_capture.vhd
-set_global_assignment -name VHDL_FILE src/wfm_ram_buffer/pct_payload_extrct.vhd
-set_global_assignment -name VHDL_FILE src/tx_modules/lms7002_ddout.vhd
-set_global_assignment -name VHDL_FILE src/general/bus_synch.vhd
-set_global_assignment -name VHDL_FILE src/tx_modules/sample_nr_cnt_mimo.vhd
-set_global_assignment -name VHDL_FILE src/general/synchronizer.vhd
-set_global_assignment -name VHDL_FILE src/tx_modules/rd_tx_fifo.vhd
-set_global_assignment -name VHDL_FILE src/avmm_arb/avmm_arb.vhd
-set_global_assignment -name VHDL_FILE src/ddr3_av_2x32/ddr3_av_2x32_test_top.vhd
-set_global_assignment -name VHDL_FILE src/rx_path/rx_path.vhd
-set_global_assignment -name VHDL_FILE src/rx_path/wr_rx_fifo_v3.vhd
-set_global_assignment -name VHDL_FILE src/rx_path/rx_pct_data_v2.vhd
-set_global_assignment -name VHDL_FILE src/rx_path/diq2_samples.vhd
-set_global_assignment -name VHDL_FILE src/revision/revision.vhd
-set_global_assignment -name VHDL_FILE src/general/fifo_inst.vhd
-set_global_assignment -name VHDL_FILE src/testing/fifo_loopback.vhd
-set_global_assignment -name VHDL_FILE src/pcie/pcie_top.vhd
-set_global_assignment -name VERILOG_FILE ip/pcie_core/pcie_c5_4x.v
-set_global_assignment -name VHDL_FILE src/xillybus/xillydemo.vhd
-set_global_assignment -name QIP_FILE ip/ddri/ddri.qip
-set_global_assignment -name VHDL_FILE src/lms_nco/qpsmc19x14.vhd
-set_global_assignment -name VHDL_FILE src/lms_nco/phaccu.vhd
-set_global_assignment -name VHDL_FILE src/lms_nco/nco.vhd
-set_global_assignment -name VHDL_FILE src/lms_nco/csava20x9.vhd
-set_global_assignment -name VHDL_FILE src/lms_nco/csava20x8.vhd
-set_global_assignment -name VHDL_FILE src/lms_nco/csava20x6.vhd
-set_global_assignment -name VHDL_FILE src/lms_nco/csava18x8.vhd
-set_global_assignment -name VHDL_FILE src/lms_nco/csava18x6.vhd
-set_global_assignment -name VHDL_FILE src/lms_nco/csava17x8.vhd
-set_global_assignment -name VHDL_FILE src/lms_nco/csava17x6.vhd
-set_global_assignment -name VHDL_FILE src/lms_nco/csava16x6.vhd
-set_global_assignment -name VHDL_FILE src/lms_nco/csava15x6.vhd
-set_global_assignment -name VHDL_FILE src/lms_nco/csava14x8.vhd
-set_global_assignment -name VHDL_FILE src/lms_nco/csava14x6.vhd
-set_global_assignment -name VHDL_FILE src/lms_nco/csava13x6.vhd
-set_global_assignment -name VHDL_FILE src/lms_nco/csava12x8.vhd
-set_global_assignment -name VHDL_FILE src/lms_nco/csava12x6.vhd
-set_global_assignment -name VHDL_FILE src/lms_nco/csava11x6.vhd
-set_global_assignment -name VHDL_FILE src/lms_nco/csava10x6.vhd
-set_global_assignment -name VHDL_FILE src/lms_nco/csava9x6.vhd
-set_global_assignment -name VHDL_FILE src/lms_nco/csava8x6.vhd
-set_global_assignment -name VHDL_FILE src/lms_nco/csava7x6.vhd
-set_global_assignment -name VHDL_FILE src/lms_nco/csa10.vhd
-set_global_assignment -name VHDL_FILE src/lms_nco/components.vhd
-set_global_assignment -name VHDL_FILE src/lms_nco/bcla5.vhd
-set_global_assignment -name VHDL_FILE src/lms_nco/bcla4.vhd
-set_global_assignment -name VHDL_FILE src/spi/rxtspcfg.vhd
-set_global_assignment -name VHDL_FILE src/correctors/iqcorr.vhd
-set_global_assignment -name VHDL_FILE src/correctors/gcorr.vhd
-set_global_assignment -name VHDL_FILE src/correctors/dccorra.vhd
-set_global_assignment -name VHDL_FILE src/correctors/dccorr.vhd
-set_global_assignment -name VHDL_FILE src/spi/fpgacfg.vhd
-set_global_assignment -name VHDL_FILE src/spi/pllcfg.vhd
-set_global_assignment -name VHDL_FILE src/nios_cpu/nios_cpu_top.vhd
-set_global_assignment -name QIP_FILE software/nios4usb_app/mem_init/meminit.qip
-set_global_assignment -name QIP_FILE ip/gclk_ctrl/gclk_ctrl/synthesis/gclk_ctrl.qip
-set_global_assignment -name VHDL_FILE src/rx_modules/compress.vhd
-set_global_assignment -name VHDL_FILE src/rx_modules/data_capture.vhd
-set_global_assignment -name VHDL_FILE src/tx_modules/compress_48_to_64.vhd
-set_global_assignment -name VHDL_FILE src/adpd/predistorter.vhd
-set_global_assignment -name VHDL_FILE src/rx_modules/ddr2rxiq.vhd
-set_global_assignment -name VHDL_FILE src/tx_modules/txfifo_read.vhd
-set_global_assignment -name VHDL_FILE src/wfm_ram_buffer/fifo_read.vhd
-set_global_assignment -name VHDL_FILE src/dyn_ps/pll_ps_cntrl.vhd
-set_global_assignment -name VHDL_FILE src/pll_reconfig_ctrl/config_ctrl.vhd
-set_global_assignment -name VHDL_FILE src/wfm_ram_buffer/data_gen.vhd
-set_global_assignment -name VHDL_FILE src/wfm_ram_buffer/rfifo_ctrl.vhd
-set_global_assignment -name VHDL_FILE src/wfm_ram_buffer/sl_ctrl.vhd
-set_global_assignment -name VHDL_FILE src/ddr2_controllers/ram_control.vhd
-set_global_assignment -name VHDL_FILE src/spi/miso_mux.vhd
-set_global_assignment -name VHDL_FILE src/spi/txtspcfg.vhd
-set_global_assignment -name VHDL_FILE src/spi/mem_package.vhd
-set_global_assignment -name VHDL_FILE src/spi/mcfg32wm_fsm.vhd
-set_global_assignment -name VHDL_FILE src/spi/mcfg_components.vhd
-set_global_assignment -name VHDL_FILE src/testing/nco_bin_sin.vhd
-set_global_assignment -name VHDL_FILE src/fx3/slaveFIFO2b_stream.vhd
-set_global_assignment -name VHDL_FILE src/testing/rx_fifo_ctrl.vhd
-set_global_assignment -name VHDL_FILE src/ddr2_controllers/ramfifo_ctrl.vhd
-set_global_assignment -name VHDL_FILE src/general/alive.vhd
-set_global_assignment -name VHDL_FILE src/general/debounce.vhd
-set_global_assignment -name QIP_FILE ip/ddrbuff_infifo/ddrbuff_infifo.qip
-set_global_assignment -name QIP_FILE ip/ddrbuff_outfifo/ddrbuff_outfifo.qip
-set_global_assignment -name QIP_FILE ip/fpga_infifo/fpga_infifo.qip
-set_global_assignment -name QIP_FILE ip/fpga_outfifo/fpga_outfifo.qip
-set_global_assignment -name QIP_FILE ip/ddo/ddrox1.qip
-set_global_assignment -name VHDL_FILE src/testing/counter.vhd
-set_global_assignment -name QIP_FILE ip/fifo16_to_32/fifo16_to_32.qip
-set_global_assignment -name QIP_FILE ip/fifo32_to_16/fifo32_to_16.qip
-set_global_assignment -name VHDL_FILE src/general/rstn_pulse.vhd
-set_global_assignment -name QIP_FILE ip/trxfifo/trxfifo.qip
-set_global_assignment -name QIP_FILE ip/ddro/ddro.qip
-set_global_assignment -name QIP_FILE ip/lpm_mux1/lpm_mux1.qip
-set_global_assignment -name VHDL_FILE src/tx_modules/ddr_ch_sel.vhd
-set_global_assignment -name QIP_FILE ip/io_buff/input_buffer.qip
-set_global_assignment -name QIP_FILE ip/rx_fifo/rx_fifo.qip
-set_global_assignment -name VHDL_FILE src/adpd/buffer_rd_seq.vhd
-set_global_assignment -name VHDL_FILE src/testing/const.vhd
-set_global_assignment -name QIP_FILE ip/rx_pll/rx_pll.qip
-set_global_assignment -name SIP_FILE ip/rx_pll/rx_pll.sip
-set_global_assignment -name QIP_FILE ip/tx_pll/tx_pll.qip
-set_global_assignment -name SIP_FILE ip/tx_pll/tx_pll.sip
-set_global_assignment -name SIGNALTAP_FILE signal_tap/wfm_load_test.stp
-set_global_assignment -name SIGNALTAP_FILE signal_tap/wfm_to_ram_test.stp
-set_global_assignment -name QIP_FILE ip/fpga_pll/fpga_pll.qip
-set_global_assignment -name SIP_FILE ip/fpga_pll/fpga_pll.sip
-set_global_assignment -name SIGNALTAP_FILE signal_tap/adc_test.stp
-set_global_assignment -name QIP_FILE ip/lpm_const/lpm_const.qip
-set_global_assignment -name QIP_FILE ip/lpm_const/lmp_const40265318.qip
-set_global_assignment -name SIGNALTAP_FILE signal_tap/dac_test.stp
-set_global_assignment -name SIGNALTAP_FILE signal_tap/wfm_to_adc.stp
-set_global_assignment -name VHDL_FILE src/tx_modules/compress_to_64.vhd
-set_global_assignment -name SIGNALTAP_FILE signal_tap/spi_teest.stp
-set_global_assignment -name SIGNALTAP_FILE signal_tap/fx3_test.stp
-set_global_assignment -name SIGNALTAP_FILE signal_tap/fill_rxfifo_test.stp
-set_global_assignment -name VHDL_FILE src/tx_modules/compress_to_32.vhd
-set_global_assignment -name SIGNALTAP_FILE signal_tap/wfm_to_ram.stp
-set_global_assignment -name SIGNALTAP_FILE signal_tap/fx3_load.stp
-set_global_assignment -name VHDL_FILE src/general/sin_cos_nco.vhd
-set_global_assignment -name SIGNALTAP_FILE signal_tap/debug.stp
-set_global_assignment -name QIP_FILE ip/lb_fifo/lb_fifo.qip
-set_global_assignment -name VHDL_FILE src/general/sign_to_uns_std.vhd
-set_global_assignment -name VHDL_FILE src/spi/adpdcfg.vhd
-set_global_assignment -name QIP_FILE ip/ddo/ddro14.qip
-set_global_assignment -name QIP_FILE ip/lpm_mux/lpm_mux14.qip
-set_global_assignment -name QIP_FILE ip/lpm_mux/lpm_mux18.qip
-set_global_assignment -name QIP_FILE ip/lms_dlb_fifo/lms_dlb_fifo.qip
-set_global_assignment -name QIP_FILE ip/altio_out/altio_out.qip
-set_global_assignment -name VHDL_FILE src/avmm_arb/avmm_arb_top.vhd
-set_global_assignment -name VHDL_FILE src/avmm_arb/DDR3_avmm_2x32_ctrl.vhd
-set_global_assignment -name VHDL_FILE src/adpd/fifo_buff.vhd
-set_global_assignment -name VHDL_FILE src/adpd/data_cap_buffer.vhd
-set_global_assignment -name VHDL_FILE src/general/sync_reg.vhd
-set_global_assignment -name VHDL_FILE src/general/deinterleave.vhd
-set_global_assignment -name MIF_FILE ip/test_ram/test_ram.mif
-set_global_assignment -name VHDL_FILE src/general/mac_ch_sel.vhd
-set_global_assignment -name VHDL_FILE src/rx_path_top/rx_path/synth/rx_path_top.vhd
-set_global_assignment -name VHDL_FILE src/tx_path_top/tx_path/synth/tx_path_top.vhd
-set_global_assignment -name VHDL_FILE src/tx_path_top/tx_path/synth/sync_fifo_rw.vhd
-set_global_assignment -name TCL_SCRIPT_FILE DDR3_TOP_assigments.tcl
-set_global_assignment -name QIP_FILE ip/lpm_mux/lpm_mux13.qip
-set_global_assignment -name VHDL_FILE src/spi/memcfg.vhd
-set_global_assignment -name VHDL_FILE src/general/signal_delay.vhd
-set_global_assignment -name SIGNALTAP_FILE signal_tap/debug_v2.stp
-set_global_assignment -name SIGNALTAP_FILE signal_tap/debug_v3.stp
-set_global_assignment -name BDF_FILE lms7_trx_top.bdf
 set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
@@ -1634,4 +1414,338 @@ set_location_assignment PIN_T30 -to FPGA_LED5_R
 set_location_assignment PIN_W29 -to FPGA_LED5_G
 set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to FPGA_LED5_R
 set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to FPGA_LED5_G
+set_global_assignment -name SLD_NODE_CREATOR_ID 110 -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_ENTITY_NAME sld_signaltap -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_clk -to "IC_74HC595_top:inst1|clk" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[0] -to "IC_74HC595_top:inst1|DS" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[1] -to "IC_74HC595_top:inst1|IC_74HC595:IC_74HC595_inst0|current_state.idle" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[2] -to "IC_74HC595_top:inst1|IC_74HC595:IC_74HC595_inst0|current_state.latch" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[3] -to "IC_74HC595_top:inst1|IC_74HC595:IC_74HC595_inst0|current_state.shift_en" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[4] -to "IC_74HC595_top:inst1|SHCP" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[5] -to "IC_74HC595_top:inst1|STCP" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[6] -to "IC_74HC595_top:inst1|busy" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[7] -to "IC_74HC595_top:inst1|data[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[8] -to "IC_74HC595_top:inst1|data[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[9] -to "IC_74HC595_top:inst1|data[11]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[10] -to "IC_74HC595_top:inst1|data[12]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[11] -to "IC_74HC595_top:inst1|data[13]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[12] -to "IC_74HC595_top:inst1|data[14]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[13] -to "IC_74HC595_top:inst1|data[15]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[14] -to "IC_74HC595_top:inst1|data[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[15] -to "IC_74HC595_top:inst1|data[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[16] -to "IC_74HC595_top:inst1|data[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[17] -to "IC_74HC595_top:inst1|data[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[18] -to "IC_74HC595_top:inst1|data[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[19] -to "IC_74HC595_top:inst1|data[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[20] -to "IC_74HC595_top:inst1|data[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[21] -to "IC_74HC595_top:inst1|data[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[22] -to "IC_74HC595_top:inst1|data[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[23] -to "IC_74HC595_top:inst1|data_change" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[24] -to "IC_74HC595_top:inst1|reset_n" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[0] -to "IC_74HC595_top:inst1|DS" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[1] -to "IC_74HC595_top:inst1|IC_74HC595:IC_74HC595_inst0|current_state.idle" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[2] -to "IC_74HC595_top:inst1|IC_74HC595:IC_74HC595_inst0|current_state.latch" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[3] -to "IC_74HC595_top:inst1|IC_74HC595:IC_74HC595_inst0|current_state.shift_en" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[4] -to "IC_74HC595_top:inst1|SHCP" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[5] -to "IC_74HC595_top:inst1|STCP" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[6] -to "IC_74HC595_top:inst1|busy" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[7] -to "IC_74HC595_top:inst1|data[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[8] -to "IC_74HC595_top:inst1|data[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[9] -to "IC_74HC595_top:inst1|data[11]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[10] -to "IC_74HC595_top:inst1|data[12]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[11] -to "IC_74HC595_top:inst1|data[13]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[12] -to "IC_74HC595_top:inst1|data[14]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[13] -to "IC_74HC595_top:inst1|data[15]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[14] -to "IC_74HC595_top:inst1|data[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[15] -to "IC_74HC595_top:inst1|data[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[16] -to "IC_74HC595_top:inst1|data[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[17] -to "IC_74HC595_top:inst1|data[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[18] -to "IC_74HC595_top:inst1|data[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[19] -to "IC_74HC595_top:inst1|data[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[20] -to "IC_74HC595_top:inst1|data[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[21] -to "IC_74HC595_top:inst1|data[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[22] -to "IC_74HC595_top:inst1|data[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[23] -to "IC_74HC595_top:inst1|data_change" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[24] -to "IC_74HC595_top:inst1|reset_n" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_RAM_BLOCK_TYPE=AUTO" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_DATA_BITS=25" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_BITS=25" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STORAGE_QUALIFIER_BITS=25" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_INFO=805334528" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_POWER_UP_TRIGGER=0" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK=000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK_LENGTH=96" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STORAGE_QUALIFIER_INVERSION_MASK_LENGTH=0" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SEGMENT_SIZE=128" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ATTRIBUTE_MEM_MODE=OFF" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STATE_FLOW_USE_GENERATED=0" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STATE_BITS=11" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_BUFFER_FULL_STOP=1" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_CURRENT_RESOURCE_WIDTH=1" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INCREMENTAL_ROUTING=1" -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[0] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[1] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[2] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[3] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[4] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[5] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[6] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[7] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[8] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[9] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[10] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[11] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[12] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[13] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[14] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[15] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[16] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[17] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[18] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[19] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[20] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[21] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[22] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[23] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[24] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[25] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[26] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[27] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[28] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[29] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[30] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[31] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_LEVEL=1" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SAMPLE_DEPTH=128" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_IN_ENABLED=0" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_PIPELINE=0" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_RAM_PIPELINE=0" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_COUNTER_PIPELINE=0" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ADVANCED_TRIGGER_ENTITY=basic,1," -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_LEVEL_PIPELINE=1" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ENABLE_ADVANCED_TRIGGER=0" -section_id auto_signaltap_0
+set_global_assignment -name SEED 2
+set_global_assignment -name VHDL_FILE src/general/busy_delay.vhd
+set_global_assignment -name VHDL_FILE src/general/FX3_LED_ctrl.vhd
+set_global_assignment -name VHDL_FILE src/74HC595/synth/IC_74HC595_top.vhd
+set_global_assignment -name VHDL_FILE src/74HC595/synth/IC_74HC595.vhd
+set_global_assignment -name QXP_FILE "../limesdr-qpcie_xillybus_core/xillybus_core.qxp"
+set_global_assignment -name VERILOG_FILE "../limesdr-qpcie_xillybus_core/xillybus.v"
+set_global_assignment -name VHDL_FILE src/tx_path_top/tx_path/synth/lms_txio.vhd
+set_global_assignment -name SDC_FILE PCIe_timing.sdc
+set_global_assignment -name QIP_FILE ip/ddr3_av_2x32/ddr3_av_2x32.qip
+set_global_assignment -name QIP_FILE ip/pcie_core/pcie_reconfig/synthesis/pcie_reconfig.qip
+set_global_assignment -name SDC_FILE LMS2_timing.sdc
+set_global_assignment -name SDC_FILE LMS1_timing.sdc
+set_global_assignment -name SDC_FILE ADS4246_timing.sdc
+set_global_assignment -name QIP_FILE nios_cpu/synthesis/nios_cpu.qip
+set_global_assignment -name SDC_FILE lms7_x2_trx_timing.sdc
+set_global_assignment -name SDC_FILE DAC5672_timing.sdc
+set_global_assignment -name SDC_FILE Clock_groups.sdc
+set_global_assignment -name SDC_FILE src/wfm_player/wfm_player_x2_top.sdc
+set_global_assignment -name SYSTEMVERILOG_FILE src/avalon_traffic_gen/synth/avalon_traffic_gen.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/avalon_traffic_gen/synth/av_trf_gen_scfifo_wrapper.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/avalon_traffic_gen/synth/av_trf_gen_drv_def.sv
+set_global_assignment -name VHDL_FILE src/wfm_player/synth/wfm_player_x2_top.vhd
+set_global_assignment -name VHDL_FILE src/wfm_player/synth/wfm_player.vhd
+set_global_assignment -name VHDL_FILE src/wfm_ram_buffer/synth/stream_switch.vhd
+set_global_assignment -name VHDL_FILE src/general/reset_n_synch.vhd
+set_global_assignment -name VHDL_FILE src/wfm_ram_buffer/synth/wfm_wcmd_fsm.vhd
+set_global_assignment -name VHDL_FILE src/wfm_ram_buffer/synth/wfm_rcmd_fsm.vhd
+set_global_assignment -name VHDL_FILE src/wfm_ram_buffer/synth/wfm_player_rst_ctrl.vhd
+set_global_assignment -name VHDL_FILE src/general/edge_pulse/synth/edge_pulse.vhd
+set_global_assignment -name VHDL_FILE src/tx_path_top/fifo2diq/synth/txiq_par.vhd
+set_global_assignment -name VHDL_FILE src/spi/lmlicfg_wrapp.vhd
+set_global_assignment -name VHDL_FILE src/packages/synth/FIFO_PACK.vhd
+set_global_assignment -name VHDL_FILE src/correctors/tx_chain.vhd
+set_global_assignment -name VHDL_FILE symbols/rx_chain.vhd
+set_global_assignment -name VHDL_FILE src/fifo_bulk_read/synth/fifo_bulk_read.vhd
+set_global_assignment -name QIP_FILE ip/clkctrl_c5/clkctrl_c5/synthesis/clkctrl_c5.qip
+set_global_assignment -name VHDL_FILE src/tx_pll_top_cyc5/synth/tx_pll_top_cyc5.vhd
+set_global_assignment -name VHDL_FILE src/rx_pll_top_cyc5/synth/rx_pll_top_cyc5.vhd
+set_global_assignment -name VHDL_FILE src/lms7_rxtx/synth/lms7_rxtx_top.vhd
+set_global_assignment -name VHDL_FILE src/limelight/synth/limelight_top.vhd
+set_global_assignment -name VHDL_FILE src/adc/synth/adc_top.vhd
+set_global_assignment -name VHDL_FILE src/adc/synth/ADS4246_check.vhd
+set_global_assignment -name VHDL_FILE src/adc/synth/ADS4246_ch.vhd
+set_global_assignment -name VHDL_FILE src/adc/synth/ADS4246.vhd
+set_global_assignment -name VHDL_FILE src/tx_path_top/packets2data/synth/packets2data_top.vhd
+set_global_assignment -name VHDL_FILE src/tx_path_top/packets2data/synth/packets2data.vhd
+set_global_assignment -name VHDL_FILE src/tx_path_top/packets2data/synth/p2d_wr_fsm.vhd
+set_global_assignment -name VHDL_FILE src/tx_path_top/packets2data/synth/p2d_sync_fsm.vhd
+set_global_assignment -name VHDL_FILE src/tx_path_top/packets2data/synth/p2d_rd_fsm.vhd
+set_global_assignment -name VHDL_FILE src/tx_path_top/packets2data/synth/p2d_clr_fsm.vhd
+set_global_assignment -name VHDL_FILE src/tx_path_top/handshake_sync/synth/handshake_sync.vhd
+set_global_assignment -name VHDL_FILE src/tx_path_top/fifo2diq/synth/txiq.vhd
+set_global_assignment -name VHDL_FILE src/tx_path_top/fifo2diq/synth/fifo2diq.vhd
+set_global_assignment -name VHDL_FILE src/tx_path_top/bit_unpack/synth/unpack_64_to_64.vhd
+set_global_assignment -name VHDL_FILE src/tx_path_top/bit_unpack/synth/unpack_64_to_56.vhd
+set_global_assignment -name VHDL_FILE src/tx_path_top/bit_unpack/synth/unpack_64_to_48.vhd
+set_global_assignment -name VHDL_FILE src/tx_path_top/bit_unpack/synth/bit_unpack_64.vhd
+set_global_assignment -name VHDL_FILE src/altera_inst/lpm_cnt_inst.vhd
+set_global_assignment -name VHDL_FILE src/rx_path_top/smpl_cnt/synth/smpl_cnt.vhd
+set_global_assignment -name VHDL_FILE src/rx_path_top/diq2fifo/synth/test_data_dd.vhd
+set_global_assignment -name VHDL_FILE src/rx_path_top/diq2fifo/synth/rxiq_siso_sdr.vhd
+set_global_assignment -name VHDL_FILE src/rx_path_top/diq2fifo/synth/rxiq_siso_ddr.vhd
+set_global_assignment -name VHDL_FILE src/rx_path_top/diq2fifo/synth/rxiq_siso.vhd
+set_global_assignment -name VHDL_FILE src/rx_path_top/diq2fifo/synth/rxiq_pulse_ddr.vhd
+set_global_assignment -name VHDL_FILE src/rx_path_top/diq2fifo/synth/rxiq_mimo_ddr.vhd
+set_global_assignment -name VHDL_FILE src/rx_path_top/diq2fifo/synth/rxiq_mimo.vhd
+set_global_assignment -name VHDL_FILE src/rx_path_top/diq2fifo/synth/rxiq.vhd
+set_global_assignment -name VHDL_FILE src/rx_path_top/diq2fifo/synth/lms7002_ddin.vhd
+set_global_assignment -name VHDL_FILE src/rx_path_top/diq2fifo/synth/diq2fifo.vhd
+set_global_assignment -name VHDL_FILE src/rx_path_top/data2packets/synth/data2packets_top.vhd
+set_global_assignment -name VHDL_FILE src/rx_path_top/data2packets/synth/data2packets_fsm.vhd
+set_global_assignment -name VHDL_FILE src/rx_path_top/data2packets/synth/data2packets.vhd
+set_global_assignment -name VHDL_FILE src/rx_path_top/bit_pack/synth/pack_56_to_64.vhd
+set_global_assignment -name VHDL_FILE src/rx_path_top/bit_pack/synth/pack_48_to_64.vhd
+set_global_assignment -name VHDL_FILE src/rx_path_top/bit_pack/synth/bit_pack.vhd
+set_global_assignment -name VHDL_FILE src/general/capture_valid.vhd
+set_global_assignment -name VHDL_FILE src/general/bus_sync_reg.vhd
+set_global_assignment -name VHDL_FILE src/pulse_divider/synth/pulse_gen.vhd
+set_global_assignment -name VHDL_FILE src/pulse_divider/synth/pulse_div.vhd
+set_global_assignment -name VHDL_FILE src/adpd/data_capture.vhd
+set_global_assignment -name VHDL_FILE src/wfm_ram_buffer/pct_payload_extrct.vhd
+set_global_assignment -name VHDL_FILE src/tx_modules/lms7002_ddout.vhd
+set_global_assignment -name VHDL_FILE src/general/bus_synch.vhd
+set_global_assignment -name VHDL_FILE src/tx_modules/sample_nr_cnt_mimo.vhd
+set_global_assignment -name VHDL_FILE src/general/synchronizer.vhd
+set_global_assignment -name VHDL_FILE src/tx_modules/rd_tx_fifo.vhd
+set_global_assignment -name VHDL_FILE src/avmm_arb/avmm_arb.vhd
+set_global_assignment -name VHDL_FILE src/ddr3_av_2x32/ddr3_av_2x32_test_top.vhd
+set_global_assignment -name VHDL_FILE src/rx_path/rx_path.vhd
+set_global_assignment -name VHDL_FILE src/rx_path/wr_rx_fifo_v3.vhd
+set_global_assignment -name VHDL_FILE src/rx_path/rx_pct_data_v2.vhd
+set_global_assignment -name VHDL_FILE src/rx_path/diq2_samples.vhd
+set_global_assignment -name VHDL_FILE src/revision/revision.vhd
+set_global_assignment -name VHDL_FILE src/general/fifo_inst.vhd
+set_global_assignment -name VHDL_FILE src/testing/fifo_loopback.vhd
+set_global_assignment -name VHDL_FILE src/pcie/pcie_top.vhd
+set_global_assignment -name VERILOG_FILE ip/pcie_core/pcie_c5_4x.v
+set_global_assignment -name VHDL_FILE src/xillybus/xillydemo.vhd
+set_global_assignment -name QIP_FILE ip/ddri/ddri.qip
+set_global_assignment -name VHDL_FILE src/lms_nco/qpsmc19x14.vhd
+set_global_assignment -name VHDL_FILE src/lms_nco/phaccu.vhd
+set_global_assignment -name VHDL_FILE src/lms_nco/nco.vhd
+set_global_assignment -name VHDL_FILE src/lms_nco/csava20x9.vhd
+set_global_assignment -name VHDL_FILE src/lms_nco/csava20x8.vhd
+set_global_assignment -name VHDL_FILE src/lms_nco/csava20x6.vhd
+set_global_assignment -name VHDL_FILE src/lms_nco/csava18x8.vhd
+set_global_assignment -name VHDL_FILE src/lms_nco/csava18x6.vhd
+set_global_assignment -name VHDL_FILE src/lms_nco/csava17x8.vhd
+set_global_assignment -name VHDL_FILE src/lms_nco/csava17x6.vhd
+set_global_assignment -name VHDL_FILE src/lms_nco/csava16x6.vhd
+set_global_assignment -name VHDL_FILE src/lms_nco/csava15x6.vhd
+set_global_assignment -name VHDL_FILE src/lms_nco/csava14x8.vhd
+set_global_assignment -name VHDL_FILE src/lms_nco/csava14x6.vhd
+set_global_assignment -name VHDL_FILE src/lms_nco/csava13x6.vhd
+set_global_assignment -name VHDL_FILE src/lms_nco/csava12x8.vhd
+set_global_assignment -name VHDL_FILE src/lms_nco/csava12x6.vhd
+set_global_assignment -name VHDL_FILE src/lms_nco/csava11x6.vhd
+set_global_assignment -name VHDL_FILE src/lms_nco/csava10x6.vhd
+set_global_assignment -name VHDL_FILE src/lms_nco/csava9x6.vhd
+set_global_assignment -name VHDL_FILE src/lms_nco/csava8x6.vhd
+set_global_assignment -name VHDL_FILE src/lms_nco/csava7x6.vhd
+set_global_assignment -name VHDL_FILE src/lms_nco/csa10.vhd
+set_global_assignment -name VHDL_FILE src/lms_nco/components.vhd
+set_global_assignment -name VHDL_FILE src/lms_nco/bcla5.vhd
+set_global_assignment -name VHDL_FILE src/lms_nco/bcla4.vhd
+set_global_assignment -name VHDL_FILE src/spi/rxtspcfg.vhd
+set_global_assignment -name VHDL_FILE src/correctors/iqcorr.vhd
+set_global_assignment -name VHDL_FILE src/correctors/gcorr.vhd
+set_global_assignment -name VHDL_FILE src/correctors/dccorra.vhd
+set_global_assignment -name VHDL_FILE src/correctors/dccorr.vhd
+set_global_assignment -name VHDL_FILE src/spi/fpgacfg.vhd
+set_global_assignment -name VHDL_FILE src/spi/pllcfg.vhd
+set_global_assignment -name VHDL_FILE src/nios_cpu/nios_cpu_top.vhd
+set_global_assignment -name QIP_FILE software/nios4usb_app/mem_init/meminit.qip
+set_global_assignment -name QIP_FILE ip/gclk_ctrl/gclk_ctrl/synthesis/gclk_ctrl.qip
+set_global_assignment -name VHDL_FILE src/rx_modules/compress.vhd
+set_global_assignment -name VHDL_FILE src/rx_modules/data_capture.vhd
+set_global_assignment -name VHDL_FILE src/tx_modules/compress_48_to_64.vhd
+set_global_assignment -name VHDL_FILE src/adpd/predistorter.vhd
+set_global_assignment -name VHDL_FILE src/rx_modules/ddr2rxiq.vhd
+set_global_assignment -name VHDL_FILE src/tx_modules/txfifo_read.vhd
+set_global_assignment -name VHDL_FILE src/wfm_ram_buffer/fifo_read.vhd
+set_global_assignment -name VHDL_FILE src/dyn_ps/pll_ps_cntrl.vhd
+set_global_assignment -name VHDL_FILE src/pll_reconfig_ctrl/config_ctrl.vhd
+set_global_assignment -name VHDL_FILE src/wfm_ram_buffer/data_gen.vhd
+set_global_assignment -name VHDL_FILE src/wfm_ram_buffer/rfifo_ctrl.vhd
+set_global_assignment -name VHDL_FILE src/wfm_ram_buffer/sl_ctrl.vhd
+set_global_assignment -name VHDL_FILE src/ddr2_controllers/ram_control.vhd
+set_global_assignment -name VHDL_FILE src/spi/miso_mux.vhd
+set_global_assignment -name VHDL_FILE src/spi/txtspcfg.vhd
+set_global_assignment -name VHDL_FILE src/spi/mem_package.vhd
+set_global_assignment -name VHDL_FILE src/spi/mcfg32wm_fsm.vhd
+set_global_assignment -name VHDL_FILE src/spi/mcfg_components.vhd
+set_global_assignment -name VHDL_FILE src/testing/nco_bin_sin.vhd
+set_global_assignment -name VHDL_FILE src/fx3/slaveFIFO2b_stream.vhd
+set_global_assignment -name VHDL_FILE src/testing/rx_fifo_ctrl.vhd
+set_global_assignment -name VHDL_FILE src/ddr2_controllers/ramfifo_ctrl.vhd
+set_global_assignment -name VHDL_FILE src/general/alive.vhd
+set_global_assignment -name VHDL_FILE src/general/debounce.vhd
+set_global_assignment -name QIP_FILE ip/ddrbuff_infifo/ddrbuff_infifo.qip
+set_global_assignment -name QIP_FILE ip/ddrbuff_outfifo/ddrbuff_outfifo.qip
+set_global_assignment -name QIP_FILE ip/fpga_infifo/fpga_infifo.qip
+set_global_assignment -name QIP_FILE ip/fpga_outfifo/fpga_outfifo.qip
+set_global_assignment -name QIP_FILE ip/ddo/ddrox1.qip
+set_global_assignment -name VHDL_FILE src/testing/counter.vhd
+set_global_assignment -name QIP_FILE ip/fifo16_to_32/fifo16_to_32.qip
+set_global_assignment -name QIP_FILE ip/fifo32_to_16/fifo32_to_16.qip
+set_global_assignment -name VHDL_FILE src/general/rstn_pulse.vhd
+set_global_assignment -name QIP_FILE ip/trxfifo/trxfifo.qip
+set_global_assignment -name QIP_FILE ip/ddro/ddro.qip
+set_global_assignment -name QIP_FILE ip/lpm_mux1/lpm_mux1.qip
+set_global_assignment -name VHDL_FILE src/tx_modules/ddr_ch_sel.vhd
+set_global_assignment -name QIP_FILE ip/io_buff/input_buffer.qip
+set_global_assignment -name QIP_FILE ip/rx_fifo/rx_fifo.qip
+set_global_assignment -name VHDL_FILE src/adpd/buffer_rd_seq.vhd
+set_global_assignment -name VHDL_FILE src/testing/const.vhd
+set_global_assignment -name QIP_FILE ip/rx_pll/rx_pll.qip
+set_global_assignment -name SIP_FILE ip/rx_pll/rx_pll.sip
+set_global_assignment -name QIP_FILE ip/tx_pll/tx_pll.qip
+set_global_assignment -name SIP_FILE ip/tx_pll/tx_pll.sip
+set_global_assignment -name SIGNALTAP_FILE signal_tap/wfm_load_test.stp
+set_global_assignment -name SIGNALTAP_FILE signal_tap/wfm_to_ram_test.stp
+set_global_assignment -name QIP_FILE ip/fpga_pll/fpga_pll.qip
+set_global_assignment -name SIP_FILE ip/fpga_pll/fpga_pll.sip
+set_global_assignment -name SIGNALTAP_FILE signal_tap/adc_test.stp
+set_global_assignment -name QIP_FILE ip/lpm_const/lpm_const.qip
+set_global_assignment -name QIP_FILE ip/lpm_const/lmp_const40265318.qip
+set_global_assignment -name SIGNALTAP_FILE signal_tap/dac_test.stp
+set_global_assignment -name SIGNALTAP_FILE signal_tap/wfm_to_adc.stp
+set_global_assignment -name VHDL_FILE src/tx_modules/compress_to_64.vhd
+set_global_assignment -name SIGNALTAP_FILE signal_tap/spi_teest.stp
+set_global_assignment -name SIGNALTAP_FILE signal_tap/fx3_test.stp
+set_global_assignment -name SIGNALTAP_FILE signal_tap/fill_rxfifo_test.stp
+set_global_assignment -name VHDL_FILE src/tx_modules/compress_to_32.vhd
+set_global_assignment -name SIGNALTAP_FILE signal_tap/wfm_to_ram.stp
+set_global_assignment -name SIGNALTAP_FILE signal_tap/fx3_load.stp
+set_global_assignment -name VHDL_FILE src/general/sin_cos_nco.vhd
+set_global_assignment -name QIP_FILE ip/lb_fifo/lb_fifo.qip
+set_global_assignment -name VHDL_FILE src/general/sign_to_uns_std.vhd
+set_global_assignment -name VHDL_FILE src/spi/adpdcfg.vhd
+set_global_assignment -name QIP_FILE ip/ddo/ddro14.qip
+set_global_assignment -name QIP_FILE ip/lpm_mux/lpm_mux14.qip
+set_global_assignment -name QIP_FILE ip/lpm_mux/lpm_mux18.qip
+set_global_assignment -name QIP_FILE ip/lms_dlb_fifo/lms_dlb_fifo.qip
+set_global_assignment -name QIP_FILE ip/altio_out/altio_out.qip
+set_global_assignment -name VHDL_FILE src/avmm_arb/avmm_arb_top.vhd
+set_global_assignment -name VHDL_FILE src/avmm_arb/DDR3_avmm_2x32_ctrl.vhd
+set_global_assignment -name VHDL_FILE src/adpd/fifo_buff.vhd
+set_global_assignment -name VHDL_FILE src/adpd/data_cap_buffer.vhd
+set_global_assignment -name VHDL_FILE src/general/sync_reg.vhd
+set_global_assignment -name VHDL_FILE src/general/deinterleave.vhd
+set_global_assignment -name MIF_FILE ip/test_ram/test_ram.mif
+set_global_assignment -name VHDL_FILE src/general/mac_ch_sel.vhd
+set_global_assignment -name VHDL_FILE src/rx_path_top/rx_path/synth/rx_path_top.vhd
+set_global_assignment -name VHDL_FILE src/tx_path_top/tx_path/synth/tx_path_top.vhd
+set_global_assignment -name VHDL_FILE src/tx_path_top/tx_path/synth/sync_fifo_rw.vhd
+set_global_assignment -name TCL_SCRIPT_FILE DDR3_TOP_assigments.tcl
+set_global_assignment -name QIP_FILE ip/lpm_mux/lpm_mux13.qip
+set_global_assignment -name VHDL_FILE src/spi/memcfg.vhd
+set_global_assignment -name VHDL_FILE src/general/signal_delay.vhd
+set_global_assignment -name BDF_FILE lms7_trx_top.bdf
+set_global_assignment -name SIGNALTAP_FILE signal_tap/debug.stp
+set_global_assignment -name SLD_FILE db/debug_auto_stripped.stp
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
