@@ -36,10 +36,14 @@ end IC_74HC595_top;
 -- ----------------------------------------------------------------------------
 architecture arch of IC_74HC595_top is
 --declare signals,  components here
-signal data_remaped  : std_logic_vector (15 downto 0) ;
-signal data_sync     : std_logic_vector (15 downto 0); 
-signal data_sync_reg : std_logic_vector (15 downto 0);
-signal data_change   : std_logic;
+signal reset_n_sync     : std_logic;
+signal reset_n_delayed  : std_logic;
+signal data_remaped     : std_logic_vector (15 downto 0) ;
+signal data_sync        : std_logic_vector (15 downto 0); 
+signal data_sync_reg    : std_logic_vector (15 downto 0);
+signal data_change      : std_logic;
+signal reset_cnt        : unsigned(7 downto 0);
+
 
 begin
 
@@ -106,16 +110,35 @@ data_remaped(15)  <= data(15);
 -- ----------------------------------------------------------------------------
 -- Data synchronization into clk domain
 -- ----------------------------------------------------------------------------
+sync_reg0 : entity work.sync_reg 
+port map(clk, reset_n, reset_n, reset_n_sync);
+
 bus_sync_reg0 : entity work.bus_sync_reg
 generic map (16)
-port map(clk, '1', data_remaped, data_sync);
+port map(clk, reset_n_sync, data_remaped, data_sync);
+
+process(clk, reset_n_sync)
+begin
+   if reset_n_sync = '0' then 
+      reset_cnt         <= (others=>'0');
+      reset_n_delayed   <= '0';
+   elsif (clk'event AND clk='1') then 
+      if reset_cnt < 255 then 
+         reset_cnt <= reset_cnt + 1;
+         reset_n_delayed <= '0';
+      else 
+         reset_cnt <= reset_cnt;
+         reset_n_delayed <= '1';
+      end if;         
+   end if;
+end process;
 
 -- ----------------------------------------------------------------------------
 -- Detecting signal change
 -- ----------------------------------------------------------------------------
- process(reset_n, clk)
+ process(reset_n_delayed, clk)
     begin
-      if reset_n='0' then
+      if reset_n_delayed='0' then
          data_sync_reg  <= (others=> '0');
          data_change    <= '0';
       elsif (clk'event and clk = '1') then
@@ -137,7 +160,7 @@ IC_74HC595_inst0 : entity work.IC_74HC595
    )
    port map (
       clk      => clk,
-      reset_n  => reset_n,
+      reset_n  => reset_n_delayed,
       en       => data_change,
       data     => data_sync_reg,
       busy     => busy,

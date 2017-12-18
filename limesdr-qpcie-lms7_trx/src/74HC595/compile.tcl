@@ -32,7 +32,8 @@ puts {
 
 #Add files to compile, follow compilation order(last file - top module)
 set library_file_list {
-                           source_library { ../general/bus_sync_reg.vhd
+                           source_library { ../general/sync_reg.vhd
+                                            ../general/bus_sync_reg.vhd
                                             synth/IC_74HC595.vhd
                                             synth/IC_74HC595_top.vhd
                                             sim/IC_74HC595_tb.vhd

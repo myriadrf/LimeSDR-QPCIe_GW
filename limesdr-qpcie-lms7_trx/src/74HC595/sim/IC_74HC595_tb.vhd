@@ -64,7 +64,7 @@ begin
    
    process is
    begin
-      dut0_data <= x"0000";
+      dut0_data <= x"0001";
       wait until reset_n = '1';
       wait until rising_edge(clk0);
       dut0_data <= x"0001";
