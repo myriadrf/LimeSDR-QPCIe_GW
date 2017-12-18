@@ -468,9 +468,6 @@ set_location_assignment FRACTIONALPLL_X0_Y32_N0 -to "lms7_rxtx_top:inst121|rx_pl
 set_location_assignment FRACTIONALPLL_X0_Y15_N0 -to "lms7_rxtx_top:inst121|tx_pll_top_cyc5:tx_pll_top_cyc5_inst0|tx_pll:tx_pll_inst1|tx_pll_0002:tx_pll_inst|altera_pll:altera_pll_i|altera_cyclonev_pll:cyclonev_pll|altera_cyclonev_pll_base:fpll_0|fpll" -comment LMS2_TX_PLL
 set_location_assignment FRACTIONALPLL_X0_Y56_N0 -to "fpga_pll:inst34|fpga_pll_0002:fpga_pll_inst|altera_pll:altera_pll_i|altera_cyclonev_pll:cyclonev_pll|altera_cyclonev_pll_base:fpll_0|fpll" -comment FPGA_PLL
 set_location_assignment FRACTIONALPLL_X89_Y74_N0 -to "lms7_rxtx_top:inst120|tx_pll_top_cyc5:tx_pll_top_cyc5_inst0|tx_pll:tx_pll_inst1|tx_pll_0002:tx_pll_inst|altera_pll:altera_pll_i|altera_cyclonev_pll:cyclonev_pll|altera_cyclonev_pll_base:fpll_0|fpll" -comment LMS2_TX_PLL
-set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
-set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
-set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
 set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_BOT_A[0] -tag __ddr3_av_2x32_p0
 set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_BOT_A[10] -tag __ddr3_av_2x32_p0
 set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_BOT_A[11] -tag __ddr3_av_2x32_p0
@@ -1524,7 +1521,7 @@ set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_COUNTER_PIPELINE=
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ADVANCED_TRIGGER_ENTITY=basic,1," -section_id auto_signaltap_0
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_LEVEL_PIPELINE=1" -section_id auto_signaltap_0
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ENABLE_ADVANCED_TRIGGER=0" -section_id auto_signaltap_0
-set_global_assignment -name SEED 2
+set_global_assignment -name SEED 1
 set_global_assignment -name VHDL_FILE src/general/busy_delay.vhd
 set_global_assignment -name VHDL_FILE src/general/FX3_LED_ctrl.vhd
 set_global_assignment -name VHDL_FILE src/74HC595/synth/IC_74HC595_top.vhd
@@ -1747,5 +1744,11 @@ set_global_assignment -name VHDL_FILE src/spi/memcfg.vhd
 set_global_assignment -name VHDL_FILE src/general/signal_delay.vhd
 set_global_assignment -name BDF_FILE lms7_trx_top.bdf
 set_global_assignment -name SIGNALTAP_FILE signal_tap/debug.stp
+set_global_assignment -name PHYSICAL_SYNTHESIS_REGISTER_RETIMING OFF
+set_global_assignment -name ALLOW_REGISTER_RETIMING OFF
+set_global_assignment -name PHYSICAL_SYNTHESIS_COMBO_LOGIC OFF
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
 set_global_assignment -name SLD_FILE db/debug_auto_stripped.stp
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
