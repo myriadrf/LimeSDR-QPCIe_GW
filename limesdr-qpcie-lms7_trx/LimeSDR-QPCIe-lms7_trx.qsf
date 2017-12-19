@@ -1522,6 +1522,21 @@ set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ADVANCED_TRIGGER_
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_LEVEL_PIPELINE=1" -section_id auto_signaltap_0
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ENABLE_ADVANCED_TRIGGER=0" -section_id auto_signaltap_0
 set_global_assignment -name SEED 1
+set_global_assignment -name PHYSICAL_SYNTHESIS_REGISTER_RETIMING OFF
+set_global_assignment -name ALLOW_REGISTER_RETIMING OFF
+set_global_assignment -name PHYSICAL_SYNTHESIS_COMBO_LOGIC OFF
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+set_global_assignment -name VHDL_FILE src/self_test/tstcfg.vhd
+set_global_assignment -name VHDL_FILE src/self_test/transition_count.vhd
+set_global_assignment -name VHDL_FILE src/self_test/singl_clk_with_ref_test.vhd
+set_global_assignment -name VHDL_FILE src/self_test/ddr2_tester.vhd
+set_global_assignment -name VHDL_FILE src/self_test/clock_test.vhd
+set_global_assignment -name VHDL_FILE src/self_test/clk_with_ref_test.vhd
+set_global_assignment -name VHDL_FILE src/self_test/clk_no_ref_test.vhd
+set_global_assignment -name VHDL_FILE src/txiqmux/synth/txiqmux.vhd
+set_global_assignment -name VHDL_FILE src/txiqmux/synth/txiq_tst_ptrn.vhd
 set_global_assignment -name VHDL_FILE src/general/busy_delay.vhd
 set_global_assignment -name VHDL_FILE src/general/FX3_LED_ctrl.vhd
 set_global_assignment -name VHDL_FILE src/74HC595/synth/IC_74HC595_top.vhd
@@ -1744,11 +1759,17 @@ set_global_assignment -name VHDL_FILE src/spi/memcfg.vhd
 set_global_assignment -name VHDL_FILE src/general/signal_delay.vhd
 set_global_assignment -name BDF_FILE lms7_trx_top.bdf
 set_global_assignment -name SIGNALTAP_FILE signal_tap/debug.stp
-set_global_assignment -name PHYSICAL_SYNTHESIS_REGISTER_RETIMING OFF
-set_global_assignment -name ALLOW_REGISTER_RETIMING OFF
-set_global_assignment -name PHYSICAL_SYNTHESIS_COMBO_LOGIC OFF
-set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
-set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
-set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
-set_global_assignment -name SLD_FILE db/debug_auto_stripped.stp
+set_location_assignment PIN_AB18 -to SI_CLK6
+set_location_assignment PIN_P22 -to SI_CLK0
+set_location_assignment PIN_P23 -to SI_CLK1
+set_location_assignment PIN_AC15 -to SI_CLK7
+set_location_assignment PIN_G7 -to ADF_MUXOUT
+set_instance_assignment -name IO_STANDARD "1.8 V" -to SI_CLK6
+set_instance_assignment -name IO_STANDARD "1.8 V" -to SI_CLK7
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to SI_CLK1
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to SI_CLK0
+set_instance_assignment -name IO_STANDARD "1.5 V" -to ADF_MUXOUT
+set_location_assignment PIN_AJ3 -to FX3_FPGA_GPIO5
+set_instance_assignment -name IO_STANDARD "1.5 V" -to FX3_FPGA_GPIO5
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
+set_global_assignment -name SLD_FILE db/debug_auto_stripped.stp
