@@ -42,6 +42,9 @@ entity lmlicfg_wrapp is
       lmli_txpct_loss_clr  : out std_logic;
       lmli_rx_en           : out std_logic;
       lmli_tx_en           : out std_logic;
+      lmli_rx_ptrn_en		: out std_logic;
+		lmli_tx_ptrn_en		: out std_logic;
+		lmli_tx_cnt_en		   : out std_logic;
       wfm_play             : out std_logic;
       wfm_load             : out std_logic;
       wfm_ch_en            : out std_logic_vector(1 downto 0);
@@ -64,6 +67,9 @@ signal fpgacfg_inst0_smpl_nr_clr    : std_logic_vector(2 downto 0);
 signal fpgacfg_inst0_txpct_loss_clr : std_logic_vector(2 downto 0);
 signal fpgacfg_inst0_rx_en          : std_logic_vector(2 downto 0);
 signal fpgacfg_inst0_tx_en          : std_logic_vector(2 downto 0);
+signal fpgacfg_inst0_rx_ptrn_en     : std_logic;  
+signal fpgacfg_inst0_tx_ptrn_en     : std_logic;  
+signal fpgacfg_inst0_tx_cnt_en      : std_logic;  
 signal fpgacfg_inst0_wfm_play       : std_logic_vector(2 downto 0);
 signal fpgacfg_inst0_wfm_load       : std_logic_vector(2 downto 0);
 signal fpgacfg_inst0_wfm0_ch_en     : std_logic_vector(15 downto 0);
@@ -114,6 +120,9 @@ fpgacfg_inst0 :  entity work.fpgacfg
       txpct_loss_clr    => fpgacfg_inst0_txpct_loss_clr,
       rx_en             => fpgacfg_inst0_rx_en,
       tx_en             => fpgacfg_inst0_tx_en,
+      rx_ptrn_en		   => fpgacfg_inst0_rx_ptrn_en,
+		tx_ptrn_en		   => fpgacfg_inst0_tx_ptrn_en,
+		tx_cnt_en		   => fpgacfg_inst0_tx_cnt_en,
       wfm_play          => fpgacfg_inst0_wfm_play,
       wfm_load          => fpgacfg_inst0_wfm_load,
       wfm0_ch_en        => fpgacfg_inst0_wfm0_ch_en,
@@ -160,6 +169,9 @@ fpgacfg_inst0 :  entity work.fpgacfg
    lmli_txpct_loss_clr  <= fpgacfg_inst0_txpct_loss_clr(0);
    lmli_rx_en           <= fpgacfg_inst0_rx_en(0);
    lmli_tx_en           <= fpgacfg_inst0_tx_en(0);
+   lmli_rx_ptrn_en		<= fpgacfg_inst0_rx_ptrn_en;
+   lmli_tx_ptrn_en		<= fpgacfg_inst0_tx_ptrn_en;
+   lmli_tx_cnt_en		   <= fpgacfg_inst0_tx_cnt_en;
    wfm_play             <= fpgacfg_inst0_wfm_play(0);
    wfm_load             <= fpgacfg_inst0_wfm_load(0);
    wfm_ch_en            <= fpgacfg_inst0_wfm0_ch_en(1 downto 0);

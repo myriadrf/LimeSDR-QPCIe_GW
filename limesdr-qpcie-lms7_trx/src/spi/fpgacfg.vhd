@@ -55,6 +55,9 @@ entity fpgacfg is
 		txpct_loss_clr	: out std_logic_vector(2 downto 0);
 		rx_en				: out std_logic_vector(2 downto 0);
 		tx_en				: out std_logic_vector(2 downto 0);
+      rx_ptrn_en		: out std_logic;
+		tx_ptrn_en		: out std_logic;
+		tx_cnt_en		: out std_logic;
 		wfm_play			: out std_logic_vector(2 downto 0);
 		wfm_load			: out std_logic_vector(2 downto 0);
 		wfm0_ch_en		: out std_logic_vector(15 downto 0);
@@ -280,6 +283,9 @@ begin
 		txpct_loss_clr	<= mem(9) (5) & mem(9) (3) & mem(9) (1);
 		rx_en				<= mem(10) (4) & mem(10) (2) & mem(10) (0);
 		tx_en				<= mem(10) (5) & mem(10) (3) & mem(10) (1);
+      rx_ptrn_en		<= mem(10) (8);
+		tx_ptrn_en		<= mem(10) (9);
+		tx_cnt_en		<= mem(10) (10);
 		
 		wfm1_ch_en		<= mem(11) (15 downto 0);
 		wfm0_ch_en		<= mem(12) (15 downto 0);
