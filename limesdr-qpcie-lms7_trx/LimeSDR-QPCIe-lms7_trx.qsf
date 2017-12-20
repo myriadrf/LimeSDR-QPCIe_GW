@@ -1758,7 +1758,6 @@ set_global_assignment -name QIP_FILE ip/lpm_mux/lpm_mux13.qip
 set_global_assignment -name VHDL_FILE src/spi/memcfg.vhd
 set_global_assignment -name VHDL_FILE src/general/signal_delay.vhd
 set_global_assignment -name BDF_FILE lms7_trx_top.bdf
-set_global_assignment -name SIGNALTAP_FILE signal_tap/debug.stp
 set_location_assignment PIN_AB18 -to SI_CLK6
 set_location_assignment PIN_P22 -to SI_CLK0
 set_location_assignment PIN_P23 -to SI_CLK1
