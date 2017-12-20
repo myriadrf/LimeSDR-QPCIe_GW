@@ -43,7 +43,7 @@
 #define LMS2_SS			8
 #define LMS2_RESET		9
 
-unsigned char dac_val = 134;	//TCXO DAC value
+unsigned short int dac_val = 134;	//TCXO DAC value
 signed short int converted_val = 300;	//Temperature
 
 
@@ -246,24 +246,26 @@ void init_ADC()
  *	@param oe output enable control: 0 - output disabled, 1 - output enabled
  *	@param data pointer to DAC value (1 byte)
  */
-void Control_TCXO_DAC (unsigned char oe, unsigned char *data) //controls DAC (AD5601)
+void Control_TCXO_DAC (unsigned char oe, unsigned short int *data) //controls DAC (AD5601)
 {
 	volatile int spirez;
-	unsigned char DAC_data[2];
+	unsigned char DAC_data[3];
 
 	if (oe == 0) //set DAC out to three-state
 	{
-		DAC_data[0] = 0xC0; //POWER-DOWN MODE = THREE-STATE (MSB bits = 11) + MSB data
-		DAC_data[1] = 0x00; //LSB data
+		DAC_data[0] = 0x03; //POWER-DOWN MODE = THREE-STATE (PD[1:0]([17:16]) = 11)
+		DAC_data[1] = 0x00;
+		DAC_data[2] = 0x00; //LSB data
 
-		spirez = alt_avalon_spi_command(DAC_SPI1_BASE, SPI_NR_TCXO_DAC, 2, DAC_data, 0, NULL, 0);
+		spirez = alt_avalon_spi_command(DAC_SPI1_BASE, SPI_NR_TCXO_DAC, 3, DAC_data, 0, NULL, 0);
 	}
 	else //enable DAC output, set new val
 	{
-		DAC_data[0] = (*data) >>2; //POWER-DOWN MODE = NORMAL OPERATION (MSB bits =00) + MSB data
-		DAC_data[1] = (*data) <<6; //LSB data
+		DAC_data[0] = 0; //POWER-DOWN MODE = NORMAL OPERATION PD[1:0]([17:16]) = 00)
+		DAC_data[1] = ((*data) >>8) & 0xFF;
+		DAC_data[2] = ((*data) >>0) & 0xFF;
 
-		spirez = alt_avalon_spi_command(DAC_SPI1_BASE, SPI_NR_TCXO_DAC, 2, DAC_data, 0, NULL, 0);
+		spirez = alt_avalon_spi_command(DAC_SPI1_BASE, SPI_NR_TCXO_DAC, 3, DAC_data, 0, NULL, 0);
 	}
 }
 
@@ -679,7 +681,7 @@ int main(void)
 
 	//write default TCXO DAC value
 	Control_TCXO_ADF (0, NULL); //set ADF4002 CP to three-state
-	dac_val = 125; //default DAC value
+	dac_val = 30714; //default DAC value
 	Control_TCXO_DAC (1, &dac_val); //enable DAC output, set new val
 
 	//default dig pot wiper values
@@ -971,8 +973,11 @@ int main(void)
 								LMS_Ctrl_Packet_Tx->Data_field[0 + (block * 4)] = LMS_Ctrl_Packet_Rx->Data_field[block]; //ch
 								LMS_Ctrl_Packet_Tx->Data_field[1 + (block * 4)] = 0x00; //RAW //unit, power
 
-								LMS_Ctrl_Packet_Tx->Data_field[2 + (block * 4)] = 0; //signed val, MSB byte
-								LMS_Ctrl_Packet_Tx->Data_field[3 + (block * 4)] = dac_val; //signed val, LSB byte
+								//LMS_Ctrl_Packet_Tx->Data_field[2 + (block * 4)] = 0; //signed val, MSB byte
+								//LMS_Ctrl_Packet_Tx->Data_field[3 + (block * 4)] = dac_val; //signed val, LSB byte
+								LMS_Ctrl_Packet_Tx->Data_field[2 + (block * 4)] = (dac_val >> 8) & 0xFF; //unsigned val, MSB byte
+								LMS_Ctrl_Packet_Tx->Data_field[3 + (block * 4)] = dac_val & 0xFF; //unsigned val, LSB byte
+
 							break;
 
 							case 1: //temperature
@@ -1033,15 +1038,12 @@ int main(void)
 							case 0: //TCXO DAC
 								if (LMS_Ctrl_Packet_Rx->Data_field[1 + (block * 4)] == 0) //RAW units?
 								{
-									if(LMS_Ctrl_Packet_Rx->Data_field[2 + (block * 4)] == 0) //MSB byte empty?
-									{
-										Control_TCXO_ADF(0, NULL); //set ADF4002 CP to three-state
+									Control_TCXO_ADF(0, NULL); //set ADF4002 CP to three-state
 
-										//write data to DAC
-										dac_val = LMS_Ctrl_Packet_Rx->Data_field[3 + (block * 4)];
-										Control_TCXO_DAC(1, &dac_val); //enable DAC output, set new val
-									}
-									else cmd_errors++;
+									//write data to DAC
+									//dac_val = LMS_Ctrl_Packet_Rx->Data_field[3 + (block * 4)];
+									dac_val = (LMS_Ctrl_Packet_Rx->Data_field[2 + (block * 4)] << 8 ) + LMS_Ctrl_Packet_Rx->Data_field[3 + (block * 4)];
+									Control_TCXO_DAC(1, &dac_val); //enable DAC output, set new val
 								}
 								else cmd_errors++;
 
