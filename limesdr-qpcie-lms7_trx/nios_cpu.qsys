@@ -389,7 +389,7 @@
  <parameter name="hideFromIPCatalog" value="false" />
  <parameter name="lockedInterfaceDefinition" value="" />
  <parameter name="maxAdditionalLatency" value="1" />
- <parameter name="projectName">LimeSDR-QPCIe-lms7_trx_pcie.qpf</parameter>
+ <parameter name="projectName">LimeSDR-QPCIe-lms7_trx.qpf</parameter>
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="0" />
  <parameter name="testBenchDutName" value="" />
@@ -557,7 +557,7 @@
   <parameter name="resetValue" value="0" />
   <parameter name="simDoTestBenchWiring" value="false" />
   <parameter name="simDrivenValue" value="0" />
-  <parameter name="width" value="3" />
+  <parameter name="width" value="4" />
  </module>
  <module name="PLLCFG_SPI" kind="altera_avalon_spi" version="16.1" enabled="1">
   <parameter name="avalonSpec" value="2.0" />

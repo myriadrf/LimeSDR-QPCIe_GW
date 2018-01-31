@@ -34,13 +34,17 @@
  ENTITY  tx_pll IS 
 	 PORT 
 	 ( 
+		 cntsel	:	IN  STD_LOGIC_VECTOR (4 DOWNTO 0);
 		 locked	:	OUT  STD_LOGIC;
 		 outclk_0	:	OUT  STD_LOGIC;
 		 outclk_1	:	OUT  STD_LOGIC;
+		 phase_done	:	OUT  STD_LOGIC;
+		 phase_en	:	IN  STD_LOGIC;
 		 reconfig_from_pll	:	OUT  STD_LOGIC_VECTOR (63 DOWNTO 0);
 		 reconfig_to_pll	:	IN  STD_LOGIC_VECTOR (63 DOWNTO 0);
 		 refclk	:	IN  STD_LOGIC;
-		 rst	:	IN  STD_LOGIC
+		 rst	:	IN  STD_LOGIC;
+		 updn	:	IN  STD_LOGIC
 	 ); 
  END tx_pll;
 
@@ -48,20 +52,24 @@
 
 	 ATTRIBUTE synthesis_clearbox : natural;
 	 ATTRIBUTE synthesis_clearbox OF RTL : ARCHITECTURE IS 1;
+	 SIGNAL  wire_tx_pll_altera_pll_altera_pll_i_659_cntsel	:	STD_LOGIC_VECTOR (4 DOWNTO 0);
 	 SIGNAL  wire_gnd	:	STD_LOGIC;
-	 SIGNAL  wire_tx_pll_altera_pll_altera_pll_i_647_locked	:	STD_LOGIC;
-	 SIGNAL  wire_tx_pll_altera_pll_altera_pll_i_647_outclk	:	STD_LOGIC_VECTOR (1 DOWNTO 0);
-	 SIGNAL  wire_tx_pll_altera_pll_altera_pll_i_647_reconfig_from_pll	:	STD_LOGIC_VECTOR (63 DOWNTO 0);
-	 SIGNAL  wire_tx_pll_altera_pll_altera_pll_i_647_reconfig_to_pll	:	STD_LOGIC_VECTOR (63 DOWNTO 0);
+	 SIGNAL  wire_tx_pll_altera_pll_altera_pll_i_659_locked	:	STD_LOGIC;
+	 SIGNAL  wire_tx_pll_altera_pll_altera_pll_i_659_outclk	:	STD_LOGIC_VECTOR (1 DOWNTO 0);
+	 SIGNAL  wire_tx_pll_altera_pll_altera_pll_i_659_phase_done	:	STD_LOGIC;
+	 SIGNAL  wire_tx_pll_altera_pll_altera_pll_i_659_reconfig_from_pll	:	STD_LOGIC_VECTOR (63 DOWNTO 0);
+	 SIGNAL  wire_tx_pll_altera_pll_altera_pll_i_659_reconfig_to_pll	:	STD_LOGIC_VECTOR (63 DOWNTO 0);
  BEGIN
 
 	wire_gnd <= '0';
-	locked <= wire_tx_pll_altera_pll_altera_pll_i_647_locked;
-	outclk_0 <= wire_tx_pll_altera_pll_altera_pll_i_647_outclk(0);
-	outclk_1 <= wire_tx_pll_altera_pll_altera_pll_i_647_outclk(1);
-	reconfig_from_pll <= ( wire_tx_pll_altera_pll_altera_pll_i_647_reconfig_from_pll(63 DOWNTO 0));
-	wire_tx_pll_altera_pll_altera_pll_i_647_reconfig_to_pll <= ( reconfig_to_pll(63 DOWNTO 0));
-	tx_pll_altera_pll_altera_pll_i_647 :  altera_pll
+	locked <= wire_tx_pll_altera_pll_altera_pll_i_659_locked;
+	outclk_0 <= wire_tx_pll_altera_pll_altera_pll_i_659_outclk(0);
+	outclk_1 <= wire_tx_pll_altera_pll_altera_pll_i_659_outclk(1);
+	phase_done <= wire_tx_pll_altera_pll_altera_pll_i_659_phase_done;
+	reconfig_from_pll <= ( wire_tx_pll_altera_pll_altera_pll_i_659_reconfig_from_pll(63 DOWNTO 0));
+	wire_tx_pll_altera_pll_altera_pll_i_659_cntsel <= ( cntsel(4 DOWNTO 0));
+	wire_tx_pll_altera_pll_altera_pll_i_659_reconfig_to_pll <= ( reconfig_to_pll(63 DOWNTO 0));
+	tx_pll_altera_pll_altera_pll_i_659 :  altera_pll
 	  GENERIC MAP (
 		c_cnt_bypass_en0 => "false",
 		c_cnt_bypass_en1 => "false",
@@ -294,7 +302,7 @@
 		pll_manu_clk_sw_en => "false",
 		pll_output_clk_frequency => "320.0 MHz",
 		pll_slf_rst => "false",
-		pll_subtype => "Reconfigurable",
+		pll_subtype => "ReconfDPS",
 		pll_type => "Cyclone V",
 		pll_vco_div => 2,
 		pll_vcoph_div => 1,
@@ -303,13 +311,17 @@
 		sim_additional_refclk_cycles_to_lock => 0
 	  )
 	  PORT MAP ( 
+		cntsel => wire_tx_pll_altera_pll_altera_pll_i_659_cntsel,
 		fbclk => wire_gnd,
-		locked => wire_tx_pll_altera_pll_altera_pll_i_647_locked,
-		outclk => wire_tx_pll_altera_pll_altera_pll_i_647_outclk,
-		reconfig_from_pll => wire_tx_pll_altera_pll_altera_pll_i_647_reconfig_from_pll,
-		reconfig_to_pll => wire_tx_pll_altera_pll_altera_pll_i_647_reconfig_to_pll,
+		locked => wire_tx_pll_altera_pll_altera_pll_i_659_locked,
+		outclk => wire_tx_pll_altera_pll_altera_pll_i_659_outclk,
+		phase_done => wire_tx_pll_altera_pll_altera_pll_i_659_phase_done,
+		phase_en => phase_en,
+		reconfig_from_pll => wire_tx_pll_altera_pll_altera_pll_i_659_reconfig_from_pll,
+		reconfig_to_pll => wire_tx_pll_altera_pll_altera_pll_i_659_reconfig_to_pll,
 		refclk => refclk,
-		rst => rst
+		rst => rst,
+		updn => updn
 	  );
 
  END RTL; --tx_pll

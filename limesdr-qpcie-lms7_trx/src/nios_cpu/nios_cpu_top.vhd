@@ -26,7 +26,7 @@ entity nios_cpu_top is
 			pllcfg_SS_n      		: out std_logic;
 			gpi0                	: in  std_logic_vector(7 downto 0);
 			gpio0		            : out std_logic_vector(7 downto 0);
-			pll_cmd					: in  std_logic_vector(2 downto 0);
+			pll_cmd					: in  std_logic_vector(3 downto 0);
 			pll_stat					: out  std_logic_vector(9 downto 0);
 			pll_recfg_from_pll0 	: in  std_logic_vector(63 downto 0) := (others => '0');
 			pll_recfg_to_pll0   	: out std_logic_vector(63 downto 0);
@@ -97,7 +97,7 @@ architecture arch of nios_cpu_top is
 			pll_recfg_to_pll_4_reconfig_to_pll     : out   std_logic_vector(63 downto 0);                    -- reconfig_to_pll
 			pll_recfg_to_pll_5_reconfig_to_pll     : out   std_logic_vector(63 downto 0);                    -- reconfig_to_pll
 			pll_rst_export                         : out   std_logic_vector(31 downto 0);                    -- export
-			pllcfg_cmd_export                      : in    std_logic_vector(2 downto 0)  := (others => 'X'); -- export
+			pllcfg_cmd_export                      : in    std_logic_vector(3 downto 0)  := (others => 'X'); -- export
 			pllcfg_spi_MISO                        : in    std_logic                     := 'X';             -- MISO
 			pllcfg_spi_MOSI                        : out   std_logic;                                        -- MOSI
 			pllcfg_spi_SCLK                        : out   std_logic;                                        -- SCLK

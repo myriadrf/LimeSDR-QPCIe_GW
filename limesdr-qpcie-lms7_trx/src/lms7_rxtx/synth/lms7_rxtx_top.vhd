@@ -29,7 +29,9 @@ entity lms7_rxtx_top is
       
       
    );
-   port (      
+   port (
+      free_running_clk        : in std_logic;
+      logic_reset_n           : in std_logic;
       --LimeLight interface settings
       lml_smpl_width          : in std_logic_vector(1 downto 0); --"10"-12bit, "01"-14bit, "00"-16bit;
       lml_mode                : in std_logic; -- JESD207: 1; TRXIQ: 0
@@ -42,11 +44,26 @@ entity lms7_rxtx_top is
       --RX interface (RF2BB, -> FPGA receive)
       rx_pll_in_clk           : in std_logic; -- PLL clk in
       rx_pll_areset           : in std_logic;
+      rx_pll_logic_reset_n    : in std_logic;
       rx_pll_c0               : out std_logic; --FCLK, connect directly to pin 
       rx_pll_c1               : out std_logic;
       rx_pll_locked           : out std_logic;
       rx_pll_rcnfg_in         : in std_logic_vector(63 downto 0);
       rx_pll_rcnfg_out        : out std_logic_vector(63 downto 0);
+      --Dynamic phase shift ports
+      rx_pll_dynps_mode        : in std_logic; -- 0 - manual, 1 - auto
+      rx_pll_dynps_areset_n    : in std_logic;
+      rx_pll_dynps_en          : in std_logic;
+      rx_pll_dynps_tst         : in std_logic;
+      rx_pll_dynps_dir         : in std_logic;
+      rx_pll_dynps_cnt_sel     : in std_logic_vector(4 downto 0);
+      -- max phase steps in auto mode, phase steps to shift in manual mode 
+      rx_pll_dynps_phase       : in std_logic_vector(9 downto 0);
+      rx_pll_dynps_step_size   : in std_logic_vector(9 downto 0);
+      rx_pll_dynps_busy        : out std_logic;
+      rx_pll_dynps_done        : out std_logic;
+      rx_pll_dynps_status      : out std_logic;
+      
          
       rx_clk_en               : in std_logic_vector(1 downto 0); --clock output enable
       rx_drct_clk_en          : in std_logic_vector(1 downto 0); --1- Direct clk, 0 - PLL clocks 
@@ -79,12 +96,26 @@ entity lms7_rxtx_top is
       
       tx_pll_in_clk           : in std_logic; -- PLL clk in
       tx_pll_areset           : in std_logic;
+      tx_pll_logic_reset_n    : in std_logic;
       tx_pll_c0               : out std_logic; --FCLK, connect directly to pin 
       tx_pll_c1               : out std_logic;
       tx_pll_locked           : out std_logic;
       tx_pll_rcnfg_in         : in std_logic_vector(63 downto 0);
       tx_pll_rcnfg_out        : out std_logic_vector(63 downto 0);
-         
+      --Dynamic phase shift ports
+      tx_pll_dynps_mode       : in std_logic; -- 0 - manual, 1 - auto
+      tx_pll_dynps_areset_n   : in std_logic;
+      tx_pll_dynps_en         : in std_logic;
+      tx_pll_dynps_tst        : in std_logic;
+      tx_pll_dynps_dir        : in std_logic;
+      tx_pll_dynps_cnt_sel    : in std_logic_vector(4 downto 0);
+      -- max phase steps in auto mode, phase steps to shift in manual mode 
+      tx_pll_dynps_phase      : in std_logic_vector(9 downto 0);
+      tx_pll_dynps_step_size  : in std_logic_vector(9 downto 0);
+      tx_pll_dynps_busy       : out std_logic;
+      tx_pll_dynps_done       : out std_logic;
+      tx_pll_dynps_status     : out std_logic;  
+      
       tx_clk_en               : in std_logic_vector(1 downto 0); --clock output enable
       tx_drct_clk_en          : in std_logic_vector(1 downto 0); --1- Direct clk, 0 - PLL clocks
       
@@ -119,13 +150,17 @@ architecture arch of lms7_rxtx_top is
 signal inst0_c0            : std_logic;
 signal inst0_c1            : std_logic;
 signal inst0_pll_locked    : std_logic;
+signal inst0_smpl_cmp_en   : std_logic;
 
 --inst 1
 signal inst1_c0            : std_logic;
 signal inst1_c1            : std_logic;
 signal inst1_pll_locked    : std_logic;
+signal inst1_smpl_cmp_en   : std_logic;
 
-
+signal inst2_smpl_cmp_en   : std_logic;
+signal inst2_smpl_cmp_done : std_logic;
+signal inst2_smpl_cmp_error: std_logic;
 
   
 begin
@@ -138,12 +173,15 @@ tx_pll_top_cyc5_inst0 : entity work.tx_pll_top_cyc5
    generic map(
       intended_device_family  => dev_family,
       drct_c0_ndly            => 2,
-      drct_c1_ndly            => 3
+      drct_c1_ndly            => 3,
+      cntsel_width            => 5
    )
    port map(
-   --PLL input 
+   --PLL input
+   free_running_clk  => free_running_clk,
    pll_inclk         => tx_pll_in_clk,
    pll_areset        => tx_pll_areset,
+   pll_logic_reset_n => tx_pll_logic_reset_n,
    inv_c0            => '0',
    c0                => inst0_c0, --muxed clock output
    c1                => inst0_c1, --muxed clock output
@@ -153,7 +191,23 @@ tx_pll_top_cyc5_inst0 : entity work.tx_pll_top_cyc5
    drct_clk_en       => tx_drct_clk_en, --1- Direct clk, 0 - PLL clocks 
    --Reconfiguration ports
    rcnfg_to_pll      => tx_pll_rcnfg_in,
-   rcnfg_from_pll    => tx_pll_rcnfg_out
+   rcnfg_from_pll    => tx_pll_rcnfg_out,
+   dynps_mode        => tx_pll_dynps_mode,
+   dynps_areset_n    => tx_pll_dynps_areset_n,
+   dynps_en          => tx_pll_dynps_en,
+   dynps_tst         => tx_pll_dynps_tst,
+   dynps_dir         => tx_pll_dynps_dir,
+   dynps_cnt_sel     => tx_pll_dynps_cnt_sel,
+   -- max phase steps in auto mode, phase steps to shift in manual mode 
+   dynps_phase       => tx_pll_dynps_phase,
+   dynps_step_size   => tx_pll_dynps_step_size,
+   dynps_busy        => tx_pll_dynps_busy,
+   dynps_done        => tx_pll_dynps_done,
+   dynps_status      => tx_pll_dynps_status,
+   --signals from sample compare module (required for automatic phase searching)
+   smpl_cmp_en       => inst0_smpl_cmp_en,
+   smpl_cmp_done     => inst2_smpl_cmp_done,
+   smpl_cmp_error    => inst2_smpl_cmp_error
    
    );
    
@@ -165,12 +219,15 @@ rx_pll_top_cyc5_inst1 : entity work.rx_pll_top_cyc5
    generic map(
       intended_device_family  => dev_family,
       drct_c0_ndly            => 2,
-      drct_c1_ndly            => 3
+      drct_c1_ndly            => 3,
+      cntsel_width            => 5
    )
    port map(
+   free_running_clk  => free_running_clk,
    --PLL input 
    pll_inclk         => rx_pll_in_clk,
    pll_areset        => rx_pll_areset,
+   pll_logic_reset_n => rx_pll_logic_reset_n,
    inv_c0            => '0',
    c0                => inst1_c0, --muxed clock output
    c1                => inst1_c1, --muxed clock output
@@ -180,11 +237,27 @@ rx_pll_top_cyc5_inst1 : entity work.rx_pll_top_cyc5
    drct_clk_en       => rx_drct_clk_en, --1- Direct clk, 0 - PLL clocks 
    --Reconfiguration ports
    rcnfg_to_pll      => rx_pll_rcnfg_in,
-   rcnfg_from_pll    => rx_pll_rcnfg_out
-   
+   rcnfg_from_pll    => rx_pll_rcnfg_out,
+   dynps_mode        => rx_pll_dynps_mode,
+   dynps_areset_n    => rx_pll_dynps_areset_n,
+   dynps_en          => rx_pll_dynps_en,
+   dynps_tst         => rx_pll_dynps_tst,
+   dynps_dir         => rx_pll_dynps_dir,
+   dynps_cnt_sel     => rx_pll_dynps_cnt_sel,
+   -- max phase steps in auto mode, phase steps to shift in manual mode 
+   dynps_phase       => rx_pll_dynps_phase,
+   dynps_step_size   => rx_pll_dynps_step_size,
+   dynps_busy        => rx_pll_dynps_busy,
+   dynps_done        => rx_pll_dynps_done,
+   dynps_status      => rx_pll_dynps_status,
+   --signals from sample compare module (required for automatic phase searching)
+   smpl_cmp_en       => inst1_smpl_cmp_en,
+   smpl_cmp_done     => inst2_smpl_cmp_done,
+   smpl_cmp_error    => inst2_smpl_cmp_error
    );
    
-   
+ 
+inst2_smpl_cmp_en <= inst0_smpl_cmp_en OR inst1_smpl_cmp_en;
    
 limelight_top_inst2 : entity work.limelight_top
    generic map(

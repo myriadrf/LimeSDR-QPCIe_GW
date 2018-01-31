@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_cpu' in SOPC Builder design 'nios_cpu'
  * SOPC Builder design path: ../../nios_cpu.sopcinfo
  *
- * Generated: Wed Dec 20 13:42:47 EET 2017
+ * Generated: Wed Jan 31 14:52:09 EET 2018
  */
 
 /*
@@ -168,7 +168,7 @@
 #define PLLCFG_COMMAND_BIT_CLEARING_EDGE_REGISTER 0
 #define PLLCFG_COMMAND_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define PLLCFG_COMMAND_CAPTURE 0
-#define PLLCFG_COMMAND_DATA_WIDTH 3
+#define PLLCFG_COMMAND_DATA_WIDTH 4
 #define PLLCFG_COMMAND_DO_TEST_BENCH_WIRING 0
 #define PLLCFG_COMMAND_DRIVEN_SIM_VALUE 0
 #define PLLCFG_COMMAND_EDGE_TYPE "NONE"
@@ -590,7 +590,7 @@
 #define SYSID_QSYS_0_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define SYSID_QSYS_0_NAME "/dev/sysid_qsys_0"
 #define SYSID_QSYS_0_SPAN 8
-#define SYSID_QSYS_0_TIMESTAMP 1498028469
+#define SYSID_QSYS_0_TIMESTAMP 1517402641
 #define SYSID_QSYS_0_TYPE "altera_avalon_sysid_qsys"
 
 #endif /* __SYSTEM_H_ */

@@ -6,7 +6,7 @@
  */
 
 #include "io.h"
-#include "system.h"
+#include <system.h>
 #include "alt_types.h"
 #include <stdint.h>
 #include <string.h>
@@ -647,6 +647,7 @@ int main(void)
 	uint8_t phcfg_start_old, phcfg_start;
 	uint8_t pllcfg_start_old, pllcfg_start;
 	uint8_t pllrst_start_old, pllrst_start;
+	uint8_t phcfg_mode;
 	//tPLL_CFG pll_config;
 	uint8_t pllcfgrez;
 
@@ -763,7 +764,15 @@ int main(void)
 	    if((phcfg_start_old == 0) && (phcfg_start != 0))
 	    {
 	    	IOWR(PLLCFG_STATUS_BASE, 0x00, PLLCFG_BUSY);
-	    	pllcfgrez = UpdatePHCFG();
+	    	phcfg_mode = (IORD(PLLCFG_COMMAND_BASE, 0x00) & 0x08) >> 3;
+	    	if (phcfg_mode){
+
+	    	}
+	    	else{
+	    		pllcfgrez = UpdatePHCFG();
+
+	    	};
+
 	    	IOWR(PLLCFG_STATUS_BASE, 0x00, (pllcfgrez << 2) | PLLCFG_DONE);
 	    }
 
