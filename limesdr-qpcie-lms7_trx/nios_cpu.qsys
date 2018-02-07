@@ -21,7 +21,7 @@
    {
       datum baseAddress
       {
-         value = "71376";
+         value = "71440";
          type = "String";
       }
    }
@@ -45,7 +45,23 @@
    {
       datum baseAddress
       {
-         value = "71328";
+         value = "71392";
+         type = "String";
+      }
+   }
+   element PLLCFG_Err
+   {
+      datum _sortIndex
+      {
+         value = "23";
+         type = "int";
+      }
+   }
+   element PLLCFG_Err.s1
+   {
+      datum baseAddress
+      {
+         value = "71312";
          type = "String";
       }
    }
@@ -77,7 +93,23 @@
    {
       datum baseAddress
       {
-         value = "71312";
+         value = "71376";
+         type = "String";
+      }
+   }
+   element PLL_Lock
+   {
+      datum _sortIndex
+      {
+         value = "24";
+         type = "int";
+      }
+   }
+   element PLL_Lock.s1
+   {
+      datum baseAddress
+      {
+         value = "71296";
          type = "String";
       }
    }
@@ -93,7 +125,7 @@
    {
       datum baseAddress
       {
-         value = "71296";
+         value = "71360";
          type = "String";
       }
    }
@@ -154,7 +186,7 @@
    {
       datum baseAddress
       {
-         value = "71344";
+         value = "71408";
          type = "String";
       }
    }
@@ -170,7 +202,7 @@
    {
       datum baseAddress
       {
-         value = "71360";
+         value = "71424";
          type = "String";
       }
    }
@@ -207,7 +239,7 @@
    {
       datum baseAddress
       {
-         value = "71400";
+         value = "71464";
          type = "String";
       }
    }
@@ -354,6 +386,38 @@
          type = "String";
       }
    }
+   element smpl_cmp_en
+   {
+      datum _sortIndex
+      {
+         value = "22";
+         type = "int";
+      }
+   }
+   element smpl_cmp_en.s1
+   {
+      datum baseAddress
+      {
+         value = "71328";
+         type = "String";
+      }
+   }
+   element smpl_cmp_status
+   {
+      datum _sortIndex
+      {
+         value = "21";
+         type = "int";
+      }
+   }
+   element smpl_cmp_status.s1
+   {
+      datum baseAddress
+      {
+         value = "71344";
+         type = "String";
+      }
+   }
    element sysid_qsys_0
    {
       datum _sortIndex
@@ -371,7 +435,7 @@
    {
       datum baseAddress
       {
-         value = "71392";
+         value = "71456";
          type = "String";
       }
    }
@@ -389,7 +453,7 @@
  <parameter name="hideFromIPCatalog" value="false" />
  <parameter name="lockedInterfaceDefinition" value="" />
  <parameter name="maxAdditionalLatency" value="1" />
- <parameter name="projectName">LimeSDR-QPCIe-lms7_trx_pcie.qpf</parameter>
+ <parameter name="projectName">LimeSDR-QPCIe-lms7_trx.qpf</parameter>
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="0" />
  <parameter name="testBenchDutName" value="" />
@@ -446,6 +510,11 @@
  <interface
    name="gpio0"
    internal="gpio_0.external_connection"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="pll_lock_external_connection"
+   internal="PLL_Lock.external_connection"
    type="conduit"
    dir="end" />
  <interface
@@ -519,6 +588,11 @@
    type="conduit"
    dir="end" />
  <interface
+   name="pllcfg_err_external_connection"
+   internal="PLLCFG_Err.external_connection"
+   type="conduit"
+   dir="end" />
+ <interface
    name="pllcfg_spi"
    internal="PLLCFG_SPI.external"
    type="conduit"
@@ -538,6 +612,16 @@
    internal="i2c_opencores_0.export_sda"
    type="conduit"
    dir="end" />
+ <interface
+   name="smpl_cmp_en_external_connection"
+   internal="smpl_cmp_en.external_connection"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="smpl_cmp_status_external_connection"
+   internal="smpl_cmp_status.external_connection"
+   type="conduit"
+   dir="end" />
  <module name="Av_FIFO_Int_0" kind="Av_FIFO_Int" version="1.0" enabled="1">
   <parameter name="width" value="32" />
  </module>
@@ -549,7 +633,7 @@
   <parameter name="bitClearingEdgeCapReg" value="false" />
   <parameter name="bitModifyingOutReg" value="false" />
   <parameter name="captureEdge" value="false" />
-  <parameter name="clockRate" value="30720000" />
+  <parameter name="clockRate" value="100000000" />
   <parameter name="direction" value="Input" />
   <parameter name="edgeType" value="RISING" />
   <parameter name="generateIRQ" value="false" />
@@ -557,7 +641,21 @@
   <parameter name="resetValue" value="0" />
   <parameter name="simDoTestBenchWiring" value="false" />
   <parameter name="simDrivenValue" value="0" />
-  <parameter name="width" value="3" />
+  <parameter name="width" value="4" />
+ </module>
+ <module name="PLLCFG_Err" kind="altera_avalon_pio" version="16.1" enabled="1">
+  <parameter name="bitClearingEdgeCapReg" value="false" />
+  <parameter name="bitModifyingOutReg" value="false" />
+  <parameter name="captureEdge" value="false" />
+  <parameter name="clockRate" value="100000000" />
+  <parameter name="direction" value="Output" />
+  <parameter name="edgeType" value="RISING" />
+  <parameter name="generateIRQ" value="false" />
+  <parameter name="irqType" value="LEVEL" />
+  <parameter name="resetValue" value="0" />
+  <parameter name="simDoTestBenchWiring" value="false" />
+  <parameter name="simDrivenValue" value="0" />
+  <parameter name="width" value="8" />
  </module>
  <module name="PLLCFG_SPI" kind="altera_avalon_spi" version="16.1" enabled="1">
   <parameter name="avalonSpec" value="2.0" />
@@ -565,7 +663,7 @@
   <parameter name="clockPolarity" value="0" />
   <parameter name="dataWidth" value="8" />
   <parameter name="disableAvalonFlowControl" value="false" />
-  <parameter name="inputClockRate" value="30720000" />
+  <parameter name="inputClockRate" value="100000000" />
   <parameter name="insertDelayBetweenSlaveSelectAndSClk" value="false" />
   <parameter name="insertSync" value="false" />
   <parameter name="lsbOrderedFirst" value="false" />
@@ -583,7 +681,7 @@
   <parameter name="bitClearingEdgeCapReg" value="false" />
   <parameter name="bitModifyingOutReg" value="false" />
   <parameter name="captureEdge" value="false" />
-  <parameter name="clockRate" value="30720000" />
+  <parameter name="clockRate" value="100000000" />
   <parameter name="direction" value="Output" />
   <parameter name="edgeType" value="RISING" />
   <parameter name="generateIRQ" value="false" />
@@ -591,13 +689,27 @@
   <parameter name="resetValue" value="1" />
   <parameter name="simDoTestBenchWiring" value="false" />
   <parameter name="simDrivenValue" value="0" />
-  <parameter name="width" value="10" />
+  <parameter name="width" value="8" />
+ </module>
+ <module name="PLL_Lock" kind="altera_avalon_pio" version="16.1" enabled="1">
+  <parameter name="bitClearingEdgeCapReg" value="false" />
+  <parameter name="bitModifyingOutReg" value="false" />
+  <parameter name="captureEdge" value="false" />
+  <parameter name="clockRate" value="100000000" />
+  <parameter name="direction" value="Input" />
+  <parameter name="edgeType" value="RISING" />
+  <parameter name="generateIRQ" value="false" />
+  <parameter name="irqType" value="LEVEL" />
+  <parameter name="resetValue" value="0" />
+  <parameter name="simDoTestBenchWiring" value="false" />
+  <parameter name="simDrivenValue" value="0" />
+  <parameter name="width" value="8" />
  </module>
  <module name="PLL_RST" kind="altera_avalon_pio" version="16.1" enabled="1">
   <parameter name="bitClearingEdgeCapReg" value="false" />
   <parameter name="bitModifyingOutReg" value="false" />
   <parameter name="captureEdge" value="false" />
-  <parameter name="clockRate" value="30720000" />
+  <parameter name="clockRate" value="100000000" />
   <parameter name="direction" value="Output" />
   <parameter name="edgeType" value="RISING" />
   <parameter name="generateIRQ" value="false" />
@@ -608,7 +720,7 @@
   <parameter name="width" value="32" />
  </module>
  <module name="clk_0" kind="clock_source" version="16.1" enabled="1">
-  <parameter name="clockFrequency" value="30720000" />
+  <parameter name="clockFrequency" value="100000000" />
   <parameter name="clockFrequencyKnown" value="true" />
   <parameter name="inputClockFrequency" value="0" />
   <parameter name="resetSynchronousEdges" value="NONE" />
@@ -619,7 +731,7 @@
   <parameter name="clockPolarity" value="0" />
   <parameter name="dataWidth" value="8" />
   <parameter name="disableAvalonFlowControl" value="false" />
-  <parameter name="inputClockRate" value="30720000" />
+  <parameter name="inputClockRate" value="100000000" />
   <parameter name="insertDelayBetweenSlaveSelectAndSClk" value="true" />
   <parameter name="insertSync" value="false" />
   <parameter name="lsbOrderedFirst" value="false" />
@@ -635,7 +747,7 @@
   <parameter name="clockPolarity" value="0" />
   <parameter name="dataWidth" value="8" />
   <parameter name="disableAvalonFlowControl" value="false" />
-  <parameter name="inputClockRate" value="30720000" />
+  <parameter name="inputClockRate" value="100000000" />
   <parameter name="insertDelayBetweenSlaveSelectAndSClk" value="false" />
   <parameter name="insertSync" value="false" />
   <parameter name="lsbOrderedFirst" value="false" />
@@ -649,7 +761,7 @@
   <parameter name="bitClearingEdgeCapReg" value="false" />
   <parameter name="bitModifyingOutReg" value="false" />
   <parameter name="captureEdge" value="false" />
-  <parameter name="clockRate" value="30720000" />
+  <parameter name="clockRate" value="100000000" />
   <parameter name="direction" value="Input" />
   <parameter name="edgeType" value="RISING" />
   <parameter name="generateIRQ" value="false" />
@@ -663,7 +775,7 @@
   <parameter name="bitClearingEdgeCapReg" value="false" />
   <parameter name="bitModifyingOutReg" value="false" />
   <parameter name="captureEdge" value="false" />
-  <parameter name="clockRate" value="30720000" />
+  <parameter name="clockRate" value="100000000" />
   <parameter name="direction" value="Output" />
   <parameter name="edgeType" value="RISING" />
   <parameter name="generateIRQ" value="false" />
@@ -685,7 +797,7 @@
    enabled="1">
   <parameter name="allowMultipleConnections" value="false" />
   <parameter name="avalonSpec" value="2.0" />
-  <parameter name="clkFreq" value="30720000" />
+  <parameter name="clkFreq" value="100000000" />
   <parameter name="hubInstanceID" value="0" />
   <parameter name="readBufferDepth" value="64" />
   <parameter name="readIRQThreshold" value="8" />
@@ -706,7 +818,7 @@
   <parameter name="breakOffset" value="32" />
   <parameter name="breakSlave" value="None" />
   <parameter name="cdx_enabled" value="false" />
-  <parameter name="clockFrequency" value="30720000" />
+  <parameter name="clockFrequency" value="100000000" />
   <parameter name="cpuArchRev" value="1" />
   <parameter name="cpuID" value="0" />
   <parameter name="cpuReset" value="false" />
@@ -717,7 +829,7 @@
   <parameter name="dataAddrWidth" value="17" />
   <parameter name="dataMasterHighPerformanceAddrWidth" value="1" />
   <parameter name="dataMasterHighPerformanceMapParam" value="" />
-  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='oc_mem.s1' start='0x8000' end='0x10000' type='altera_avalon_onchip_memory2.s1' /><slave name='nios2_cpu.debug_mem_slave' start='0x10800' end='0x11000' type='altera_nios2_gen2.debug_mem_slave' /><slave name='pll_reconfig_1.mgmt_avalon_slave' start='0x11000' end='0x11100' type='altera_pll_reconfig.mgmt_avalon_slave' /><slave name='pll_reconfig_2.mgmt_avalon_slave' start='0x11100' end='0x11200' type='altera_pll_reconfig.mgmt_avalon_slave' /><slave name='pll_reconfig_3.mgmt_avalon_slave' start='0x11200' end='0x11300' type='altera_pll_reconfig.mgmt_avalon_slave' /><slave name='pll_reconfig_4.mgmt_avalon_slave' start='0x11300' end='0x11400' type='altera_pll_reconfig.mgmt_avalon_slave' /><slave name='pll_reconfig_5.mgmt_avalon_slave' start='0x11400' end='0x11500' type='altera_pll_reconfig.mgmt_avalon_slave' /><slave name='pll_reconfig_0.mgmt_avalon_slave' start='0x11500' end='0x11600' type='altera_pll_reconfig.mgmt_avalon_slave' /><slave name='dac_spi1.spi_control_port' start='0x11600' end='0x11620' type='altera_avalon_spi.spi_control_port' /><slave name='PLLCFG_SPI.spi_control_port' start='0x11620' end='0x11640' type='altera_avalon_spi.spi_control_port' /><slave name='fpga_spi0.spi_control_port' start='0x11640' end='0x11660' type='altera_avalon_spi.spi_control_port' /><slave name='i2c_opencores_0.avalon_slave_0' start='0x11660' end='0x11680' type='i2c_opencores.avalon_slave_0' /><slave name='PLL_RST.s1' start='0x11680' end='0x11690' type='altera_avalon_pio.s1' /><slave name='PLLCFG_Status.s1' start='0x11690' end='0x116A0' type='altera_avalon_pio.s1' /><slave name='PLLCFG_Command.s1' start='0x116A0' end='0x116B0' type='altera_avalon_pio.s1' /><slave name='gpi_0.s1' start='0x116B0' end='0x116C0' type='altera_avalon_pio.s1' /><slave name='gpio_0.s1' start='0x116C0' end='0x116D0' type='altera_avalon_pio.s1' /><slave name='Av_FIFO_Int_0.avalon_slave_0' start='0x116D0' end='0x116E0' type='Av_FIFO_Int.avalon_slave_0' /><slave name='sysid_qsys_0.control_slave' start='0x116E0' end='0x116E8' type='altera_avalon_sysid_qsys.control_slave' /><slave name='jtag_uart_0.avalon_jtag_slave' start='0x116E8' end='0x116F0' type='altera_avalon_jtag_uart.avalon_jtag_slave' /></address-map>]]></parameter>
+  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='oc_mem.s1' start='0x8000' end='0x10000' type='altera_avalon_onchip_memory2.s1' /><slave name='nios2_cpu.debug_mem_slave' start='0x10800' end='0x11000' type='altera_nios2_gen2.debug_mem_slave' /><slave name='pll_reconfig_1.mgmt_avalon_slave' start='0x11000' end='0x11100' type='altera_pll_reconfig.mgmt_avalon_slave' /><slave name='pll_reconfig_2.mgmt_avalon_slave' start='0x11100' end='0x11200' type='altera_pll_reconfig.mgmt_avalon_slave' /><slave name='pll_reconfig_3.mgmt_avalon_slave' start='0x11200' end='0x11300' type='altera_pll_reconfig.mgmt_avalon_slave' /><slave name='pll_reconfig_4.mgmt_avalon_slave' start='0x11300' end='0x11400' type='altera_pll_reconfig.mgmt_avalon_slave' /><slave name='pll_reconfig_5.mgmt_avalon_slave' start='0x11400' end='0x11500' type='altera_pll_reconfig.mgmt_avalon_slave' /><slave name='pll_reconfig_0.mgmt_avalon_slave' start='0x11500' end='0x11600' type='altera_pll_reconfig.mgmt_avalon_slave' /><slave name='dac_spi1.spi_control_port' start='0x11600' end='0x11620' type='altera_avalon_spi.spi_control_port' /><slave name='PLLCFG_SPI.spi_control_port' start='0x11620' end='0x11640' type='altera_avalon_spi.spi_control_port' /><slave name='fpga_spi0.spi_control_port' start='0x11640' end='0x11660' type='altera_avalon_spi.spi_control_port' /><slave name='i2c_opencores_0.avalon_slave_0' start='0x11660' end='0x11680' type='i2c_opencores.avalon_slave_0' /><slave name='PLL_Lock.s1' start='0x11680' end='0x11690' type='altera_avalon_pio.s1' /><slave name='PLLCFG_Err.s1' start='0x11690' end='0x116A0' type='altera_avalon_pio.s1' /><slave name='smpl_cmp_en.s1' start='0x116A0' end='0x116B0' type='altera_avalon_pio.s1' /><slave name='smpl_cmp_status.s1' start='0x116B0' end='0x116C0' type='altera_avalon_pio.s1' /><slave name='PLL_RST.s1' start='0x116C0' end='0x116D0' type='altera_avalon_pio.s1' /><slave name='PLLCFG_Status.s1' start='0x116D0' end='0x116E0' type='altera_avalon_pio.s1' /><slave name='PLLCFG_Command.s1' start='0x116E0' end='0x116F0' type='altera_avalon_pio.s1' /><slave name='gpi_0.s1' start='0x116F0' end='0x11700' type='altera_avalon_pio.s1' /><slave name='gpio_0.s1' start='0x11700' end='0x11710' type='altera_avalon_pio.s1' /><slave name='Av_FIFO_Int_0.avalon_slave_0' start='0x11710' end='0x11720' type='Av_FIFO_Int.avalon_slave_0' /><slave name='sysid_qsys_0.control_slave' start='0x11720' end='0x11728' type='altera_avalon_sysid_qsys.control_slave' /><slave name='jtag_uart_0.avalon_jtag_slave' start='0x11728' end='0x11730' type='altera_avalon_jtag_uart.avalon_jtag_slave' /></address-map>]]></parameter>
   <parameter name="data_master_high_performance_paddr_base" value="0" />
   <parameter name="data_master_high_performance_paddr_size" value="0" />
   <parameter name="data_master_paddr_base" value="0" />
@@ -968,6 +1080,42 @@
   <parameter name="device_family" value="Cyclone V" />
  </module>
  <module
+   name="smpl_cmp_en"
+   kind="altera_avalon_pio"
+   version="16.1"
+   enabled="1">
+  <parameter name="bitClearingEdgeCapReg" value="false" />
+  <parameter name="bitModifyingOutReg" value="false" />
+  <parameter name="captureEdge" value="false" />
+  <parameter name="clockRate" value="100000000" />
+  <parameter name="direction" value="Output" />
+  <parameter name="edgeType" value="RISING" />
+  <parameter name="generateIRQ" value="false" />
+  <parameter name="irqType" value="LEVEL" />
+  <parameter name="resetValue" value="0" />
+  <parameter name="simDoTestBenchWiring" value="false" />
+  <parameter name="simDrivenValue" value="0" />
+  <parameter name="width" value="2" />
+ </module>
+ <module
+   name="smpl_cmp_status"
+   kind="altera_avalon_pio"
+   version="16.1"
+   enabled="1">
+  <parameter name="bitClearingEdgeCapReg" value="false" />
+  <parameter name="bitModifyingOutReg" value="false" />
+  <parameter name="captureEdge" value="false" />
+  <parameter name="clockRate" value="100000000" />
+  <parameter name="direction" value="Input" />
+  <parameter name="edgeType" value="RISING" />
+  <parameter name="generateIRQ" value="false" />
+  <parameter name="irqType" value="LEVEL" />
+  <parameter name="resetValue" value="0" />
+  <parameter name="simDoTestBenchWiring" value="false" />
+  <parameter name="simDrivenValue" value="0" />
+  <parameter name="width" value="2" />
+ </module>
+ <module
    name="sysid_qsys_0"
    kind="altera_avalon_sysid_qsys"
    version="16.1"
@@ -980,7 +1128,7 @@
    start="nios2_cpu.data_master"
    end="jtag_uart_0.avalon_jtag_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x000116e8" />
+  <parameter name="baseAddress" value="0x00011728" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -989,7 +1137,7 @@
    start="nios2_cpu.data_master"
    end="Av_FIFO_Int_0.avalon_slave_0">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x000116d0" />
+  <parameter name="baseAddress" value="0x00011710" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1007,7 +1155,7 @@
    start="nios2_cpu.data_master"
    end="sysid_qsys_0.control_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x000116e0" />
+  <parameter name="baseAddress" value="0x00011720" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1088,7 +1236,7 @@
    start="nios2_cpu.data_master"
    end="gpio_0.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x000116c0" />
+  <parameter name="baseAddress" value="0x00011700" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1097,7 +1245,7 @@
    start="nios2_cpu.data_master"
    end="gpi_0.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x000116b0" />
+  <parameter name="baseAddress" value="0x000116f0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1106,7 +1254,7 @@
    start="nios2_cpu.data_master"
    end="PLLCFG_Command.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x000116a0" />
+  <parameter name="baseAddress" value="0x000116e0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1115,7 +1263,7 @@
    start="nios2_cpu.data_master"
    end="PLLCFG_Status.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00011690" />
+  <parameter name="baseAddress" value="0x000116d0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1123,6 +1271,42 @@
    version="16.1"
    start="nios2_cpu.data_master"
    end="PLL_RST.s1">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x000116c0" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="16.1"
+   start="nios2_cpu.data_master"
+   end="smpl_cmp_status.s1">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x000116b0" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="16.1"
+   start="nios2_cpu.data_master"
+   end="smpl_cmp_en.s1">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x000116a0" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="16.1"
+   start="nios2_cpu.data_master"
+   end="PLLCFG_Err.s1">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x00011690" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="16.1"
+   start="nios2_cpu.data_master"
+   end="PLL_Lock.s1">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x00011680" />
   <parameter name="defaultConnection" value="false" />
@@ -1187,6 +1371,14 @@
  <connection kind="clock" version="16.1" start="clk_0.clk" end="PLLCFG_SPI.clk" />
  <connection kind="clock" version="16.1" start="clk_0.clk" end="PLL_RST.clk" />
  <connection kind="clock" version="16.1" start="clk_0.clk" end="dac_spi1.clk" />
+ <connection
+   kind="clock"
+   version="16.1"
+   start="clk_0.clk"
+   end="smpl_cmp_status.clk" />
+ <connection kind="clock" version="16.1" start="clk_0.clk" end="smpl_cmp_en.clk" />
+ <connection kind="clock" version="16.1" start="clk_0.clk" end="PLLCFG_Err.clk" />
+ <connection kind="clock" version="16.1" start="clk_0.clk" end="PLL_Lock.clk" />
  <connection kind="clock" version="16.1" start="clk_0.clk" end="oc_mem.clk1" />
  <connection
    kind="clock"
@@ -1268,6 +1460,26 @@
    version="16.1"
    start="clk_0.clk_reset"
    end="Av_FIFO_Int_0.reset" />
+ <connection
+   kind="reset"
+   version="16.1"
+   start="clk_0.clk_reset"
+   end="smpl_cmp_status.reset" />
+ <connection
+   kind="reset"
+   version="16.1"
+   start="clk_0.clk_reset"
+   end="smpl_cmp_en.reset" />
+ <connection
+   kind="reset"
+   version="16.1"
+   start="clk_0.clk_reset"
+   end="PLLCFG_Err.reset" />
+ <connection
+   kind="reset"
+   version="16.1"
+   start="clk_0.clk_reset"
+   end="PLL_Lock.reset" />
  <connection
    kind="reset"
    version="16.1"

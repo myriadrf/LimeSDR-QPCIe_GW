@@ -18,19 +18,19 @@
 // altera message_level Level1 
 // altera message_off 10034 10035 10036 10037 10230 10240 10030 
 
-module nios_cpu_PLLCFG_Status (
-                                // inputs:
-                                 address,
-                                 chipselect,
-                                 clk,
-                                 reset_n,
-                                 write_n,
-                                 writedata,
+module nios_cpu_PLLCFG_Err (
+                             // inputs:
+                              address,
+                              chipselect,
+                              clk,
+                              reset_n,
+                              write_n,
+                              writedata,
 
-                                // outputs:
-                                 out_port,
-                                 readdata
-                              )
+                             // outputs:
+                              out_port,
+                              readdata
+                           )
 ;
 
   output  [  7: 0] out_port;
@@ -54,7 +54,7 @@ wire    [ 31: 0] readdata;
   always @(posedge clk or negedge reset_n)
     begin
       if (reset_n == 0)
-          data_out <= 1;
+          data_out <= 0;
       else if (chipselect && ~write_n && (address == 0))
           data_out <= writedata[7 : 0];
     end
