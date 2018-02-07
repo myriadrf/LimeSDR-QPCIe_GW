@@ -73,7 +73,11 @@ entity lms7_rxtx_top is
       rx_pct_fifo_wrusedw     : in std_logic_vector(rx_pct_fifo_wrusedw_w-1 downto 0);
       rx_pct_fifo_wrreq       : out std_logic;
       rx_pct_fifo_wdata       : out std_logic_vector(63 downto 0);
-      
+      --sample compare
+      rx_smpl_cmp_start       : in std_logic;
+      rx_smpl_cmp_length      : in std_logic_vector(15 downto 0);
+      rx_smpl_cmp_done        : out std_logic;
+      rx_smpl_cmp_err         : out std_logic; 
       
       --TX interface (BB2RF, FPGA transmit)  
       
@@ -236,7 +240,11 @@ limelight_top_inst2 : entity work.limelight_top
       rx_pct_fifo_wrusedw     => rx_pct_fifo_wrusedw,
       rx_pct_fifo_wrreq       => rx_pct_fifo_wrreq,
       rx_pct_fifo_wdata       => rx_pct_fifo_wdata,
-           
+      rx_smpl_cmp_start       => rx_smpl_cmp_start,     
+      rx_smpl_cmp_length      => rx_smpl_cmp_length,
+      rx_smpl_cmp_done        => rx_smpl_cmp_done, 
+      rx_smpl_cmp_err         => rx_smpl_cmp_err,   
+      
       --TX interface (BB2RF, FPGA transmit)      
       tx_clk                  => inst0_c1,
       tx_pct_wclk             => tx_pct_wclk,

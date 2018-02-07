@@ -271,7 +271,9 @@ clkctrl_c5_inst4 : clkctrl_c5
 		outclk => c1_global
 	);
 
-c0             <= inst2_dataout(0);
+--c0             <= inst2_dataout(0);
+c0             <= inst1_outclk_0;
+
 c1             <= c1_global;
 pll_locked     <= inst1_locked;
 

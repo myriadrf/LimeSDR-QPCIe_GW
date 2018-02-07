@@ -45,8 +45,9 @@ entity pllcfg is
 
 		
 		-- Status Inputs
-		pllcfg_busy: in std_logic;
-		pllcfg_done: in std_logic;
+--		pllcfg_busy: in std_logic;
+--		pllcfg_done: in std_logic;
+      pllcfg_status : in std_logic_vector(7 downto 0);
 		pllcfg_err: in std_logic_vector(7 downto 0);
 		
 		
@@ -56,10 +57,11 @@ entity pllcfg is
 		-- PLL Configuratioin Related
 		phcfg_start: out std_logic; --
 		pllcfg_start: out std_logic; --
-		pllrst_start: out std_logic --
+		pllrst_start: out std_logic; --
 --		phcfg_updn: out std_logic; --
 --		cnt_ind: out std_logic_vector(4 downto 0); --
 --		pll_ind: out std_logic_vector(4 downto 0); --
+      phcfg_mode  : out std_logic;
 --		
 --		cnt_phase: out std_logic_vector(15 downto 0); --
 --		
@@ -107,7 +109,8 @@ entity pllcfg is
 --		c6_cnt: out std_logic_vector(15 downto 0); -- 
 --		c7_cnt: out std_logic_vector(15 downto 0); -- 
 --		c8_cnt: out std_logic_vector(15 downto 0); -- 
---		c9_cnt: out std_logic_vector(15 downto 0) -- 
+--		c9_cnt: out std_logic_vector(15 downto 0); --
+      auto_phcfg_smpls: out std_logic_vector(15 downto 0) 
 
 	);
 end pllcfg;
@@ -299,7 +302,7 @@ begin
 			mem(0)  	<= "0000000000000000";	--	16 free, RESERVED[15:0]
 			mem(1)		<= "0000000000000001";	--	14 free, PLLCFG_ERR[7:0], UNUSED[5:0], BUSY (Read Only), DONE (Read Only)
 			mem(2)		<= "0000000000000000";	--	0  free, PLL_LOCK[15:0] (Read Only)
-			mem(3)  	<= "0000000000000000";	--	2  free, UNUSED[1:0], PHCFG_UpDn, CNT_IND[4:0], PLL_IND[4:0], PLLRST_START, PHCFG_START, PLLCFG_START
+			mem(3)  	<= "0000000000000000";	--	1  free, UNUSED[0], phcfg_mode, PHCFG_UpDn, CNT_IND[4:0], PLL_IND[4:0], PLLRST_START, PHCFG_START, PLLCFG_START
 			mem(4)  	<= "0000000000000000";	--	0  free, CNT_PHASE[15:0]
 			mem(5)  	<= "0000000000000000";	--  1  free, UNUSED, PLLCFG_BS[3:0] (for Cyclone V), CHP_CURR[2:0], PLLCFG_VCODIV, PLLCFG_LF_RES[4:0] (for Cyclone IV), PLLCFG_LF_CAP[1:0] (for Cyclone IV)
 			mem(6)		<= "0000000000001010";	--	12 free, M_ODDDIV, M_BYP, N_ODDDIV, N_BYP
@@ -321,7 +324,8 @@ begin
 			mem(22)		<= "0000000000000000";	--  0  free, C8_HCNT[15:8], C8_LCNT[7:0]
 			mem(23)		<= "0000000000000000";	--  0  free, C9_HCNT[15:8], C9_LCNT[7:0]
 																				--	Rest of the addresses reserved for Cx counters
-			
+			mem(30)  <= "0000111111111111"; -- 0  free, auto_phcfg_smpls[15:0]
+         mem(31)  <= "0000000000000010"; -- 0  free, auto_phcfg_step
 		elsif sclkA'event and sclkA = '1' then
 				if mem_weA = '1' then
 					mem(to_integer(unsigned(inst_regA(4 downto 0)))) <= din_regA(14 downto 0) & sdinA;
@@ -332,10 +336,10 @@ begin
 					for_lop : for i in 2 to 15 loop
 						mem(1)(i) <= '0';  
 					end loop;
-					mem(1)(1 downto 0)	<= pllcfg_busy & pllcfg_done;
-					mem(2)  <= pll_lock_int;
+					mem(1)(7 downto 0)	<= pllcfg_status;
+					mem(2)               <= pll_lock_int;
 					
-					mem(2)(15 downto 8) <= pllcfg_err;
+					mem(2)(15 downto 8)  <= pllcfg_err;
 				end if;
 				
 		end if;
@@ -346,13 +350,14 @@ begin
 	-- ---------------------------------------------------------------------------------------------
 	
 
-	
+	phcfg_mode     <= mem(3)(14);
 --	phcfg_updn		<= mem(3)(13);
 --	cnt_ind				<= mem(3)(12 downto 8);
 --	pll_ind				<= mem(3)(7 downto 3);
 	pllrst_start	<= mem(3)(2);
 	phcfg_start		<= mem(3)(1);
 	pllcfg_start	<= mem(3)(0);
+
 	
 --	cnt_phase			<= mem(4);
 --	
@@ -401,6 +406,6 @@ begin
 --	c7_cnt 				<= mem(21);
 --	c8_cnt 				<= mem(22);
 --	c9_cnt				<= mem(23);
-
+   auto_phcfg_smpls  <= mem(30);
 
 end pllcfg_arch;
