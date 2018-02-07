@@ -10,6 +10,7 @@
 #include "alt_types.h"
 #include <stdint.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "pll_rcfg.h"
 
@@ -50,6 +51,7 @@ signed short int converted_val = 300;	//Temperature
 uint8_t test, block, cmd_errors, glEp0Buffer_Rx[64], glEp0Buffer_Tx[64];
 tLMS_Ctrl_Packet *LMS_Ctrl_Packet_Tx = (tLMS_Ctrl_Packet*)glEp0Buffer_Tx;
 tLMS_Ctrl_Packet *LMS_Ctrl_Packet_Rx = (tLMS_Ctrl_Packet*)glEp0Buffer_Rx;
+
 
 
 /**	This function checks if all blocks could fit in data field.
@@ -565,6 +567,134 @@ uint8_t UpdatePHCFG(void)
 	return pllcfgrez;
 }
 
+uint8_t smpl_cmp(uint8_t pll_ind){
+
+	uint8_t smpl_cmp_status;
+
+	//clean sample compare en bits
+	IOWR_8DIRECT(SMPL_CMP_EN_BASE, 0x00, 0x00);	//Set to 0
+	while((IORD_8DIRECT(SMPL_CMP_STATUS_BASE, 0x00) & 0x01) == 0x01);
+
+	//trigger sample compare enable
+	if (pll_ind < 2) {
+		IOWR_8DIRECT(SMPL_CMP_EN_BASE, 0x00, 0x01);	//Set to 1
+	}
+	else {
+		IOWR_8DIRECT(SMPL_CMP_EN_BASE, 0x00, 0x02);	//Set to 2
+	}
+
+	//wait for sample compare done
+	while(((IORD_8DIRECT(SMPL_CMP_STATUS_BASE, 0x00)) & 0x01) == 0x00);
+	smpl_cmp_status = (IORD_8DIRECT(SMPL_CMP_STATUS_BASE, 0x00));
+
+	return smpl_cmp_status;
+
+
+}
+
+
+uint8_t *AutoPHCFG(uint8_t status[2])
+{
+	uint32_t PLL_BASE;
+	uint32_t Val, Cx, Dir;
+	uint8_t pll_ind;
+	uint8_t wr_buf[2];
+	uint8_t rd_buf[2];
+	uint8_t pllcfgrez;
+	uint8_t smpl_cmp_status;
+	uint8_t min_found = 0;
+	uint8_t max_found = 0;
+	int phase_min = 0;
+	int phase_max = 0;
+	int phase_midle = 0;
+	int phase_reverse = 0;
+	int timeout = 0;
+	int spirez;
+
+
+
+	//Reset PLL to get default phase relationship
+	ResetPLL();
+
+	// Read
+	wr_buf[0] = 0x00;	// Command and Address
+	wr_buf[1] = 0x23;	// Command and Address
+	spirez = alt_avalon_spi_command(PLLCFG_SPI_BASE, 0, 2, wr_buf, 2, rd_buf, 0);
+
+	// Get PLL base address
+	PLL_BASE = GetPLLCFG_Base( PLL_IND(rd_buf[1]) );
+	pll_ind = PLL_IND(rd_buf[1]);
+
+	//Write in Mode Register "0" for waitrequest mode, "1" for polling mode
+	IOWR_32DIRECT(PLL_BASE, MODE, 0x01);
+
+	// Set Up/Down
+	Dir = PH_DIR(rd_buf[0]); //(rd_buf[1] >> 5) & 0x01;
+
+	// Set Cx
+	Cx = CX_IND(rd_buf[0]) - 2; //(rd_buf[1] & 0x1F);
+
+	// Read step size
+	wr_buf[0] = 0x00;	// Command and Address
+	wr_buf[1] = 0x3F;	// Command and Address
+	spirez = alt_avalon_spi_command(PLLCFG_SPI_BASE, 0, 2, wr_buf, 2, rd_buf, 0);
+	Val = CX_PHASE(rd_buf[0], rd_buf[1]); //(rd_buf[1] << 8) | rd_buf[0];
+
+	//pll_lock_status = IORD_8DIRECT(PLL_LOCK_BASE, 0x00);
+	//current_pll_lock_status = ( ((IORD_8DIRECT(PLL_LOCK_BASE, 0x00)) >> pll_ind) & 0x01);
+
+	//wait for pll lock
+	while((((IORD_8DIRECT(PLL_LOCK_BASE, 0x00)) >> pll_ind) & 0x01) == 0x00) {
+		timeout++;
+		if (timeout > 255) break;
+	}
+
+	// if pll is locked without timeout start phase search
+	if (timeout < 255) {
+		for (int i = 0; i < 1023; i++ ) {
+			// get sample compare status
+			smpl_cmp_status = smpl_cmp(pll_ind);
+
+			if (((smpl_cmp_status & 0x02) == 0x00) && (min_found == 0)) {
+				min_found = 1;
+				phase_min = i * Val;
+			}
+
+			if (((smpl_cmp_status & 0x02) == 0x02) && (min_found == 1)){
+				max_found = 1;
+				phase_max = i * Val;
+			}
+
+			if ((min_found == 1) && (max_found == 1)) {
+				phase_midle = phase_min + ((phase_max - Val - phase_min) /2);
+				phase_reverse = phase_max - phase_midle;
+				// Set Phase shift register to bring back phase to middle value
+				set_Phase(PLL_BASE, Cx, phase_reverse, Dir ^ 1);
+				// Apply PLL configuration
+				pllcfgrez = start_Reconfig(PLL_BASE);
+				smpl_cmp_status= smpl_cmp(pll_ind);
+				status[1] = smpl_cmp(pll_ind);
+
+				break;
+			}
+
+			// Set Phase shift register
+			set_Phase(PLL_BASE, Cx, Val, Dir);
+			// Apply PLL configuration
+			pllcfgrez = start_Reconfig(PLL_BASE);
+			status[1] = 0x03;
+
+
+
+		}
+	}
+
+	status[0] = pllcfgrez;
+	return status;
+
+}
+
+
 //
 void ResetPLL(void)
 {
@@ -647,8 +777,11 @@ int main(void)
 	uint8_t phcfg_start_old, phcfg_start;
 	uint8_t pllcfg_start_old, pllcfg_start;
 	uint8_t pllrst_start_old, pllrst_start;
+	uint8_t phcfg_mode	= 0;
 	//tPLL_CFG pll_config;
 	uint8_t pllcfgrez;
+	uint8_t autophcfg_status[2];
+	uint8_t temp;
 
 	uint8_t wr_buf[2];
 	uint8_t rd_buf[2];
@@ -763,8 +896,20 @@ int main(void)
 	    if((phcfg_start_old == 0) && (phcfg_start != 0))
 	    {
 	    	IOWR(PLLCFG_STATUS_BASE, 0x00, PLLCFG_BUSY);
-	    	pllcfgrez = UpdatePHCFG();
-	    	IOWR(PLLCFG_STATUS_BASE, 0x00, (pllcfgrez << 2) | PLLCFG_DONE);
+	    	phcfg_mode = (IORD(PLLCFG_COMMAND_BASE, 0x00) & 0x08) >> 3;
+	    	if (phcfg_mode == 0x01) {
+	    		AutoPHCFG(autophcfg_status); //autophcfg_status[2] = AUTO_PHCFG_ERR[1], AUTO_PHCFG_DONE[0]
+
+	    		// AUTO_PHCFG_ERR[3], AUTO_PHCFG_DONE[2], BUSY[1], DONE[0]
+	    		IOWR(PLLCFG_STATUS_BASE, 0x00, ((autophcfg_status[1] & 0x02) << 2) | PHCFG_DONE | PLLCFG_DONE);
+	    		IOWR(PLLCFG_ERR_BASE, 0x00, pllcfgrez);
+	    	}
+	    	else {
+	    		pllcfgrez = UpdatePHCFG();
+	    		IOWR(PLLCFG_STATUS_BASE, 0x00, PLLCFG_DONE);
+	    		IOWR(PLLCFG_ERR_BASE, 0x00, pllcfgrez << 2);
+	    	}
+
 	    }
 
 	    // Check if there is a request for PLL configuration update
