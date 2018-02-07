@@ -35,6 +35,7 @@
 // PLL configuration status defines
 #define PLLCFG_DONE 1
 #define PLLCFG_BUSY 2
+#define PHCFG_DONE	4
 
 // PLL configuration error codes
 #define PLLCFG_NOERR 0x00

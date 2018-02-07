@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>Dec 20, 2017 1:42:43 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1513770163664</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>Feb 7, 2018 10:26:12 AM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1517991972165</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>H:\working_dir\altera\LimeSDR-QPCIe\LimeSDR-QPCIe-lms7_trx_pcie\limesdr-qpcie-lms7_trx\software\nios4usb_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>..\..\nios_cpu.sopcinfo</SopcDesignFile>
@@ -965,50 +965,74 @@
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>PLL_RST</slaveDescriptor>
+                <slaveDescriptor>PLL_Lock</slaveDescriptor>
                 <addressRange>0x00011680 - 0x0001168F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>PLLCFG_Status</slaveDescriptor>
+                <slaveDescriptor>PLLCFG_Err</slaveDescriptor>
                 <addressRange>0x00011690 - 0x0001169F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>PLLCFG_Command</slaveDescriptor>
+                <slaveDescriptor>smpl_cmp_en</slaveDescriptor>
                 <addressRange>0x000116A0 - 0x000116AF</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>gpi_0</slaveDescriptor>
+                <slaveDescriptor>smpl_cmp_status</slaveDescriptor>
                 <addressRange>0x000116B0 - 0x000116BF</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>gpio_0</slaveDescriptor>
+                <slaveDescriptor>PLL_RST</slaveDescriptor>
                 <addressRange>0x000116C0 - 0x000116CF</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>Av_FIFO_Int_0</slaveDescriptor>
+                <slaveDescriptor>PLLCFG_Status</slaveDescriptor>
                 <addressRange>0x000116D0 - 0x000116DF</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
+                <slaveDescriptor>PLLCFG_Command</slaveDescriptor>
+                <addressRange>0x000116E0 - 0x000116EF</addressRange>
+                <addressSpan>16</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>gpi_0</slaveDescriptor>
+                <addressRange>0x000116F0 - 0x000116FF</addressRange>
+                <addressSpan>16</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>gpio_0</slaveDescriptor>
+                <addressRange>0x00011700 - 0x0001170F</addressRange>
+                <addressSpan>16</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>Av_FIFO_Int_0</slaveDescriptor>
+                <addressRange>0x00011710 - 0x0001171F</addressRange>
+                <addressSpan>16</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
                 <slaveDescriptor>sysid_qsys_0</slaveDescriptor>
-                <addressRange>0x000116E0 - 0x000116E7</addressRange>
+                <addressRange>0x00011720 - 0x00011727</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>jtag_uart_0</slaveDescriptor>
-                <addressRange>0x000116E8 - 0x000116EF</addressRange>
+                <addressRange>0x00011728 - 0x0001172F</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes>printable</attributes>
         </MemoryMap>
