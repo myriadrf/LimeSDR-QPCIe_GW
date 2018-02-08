@@ -15,6 +15,7 @@ use ieee.numeric_std.all;
 entity nios_cpu_top is
   port (
 			clk100					: in std_logic;
+			reset_n					: in std_logic;
 			nrst						: out std_logic; --NOT CONNECTED			
 			fpga_spi0_MISO				: in std_logic;
 			fpga_spi0_MOSI      	: out std_logic;
@@ -73,6 +74,19 @@ architecture arch of nios_cpu_top is
    signal smpl_cmp_en_int        : std_logic_vector(1 downto 0);
    
    signal pll_lock_sync          : std_logic_vector(7 downto 0);
+	
+	signal pll_stat_int				: std_logic_vector(7 downto 0);
+	signal pll_stat_int_reg			: std_logic_vector(7 downto 0);
+	
+	signal time_cnt					: unsigned(31 downto 0);
+	signal cnt_en						: std_logic;
+	signal pll_cmd_sync				: std_logic_vector(3 downto 0);
+	signal pll_cmd_sync_reg			: std_logic_vector(3 downto 0);
+	
+	attribute noprune: boolean;
+	attribute noprune of time_cnt: signal is true;
+	
+	
 		
 	component nios_cpu is
 		port (
@@ -134,6 +148,12 @@ bus_sync_reg1 : entity work.bus_sync_reg
 generic map (8)
 port map(clk100, '1', pll_lock, pll_lock_sync);
 
+bus_sync_reg2 : entity work.bus_sync_reg
+generic map (4)
+port map(clk100, '1', pll_cmd, pll_cmd_sync);
+
+
+
 
 	u0 : component nios_cpu
 		port map (
@@ -170,7 +190,7 @@ port map(clk100, '1', pll_lock, pll_lock_sync);
 			pll_rst_export                               => pll_rst,
 			pllcfg_cmd_export								      => pll_cmd,
          pllcfg_err_external_connection_export        => pll_err,
-			pllcfg_stat_export							      => pll_stat,
+			pllcfg_stat_export							      => pll_stat_int,
          pll_lock_external_connection_export          => pll_lock_sync,
 			pllcfg_spi_MISO                              => pllcfg_MISO,
 			pllcfg_spi_MOSI                              => pllcfg_MOSI,
@@ -193,7 +213,43 @@ port map(clk100, '1', pll_lock, pll_lock_sync);
    smpl_cmp_status_mux <=  smpl_cmp_status_sync(1 downto 0) when smpl_cmp_en_int(0) = '1' else 
                            smpl_cmp_status_sync(3 downto 2);
 
-
+	pll_stat <= pll_stat_int;								
+	
+	process(clk100, reset_n)
+	begin
+		if reset_n = '0' then 
+			time_cnt <= (others=> '0');
+			cnt_en	<= '0';
+			pll_cmd_sync_reg <= (others=> '0');
+			pll_stat_int_reg <= (others=> '0');
+		elsif (clk100'event AND clk100 = '1') then
+		
+			pll_cmd_sync_reg <= pll_cmd_sync;
+			pll_stat_int_reg <= pll_stat_int;
+			
+			if pll_cmd_sync(1) = '1' AND pll_cmd_sync_reg(1) = '0' then
+				if pll_cmd_sync(3) = '1' then 
+					cnt_en <= '1';
+				else 
+					cnt_en <= '0';
+				end if;
+			elsif (pll_stat_int(2) = '1' AND pll_stat_int_reg(2) = '0') OR pll_cmd_sync(1) = '0' then 
+				cnt_en <= '0';
+			else 
+				cnt_en <= cnt_en;
+			end if;
+			
+			
+			if cnt_en = '1' then 
+				time_cnt <= time_cnt + 1;
+			else 
+				time_cnt <= (others=> '0');
+			end if;
+			
+		end if;
+	end process;
+	
+	
 end arch;   
 
 
