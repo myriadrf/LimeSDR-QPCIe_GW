@@ -35,49 +35,49 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   8 .debug_aranges 00000430  00000000  00000000  000059f8  2**3
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_info   000052e4  00000000  00000000  00005e28  2**0
+  9 .debug_info   000052cc  00000000  00000000  00005e28  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_abbrev 00001bca  00000000  00000000  0000b10c  2**0
+ 10 .debug_abbrev 00001bca  00000000  00000000  0000b0f4  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_line   0000246f  00000000  00000000  0000ccd6  2**0
+ 11 .debug_line   0000246d  00000000  00000000  0000ccbe  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_frame  00000ad8  00000000  00000000  0000f148  2**2
+ 12 .debug_frame  00000ad8  00000000  00000000  0000f12c  2**2
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_str    0000192b  00000000  00000000  0000fc20  2**0
+ 13 .debug_str    00001913  00000000  00000000  0000fc04  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_loc    0000082d  00000000  00000000  0001154b  2**0
+ 14 .debug_loc    0000082d  00000000  00000000  00011517  2**0
                   CONTENTS, READONLY, DEBUGGING
- 15 .debug_alt_sim_info 00000010  00000000  00000000  00011d78  2**2
+ 15 .debug_alt_sim_info 00000010  00000000  00000000  00011d44  2**2
                   CONTENTS, READONLY, DEBUGGING
- 16 .debug_ranges 00000100  00000000  00000000  00011d88  2**3
+ 16 .debug_ranges 00000100  00000000  00000000  00011d58  2**3
                   CONTENTS, READONLY, DEBUGGING
- 17 .thread_model 00000003  00000000  00000000  00013726  2**0
+ 17 .thread_model 00000003  00000000  00000000  000136f6  2**0
                   CONTENTS, READONLY
- 18 .cpu          00000009  00000000  00000000  00013729  2**0
+ 18 .cpu          00000009  00000000  00000000  000136f9  2**0
                   CONTENTS, READONLY
- 19 .qsys         00000001  00000000  00000000  00013732  2**0
+ 19 .qsys         00000001  00000000  00000000  00013702  2**0
                   CONTENTS, READONLY
- 20 .simulation_enabled 00000001  00000000  00000000  00013733  2**0
+ 20 .simulation_enabled 00000001  00000000  00000000  00013703  2**0
                   CONTENTS, READONLY
- 21 .sysid_hash   00000004  00000000  00000000  00013734  2**0
+ 21 .sysid_hash   00000004  00000000  00000000  00013704  2**0
                   CONTENTS, READONLY
- 22 .sysid_base   00000004  00000000  00000000  00013738  2**0
+ 22 .sysid_base   00000004  00000000  00000000  00013708  2**0
                   CONTENTS, READONLY
- 23 .sysid_time   00000004  00000000  00000000  0001373c  2**0
+ 23 .sysid_time   00000004  00000000  00000000  0001370c  2**0
                   CONTENTS, READONLY
- 24 .stderr_dev   0000000b  00000000  00000000  00013740  2**0
+ 24 .stderr_dev   0000000b  00000000  00000000  00013710  2**0
                   CONTENTS, READONLY
- 25 .stdin_dev    0000000b  00000000  00000000  0001374b  2**0
+ 25 .stdin_dev    0000000b  00000000  00000000  0001371b  2**0
                   CONTENTS, READONLY
- 26 .stdout_dev   0000000b  00000000  00000000  00013756  2**0
+ 26 .stdout_dev   0000000b  00000000  00000000  00013726  2**0
                   CONTENTS, READONLY
- 27 .sopc_system_name 00000008  00000000  00000000  00013761  2**0
+ 27 .sopc_system_name 00000008  00000000  00000000  00013731  2**0
                   CONTENTS, READONLY
- 28 .quartus_project_dir 00000056  00000000  00000000  00013769  2**0
+ 28 .quartus_project_dir 00000056  00000000  00000000  00013739  2**0
                   CONTENTS, READONLY
- 29 .jdi          00006fd3  00000000  00000000  000137bf  2**0
+ 29 .jdi          00006fd3  00000000  00000000  0001378f  2**0
                   CONTENTS, READONLY
- 30 .sopcinfo     000a6a87  00000000  00000000  0001a792  2**0
+ 30 .sopcinfo     000ac871  00000000  00000000  0001a762  2**0
                   CONTENTS, READONLY
 SYMBOL TABLE:
 00008000 l    d  .entry	00000000 .entry
@@ -1953,11 +1953,11 @@ uint8_t *AutoPHCFG(uint8_t status[2])
     9178:	dc001315 	stw	r16,76(sp)
     917c:	df001404 	addi	fp,sp,80
     9180:	e13ffe15 	stw	r4,-8(fp)
+	uint8_t pll_ind;
+	uint8_t wr_buf[2];
 	uint8_t rd_buf[2];
 	uint8_t pllcfgrez;
 	uint8_t smpl_cmp_status;
-	uint8_t pll_lock_status;
-	uint8_t current_pll_lock_status;
 	uint8_t min_found = 0;
     9184:	e03fef45 	stb	zero,-67(fp)
 	uint8_t max_found = 0;
@@ -2102,7 +2102,7 @@ uint8_t *AutoPHCFG(uint8_t status[2])
     92e4:	0001883a 	nop
 	}
 
-	//pll_lock_status = (IORD_8DIRECT(PLL_LOCK_BASE, 0x00) >> pll_ind) & 0x01;
+	// if pll is locked without timeout start phase search
 	if (timeout < 255) {
     92e8:	e0bff217 	ldw	r2,-56(fp)
     92ec:	10803fc8 	cmpgei	r2,r2,255
@@ -2110,7 +2110,7 @@ uint8_t *AutoPHCFG(uint8_t status[2])
 		for (int i = 0; i < 1023; i++ ) {
     92f4:	e03ff315 	stw	zero,-52(fp)
     92f8:	00005506 	br	9450 <AutoPHCFG+0x2e4>
-
+			// get sample compare status
 			smpl_cmp_status = smpl_cmp(pll_ind);
     92fc:	e0bff803 	ldbu	r2,-32(fp)
     9300:	1009883a 	mov	r4,r2
@@ -2144,7 +2144,6 @@ uint8_t *AutoPHCFG(uint8_t status[2])
 				max_found = 1;
     9354:	00800044 	movi	r2,1
     9358:	e0bfef85 	stb	r2,-66(fp)
-				//because last phase value is invalid
 				phase_max = i * Val;
     935c:	e0bff317 	ldw	r2,-52(fp)
     9360:	e17ffb17 	ldw	r5,-20(fp)
@@ -2175,9 +2174,7 @@ uint8_t *AutoPHCFG(uint8_t status[2])
     93b0:	e0bff417 	ldw	r2,-48(fp)
     93b4:	1885c83a 	sub	r2,r3,r2
     93b8:	e0bff515 	stw	r2,-44(fp)
-				//Reset PLL to get default phase relationship
-				//ResetPLL();
-				// Set Phase shift register
+				// Set Phase shift register to bring back phase to middle value
 				set_Phase(PLL_BASE, Cx, phase_reverse, Dir ^ 1);
     93bc:	e0fff517 	ldw	r3,-44(fp)
     93c0:	e0bff917 	ldw	r2,-28(fp)
@@ -2229,7 +2226,7 @@ uint8_t *AutoPHCFG(uint8_t status[2])
 		if (timeout > 255) break;
 	}
 
-	//pll_lock_status = (IORD_8DIRECT(PLL_LOCK_BASE, 0x00) >> pll_ind) & 0x01;
+	// if pll is locked without timeout start phase search
 	if (timeout < 255) {
 		for (int i = 0; i < 1023; i++ ) {
     9444:	e0bff317 	ldw	r2,-52(fp)

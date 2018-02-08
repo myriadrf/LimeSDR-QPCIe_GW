@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>Feb 7, 2018 10:26:12 AM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1517991972165</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>Feb 7, 2018 3:17:13 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1518009433872</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>H:\working_dir\altera\LimeSDR-QPCIe\LimeSDR-QPCIe-lms7_trx_pcie\limesdr-qpcie-lms7_trx\software\nios4usb_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>..\..\nios_cpu.sopcinfo</SopcDesignFile>
