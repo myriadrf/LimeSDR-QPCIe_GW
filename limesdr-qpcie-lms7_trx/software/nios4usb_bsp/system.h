@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_cpu' in SOPC Builder design 'nios_cpu'
  * SOPC Builder design path: ../../nios_cpu.sopcinfo
  *
- * Generated: Wed Jan 31 14:52:09 EET 2018
+ * Generated: Mon Feb 12 11:51:55 EET 2018
  */
 
 /*
@@ -61,7 +61,7 @@
  */
 
 #define ALT_MODULE_CLASS_Av_FIFO_Int_0 Av_FIFO_Int
-#define AV_FIFO_INT_0_BASE 0x116d0
+#define AV_FIFO_INT_0_BASE 0x6d0
 #define AV_FIFO_INT_0_IRQ -1
 #define AV_FIFO_INT_0_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define AV_FIFO_INT_0_NAME "/dev/Av_FIFO_Int_0"
@@ -76,7 +76,7 @@
 
 #define ALT_CPU_ARCHITECTURE "altera_nios2_gen2"
 #define ALT_CPU_BIG_ENDIAN 0
-#define ALT_CPU_BREAK_ADDR 0x00010820
+#define ALT_CPU_BREAK_ADDR 0x00001020
 #define ALT_CPU_CPU_ARCH_NIOS2_R1
 #define ALT_CPU_CPU_FREQ 30720000u
 #define ALT_CPU_CPU_ID_SIZE 1
@@ -86,7 +86,7 @@
 #define ALT_CPU_DCACHE_LINE_SIZE 0
 #define ALT_CPU_DCACHE_LINE_SIZE_LOG2 0
 #define ALT_CPU_DCACHE_SIZE 0
-#define ALT_CPU_EXCEPTION_ADDR 0x00008020
+#define ALT_CPU_EXCEPTION_ADDR 0x00010020
 #define ALT_CPU_FLASH_ACCELERATOR_LINES 0
 #define ALT_CPU_FLASH_ACCELERATOR_LINE_SIZE 0
 #define ALT_CPU_FLUSHDA_SUPPORTED
@@ -104,7 +104,7 @@
 #define ALT_CPU_INST_ADDR_WIDTH 0x11
 #define ALT_CPU_NAME "nios2_cpu"
 #define ALT_CPU_OCI_VERSION 1
-#define ALT_CPU_RESET_ADDR 0x00008000
+#define ALT_CPU_RESET_ADDR 0x00010000
 
 
 /*
@@ -113,7 +113,7 @@
  */
 
 #define NIOS2_BIG_ENDIAN 0
-#define NIOS2_BREAK_ADDR 0x00010820
+#define NIOS2_BREAK_ADDR 0x00001020
 #define NIOS2_CPU_ARCH_NIOS2_R1
 #define NIOS2_CPU_FREQ 30720000u
 #define NIOS2_CPU_ID_SIZE 1
@@ -123,7 +123,7 @@
 #define NIOS2_DCACHE_LINE_SIZE 0
 #define NIOS2_DCACHE_LINE_SIZE_LOG2 0
 #define NIOS2_DCACHE_SIZE 0
-#define NIOS2_EXCEPTION_ADDR 0x00008020
+#define NIOS2_EXCEPTION_ADDR 0x00010020
 #define NIOS2_FLASH_ACCELERATOR_LINES 0
 #define NIOS2_FLASH_ACCELERATOR_LINE_SIZE 0
 #define NIOS2_FLUSHDA_SUPPORTED
@@ -139,7 +139,7 @@
 #define NIOS2_ICACHE_SIZE 0
 #define NIOS2_INST_ADDR_WIDTH 0x11
 #define NIOS2_OCI_VERSION 1
-#define NIOS2_RESET_ADDR 0x00008000
+#define NIOS2_RESET_ADDR 0x00010000
 
 
 /*
@@ -164,7 +164,7 @@
  */
 
 #define ALT_MODULE_CLASS_PLLCFG_Command altera_avalon_pio
-#define PLLCFG_COMMAND_BASE 0x116a0
+#define PLLCFG_COMMAND_BASE 0x6a0
 #define PLLCFG_COMMAND_BIT_CLEARING_EDGE_REGISTER 0
 #define PLLCFG_COMMAND_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define PLLCFG_COMMAND_CAPTURE 0
@@ -191,7 +191,7 @@
  */
 
 #define ALT_MODULE_CLASS_PLLCFG_SPI altera_avalon_spi
-#define PLLCFG_SPI_BASE 0x11620
+#define PLLCFG_SPI_BASE 0x620
 #define PLLCFG_SPI_CLOCKMULT 1
 #define PLLCFG_SPI_CLOCKPHASE 0
 #define PLLCFG_SPI_CLOCKPOLARITY 0
@@ -222,7 +222,7 @@
  */
 
 #define ALT_MODULE_CLASS_PLLCFG_Status altera_avalon_pio
-#define PLLCFG_STATUS_BASE 0x11690
+#define PLLCFG_STATUS_BASE 0x690
 #define PLLCFG_STATUS_BIT_CLEARING_EDGE_REGISTER 0
 #define PLLCFG_STATUS_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define PLLCFG_STATUS_CAPTURE 0
@@ -249,7 +249,7 @@
  */
 
 #define ALT_MODULE_CLASS_PLL_RST altera_avalon_pio
-#define PLL_RST_BASE 0x11680
+#define PLL_RST_BASE 0x680
 #define PLL_RST_BIT_CLEARING_EDGE_REGISTER 0
 #define PLL_RST_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define PLL_RST_CAPTURE 0
@@ -286,19 +286,19 @@
 #define ALT_NUM_INTERNAL_INTERRUPT_CONTROLLERS 1
 #define ALT_NUM_INTERRUPT_CONTROLLERS 1
 #define ALT_STDERR "/dev/jtag_uart_0"
-#define ALT_STDERR_BASE 0x116e8
+#define ALT_STDERR_BASE 0x6e8
 #define ALT_STDERR_DEV jtag_uart_0
 #define ALT_STDERR_IS_JTAG_UART
 #define ALT_STDERR_PRESENT
 #define ALT_STDERR_TYPE "altera_avalon_jtag_uart"
 #define ALT_STDIN "/dev/jtag_uart_0"
-#define ALT_STDIN_BASE 0x116e8
+#define ALT_STDIN_BASE 0x6e8
 #define ALT_STDIN_DEV jtag_uart_0
 #define ALT_STDIN_IS_JTAG_UART
 #define ALT_STDIN_PRESENT
 #define ALT_STDIN_TYPE "altera_avalon_jtag_uart"
 #define ALT_STDOUT "/dev/jtag_uart_0"
-#define ALT_STDOUT_BASE 0x116e8
+#define ALT_STDOUT_BASE 0x6e8
 #define ALT_STDOUT_DEV jtag_uart_0
 #define ALT_STDOUT_IS_JTAG_UART
 #define ALT_STDOUT_PRESENT
@@ -312,7 +312,7 @@
  */
 
 #define ALT_MODULE_CLASS_dac_spi1 altera_avalon_spi
-#define DAC_SPI1_BASE 0x11600
+#define DAC_SPI1_BASE 0x600
 #define DAC_SPI1_CLOCKMULT 1
 #define DAC_SPI1_CLOCKPHASE 1
 #define DAC_SPI1_CLOCKPOLARITY 0
@@ -343,7 +343,7 @@
  */
 
 #define ALT_MODULE_CLASS_fpga_spi0 altera_avalon_spi
-#define FPGA_SPI0_BASE 0x11640
+#define FPGA_SPI0_BASE 0x640
 #define FPGA_SPI0_CLOCKMULT 1
 #define FPGA_SPI0_CLOCKPHASE 0
 #define FPGA_SPI0_CLOCKPOLARITY 0
@@ -374,7 +374,7 @@
  */
 
 #define ALT_MODULE_CLASS_gpi_0 altera_avalon_pio
-#define GPI_0_BASE 0x116b0
+#define GPI_0_BASE 0x6b0
 #define GPI_0_BIT_CLEARING_EDGE_REGISTER 0
 #define GPI_0_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define GPI_0_CAPTURE 0
@@ -401,7 +401,7 @@
  */
 
 #define ALT_MODULE_CLASS_gpio_0 altera_avalon_pio
-#define GPIO_0_BASE 0x116c0
+#define GPIO_0_BASE 0x6c0
 #define GPIO_0_BIT_CLEARING_EDGE_REGISTER 0
 #define GPIO_0_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define GPIO_0_CAPTURE 0
@@ -439,7 +439,7 @@
  */
 
 #define ALT_MODULE_CLASS_i2c_opencores_0 i2c_opencores
-#define I2C_OPENCORES_0_BASE 0x11660
+#define I2C_OPENCORES_0_BASE 0x660
 #define I2C_OPENCORES_0_IRQ 0
 #define I2C_OPENCORES_0_IRQ_INTERRUPT_CONTROLLER_ID 0
 #define I2C_OPENCORES_0_NAME "/dev/i2c_opencores_0"
@@ -453,7 +453,7 @@
  */
 
 #define ALT_MODULE_CLASS_jtag_uart_0 altera_avalon_jtag_uart
-#define JTAG_UART_0_BASE 0x116e8
+#define JTAG_UART_0_BASE 0x6e8
 #define JTAG_UART_0_IRQ 1
 #define JTAG_UART_0_IRQ_INTERRUPT_CONTROLLER_ID 0
 #define JTAG_UART_0_NAME "/dev/jtag_uart_0"
@@ -473,7 +473,7 @@
 #define ALT_MODULE_CLASS_oc_mem altera_avalon_onchip_memory2
 #define OC_MEM_ALLOW_IN_SYSTEM_MEMORY_CONTENT_EDITOR 0
 #define OC_MEM_ALLOW_MRAM_SIM_CONTENTS_ONLY_FILE 0
-#define OC_MEM_BASE 0x8000
+#define OC_MEM_BASE 0x10000
 #define OC_MEM_CONTENTS_INFO ""
 #define OC_MEM_DUAL_PORT 0
 #define OC_MEM_GUI_RAM_BLOCK_TYPE "AUTO"
@@ -500,7 +500,7 @@
  */
 
 #define ALT_MODULE_CLASS_pll_reconfig_0 altera_pll_reconfig
-#define PLL_RECONFIG_0_BASE 0x11500
+#define PLL_RECONFIG_0_BASE 0x0
 #define PLL_RECONFIG_0_IRQ -1
 #define PLL_RECONFIG_0_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define PLL_RECONFIG_0_NAME "/dev/pll_reconfig_0"
@@ -514,7 +514,7 @@
  */
 
 #define ALT_MODULE_CLASS_pll_reconfig_1 altera_pll_reconfig
-#define PLL_RECONFIG_1_BASE 0x11000
+#define PLL_RECONFIG_1_BASE 0x100
 #define PLL_RECONFIG_1_IRQ -1
 #define PLL_RECONFIG_1_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define PLL_RECONFIG_1_NAME "/dev/pll_reconfig_1"
@@ -528,7 +528,7 @@
  */
 
 #define ALT_MODULE_CLASS_pll_reconfig_2 altera_pll_reconfig
-#define PLL_RECONFIG_2_BASE 0x11100
+#define PLL_RECONFIG_2_BASE 0x200
 #define PLL_RECONFIG_2_IRQ -1
 #define PLL_RECONFIG_2_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define PLL_RECONFIG_2_NAME "/dev/pll_reconfig_2"
@@ -542,7 +542,7 @@
  */
 
 #define ALT_MODULE_CLASS_pll_reconfig_3 altera_pll_reconfig
-#define PLL_RECONFIG_3_BASE 0x11200
+#define PLL_RECONFIG_3_BASE 0x300
 #define PLL_RECONFIG_3_IRQ -1
 #define PLL_RECONFIG_3_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define PLL_RECONFIG_3_NAME "/dev/pll_reconfig_3"
@@ -556,7 +556,7 @@
  */
 
 #define ALT_MODULE_CLASS_pll_reconfig_4 altera_pll_reconfig
-#define PLL_RECONFIG_4_BASE 0x11300
+#define PLL_RECONFIG_4_BASE 0x400
 #define PLL_RECONFIG_4_IRQ -1
 #define PLL_RECONFIG_4_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define PLL_RECONFIG_4_NAME "/dev/pll_reconfig_4"
@@ -570,7 +570,7 @@
  */
 
 #define ALT_MODULE_CLASS_pll_reconfig_5 altera_pll_reconfig
-#define PLL_RECONFIG_5_BASE 0x11400
+#define PLL_RECONFIG_5_BASE 0x500
 #define PLL_RECONFIG_5_IRQ -1
 #define PLL_RECONFIG_5_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define PLL_RECONFIG_5_NAME "/dev/pll_reconfig_5"
@@ -584,13 +584,13 @@
  */
 
 #define ALT_MODULE_CLASS_sysid_qsys_0 altera_avalon_sysid_qsys
-#define SYSID_QSYS_0_BASE 0x116e0
+#define SYSID_QSYS_0_BASE 0x6e0
 #define SYSID_QSYS_0_ID 10
 #define SYSID_QSYS_0_IRQ -1
 #define SYSID_QSYS_0_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define SYSID_QSYS_0_NAME "/dev/sysid_qsys_0"
 #define SYSID_QSYS_0_SPAN 8
-#define SYSID_QSYS_0_TIMESTAMP 1517402641
+#define SYSID_QSYS_0_TIMESTAMP 1518428261
 #define SYSID_QSYS_0_TYPE "altera_avalon_sysid_qsys"
 
 #endif /* __SYSTEM_H_ */
