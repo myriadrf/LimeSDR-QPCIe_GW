@@ -107,12 +107,21 @@ begin
                 
             4'b0001: 
                 begin
-                    write_count<=write_count+1'b1;
+                    // 
+                    if (mgmt_waitrequest == 1'b1)
+                        begin 
+                            write_count <= 4'b0000;
+                        end
+                    else
+                        begin
+                            write_count<=write_count+1'b1;
+                        end
+                    
                     mgmt_read<=1'b0;
                     mgmt_address<=6'b000000;
                     mgmt_writedata<=32'h00000001;	
                     
-                    if(write_count==4'b0000)
+                    if(write_count==4'b0000 & mgmt_waitrequest == 1'b1)
                     begin
                         mgmt_write<=1'b1;
                     end
@@ -147,7 +156,14 @@ begin
                 
             4'b0011: 
                 begin
-                    write_count<=write_count+1'b1;
+                    if (mgmt_waitrequest == 1'b1)
+                        begin 
+                            write_count <= 4'b0000;
+                        end
+                    else
+                        begin
+                            write_count<=write_count+1'b1;
+                        end
                     mgmt_read<=1'b0;
                     mgmt_address<=6'b000110;
                     mgmt_writedata[31:22] <= 10'b0000000000;
@@ -156,7 +172,7 @@ begin
                     mgmt_writedata[15:0]  <= phase; 
                     //Writing to DPS register
                     
-                    if(write_count==4'b0000)
+                    if(write_count==4'b0000 & mgmt_waitrequest == 1'b1)
                     begin
                         mgmt_write<=1'b1;
                     end
@@ -184,15 +200,22 @@ begin
                 
             4'b0101: 
                 begin
-                    write_count<=write_count+1'b1;
+                    if (mgmt_waitrequest == 1'b1)
+                        begin 
+                            write_count <= 4'b0000;
+                        end
+                    else
+                        begin
+                            write_count<=write_count+1'b1;
+                        end
                     mgmt_read<=1'b0;
                     mgmt_address<=6'b000010;
                     mgmt_writedata<=32'b00000000000000000000000000000001;	
                     //Writing to Start Register
                     
-                    if(write_count==4'b0000)
-                    begin 
-                        mgmt_write <= 1'b1;
+                    if(write_count==4'b0000 & mgmt_waitrequest == 1'b1)
+                    begin
+                        mgmt_write<=1'b1;
                     end
                     
                 else mgmt_write<=1'b0;
@@ -223,7 +246,7 @@ begin
                     mgmt_write<=1'b0;
                     mgmt_address<=6'b000001;
                     
-                    if (mgmt_readdata[0]==1'b1) 
+                    if (mgmt_readdata[0]==1'b1 & mgmt_waitrequest == 1'b0) 
                     begin 
                         state <= 4'b1000;
                     end
