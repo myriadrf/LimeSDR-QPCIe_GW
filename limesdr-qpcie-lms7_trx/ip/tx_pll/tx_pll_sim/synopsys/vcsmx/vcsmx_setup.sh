@@ -12,7 +12,7 @@
 # or its authorized distributors. Please refer to the applicable 
 # agreement for further details.
 
-# ACDS 16.1 200 win32 2018.01.30.17:06:07
+# ACDS 16.1 200 win32 2018.02.08.16:02:26
 
 # ----------------------------------------
 # vcsmx - auto-generated simulation script
@@ -101,7 +101,7 @@
 # within the Quartus project, and generate a unified
 # script which supports all the Altera IP within the design.
 # ----------------------------------------
-# ACDS 16.1 200 win32 2018.01.30.17:06:07
+# ACDS 16.1 200 win32 2018.02.08.16:02:26
 # ----------------------------------------
 # initialize variables
 TOP_LEVEL_NAME="tx_pll"

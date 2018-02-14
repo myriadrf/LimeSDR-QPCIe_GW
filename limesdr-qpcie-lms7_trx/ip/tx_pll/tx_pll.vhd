@@ -15,10 +15,6 @@ entity tx_pll is
 		outclk_0          : out std_logic;                                        --           outclk0.clk
 		outclk_1          : out std_logic;                                        --           outclk1.clk
 		locked            : out std_logic;                                        --            locked.export
-		phase_en          : in  std_logic                     := '0';             --          phase_en.phase_en
-		updn              : in  std_logic                     := '0';             --              updn.updn
-		cntsel            : in  std_logic_vector(4 downto 0)  := (others => '0'); --            cntsel.cntsel
-		phase_done        : out std_logic;                                        --        phase_done.phase_done
 		reconfig_to_pll   : in  std_logic_vector(63 downto 0) := (others => '0'); --   reconfig_to_pll.reconfig_to_pll
 		reconfig_from_pll : out std_logic_vector(63 downto 0)                     -- reconfig_from_pll.reconfig_from_pll
 	);
@@ -32,10 +28,6 @@ architecture rtl of tx_pll is
 			outclk_0          : out std_logic;                                        -- clk
 			outclk_1          : out std_logic;                                        -- clk
 			locked            : out std_logic;                                        -- export
-			phase_en          : in  std_logic                     := 'X';             -- phase_en
-			updn              : in  std_logic                     := 'X';             -- updn
-			cntsel            : in  std_logic_vector(4 downto 0)  := (others => 'X'); -- cntsel
-			phase_done        : out std_logic;                                        -- phase_done
 			reconfig_to_pll   : in  std_logic_vector(63 downto 0) := (others => 'X'); -- reconfig_to_pll
 			reconfig_from_pll : out std_logic_vector(63 downto 0)                     -- reconfig_from_pll
 		);
@@ -50,10 +42,6 @@ begin
 			outclk_0          => outclk_0,          --           outclk0.clk
 			outclk_1          => outclk_1,          --           outclk1.clk
 			locked            => locked,            --            locked.export
-			phase_en          => phase_en,          --          phase_en.phase_en
-			updn              => updn,              --              updn.updn
-			cntsel            => cntsel,            --            cntsel.cntsel
-			phase_done        => phase_done,        --        phase_done.phase_done
 			reconfig_to_pll   => reconfig_to_pll,   --   reconfig_to_pll.reconfig_to_pll
 			reconfig_from_pll => reconfig_from_pll  -- reconfig_from_pll.reconfig_from_pll
 		);
@@ -89,7 +77,7 @@ end architecture rtl; -- of tx_pll
 -- Retrieval info: 	<generic name="debug_print_output" value="false" />
 -- Retrieval info: 	<generic name="debug_use_rbc_taf_method" value="false" />
 -- Retrieval info: 	<generic name="device_family" value="Cyclone V" />
--- Retrieval info: 	<generic name="device" value="Unknown" />
+-- Retrieval info: 	<generic name="device" value="5CEBA2F17A7" />
 -- Retrieval info: 	<generic name="gui_device_speed_grade" value="2" />
 -- Retrieval info: 	<generic name="gui_pll_mode" value="Integer-N PLL" />
 -- Retrieval info: 	<generic name="gui_reference_clock_frequency" value="160.0" />
@@ -269,7 +257,7 @@ end architecture rtl; -- of tx_pll
 -- Retrieval info: 	<generic name="gui_pll_auto_reset" value="Off" />
 -- Retrieval info: 	<generic name="gui_pll_bandwidth_preset" value="Auto" />
 -- Retrieval info: 	<generic name="gui_en_reconf" value="true" />
--- Retrieval info: 	<generic name="gui_en_dps_ports" value="true" />
+-- Retrieval info: 	<generic name="gui_en_dps_ports" value="false" />
 -- Retrieval info: 	<generic name="gui_en_phout_ports" value="false" />
 -- Retrieval info: 	<generic name="gui_phout_division" value="1" />
 -- Retrieval info: 	<generic name="gui_mif_generate" value="false" />
