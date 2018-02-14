@@ -48,8 +48,20 @@ entity nios_cpu_top is
 			exfifo_of_wr			: out std_logic;
 			exfifo_of_wrfull		: in std_logic;
 			exfifo_rst				: out std_logic;
-			scl               : inout std_logic;
-			sda               : inout std_logic  
+			scl               	: inout std_logic;
+			sda               	: inout std_logic;
+			avmm_s0_address      : in    std_logic_vector(8 downto 0) := (others => 'X');  -- address
+			avmm_s0_read         : in    std_logic                     := 'X';             -- read
+			avmm_s0_readdata     : out   std_logic_vector(31 downto 0);                    -- readdata
+			avmm_s0_write        : in    std_logic                     := 'X';             -- write
+			avmm_s0_writedata    : in    std_logic_vector(31 downto 0) := (others => 'X'); -- writedata
+			avmm_s0_waitrequest  : out   std_logic;                                        -- waitrequest
+			avmm_s1_address      : in    std_logic_vector(8 downto 0) := (others => 'X');  -- address
+			avmm_s1_read         : in    std_logic                     := 'X';             -- read
+			avmm_s1_readdata     : out   std_logic_vector(31 downto 0);                    -- readdata
+			avmm_s1_write        : in    std_logic                     := 'X';             -- write
+			avmm_s1_writedata    : in    std_logic_vector(31 downto 0) := (others => 'X'); -- writedata
+			avmm_s1_waitrequest  : out   std_logic                                         -- waitrequest
 
         );
 end nios_cpu_top;
@@ -63,6 +75,9 @@ architecture arch of nios_cpu_top is
 	signal dac_spi1_SS_int: std_logic;
 	signal fpga_spi0_MOSI_int, fpga_spi0_SCLK_int: std_logic;
 	signal dac_spi1_MOSI_int, dac_spi1_SCLK_int: std_logic;
+   
+   signal avmm_s0_address_int : std_logic_vector(31 downto 0);
+   signal avmm_s1_address_int : std_logic_vector(31 downto 0);
 		
 	component nios_cpu is
 		port (
@@ -104,13 +119,35 @@ architecture arch of nios_cpu_top is
 			pllcfg_spi_SS_n                        : out   std_logic;                                        -- SS_n
 			pllcfg_stat_export                     : out   std_logic_vector(9 downto 0);                     -- export
 			scl_export                             : inout std_logic                     := 'X';             -- export
-			sda_export                             : inout std_logic                     := 'X'              -- export
+			sda_export                             : inout std_logic                     := 'X';              -- export
+			avmm_s0_address                        : in    std_logic_vector(31 downto 0) := (others => 'X'); -- address
+			avmm_s0_read                           : in    std_logic                     := 'X';             -- read
+			avmm_s0_readdata                       : out   std_logic_vector(31 downto 0);                    -- readdata
+			avmm_s0_write                          : in    std_logic                     := 'X';             -- write
+			avmm_s0_writedata                      : in    std_logic_vector(31 downto 0) := (others => 'X'); -- writedata
+			avmm_s0_waitrequest                    : out   std_logic;                                        -- waitrequest
+			avmm_s1_address                        : in    std_logic_vector(31 downto 0) := (others => 'X'); -- address
+			avmm_s1_read                           : in    std_logic                     := 'X';             -- read
+			avmm_s1_readdata                       : out   std_logic_vector(31 downto 0);                    -- readdata
+			avmm_s1_write                          : in    std_logic                     := 'X';             -- write
+			avmm_s1_writedata                      : in    std_logic_vector(31 downto 0) := (others => 'X'); -- writedata
+			avmm_s1_waitrequest                    : out   std_logic                                         -- waitrequest
 		);
 	end component nios_cpu;
 
 
 
 begin
+   -- byte oriented address is shifted to be word aligned
+   avmm_s0_address_int <=  "00000000000000000000000" & 
+                           avmm_s0_address(8) & 
+                           avmm_s0_address(5 downto 0) & 
+                           "00"; -- address range   0 - 1FF
+   avmm_s1_address_int <=  "00000000000000000000001" & 
+                           avmm_s1_address(8) & 
+                           avmm_s1_address(5 downto 0) & 
+                           "00"; -- address range 200 - 3FF
+   
 
 	u0 : component nios_cpu
 		port map (
@@ -130,7 +167,7 @@ begin
 			fpga_spi0_MOSI                         => fpga_spi0_MOSI_int,
 			fpga_spi0_SCLK                         => fpga_spi0_SCLK_int,
 			fpga_spi0_SS_n                         => fpga_spi0_SS_n(7 downto 0),
-			gpi0_export													   => gpi0,
+			gpi0_export										=> gpi0,
 			gpio0_export                           => gpio0,
 			pll_recfg_from_pll_0_reconfig_from_pll => pll_recfg_from_pll0,
 			pll_recfg_to_pll_0_reconfig_to_pll     => pll_recfg_to_pll0,
@@ -145,14 +182,27 @@ begin
 			pll_recfg_from_pll_5_reconfig_from_pll => pll_recfg_from_pll5,
 			pll_recfg_to_pll_5_reconfig_to_pll     => pll_recfg_to_pll5,
 			pll_rst_export                         => pll_rst,
-			pllcfg_cmd_export											 => pll_cmd,
-			pllcfg_stat_export										 => pll_stat,
+			pllcfg_cmd_export								=> pll_cmd,
+			pllcfg_stat_export							=> pll_stat,
 			pllcfg_spi_MISO                        => pllcfg_MISO,
 			pllcfg_spi_MOSI                        => pllcfg_MOSI,
 			pllcfg_spi_SCLK                        => pllcfg_SCLK, 
 			pllcfg_spi_SS_n                        => pllcfg_SS_n,
-			scl_export														 => scl,
-			sda_export														 => sda
+			scl_export										=> scl,
+			sda_export										=> sda,
+         avmm_s0_address                        => avmm_s0_address_int,    
+         avmm_s0_read                           => avmm_s0_read,       
+         avmm_s0_readdata                       => avmm_s0_readdata,   
+         avmm_s0_write                          => avmm_s0_write,      
+         avmm_s0_writedata                      => avmm_s0_writedata,  
+         avmm_s0_waitrequest                    => avmm_s0_waitrequest,
+         avmm_s1_address                        => avmm_s1_address_int,    
+         avmm_s1_read                           => avmm_s1_read,       
+         avmm_s1_readdata                       => avmm_s1_readdata,   
+         avmm_s1_write                          => avmm_s1_write,      
+         avmm_s1_writedata                      => avmm_s1_writedata,  
+         avmm_s1_waitrequest                    => avmm_s1_waitrequest
+
 		);
 		
 	nrst<='0';

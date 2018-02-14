@@ -41,12 +41,14 @@ entity pll_ps_top is
       ps_done                       : out std_logic;
       ps_status                     : out std_logic;     
       --pll ports
-      pll_phasecounterselect        : out std_logic_vector(cntsel_width-1 downto 0);
-      pll_phaseupdown               : out std_logic;
-      pll_phasestep                 : out std_logic;
-      pll_phasedone                 : in std_logic;
+		pll_mgmt_readdata					: in std_logic_vector(31 downto 0);		
+		pll_mgmt_waitrequest				: in std_logic;
+		pll_mgmt_read						: out std_logic;
+		pll_mgmt_write						: out std_logic;
+		pll_mgmt_address					: out std_logic_vector(5 downto 0);
+		pll_mgmt_writedata				: out std_logic_vector(31 downto 0);
       pll_locked                    : in std_logic;
-      pll_reconfig                  : in std_logic;
+      pll_reconfig_en               : in std_logic;
       pll_reset_req                 : out std_logic;
       --sample compare module
       smpl_cmp_en                   : out std_logic;
@@ -62,12 +64,20 @@ end pll_ps_top;
 architecture arch of pll_ps_top is
 --declare signals,  components here
 
-signal ps_tst_reg       : std_logic;
-signal ps_en_reg        : std_logic;
---inst 0
-signal inst0_ph_step    : std_logic;
-signal inst0_ps_status  : std_logic;
-signal inst0_busy       : std_logic;
+signal reset						: std_logic;
+
+signal ps_tst_reg       		: std_logic;
+signal ps_en_reg        		: std_logic;
+--inst 0		
+signal inst0_ph_step    		: std_logic;
+signal inst0_ps_status  		: std_logic;
+signal inst0_busy       		: std_logic;
+signal inst0_mgmt_readdata		: std_logic_vector(31 downto 0);
+signal inst0_mgmt_waitrequest	: std_logic;
+signal inst0_mgmt_read			: std_logic;
+signal inst0_mgmt_write			: std_logic;
+signal inst0_mgmt_address		: std_logic_vector(5 downto 0);
+signal inst0_mgmt_writedata	: std_logic_vector(31 downto 0);
 
 --isnt1
 signal inst1_ps_en            : std_logic;
@@ -82,14 +92,36 @@ signal inst1_ps_ctrl_updown   : std_logic;
 
 signal ps_en_tst              : std_logic;
 signal ps_disable_cnt         : unsigned(7 downto 0);
+
    
    
 type state_type is (idle, check_mode, ps_enable, ps_disable);
 signal current_state, next_state : state_type;
 
+component pll_ps_av
+   port(
+      clk                     : in std_logic;
+      reset_n                 : in std_logic;
+      busy                    : out std_logic;
+      en                      : in std_logic;
+      phase                   : in std_logic_vector(9 downto 0);
+      cnt                     : in std_logic_vector(4 downto 0);
+      updown                  : in std_logic;    
+      --pll ports
+		mgmt_readdata				: in std_logic_vector(31 downto 0);
+		mgmt_waitrequest			: in std_logic;
+		mgmt_read					: out std_logic;
+		mgmt_write					: out std_logic;
+		mgmt_address				: out std_logic_vector(5 downto 0);
+		mgmt_writedata				: out std_logic_vector(31 downto 0)
 
-  
+      );
+end component;
+
+
 begin
+
+reset <= not reset_n;
 
 -- ----------------------------------------------------------------------------
 -- Input registers
@@ -205,10 +237,27 @@ end process;
 -- ----------------------------------------------------------------------------
 -- lower level instances
 -- ----------------------------------------------------------------------------   
-pll_ps_inst0 : entity work.pll_ps
-   generic map (
-      cntsel_width            => cntsel_width
-   )
+--pll_ps_inst0 : entity work.pll_ps
+--   generic map (
+--      cntsel_width            => cntsel_width
+--   )
+--   port map(
+--      clk                     => clk,
+--      reset_n                 => reset_n,
+--      busy                    => inst0_busy,
+--      en                      => inst1_ps_ctrl_en,
+--      phase                   => inst1_ps_ctrl_phase,
+--      cnt                     => inst1_ps_ctrl_cnt,
+--      updown                  => inst1_ps_ctrl_updown,    
+--      --pll ports
+--      pll_phasecounterselect  => pll_phasecounterselect,
+--      pll_phaseupdown         => pll_phaseupdown,
+--      pll_phasestep           => pll_phasestep,
+--      pll_phasedone           => pll_phasedone
+--
+--      );
+		
+pll_ps_inst0 : pll_ps_av
    port map(
       clk                     => clk,
       reset_n                 => reset_n,
@@ -218,13 +267,19 @@ pll_ps_inst0 : entity work.pll_ps
       cnt                     => inst1_ps_ctrl_cnt,
       updown                  => inst1_ps_ctrl_updown,    
       --pll ports
-      pll_phasecounterselect  => pll_phasecounterselect,
-      pll_phaseupdown         => pll_phaseupdown,
-      pll_phasestep           => pll_phasestep,
-      pll_phasedone           => pll_phasedone
+		mgmt_readdata				=> inst0_mgmt_readdata,
+		mgmt_waitrequest			=> inst0_mgmt_waitrequest,
+		mgmt_read					=> inst0_mgmt_read,
+		mgmt_write					=> inst0_mgmt_write,
+		mgmt_address				=> inst0_mgmt_address,
+		mgmt_writedata				=> inst0_mgmt_writedata
 
       );
-   
+		
+inst0_mgmt_readdata 		<= pll_mgmt_readdata;
+inst0_mgmt_waitrequest	<= pll_mgmt_waitrequest;
+
+		
    
 pll_ps_fsm_inst1 : entity work.pll_ps_fsm
    generic map (
@@ -245,7 +300,7 @@ pll_ps_fsm_inst1 : entity work.pll_ps_fsm
       ps_status         => inst1_ps_status,
       --pll ports
       pll_locked        => pll_locked,
-      pll_reconfig      => pll_reconfig,
+      pll_reconfig      => pll_reconfig_en,
       pll_reset_req     => inst1_pll_reset_req,
       --pll_ps_cntrl ports
       ps_ctrl_busy      => inst0_busy,
@@ -258,15 +313,20 @@ pll_ps_fsm_inst1 : entity work.pll_ps_fsm
       smpl_cmp_done     => smpl_cmp_done,
       smpl_cmp_error    => smpl_cmp_error
       );
+	
       
    
    
    --output ports
-   ps_done        <= inst1_ps_done;
-   ps_status      <= inst1_ps_status;
-   smpl_cmp_en    <= inst1_smpl_cmp_en;
-   pll_reset_req  <= inst1_pll_reset_req;
+   ps_done              <= inst1_ps_done;
+   ps_status            <= inst1_ps_status;
+   smpl_cmp_en          <= inst1_smpl_cmp_en;
    
+   pll_reset_req        <= inst1_pll_reset_req;
+   pll_mgmt_read			<= inst0_mgmt_read;
+   pll_mgmt_write			<= inst0_mgmt_write;
+   pll_mgmt_address		<= inst0_mgmt_address;
+   pll_mgmt_writedata   <= inst0_mgmt_writedata;	
 
   
 end arch;   
