@@ -1,5 +1,17 @@
 
 module nios_cpu (
+	avmm_s0_address,
+	avmm_s0_read,
+	avmm_s0_readdata,
+	avmm_s0_write,
+	avmm_s0_writedata,
+	avmm_s0_waitrequest,
+	avmm_s1_address,
+	avmm_s1_read,
+	avmm_s1_readdata,
+	avmm_s1_write,
+	avmm_s1_writedata,
+	avmm_s1_waitrequest,
 	clk_clk,
 	dac_spi1_MISO,
 	dac_spi1_MOSI,
@@ -40,6 +52,18 @@ module nios_cpu (
 	scl_export,
 	sda_export);	
 
+	input	[31:0]	avmm_s0_address;
+	input		avmm_s0_read;
+	output	[31:0]	avmm_s0_readdata;
+	input		avmm_s0_write;
+	input	[31:0]	avmm_s0_writedata;
+	output		avmm_s0_waitrequest;
+	input	[31:0]	avmm_s1_address;
+	input		avmm_s1_read;
+	output	[31:0]	avmm_s1_readdata;
+	input		avmm_s1_write;
+	input	[31:0]	avmm_s1_writedata;
+	output		avmm_s1_waitrequest;
 	input		clk_clk;
 	input		dac_spi1_MISO;
 	output		dac_spi1_MOSI;

@@ -1,4 +1,16 @@
 	nios_cpu u0 (
+		.avmm_s0_address                        (<connected-to-avmm_s0_address>),                        //              avmm_s0.address
+		.avmm_s0_read                           (<connected-to-avmm_s0_read>),                           //                     .read
+		.avmm_s0_readdata                       (<connected-to-avmm_s0_readdata>),                       //                     .readdata
+		.avmm_s0_write                          (<connected-to-avmm_s0_write>),                          //                     .write
+		.avmm_s0_writedata                      (<connected-to-avmm_s0_writedata>),                      //                     .writedata
+		.avmm_s0_waitrequest                    (<connected-to-avmm_s0_waitrequest>),                    //                     .waitrequest
+		.avmm_s1_address                        (<connected-to-avmm_s1_address>),                        //              avmm_s1.address
+		.avmm_s1_read                           (<connected-to-avmm_s1_read>),                           //                     .read
+		.avmm_s1_readdata                       (<connected-to-avmm_s1_readdata>),                       //                     .readdata
+		.avmm_s1_write                          (<connected-to-avmm_s1_write>),                          //                     .write
+		.avmm_s1_writedata                      (<connected-to-avmm_s1_writedata>),                      //                     .writedata
+		.avmm_s1_waitrequest                    (<connected-to-avmm_s1_waitrequest>),                    //                     .waitrequest
 		.clk_clk                                (<connected-to-clk_clk>),                                //                  clk.clk
 		.dac_spi1_MISO                          (<connected-to-dac_spi1_MISO>),                          //             dac_spi1.MISO
 		.dac_spi1_MOSI                          (<connected-to-dac_spi1_MOSI>),                          //                     .MOSI

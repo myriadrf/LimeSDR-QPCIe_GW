@@ -1,5 +1,17 @@
 	component nios_cpu is
 		port (
+			avmm_s0_address                        : in    std_logic_vector(31 downto 0) := (others => 'X'); -- address
+			avmm_s0_read                           : in    std_logic                     := 'X';             -- read
+			avmm_s0_readdata                       : out   std_logic_vector(31 downto 0);                    -- readdata
+			avmm_s0_write                          : in    std_logic                     := 'X';             -- write
+			avmm_s0_writedata                      : in    std_logic_vector(31 downto 0) := (others => 'X'); -- writedata
+			avmm_s0_waitrequest                    : out   std_logic;                                        -- waitrequest
+			avmm_s1_address                        : in    std_logic_vector(31 downto 0) := (others => 'X'); -- address
+			avmm_s1_read                           : in    std_logic                     := 'X';             -- read
+			avmm_s1_readdata                       : out   std_logic_vector(31 downto 0);                    -- readdata
+			avmm_s1_write                          : in    std_logic                     := 'X';             -- write
+			avmm_s1_writedata                      : in    std_logic_vector(31 downto 0) := (others => 'X'); -- writedata
+			avmm_s1_waitrequest                    : out   std_logic;                                        -- waitrequest
 			clk_clk                                : in    std_logic                     := 'X';             -- clk
 			dac_spi1_MISO                          : in    std_logic                     := 'X';             -- MISO
 			dac_spi1_MOSI                          : out   std_logic;                                        -- MOSI
@@ -44,6 +56,18 @@
 
 	u0 : component nios_cpu
 		port map (
+			avmm_s0_address                        => CONNECTED_TO_avmm_s0_address,                        --              avmm_s0.address
+			avmm_s0_read                           => CONNECTED_TO_avmm_s0_read,                           --                     .read
+			avmm_s0_readdata                       => CONNECTED_TO_avmm_s0_readdata,                       --                     .readdata
+			avmm_s0_write                          => CONNECTED_TO_avmm_s0_write,                          --                     .write
+			avmm_s0_writedata                      => CONNECTED_TO_avmm_s0_writedata,                      --                     .writedata
+			avmm_s0_waitrequest                    => CONNECTED_TO_avmm_s0_waitrequest,                    --                     .waitrequest
+			avmm_s1_address                        => CONNECTED_TO_avmm_s1_address,                        --              avmm_s1.address
+			avmm_s1_read                           => CONNECTED_TO_avmm_s1_read,                           --                     .read
+			avmm_s1_readdata                       => CONNECTED_TO_avmm_s1_readdata,                       --                     .readdata
+			avmm_s1_write                          => CONNECTED_TO_avmm_s1_write,                          --                     .write
+			avmm_s1_writedata                      => CONNECTED_TO_avmm_s1_writedata,                      --                     .writedata
+			avmm_s1_waitrequest                    => CONNECTED_TO_avmm_s1_waitrequest,                    --                     .waitrequest
 			clk_clk                                => CONNECTED_TO_clk_clk,                                --                  clk.clk
 			dac_spi1_MISO                          => CONNECTED_TO_dac_spi1_MISO,                          --             dac_spi1.MISO
 			dac_spi1_MOSI                          => CONNECTED_TO_dac_spi1_MOSI,                          --                     .MOSI
