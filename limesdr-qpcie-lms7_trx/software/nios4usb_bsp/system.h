@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_cpu' in SOPC Builder design 'nios_cpu'
  * SOPC Builder design path: ../../nios_cpu.sopcinfo
  *
- * Generated: Mon Feb 12 11:51:55 EET 2018
+ * Generated: Fri Mar 09 17:03:56 EET 2018
  */
 
 /*
@@ -61,12 +61,26 @@
  */
 
 #define ALT_MODULE_CLASS_Av_FIFO_Int_0 Av_FIFO_Int
-#define AV_FIFO_INT_0_BASE 0x6d0
+#define AV_FIFO_INT_0_BASE 0x7e0
 #define AV_FIFO_INT_0_IRQ -1
 #define AV_FIFO_INT_0_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define AV_FIFO_INT_0_NAME "/dev/Av_FIFO_Int_0"
 #define AV_FIFO_INT_0_SPAN 16
 #define AV_FIFO_INT_0_TYPE "Av_FIFO_Int"
+
+
+/*
+ * Avalon_MM_external_0 configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_Avalon_MM_external_0 Avalon_MM_external
+#define AVALON_MM_EXTERNAL_0_BASE 0x600
+#define AVALON_MM_EXTERNAL_0_IRQ -1
+#define AVALON_MM_EXTERNAL_0_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define AVALON_MM_EXTERNAL_0_NAME "/dev/Avalon_MM_external_0"
+#define AVALON_MM_EXTERNAL_0_SPAN 256
+#define AVALON_MM_EXTERNAL_0_TYPE "Avalon_MM_external"
 
 
 /*
@@ -154,6 +168,7 @@
 #define __ALTERA_AVALON_SYSID_QSYS
 #define __ALTERA_NIOS2_GEN2
 #define __ALTERA_PLL_RECONFIG
+#define __AVALON_MM_EXTERNAL
 #define __AV_FIFO_INT
 #define __I2C_OPENCORES
 
@@ -164,7 +179,7 @@
  */
 
 #define ALT_MODULE_CLASS_PLLCFG_Command altera_avalon_pio
-#define PLLCFG_COMMAND_BASE 0x6a0
+#define PLLCFG_COMMAND_BASE 0x7b0
 #define PLLCFG_COMMAND_BIT_CLEARING_EDGE_REGISTER 0
 #define PLLCFG_COMMAND_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define PLLCFG_COMMAND_CAPTURE 0
@@ -191,7 +206,7 @@
  */
 
 #define ALT_MODULE_CLASS_PLLCFG_SPI altera_avalon_spi
-#define PLLCFG_SPI_BASE 0x620
+#define PLLCFG_SPI_BASE 0x720
 #define PLLCFG_SPI_CLOCKMULT 1
 #define PLLCFG_SPI_CLOCKPHASE 0
 #define PLLCFG_SPI_CLOCKPOLARITY 0
@@ -222,7 +237,7 @@
  */
 
 #define ALT_MODULE_CLASS_PLLCFG_Status altera_avalon_pio
-#define PLLCFG_STATUS_BASE 0x690
+#define PLLCFG_STATUS_BASE 0x7a0
 #define PLLCFG_STATUS_BIT_CLEARING_EDGE_REGISTER 0
 #define PLLCFG_STATUS_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define PLLCFG_STATUS_CAPTURE 0
@@ -249,7 +264,7 @@
  */
 
 #define ALT_MODULE_CLASS_PLL_RST altera_avalon_pio
-#define PLL_RST_BASE 0x680
+#define PLL_RST_BASE 0x790
 #define PLL_RST_BIT_CLEARING_EDGE_REGISTER 0
 #define PLL_RST_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define PLL_RST_CAPTURE 0
@@ -286,19 +301,19 @@
 #define ALT_NUM_INTERNAL_INTERRUPT_CONTROLLERS 1
 #define ALT_NUM_INTERRUPT_CONTROLLERS 1
 #define ALT_STDERR "/dev/jtag_uart_0"
-#define ALT_STDERR_BASE 0x6e8
+#define ALT_STDERR_BASE 0x7f8
 #define ALT_STDERR_DEV jtag_uart_0
 #define ALT_STDERR_IS_JTAG_UART
 #define ALT_STDERR_PRESENT
 #define ALT_STDERR_TYPE "altera_avalon_jtag_uart"
 #define ALT_STDIN "/dev/jtag_uart_0"
-#define ALT_STDIN_BASE 0x6e8
+#define ALT_STDIN_BASE 0x7f8
 #define ALT_STDIN_DEV jtag_uart_0
 #define ALT_STDIN_IS_JTAG_UART
 #define ALT_STDIN_PRESENT
 #define ALT_STDIN_TYPE "altera_avalon_jtag_uart"
 #define ALT_STDOUT "/dev/jtag_uart_0"
-#define ALT_STDOUT_BASE 0x6e8
+#define ALT_STDOUT_BASE 0x7f8
 #define ALT_STDOUT_DEV jtag_uart_0
 #define ALT_STDOUT_IS_JTAG_UART
 #define ALT_STDOUT_PRESENT
@@ -312,7 +327,7 @@
  */
 
 #define ALT_MODULE_CLASS_dac_spi1 altera_avalon_spi
-#define DAC_SPI1_BASE 0x600
+#define DAC_SPI1_BASE 0x700
 #define DAC_SPI1_CLOCKMULT 1
 #define DAC_SPI1_CLOCKPHASE 1
 #define DAC_SPI1_CLOCKPOLARITY 0
@@ -343,7 +358,7 @@
  */
 
 #define ALT_MODULE_CLASS_fpga_spi0 altera_avalon_spi
-#define FPGA_SPI0_BASE 0x640
+#define FPGA_SPI0_BASE 0x740
 #define FPGA_SPI0_CLOCKMULT 1
 #define FPGA_SPI0_CLOCKPHASE 0
 #define FPGA_SPI0_CLOCKPOLARITY 0
@@ -374,7 +389,7 @@
  */
 
 #define ALT_MODULE_CLASS_gpi_0 altera_avalon_pio
-#define GPI_0_BASE 0x6b0
+#define GPI_0_BASE 0x7c0
 #define GPI_0_BIT_CLEARING_EDGE_REGISTER 0
 #define GPI_0_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define GPI_0_CAPTURE 0
@@ -401,7 +416,7 @@
  */
 
 #define ALT_MODULE_CLASS_gpio_0 altera_avalon_pio
-#define GPIO_0_BASE 0x6c0
+#define GPIO_0_BASE 0x7d0
 #define GPIO_0_BIT_CLEARING_EDGE_REGISTER 0
 #define GPIO_0_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define GPIO_0_CAPTURE 0
@@ -439,7 +454,7 @@
  */
 
 #define ALT_MODULE_CLASS_i2c_opencores_0 i2c_opencores
-#define I2C_OPENCORES_0_BASE 0x660
+#define I2C_OPENCORES_0_BASE 0x760
 #define I2C_OPENCORES_0_IRQ 0
 #define I2C_OPENCORES_0_IRQ_INTERRUPT_CONTROLLER_ID 0
 #define I2C_OPENCORES_0_NAME "/dev/i2c_opencores_0"
@@ -453,7 +468,7 @@
  */
 
 #define ALT_MODULE_CLASS_jtag_uart_0 altera_avalon_jtag_uart
-#define JTAG_UART_0_BASE 0x6e8
+#define JTAG_UART_0_BASE 0x7f8
 #define JTAG_UART_0_IRQ 1
 #define JTAG_UART_0_IRQ_INTERRUPT_CONTROLLER_ID 0
 #define JTAG_UART_0_NAME "/dev/jtag_uart_0"
@@ -584,13 +599,40 @@
  */
 
 #define ALT_MODULE_CLASS_sysid_qsys_0 altera_avalon_sysid_qsys
-#define SYSID_QSYS_0_BASE 0x6e0
+#define SYSID_QSYS_0_BASE 0x7f0
 #define SYSID_QSYS_0_ID 10
 #define SYSID_QSYS_0_IRQ -1
 #define SYSID_QSYS_0_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define SYSID_QSYS_0_NAME "/dev/sysid_qsys_0"
 #define SYSID_QSYS_0_SPAN 8
-#define SYSID_QSYS_0_TIMESTAMP 1518428261
+#define SYSID_QSYS_0_TIMESTAMP 1520592512
 #define SYSID_QSYS_0_TYPE "altera_avalon_sysid_qsys"
+
+
+/*
+ * vctcxo_tamer_0_ctrl configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_vctcxo_tamer_0_ctrl altera_avalon_pio
+#define VCTCXO_TAMER_0_CTRL_BASE 0x780
+#define VCTCXO_TAMER_0_CTRL_BIT_CLEARING_EDGE_REGISTER 0
+#define VCTCXO_TAMER_0_CTRL_BIT_MODIFYING_OUTPUT_REGISTER 0
+#define VCTCXO_TAMER_0_CTRL_CAPTURE 0
+#define VCTCXO_TAMER_0_CTRL_DATA_WIDTH 4
+#define VCTCXO_TAMER_0_CTRL_DO_TEST_BENCH_WIRING 0
+#define VCTCXO_TAMER_0_CTRL_DRIVEN_SIM_VALUE 0
+#define VCTCXO_TAMER_0_CTRL_EDGE_TYPE "NONE"
+#define VCTCXO_TAMER_0_CTRL_FREQ 30720000
+#define VCTCXO_TAMER_0_CTRL_HAS_IN 1
+#define VCTCXO_TAMER_0_CTRL_HAS_OUT 0
+#define VCTCXO_TAMER_0_CTRL_HAS_TRI 0
+#define VCTCXO_TAMER_0_CTRL_IRQ -1
+#define VCTCXO_TAMER_0_CTRL_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define VCTCXO_TAMER_0_CTRL_IRQ_TYPE "NONE"
+#define VCTCXO_TAMER_0_CTRL_NAME "/dev/vctcxo_tamer_0_ctrl"
+#define VCTCXO_TAMER_0_CTRL_RESET_VALUE 0
+#define VCTCXO_TAMER_0_CTRL_SPAN 16
+#define VCTCXO_TAMER_0_CTRL_TYPE "altera_avalon_pio"
 
 #endif /* __SYSTEM_H_ */

@@ -40,7 +40,6 @@
 								<option id="gnu.both.asm.option.include.paths.1799857038" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;C:\altera\15.0\ip\altera\nios2_ip\altera_nios2\HAL\inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;C:\altera\15.0\ip\altera\alt_mem_if\altera_mem_if_qseq\software_110\sequencer_bfm&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;H:\working_dir\altera\qSpark\lms7_ADPD\software\nios4usb_bsp\drivers\inc&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.2131222526" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>

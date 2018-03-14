@@ -144,6 +144,7 @@ ELF := nios4usb_app.elf
 # Paths to C, C++, and assembly source files.
 C_SRCS += main.c
 C_SRCS += pll_rcfg.c
+C_SRCS += vctcxo_tamer.c
 CXX_SRCS :=
 ASM_SRCS :=
 

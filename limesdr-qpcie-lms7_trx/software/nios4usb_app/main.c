@@ -7,6 +7,7 @@
 
 #include "io.h"
 #include <system.h>
+#include <stdbool.h>
 #include "alt_types.h"
 #include <stdint.h>
 #include <string.h>
@@ -18,11 +19,13 @@
 #include "LMS64C_protocol.h"
 #include "limesdr_qpcie_brd.h"
 #include "i2c_opencores.h"
+#include "vctcxo_tamer.h"
+#include "math.h"
 
 #define sbi(p,n) ((p) |= (1UL << (n)))
 #define cbi(p,n) ((p) &= ~(1 << (n)))
 
-#define FW_VER				1 //Initial version
+//#define FW_VER			1 //Initial version
 #define FW_VER				2 //NIOS memory increased up to 32kB
 							  //I2C module added
 							  //POT, ADF4002, TCXO DAC, LM75, Si5351C control implemented
@@ -43,13 +46,74 @@
 #define LMS2_SS			8
 #define LMS2_RESET		9
 
-unsigned short int dac_val = 134;	//TCXO DAC value
+unsigned short int dac_val = 30714;		//TCXO DAC value
 signed short int converted_val = 300;	//Temperature
 
 
 uint8_t test, block, cmd_errors, glEp0Buffer_Rx[64], glEp0Buffer_Tx[64];
 tLMS_Ctrl_Packet *LMS_Ctrl_Packet_Tx = (tLMS_Ctrl_Packet*)glEp0Buffer_Tx;
 tLMS_Ctrl_Packet *LMS_Ctrl_Packet_Rx = (tLMS_Ctrl_Packet*)glEp0Buffer_Rx;
+
+/* Define a cached version of the VCTCXO tamer control register */
+uint8_t vctcxo_tamer_ctrl_reg = 0x00;
+
+/* Define a global variable containing the current VCTCXO DAC setting.
+ * This is a 'cached' value of what is written to the DAC and is used
+ * by the VCTCXO calibration algorithm to avoid constant read requests
+ * going out to the DAC. Initial power-up state of the DAC is mid-scale.
+ */
+uint16_t vctcxo_trim_dac_value = 0x77FA;
+
+
+
+
+
+
+/* A structure that represents a point on a line. Used for calibrating
+ * the VCTCXO */
+typedef struct point {
+    int32_t  x; // Error counts
+    uint16_t y; // DAC count
+} point_t;
+
+typedef struct line {
+    point_t  point[2];
+    float  slope;
+    uint16_t y_intercept; // in DAC counts
+} line_t;
+
+/* State machine for VCTCXO tuning */
+typedef enum state {
+    COARSE_TUNE_MIN,
+    COARSE_TUNE_MAX,
+    COARSE_TUNE_DONE,
+    FINE_TUNE,
+    DO_NOTHING
+} state_t;
+
+typedef enum {
+    /** Denotes an invalid selection or state */
+    VCTCXO_TAMER_INVALID = -1,
+
+    /** Do not attempt to tame the VCTCXO with an input source. */
+    VCTCXO_TAMER_DISABLED = 0,
+
+    /** Use a 1 pps input source to tame the VCTCXO. */
+    VCTCXO_TAMER_1_PPS = 1,
+
+    /** Use a 10 MHz input source to tame the VCTCXO. */
+    VCTCXO_TAMER_10_MHZ = 2
+} vctcxo_tamer_mode;
+
+struct vctcxo_tamer_pkt_buf {
+    volatile bool    ready;
+    volatile int32_t pps_1s_error;
+    volatile bool    pps_1s_error_flag;
+    volatile int32_t pps_10s_error;
+    volatile bool    pps_10s_error_flag;
+    volatile int32_t pps_100s_error;
+    volatile bool    pps_100s_error_flag;
+};
 
 
 /**	This function checks if all blocks could fit in data field.
@@ -265,6 +329,8 @@ void Control_TCXO_DAC (unsigned char oe, unsigned short int *data) //controls DA
 		DAC_data[1] = ((*data) >>8) & 0xFF;
 		DAC_data[2] = ((*data) >>0) & 0xFF;
 
+	    /* Update cached value of trim DAC setting */
+	    vctcxo_trim_dac_value = (uint16_t) *data;
 		spirez = alt_avalon_spi_command(DAC_SPI1_BASE, SPI_NR_TCXO_DAC, 3, DAC_data, 0, NULL, 0);
 	}
 }
@@ -640,6 +706,167 @@ void Modify_BRDSPI16_Reg_bits (unsigned short int SPI_reg_addr, unsigned char MS
 	spirez = alt_avalon_spi_command(FPGA_SPI0_BASE, SPI_NR_FPGA, 4, WrBuff, 0, NULL, 0);
 }
 
+
+
+uint8_t vctcxo_tamer_read(uint8_t addr) {
+    return (uint8_t)IORD_8DIRECT(AVALON_MM_EXTERNAL_0_BASE, addr);
+}
+
+void vctcxo_tamer_write(uint8_t addr, uint8_t data) {
+    IOWR_8DIRECT(AVALON_MM_EXTERNAL_0_BASE, addr, data);
+}
+
+void vctcxo_tamer_reset_counters(bool reset) {
+    if( reset ) {
+        vctcxo_tamer_ctrl_reg |= VT_CTRL_RESET;
+    } else {
+        vctcxo_tamer_ctrl_reg &= ~VT_CTRL_RESET;
+    }
+
+    vctcxo_tamer_write(VT_CTRL_ADDR, vctcxo_tamer_ctrl_reg);
+    return;
+}
+
+void vctcxo_tamer_enable_isr(bool enable) {
+    if( enable ) {
+        vctcxo_tamer_ctrl_reg |= VT_CTRL_IRQ_EN;
+    } else {
+        vctcxo_tamer_ctrl_reg &= ~VT_CTRL_IRQ_EN;
+    }
+
+    vctcxo_tamer_write(VT_CTRL_ADDR, vctcxo_tamer_ctrl_reg);
+    return;
+}
+
+void vctcxo_tamer_clear_isr() {
+    vctcxo_tamer_write(VT_CTRL_ADDR, vctcxo_tamer_ctrl_reg | VT_CTRL_IRQ_CLR);
+    return;
+}
+
+void vctcxo_tamer_set_tune_mode(vctcxo_tamer_mode mode) {
+
+    switch (mode) {
+        case VCTCXO_TAMER_DISABLED:
+        case VCTCXO_TAMER_1_PPS:
+        case VCTCXO_TAMER_10_MHZ:
+            vctcxo_tamer_enable_isr(false);
+            break;
+
+        default:
+            /* Erroneous value */
+            return;
+    }
+
+    /* Set tuning mode */
+    vctcxo_tamer_ctrl_reg &= ~VT_CTRL_TUNE_MODE;
+    vctcxo_tamer_ctrl_reg |= (((uint8_t) mode) << 6);
+    vctcxo_tamer_write(VT_CTRL_ADDR, vctcxo_tamer_ctrl_reg);
+
+    /* Reset the counters */
+    vctcxo_tamer_reset_counters( true );
+
+    /* Take counters out of reset if tuning mode is not DISABLED */
+    if( mode != 0x00 ) {
+        vctcxo_tamer_reset_counters( false );
+    }
+
+    switch (mode) {
+        case VCTCXO_TAMER_1_PPS:
+        case VCTCXO_TAMER_10_MHZ:
+            vctcxo_tamer_enable_isr(true);
+            break;
+
+        default:
+            /* Leave ISR disabled otherwise */
+            break;
+    }
+
+    return;
+}
+
+int32_t vctcxo_tamer_read_count(uint8_t addr) {
+    uint32_t base = AVALON_MM_EXTERNAL_0_BASE;
+    uint8_t offset = addr;
+    int32_t value = 0;
+
+    value  = IORD_8DIRECT(base, offset++);
+    value |= ((int32_t) IORD_8DIRECT(base, offset++)) << 8;
+    value |= ((int32_t) IORD_8DIRECT(base, offset++)) << 16;
+    value |= ((int32_t) IORD_8DIRECT(base, offset++)) << 24;
+
+    return value;
+}
+
+void vctcxo_trim_dac_write(uint8_t cmd, uint16_t val)
+{
+	unsigned short int dac_value;
+	uint8_t tuned_val_lsb;
+	uint8_t tuned_val_msb;
+
+	tuned_val_lsb = (uint8_t) (val & 0x00FF);
+	tuned_val_msb = (uint8_t) ((val & 0xFF00) >> 8);
+
+    dac_value = (unsigned short int) val;
+    dac_val = (unsigned short int) val;
+
+    //write tuned val to VCTCXO_tamer MM registers
+    vctcxo_tamer_write(VT_DAC_TUNNED_VAL_ADDR0, tuned_val_lsb);
+    vctcxo_tamer_write(VT_DAC_TUNNED_VAL_ADDR1, tuned_val_msb);
+
+	Control_TCXO_DAC (1, &dac_value); //enable DAC output, set new val
+}
+
+
+static void vctcxo_tamer_isr(void *context) {
+    struct vctcxo_tamer_pkt_buf *pkt = (struct vctcxo_tamer_pkt_buf *)context;
+    uint8_t error_status = 0x00;
+
+    /* Disable interrupts */
+    vctcxo_tamer_enable_isr( false );
+
+    /* Reset (stop) the counters */
+    vctcxo_tamer_reset_counters( true );
+
+    /* Read the current count values */
+    pkt->pps_1s_error   = vctcxo_tamer_read_count(VT_ERR_1S_ADDR);
+    pkt->pps_10s_error  = vctcxo_tamer_read_count(VT_ERR_10S_ADDR);
+    pkt->pps_100s_error = vctcxo_tamer_read_count(VT_ERR_100S_ADDR);
+
+    /* Read the error status register */
+    error_status = vctcxo_tamer_read(VT_STAT_ADDR);
+
+    /* Set the appropriate flags in the packet buffer */
+    pkt->pps_1s_error_flag   = (error_status & VT_STAT_ERR_1S)   ? true : false;
+    pkt->pps_10s_error_flag  = (error_status & VT_STAT_ERR_10S)  ? true : false;
+    pkt->pps_100s_error_flag = (error_status & VT_STAT_ERR_100S) ? true : false;
+
+    /* Clear interrupt */
+    vctcxo_tamer_clear_isr();
+
+    /* Tell the main loop that there is a request pending */
+    pkt->ready = true;
+
+    return;
+}
+
+
+void vctcxo_tamer_init(){
+    /* Default VCTCXO Tamer and its interrupts to be disabled. */
+	vctcxo_tamer_write(VT_STATE_ADDR, 0x00);
+	/* Write status to to state register*/
+    vctcxo_tamer_set_tune_mode(VCTCXO_TAMER_1_PPS);
+}
+
+void vctcxo_tamer_dis(){
+    /* Default VCTCXO Tamer and its interrupts to be disabled. */
+    vctcxo_tamer_set_tune_mode(VCTCXO_TAMER_DISABLED);
+
+	/* Write status to to state register*/
+	vctcxo_tamer_write(VT_STATE_ADDR, 0x00);
+}
+
+
+
 int main(void)
 {
 	uint32_t i, ui32_tmp, ui32_c0, ui32_c1;
@@ -661,6 +888,29 @@ int main(void)
 	unsigned char MCP_data[2];
 	uint16_t wiper_pos[2];
 
+    uint8_t status = 0;
+    uint8_t vctcxo_tamer_irq = 0;
+    uint8_t vctcxo_tamer_en=0,	vctcxo_tamer_en_old = 0;
+
+    // Trim DAC constants
+    const uint16_t trimdac_min       = 0x1938;  // Decimal value  = 6456
+    const uint16_t trimdac_max       = 0xE2F3;	// Decimal value  = 58099
+
+    // Trim DAC calibration line
+    line_t trimdac_cal_line;
+
+    // VCTCXO Tune State machine
+    state_t tune_state = COARSE_TUNE_MIN;
+
+    // Set the known/default values of the trim DAC cal line
+    trimdac_cal_line.point[0].x  = 0;
+    trimdac_cal_line.point[0].y  = trimdac_min;
+    trimdac_cal_line.point[1].x  = 0;
+    trimdac_cal_line.point[1].y  = trimdac_max;
+    trimdac_cal_line.slope       = 0;
+    trimdac_cal_line.y_intercept = 0;
+    struct vctcxo_tamer_pkt_buf vctcxo_tamer_pkt;
+    vctcxo_tamer_pkt.ready = false;
 
     // I2C initialiazation
     I2C_init(I2C_OPENCORES_0_BASE, ALT_CPU_FREQ, 100000);
@@ -682,7 +932,7 @@ int main(void)
 
 	//write default TCXO DAC value
 	Control_TCXO_ADF (0, NULL); //set ADF4002 CP to three-state
-	dac_val = 30714; //default DAC value
+	dac_val = 30714;
 	Control_TCXO_DAC (1, &dac_val); //enable DAC output, set new val
 
 	//default dig pot wiper values
@@ -801,6 +1051,125 @@ int main(void)
 	    pllcfg_start = IORD(PLLCFG_COMMAND_BASE, 0x00) & 0x01;
 
 
+    	vctcxo_tamer_irq = (IORD_8DIRECT(VCTCXO_TAMER_0_CTRL_BASE, 0x00) & 0x02);
+	    // Clear VCTCXO tamer interrupt
+	    if(vctcxo_tamer_irq != 0)
+	    {	vctcxo_tamer_isr(&vctcxo_tamer_pkt);
+	    	//IOWR_8DIRECT(VCTCXO_TAMER_0_BASE, 0, 0x70);
+	    }
+
+    	//Get vctcxo tamer enable bit status
+    	vctcxo_tamer_en_old = vctcxo_tamer_en;
+    	vctcxo_tamer_en = (IORD_8DIRECT(VCTCXO_TAMER_0_CTRL_BASE, 0x00) & 0x01);
+
+    	if (vctcxo_tamer_en_old != vctcxo_tamer_en){
+    		if (vctcxo_tamer_en == 0x01){
+    			vctcxo_tamer_init();
+    			vctcxo_tamer_pkt.ready = true;
+    		}
+    		else {
+    			vctcxo_tamer_dis();
+    			tune_state = COARSE_TUNE_MIN;
+    			vctcxo_tamer_pkt.ready = false;
+    		}
+    	}
+
+        /* Temporarily putting the VCTCXO Calibration stuff here. */
+        if( vctcxo_tamer_pkt.ready ) {
+
+            vctcxo_tamer_pkt.ready = false;
+
+            switch(tune_state) {
+
+            case COARSE_TUNE_MIN:
+
+                /* Tune to the minimum DAC value */
+                vctcxo_trim_dac_write( 0x08, trimdac_min );
+
+                /* State to enter upon the next interrupt */
+                tune_state = COARSE_TUNE_MAX;
+
+                break;
+
+            case COARSE_TUNE_MAX:
+
+                /* We have the error from the minimum DAC setting, store it
+                 * as the 'x' coordinate for the first point */
+                trimdac_cal_line.point[0].x = vctcxo_tamer_pkt.pps_1s_error;
+
+                /* Tune to the maximum DAC value */
+                vctcxo_trim_dac_write( 0x08, trimdac_max );
+
+                /* State to enter upon the next interrupt */
+                tune_state = COARSE_TUNE_DONE;
+
+                break;
+
+            case COARSE_TUNE_DONE:
+            	/* Write status to to state register*/
+            	vctcxo_tamer_write(VT_STATE_ADDR, 0x01);
+
+                /* We have the error from the maximum DAC setting, store it
+                 * as the 'x' coordinate for the second point */
+                trimdac_cal_line.point[1].x = vctcxo_tamer_pkt.pps_1s_error;
+
+                /* We now have two points, so we can calculate the equation
+                 * for a line plotted with DAC counts on the Y axis and
+                 * error on the X axis. We want a PPM of zero, which ideally
+                 * corresponds to the y-intercept of the line. */
+                trimdac_cal_line.slope = ( (float) (trimdac_cal_line.point[1].y - trimdac_cal_line.point[0].y) / (float)
+                                           (trimdac_cal_line.point[1].x - trimdac_cal_line.point[0].x) );
+                //trimdac_cal_line.slope = ( (trimdac_cal_line.point[1].y - trimdac_cal_line.point[0].y) * 1000 /
+                                           //(trimdac_cal_line.point[1].x - trimdac_cal_line.point[0].x) );
+                //trimdac_cal_line.y_intercept = ( trimdac_cal_line.point[0].y -
+                                                 //(trimdac_cal_line.slope * trimdac_cal_line.point[0].x) ) / 1000;
+
+                trimdac_cal_line.y_intercept = ( trimdac_cal_line.point[0].y -
+                                                 (uint16_t)(round(trimdac_cal_line.slope * (float) trimdac_cal_line.point[0].x)));
+
+                /* Set the trim DAC count to the y-intercept */
+                vctcxo_trim_dac_write( 0x08, trimdac_cal_line.y_intercept );
+
+                /* State to enter upon the next interrupt */
+                tune_state = FINE_TUNE;
+
+                break;
+
+            case FINE_TUNE:
+
+                /* We should be extremely close to a perfectly tuned
+                 * VCTCXO, but some minor adjustments need to be made */
+
+                /* Check the magnitude of the errors starting with the
+                 * one second count. If an error is greater than the maxium
+                 * tolerated error, adjust the trim DAC by the error (Hz)
+                 * multiplied by the slope (in counts/Hz) and scale the
+                 * result by the precision interval (e.g. 1s, 10s, 100s). */
+                if( vctcxo_tamer_pkt.pps_1s_error_flag ) {
+                    vctcxo_trim_dac_write( 0x08, (vctcxo_trim_dac_value -
+                    		(uint16_t) (round((float)vctcxo_tamer_pkt.pps_1s_error * trimdac_cal_line.slope)/1)));
+                } else if( vctcxo_tamer_pkt.pps_10s_error_flag ) {
+                    vctcxo_trim_dac_write( 0x08, (vctcxo_trim_dac_value -
+                    		(uint16_t)(round((float)vctcxo_tamer_pkt.pps_10s_error * trimdac_cal_line.slope)/10)));
+                } else if( vctcxo_tamer_pkt.pps_100s_error_flag ) {
+                    vctcxo_trim_dac_write( 0x08, (vctcxo_trim_dac_value -
+                    		(uint16_t)(round((float)vctcxo_tamer_pkt.pps_100s_error * trimdac_cal_line.slope)/100)));
+                }
+
+                break;
+
+            default:
+                break;
+
+            } /* switch */
+
+            /* Take PPS counters out of reset */
+            vctcxo_tamer_reset_counters( false );
+
+            /* Enable interrupts */
+            vctcxo_tamer_enable_isr( true );
+
+        } /* VCTCXO Tamer interrupt */
 
         spirez = IORD(AV_FIFO_INT_0_BASE, 2);	// Read FIFO Status
         if(!(spirez & 0x01))
