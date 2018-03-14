@@ -61,7 +61,17 @@ entity nios_cpu_top is
 			avmm_s1_readdata     : out   std_logic_vector(31 downto 0);                    -- readdata
 			avmm_s1_write        : in    std_logic                     := 'X';             -- write
 			avmm_s1_writedata    : in    std_logic_vector(31 downto 0) := (others => 'X'); -- writedata
-			avmm_s1_waitrequest  : out   std_logic                                         -- waitrequest
+			avmm_s1_waitrequest  : out   std_logic;                                        -- waitrequest
+         vctcxo_tune_en       : in    std_logic;
+         vctcxo_irq           : in    std_logic;
+         avmm_m0_address      : out   std_logic_vector(7 downto 0);                     -- avmm_m0.address
+         avmm_m0_read         : out   std_logic;                                        --       .read
+         avmm_m0_waitrequest  : in    std_logic                     := '0';             --       .waitrequest
+         avmm_m0_readdata     : in    std_logic_vector(7 downto 0)  := (others => '0'); --       .readdata
+         avmm_m0_write        : out   std_logic;                                        --       .write
+         avmm_m0_writedata    : out   std_logic_vector(7 downto 0);                     --       .writedata
+         avmm_m0_clk_clk      : out   std_logic;                                        -- avm_m0_clk.clk
+         avmm_m0_reset_reset  : out   std_logic 
 
         );
 end nios_cpu_top;
@@ -78,6 +88,12 @@ architecture arch of nios_cpu_top is
    
    signal avmm_s0_address_int : std_logic_vector(31 downto 0);
    signal avmm_s1_address_int : std_logic_vector(31 downto 0);
+   
+   signal vctcxo_tune_en_sync : std_logic;
+   signal vctcxo_irq_sync     : std_logic;
+   
+   signal vctcxo_tamer_0_irq_out_irq   : std_logic;
+   signal vctcxo_tamer_0_ctrl_export   : std_logic_vector(3 downto 0);
 		
 	component nios_cpu is
 		port (
@@ -131,7 +147,16 @@ architecture arch of nios_cpu_top is
 			avmm_s1_readdata                       : out   std_logic_vector(31 downto 0);                    -- readdata
 			avmm_s1_write                          : in    std_logic                     := 'X';             -- write
 			avmm_s1_writedata                      : in    std_logic_vector(31 downto 0) := (others => 'X'); -- writedata
-			avmm_s1_waitrequest                    : out   std_logic                                         -- waitrequest
+			avmm_s1_waitrequest                    : out   std_logic;                                        -- waitrequest
+         vctcxo_tamer_0_ctrl_export             : in    std_logic_vector(3 downto 0)  := (others=>'0');             --            vctcxo_tamer_0_irq_in.export
+         avmm_m0_address                        : out   std_logic_vector(7 downto 0);                     --                           avm_m0.address
+         avmm_m0_read                           : out   std_logic;                                        --                                 .read
+         avmm_m0_waitrequest                    : in    std_logic                     := '0';             --                                 .waitrequest
+         avmm_m0_readdata                       : in    std_logic_vector(7 downto 0)  := (others => '0'); --                                 .readdata
+         avmm_m0_write                          : out   std_logic;                                        --                                 .write
+         avmm_m0_writedata                      : out   std_logic_vector(7 downto 0);                     --                                 .writedata
+         avmm_m0_clk_clk                        : out   std_logic;                                        --                       avm_m0_clk.clk
+         avmm_m0_reset_reset                    : out   std_logic  
 		);
 	end component nios_cpu;
 
@@ -149,6 +174,12 @@ begin
                            "00"; -- address range 200 - 3FF
    
 
+   sync_reg0 : entity work.sync_reg 
+   port map(clk100, '1', vctcxo_tune_en, vctcxo_tune_en_sync);
+   
+   sync_reg1 : entity work.sync_reg 
+   port map(clk100, '1', vctcxo_irq, vctcxo_irq_sync);
+   
 	u0 : component nios_cpu
 		port map (
 			clk_clk                                => clk100,
@@ -201,7 +232,16 @@ begin
          avmm_s1_readdata                       => avmm_s1_readdata,   
          avmm_s1_write                          => avmm_s1_write,      
          avmm_s1_writedata                      => avmm_s1_writedata,  
-         avmm_s1_waitrequest                    => avmm_s1_waitrequest
+         avmm_s1_waitrequest                    => avmm_s1_waitrequest,
+         vctcxo_tamer_0_ctrl_export             => vctcxo_tamer_0_ctrl_export,
+         avmm_m0_address                        => avmm_m0_address,
+         avmm_m0_read                           => avmm_m0_read,
+         avmm_m0_waitrequest                    => avmm_m0_waitrequest,
+         avmm_m0_readdata                       => avmm_m0_readdata,
+         avmm_m0_write                          => avmm_m0_write,
+         avmm_m0_writedata                      => avmm_m0_writedata,
+         avmm_m0_clk_clk                        => avmm_m0_clk_clk,
+         avmm_m0_reset_reset                    => avmm_m0_reset_reset
 
 		);
 		
@@ -212,7 +252,11 @@ begin
 	fpga_spi0_MOSI <= fpga_spi0_MOSI_int when dac_spi1_SS_int = '1' else dac_spi1_MOSI_int;
 	fpga_spi0_SCLK <= fpga_spi0_SCLK_int when dac_spi1_SS_int = '1' else dac_spi1_SCLK_int;
 
-
+   vctcxo_tamer_0_ctrl_export(0) <= vctcxo_tune_en_sync;
+   vctcxo_tamer_0_ctrl_export(1) <= vctcxo_irq_sync;
+   vctcxo_tamer_0_ctrl_export(2) <= '0';
+   vctcxo_tamer_0_ctrl_export(3) <= '0';
+   
 end arch;   
 
 
