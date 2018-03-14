@@ -50,7 +50,16 @@
 			pllcfg_spi_SS_n                        : out   std_logic;                                        -- SS_n
 			pllcfg_stat_export                     : out   std_logic_vector(9 downto 0);                     -- export
 			scl_export                             : inout std_logic                     := 'X';             -- export
-			sda_export                             : inout std_logic                     := 'X'              -- export
+			sda_export                             : inout std_logic                     := 'X';             -- export
+			avmm_m0_clk_clk                        : out   std_logic;                                        -- clk
+			avmm_m0_reset_reset                    : out   std_logic;                                        -- reset
+			avmm_m0_address                        : out   std_logic_vector(7 downto 0);                     -- address
+			avmm_m0_read                           : out   std_logic;                                        -- read
+			avmm_m0_waitrequest                    : in    std_logic                     := 'X';             -- waitrequest
+			avmm_m0_readdata                       : in    std_logic_vector(7 downto 0)  := (others => 'X'); -- readdata
+			avmm_m0_write                          : out   std_logic;                                        -- write
+			avmm_m0_writedata                      : out   std_logic_vector(7 downto 0);                     -- writedata
+			vctcxo_tamer_0_ctrl_export             : in    std_logic_vector(3 downto 0)  := (others => 'X')  -- export
 		);
 	end component nios_cpu;
 
@@ -106,6 +115,15 @@
 			pllcfg_spi_SS_n                        => CONNECTED_TO_pllcfg_spi_SS_n,                        --                     .SS_n
 			pllcfg_stat_export                     => CONNECTED_TO_pllcfg_stat_export,                     --          pllcfg_stat.export
 			scl_export                             => CONNECTED_TO_scl_export,                             --                  scl.export
-			sda_export                             => CONNECTED_TO_sda_export                              --                  sda.export
+			sda_export                             => CONNECTED_TO_sda_export,                             --                  sda.export
+			avmm_m0_clk_clk                        => CONNECTED_TO_avmm_m0_clk_clk,                        --          avmm_m0_clk.clk
+			avmm_m0_reset_reset                    => CONNECTED_TO_avmm_m0_reset_reset,                    --        avmm_m0_reset.reset
+			avmm_m0_address                        => CONNECTED_TO_avmm_m0_address,                        --              avmm_m0.address
+			avmm_m0_read                           => CONNECTED_TO_avmm_m0_read,                           --                     .read
+			avmm_m0_waitrequest                    => CONNECTED_TO_avmm_m0_waitrequest,                    --                     .waitrequest
+			avmm_m0_readdata                       => CONNECTED_TO_avmm_m0_readdata,                       --                     .readdata
+			avmm_m0_write                          => CONNECTED_TO_avmm_m0_write,                          --                     .write
+			avmm_m0_writedata                      => CONNECTED_TO_avmm_m0_writedata,                      --                     .writedata
+			vctcxo_tamer_0_ctrl_export             => CONNECTED_TO_vctcxo_tamer_0_ctrl_export              --  vctcxo_tamer_0_ctrl.export
 		);
 

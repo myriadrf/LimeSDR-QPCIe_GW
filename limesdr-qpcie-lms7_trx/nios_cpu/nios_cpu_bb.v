@@ -50,7 +50,16 @@ module nios_cpu (
 	pllcfg_spi_SS_n,
 	pllcfg_stat_export,
 	scl_export,
-	sda_export);	
+	sda_export,
+	avmm_m0_clk_clk,
+	avmm_m0_reset_reset,
+	avmm_m0_address,
+	avmm_m0_read,
+	avmm_m0_waitrequest,
+	avmm_m0_readdata,
+	avmm_m0_write,
+	avmm_m0_writedata,
+	vctcxo_tamer_0_ctrl_export);	
 
 	input	[31:0]	avmm_s0_address;
 	input		avmm_s0_read;
@@ -103,4 +112,13 @@ module nios_cpu (
 	output	[9:0]	pllcfg_stat_export;
 	inout		scl_export;
 	inout		sda_export;
+	output		avmm_m0_clk_clk;
+	output		avmm_m0_reset_reset;
+	output	[7:0]	avmm_m0_address;
+	output		avmm_m0_read;
+	input		avmm_m0_waitrequest;
+	input	[7:0]	avmm_m0_readdata;
+	output		avmm_m0_write;
+	output	[7:0]	avmm_m0_writedata;
+	input	[3:0]	vctcxo_tamer_0_ctrl_export;
 endmodule

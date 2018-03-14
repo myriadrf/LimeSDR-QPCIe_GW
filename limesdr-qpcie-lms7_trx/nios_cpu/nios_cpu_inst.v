@@ -49,6 +49,15 @@
 		.pllcfg_spi_SS_n                        (<connected-to-pllcfg_spi_SS_n>),                        //                     .SS_n
 		.pllcfg_stat_export                     (<connected-to-pllcfg_stat_export>),                     //          pllcfg_stat.export
 		.scl_export                             (<connected-to-scl_export>),                             //                  scl.export
-		.sda_export                             (<connected-to-sda_export>)                              //                  sda.export
+		.sda_export                             (<connected-to-sda_export>),                             //                  sda.export
+		.avmm_m0_clk_clk                        (<connected-to-avmm_m0_clk_clk>),                        //          avmm_m0_clk.clk
+		.avmm_m0_reset_reset                    (<connected-to-avmm_m0_reset_reset>),                    //        avmm_m0_reset.reset
+		.avmm_m0_address                        (<connected-to-avmm_m0_address>),                        //              avmm_m0.address
+		.avmm_m0_read                           (<connected-to-avmm_m0_read>),                           //                     .read
+		.avmm_m0_waitrequest                    (<connected-to-avmm_m0_waitrequest>),                    //                     .waitrequest
+		.avmm_m0_readdata                       (<connected-to-avmm_m0_readdata>),                       //                     .readdata
+		.avmm_m0_write                          (<connected-to-avmm_m0_write>),                          //                     .write
+		.avmm_m0_writedata                      (<connected-to-avmm_m0_writedata>),                      //                     .writedata
+		.vctcxo_tamer_0_ctrl_export             (<connected-to-vctcxo_tamer_0_ctrl_export>)              //  vctcxo_tamer_0_ctrl.export
 	);
 
