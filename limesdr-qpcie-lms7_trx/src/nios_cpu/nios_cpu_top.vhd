@@ -68,6 +68,7 @@ entity nios_cpu_top is
       avmm_m0_read         : out   std_logic;                                        --       .read
       avmm_m0_waitrequest  : in    std_logic                     := '0';             --       .waitrequest
       avmm_m0_readdata     : in    std_logic_vector(7 downto 0)  := (others => '0'); --       .readdata
+      avmm_m0_readdatavalid: in    std_logic                     := '0';             --       .readdatavalid
       avmm_m0_write        : out   std_logic;                                        --       .write
       avmm_m0_writedata    : out   std_logic_vector(7 downto 0);                     --       .writedata
       avmm_m0_clk_clk      : out   std_logic;                                        -- avm_m0_clk.clk
@@ -153,6 +154,7 @@ architecture arch of nios_cpu_top is
          avmm_m0_read                           : out   std_logic;                                        --                      .read
          avmm_m0_waitrequest                    : in    std_logic                     := '0';             --                      .waitrequest
          avmm_m0_readdata                       : in    std_logic_vector(7 downto 0)  := (others => '0'); --                      .readdata
+         avmm_m0_readdatavalid                  : in    std_logic                     := '0';             --                      .readdatavalid
          avmm_m0_write                          : out   std_logic;                                        --                      .write
          avmm_m0_writedata                      : out   std_logic_vector(7 downto 0);                     --                      .writedata
          avmm_m0_clk_clk                        : out   std_logic;                                        --            avm_m0_clk.clk
@@ -238,6 +240,7 @@ begin
          avmm_m0_read                           => avmm_m0_read,
          avmm_m0_waitrequest                    => avmm_m0_waitrequest,
          avmm_m0_readdata                       => avmm_m0_readdata,
+         avmm_m0_readdatavalid                  => avmm_m0_readdatavalid,
          avmm_m0_write                          => avmm_m0_write,
          avmm_m0_writedata                      => avmm_m0_writedata,
          avmm_m0_clk_clk                        => avmm_m0_clk_clk,
