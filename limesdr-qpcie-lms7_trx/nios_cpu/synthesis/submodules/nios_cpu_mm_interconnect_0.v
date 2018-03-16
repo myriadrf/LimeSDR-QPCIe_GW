@@ -46,6 +46,7 @@ module nios_cpu_mm_interconnect_0 (
 		output wire        Avalon_MM_external_0_avs_s0_read,                       //                                                 .read
 		input  wire [7:0]  Avalon_MM_external_0_avs_s0_readdata,                   //                                                 .readdata
 		output wire [7:0]  Avalon_MM_external_0_avs_s0_writedata,                  //                                                 .writedata
+		input  wire        Avalon_MM_external_0_avs_s0_readdatavalid,              //                                                 .readdatavalid
 		input  wire        Avalon_MM_external_0_avs_s0_waitrequest,                //                                                 .waitrequest
 		output wire [2:0]  dac_spi1_spi_control_port_address,                      //                        dac_spi1_spi_control_port.address
 		output wire        dac_spi1_spi_control_port_write,                        //                                                 .write
@@ -2181,7 +2182,7 @@ module nios_cpu_mm_interconnect_0 (
 		.UAV_ADDRESS_W                  (32),
 		.UAV_BURSTCOUNT_W               (1),
 		.AV_READLATENCY                 (0),
-		.USE_READDATAVALID              (0),
+		.USE_READDATAVALID              (1),
 		.USE_WAITREQUEST                (1),
 		.USE_UAV_CLKEN                  (0),
 		.USE_READRESPONSE               (0),
@@ -2216,12 +2217,12 @@ module nios_cpu_mm_interconnect_0 (
 		.av_read                (Avalon_MM_external_0_avs_s0_read),                       //                         .read
 		.av_readdata            (Avalon_MM_external_0_avs_s0_readdata),                   //                         .readdata
 		.av_writedata           (Avalon_MM_external_0_avs_s0_writedata),                  //                         .writedata
+		.av_readdatavalid       (Avalon_MM_external_0_avs_s0_readdatavalid),              //                         .readdatavalid
 		.av_waitrequest         (Avalon_MM_external_0_avs_s0_waitrequest),                //                         .waitrequest
 		.av_begintransfer       (),                                                       //              (terminated)
 		.av_beginbursttransfer  (),                                                       //              (terminated)
 		.av_burstcount          (),                                                       //              (terminated)
 		.av_byteenable          (),                                                       //              (terminated)
-		.av_readdatavalid       (1'b0),                                                   //              (terminated)
 		.av_writebyteenable     (),                                                       //              (terminated)
 		.av_lock                (),                                                       //              (terminated)
 		.av_chipselect          (),                                                       //              (terminated)

@@ -10,6 +10,7 @@ module nios_cpu (
 		input  wire [7:0]  avmm_m0_readdata,                       //                     .readdata
 		output wire        avmm_m0_write,                          //                     .write
 		output wire [7:0]  avmm_m0_writedata,                      //                     .writedata
+		input  wire        avmm_m0_readdatavalid,                  //                     .readdatavalid
 		output wire        avmm_m0_clk_clk,                        //          avmm_m0_clk.clk
 		output wire        avmm_m0_reset_reset,                    //        avmm_m0_reset.reset
 		input  wire [31:0] avmm_s0_address,                        //              avmm_s0.address
@@ -126,6 +127,7 @@ module nios_cpu (
 	wire         mm_interconnect_0_avalon_mm_external_0_avs_s0_waitrequest;      // Avalon_MM_external_0:avs_s0_waitrequest -> mm_interconnect_0:Avalon_MM_external_0_avs_s0_waitrequest
 	wire   [7:0] mm_interconnect_0_avalon_mm_external_0_avs_s0_address;          // mm_interconnect_0:Avalon_MM_external_0_avs_s0_address -> Avalon_MM_external_0:avs_s0_address
 	wire         mm_interconnect_0_avalon_mm_external_0_avs_s0_read;             // mm_interconnect_0:Avalon_MM_external_0_avs_s0_read -> Avalon_MM_external_0:avs_s0_read
+	wire         mm_interconnect_0_avalon_mm_external_0_avs_s0_readdatavalid;    // Avalon_MM_external_0:avs_s0_readdatavalid -> mm_interconnect_0:Avalon_MM_external_0_avs_s0_readdatavalid
 	wire         mm_interconnect_0_avalon_mm_external_0_avs_s0_write;            // mm_interconnect_0:Avalon_MM_external_0_avs_s0_write -> Avalon_MM_external_0:avs_s0_write
 	wire   [7:0] mm_interconnect_0_avalon_mm_external_0_avs_s0_writedata;        // mm_interconnect_0:Avalon_MM_external_0_avs_s0_writedata -> Avalon_MM_external_0:avs_s0_writedata
 	wire  [31:0] mm_interconnect_0_sysid_qsys_0_control_slave_readdata;          // sysid_qsys_0:readdata -> mm_interconnect_0:sysid_qsys_0_control_slave_readdata
@@ -240,22 +242,24 @@ module nios_cpu (
 	);
 
 	Avalon_MM_external avalon_mm_external_0 (
-		.avs_s0_address     (mm_interconnect_0_avalon_mm_external_0_avs_s0_address),     //       avs_s0.address
-		.avs_s0_read        (mm_interconnect_0_avalon_mm_external_0_avs_s0_read),        //             .read
-		.avs_s0_readdata    (mm_interconnect_0_avalon_mm_external_0_avs_s0_readdata),    //             .readdata
-		.avs_s0_write       (mm_interconnect_0_avalon_mm_external_0_avs_s0_write),       //             .write
-		.avs_s0_writedata   (mm_interconnect_0_avalon_mm_external_0_avs_s0_writedata),   //             .writedata
-		.avs_s0_waitrequest (mm_interconnect_0_avalon_mm_external_0_avs_s0_waitrequest), //             .waitrequest
-		.clock_clk          (clk_clk),                                                   //        clock.clk
-		.reset_reset        (rst_controller_001_reset_out_reset),                        //        reset.reset
-		.avm_m0_address     (avmm_m0_address),                                           //       avm_m0.address
-		.avm_m0_read        (avmm_m0_read),                                              //             .read
-		.avm_m0_waitrequest (avmm_m0_waitrequest),                                       //             .waitrequest
-		.avm_m0_readdata    (avmm_m0_readdata),                                          //             .readdata
-		.avm_m0_write       (avmm_m0_write),                                             //             .write
-		.avm_m0_writedata   (avmm_m0_writedata),                                         //             .writedata
-		.clock_source_clk   (avmm_m0_clk_clk),                                           // clock_source.clk
-		.reset_source_reset (avmm_m0_reset_reset)                                        // reset_source.reset
+		.avs_s0_address       (mm_interconnect_0_avalon_mm_external_0_avs_s0_address),       //       avs_s0.address
+		.avs_s0_read          (mm_interconnect_0_avalon_mm_external_0_avs_s0_read),          //             .read
+		.avs_s0_readdata      (mm_interconnect_0_avalon_mm_external_0_avs_s0_readdata),      //             .readdata
+		.avs_s0_write         (mm_interconnect_0_avalon_mm_external_0_avs_s0_write),         //             .write
+		.avs_s0_writedata     (mm_interconnect_0_avalon_mm_external_0_avs_s0_writedata),     //             .writedata
+		.avs_s0_waitrequest   (mm_interconnect_0_avalon_mm_external_0_avs_s0_waitrequest),   //             .waitrequest
+		.avs_s0_readdatavalid (mm_interconnect_0_avalon_mm_external_0_avs_s0_readdatavalid), //             .readdatavalid
+		.clock_clk            (clk_clk),                                                     //        clock.clk
+		.reset_reset          (rst_controller_001_reset_out_reset),                          //        reset.reset
+		.avm_m0_address       (avmm_m0_address),                                             //       avm_m0.address
+		.avm_m0_read          (avmm_m0_read),                                                //             .read
+		.avm_m0_waitrequest   (avmm_m0_waitrequest),                                         //             .waitrequest
+		.avm_m0_readdata      (avmm_m0_readdata),                                            //             .readdata
+		.avm_m0_write         (avmm_m0_write),                                               //             .write
+		.avm_m0_writedata     (avmm_m0_writedata),                                           //             .writedata
+		.avm_m0_readdatavalid (avmm_m0_readdatavalid),                                       //             .readdatavalid
+		.clock_source_clk     (avmm_m0_clk_clk),                                             // clock_source.clk
+		.reset_source_reset   (avmm_m0_reset_reset)                                          // reset_source.reset
 	);
 
 	nios_cpu_PLLCFG_Command pllcfg_command (
@@ -658,6 +662,7 @@ module nios_cpu (
 		.Avalon_MM_external_0_avs_s0_read                       (mm_interconnect_0_avalon_mm_external_0_avs_s0_read),             //                                                 .read
 		.Avalon_MM_external_0_avs_s0_readdata                   (mm_interconnect_0_avalon_mm_external_0_avs_s0_readdata),         //                                                 .readdata
 		.Avalon_MM_external_0_avs_s0_writedata                  (mm_interconnect_0_avalon_mm_external_0_avs_s0_writedata),        //                                                 .writedata
+		.Avalon_MM_external_0_avs_s0_readdatavalid              (mm_interconnect_0_avalon_mm_external_0_avs_s0_readdatavalid),    //                                                 .readdatavalid
 		.Avalon_MM_external_0_avs_s0_waitrequest                (mm_interconnect_0_avalon_mm_external_0_avs_s0_waitrequest),      //                                                 .waitrequest
 		.dac_spi1_spi_control_port_address                      (mm_interconnect_0_dac_spi1_spi_control_port_address),            //                        dac_spi1_spi_control_port.address
 		.dac_spi1_spi_control_port_write                        (mm_interconnect_0_dac_spi1_spi_control_port_write),              //                                                 .write

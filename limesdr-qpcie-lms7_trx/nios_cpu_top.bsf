@@ -207,6 +207,13 @@ agreement for further details.
 		(line (pt 0 432)(pt 16 432)(line_width 3))
 	)
 	(port
+		(pt 0 448)
+		(input)
+		(text "avmm_m0_readdatavalid" (rect 0 0 103 12)(font "Arial" ))
+		(text "avmm_m0_readdatavalid" (rect 21 443 124 455)(font "Arial" ))
+		(line (pt 0 448)(pt 16 448)(line_width 1))
+	)
+	(port
 		(pt 312 32)
 		(output)
 		(text "nrst" (rect 0 0 15 12)(font "Arial" ))

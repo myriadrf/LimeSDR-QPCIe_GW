@@ -272,6 +272,14 @@
          type = "String";
       }
    }
+   element nios_cpu
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Cyclone V";
+         type = "String";
+      }
+   }
    element oc_mem
    {
       datum _sortIndex
