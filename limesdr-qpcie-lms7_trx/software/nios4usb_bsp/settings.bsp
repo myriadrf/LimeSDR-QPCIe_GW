@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>Dec 20, 2017 1:42:43 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1513770163664</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>Mar 15, 2018 3:35:24 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1521120924783</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>H:\working_dir\altera\LimeSDR-QPCIe\LimeSDR-QPCIe-lms7_trx_pcie\limesdr-qpcie-lms7_trx\software\nios4usb_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>..\..\nios_cpu.sopcinfo</SopcDesignFile>
@@ -899,118 +899,130 @@
                 <Group xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
         </Setting>
         <MemoryMap>
-                <slaveDescriptor>oc_mem</slaveDescriptor>
-                <addressRange>0x00008000 - 0x0000FFFF</addressRange>
-                <addressSpan>32768</addressSpan>
-                <attributes>memory</attributes>
+                <slaveDescriptor>pll_reconfig_0</slaveDescriptor>
+                <addressRange>0x00000000 - 0x000000FF</addressRange>
+                <addressSpan>256</addressSpan>
+                <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>pll_reconfig_1</slaveDescriptor>
-                <addressRange>0x00011000 - 0x000110FF</addressRange>
+                <addressRange>0x00000100 - 0x000001FF</addressRange>
                 <addressSpan>256</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>pll_reconfig_2</slaveDescriptor>
-                <addressRange>0x00011100 - 0x000111FF</addressRange>
+                <addressRange>0x00000200 - 0x000002FF</addressRange>
                 <addressSpan>256</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>pll_reconfig_3</slaveDescriptor>
-                <addressRange>0x00011200 - 0x000112FF</addressRange>
+                <addressRange>0x00000300 - 0x000003FF</addressRange>
                 <addressSpan>256</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>pll_reconfig_4</slaveDescriptor>
-                <addressRange>0x00011300 - 0x000113FF</addressRange>
+                <addressRange>0x00000400 - 0x000004FF</addressRange>
                 <addressSpan>256</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>pll_reconfig_5</slaveDescriptor>
-                <addressRange>0x00011400 - 0x000114FF</addressRange>
+                <addressRange>0x00000500 - 0x000005FF</addressRange>
                 <addressSpan>256</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>pll_reconfig_0</slaveDescriptor>
-                <addressRange>0x00011500 - 0x000115FF</addressRange>
+                <slaveDescriptor>Avalon_MM_external_0</slaveDescriptor>
+                <addressRange>0x00000600 - 0x000006FF</addressRange>
                 <addressSpan>256</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>dac_spi1</slaveDescriptor>
-                <addressRange>0x00011600 - 0x0001161F</addressRange>
+                <addressRange>0x00000700 - 0x0000071F</addressRange>
                 <addressSpan>32</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>PLLCFG_SPI</slaveDescriptor>
-                <addressRange>0x00011620 - 0x0001163F</addressRange>
+                <addressRange>0x00000720 - 0x0000073F</addressRange>
                 <addressSpan>32</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>fpga_spi0</slaveDescriptor>
-                <addressRange>0x00011640 - 0x0001165F</addressRange>
+                <addressRange>0x00000740 - 0x0000075F</addressRange>
                 <addressSpan>32</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>i2c_opencores_0</slaveDescriptor>
-                <addressRange>0x00011660 - 0x0001167F</addressRange>
+                <addressRange>0x00000760 - 0x0000077F</addressRange>
                 <addressSpan>32</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
+                <slaveDescriptor>vctcxo_tamer_0_ctrl</slaveDescriptor>
+                <addressRange>0x00000780 - 0x0000078F</addressRange>
+                <addressSpan>16</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
                 <slaveDescriptor>PLL_RST</slaveDescriptor>
-                <addressRange>0x00011680 - 0x0001168F</addressRange>
+                <addressRange>0x00000790 - 0x0000079F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>PLLCFG_Status</slaveDescriptor>
-                <addressRange>0x00011690 - 0x0001169F</addressRange>
+                <addressRange>0x000007A0 - 0x000007AF</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>PLLCFG_Command</slaveDescriptor>
-                <addressRange>0x000116A0 - 0x000116AF</addressRange>
+                <addressRange>0x000007B0 - 0x000007BF</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>gpi_0</slaveDescriptor>
-                <addressRange>0x000116B0 - 0x000116BF</addressRange>
+                <addressRange>0x000007C0 - 0x000007CF</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>gpio_0</slaveDescriptor>
-                <addressRange>0x000116C0 - 0x000116CF</addressRange>
+                <addressRange>0x000007D0 - 0x000007DF</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>Av_FIFO_Int_0</slaveDescriptor>
-                <addressRange>0x000116D0 - 0x000116DF</addressRange>
+                <addressRange>0x000007E0 - 0x000007EF</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>sysid_qsys_0</slaveDescriptor>
-                <addressRange>0x000116E0 - 0x000116E7</addressRange>
+                <addressRange>0x000007F0 - 0x000007F7</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>jtag_uart_0</slaveDescriptor>
-                <addressRange>0x000116E8 - 0x000116EF</addressRange>
+                <addressRange>0x000007F8 - 0x000007FF</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes>printable</attributes>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>oc_mem</slaveDescriptor>
+                <addressRange>0x00010000 - 0x00017FFF</addressRange>
+                <addressSpan>32768</addressSpan>
+                <attributes>memory</attributes>
         </MemoryMap>
         <LinkerSection>
                 <sectionName>.text</sectionName>

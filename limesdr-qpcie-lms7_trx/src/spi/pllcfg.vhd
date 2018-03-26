@@ -45,23 +45,27 @@ entity pllcfg is
 
 		
 		-- Status Inputs
-		pllcfg_busy: in std_logic;
-		pllcfg_done: in std_logic;
-		pllcfg_err: in std_logic_vector(7 downto 0);
+		pllcfg_busy    : in std_logic;
+		pllcfg_done    : in std_logic;
+		pllcfg_err     : in std_logic_vector(7 downto 0);
+      phcfg_done     : in std_logic;
+      phcfg_error    : in std_logic;
 		
 		
 		-- PLL Lock flags
-		pll_lock: in std_logic_vector(num_of_pll-1 downto 0);
+		pll_lock: in std_logic_vector(15 downto 0);
 		
 		-- PLL Configuratioin Related
-		phcfg_start: out std_logic; --
-		pllcfg_start: out std_logic; --
-		pllrst_start: out std_logic --
---		phcfg_updn: out std_logic; --
---		cnt_ind: out std_logic_vector(4 downto 0); --
---		pll_ind: out std_logic_vector(4 downto 0); --
+		phcfg_start    : out std_logic; --
+		pllcfg_start   : out std_logic; --
+		pllrst_start   : out std_logic; --
+		phcfg_updn     : out std_logic; --
+		cnt_ind        : out std_logic_vector(4 downto 0); --
+		pll_ind        : out std_logic_vector(4 downto 0); --
+      phcfg_mode     : out std_logic;
+      phcfg_tst      : out std_logic;
 --		
---		cnt_phase: out std_logic_vector(15 downto 0); --
+		cnt_phase: out std_logic_vector(15 downto 0); --
 --		
 --		pllcfg_bs: out std_logic_vector(3 downto 0); -- (for Cyclone V)
 --		chp_curr: out std_logic_vector(2 downto 0); --
@@ -107,7 +111,9 @@ entity pllcfg is
 --		c6_cnt: out std_logic_vector(15 downto 0); -- 
 --		c7_cnt: out std_logic_vector(15 downto 0); -- 
 --		c8_cnt: out std_logic_vector(15 downto 0); -- 
---		c9_cnt: out std_logic_vector(15 downto 0) -- 
+--		c9_cnt: out std_logic_vector(15 downto 0) --
+      auto_phcfg_smpls  : out std_logic_vector(15 downto 0);
+      auto_phcfg_step   : out std_logic_vector(15 downto 0) 
 
 	);
 end pllcfg;
@@ -141,8 +147,6 @@ architecture pllcfg_arch of pllcfg is
 	signal mem_weB: std_logic;
 	
 	signal oeA, oeB: std_logic;				-- Tri state buffers control
-	
-	signal pll_lock_int		: std_logic_vector(15 downto 0);
 
 	
 	-- Components
@@ -152,8 +156,6 @@ architecture pllcfg_arch of pllcfg is
 begin
 
 
-	pll_lock_int(num_of_pll-1 downto 0) <= pll_lock;
-	pll_lock_int(15 downto num_of_pll) <= (others=> '0');
 	-- ---------------------------------------------------------------------------------------------
 	-- Finite state machines
 	-- ---------------------------------------------------------------------------------------------
@@ -297,31 +299,32 @@ begin
 		if mreset = '0' then
 
 			mem(0)  	<= "0000000000000000";	--	16 free, RESERVED[15:0]
-			mem(1)		<= "0000000000000001";	--	14 free, PLLCFG_ERR[7:0], UNUSED[5:0], BUSY (Read Only), DONE (Read Only)
-			mem(2)		<= "0000000000000000";	--	0  free, PLL_LOCK[15:0] (Read Only)
-			mem(3)  	<= "0000000000000000";	--	2  free, UNUSED[1:0], PHCFG_UpDn, CNT_IND[4:0], PLL_IND[4:0], PLLRST_START, PHCFG_START, PLLCFG_START
-			mem(4)  	<= "0000000000000000";	--	0  free, CNT_PHASE[15:0]
+			mem(1)   <= "0000000000000001";	--	14 free, PLLCFG_ERR[7:0], UNUSED[2:0],PHCFG_ERROR, PHCFG_DONE, BUSY (Read Only), DONE (Read Only)
+			mem(2)   <= "0000000000000000";	--	 0  free, PLL_LOCK[15:0] (Read Only)
+			mem(3)  	<= "0000000000000000";	--	 2  free, UNUSED[1:0], PHCFG_UpDn, CNT_IND[4:0], PLL_IND[4:0], PLLRST_START, PHCFG_START, PLLCFG_START
+			mem(4)  	<= "0000000000000000";	--	 0  free, CNT_PHASE[15:0]
 			mem(5)  	<= "0000000000000000";	--  1  free, UNUSED, PLLCFG_BS[3:0] (for Cyclone V), CHP_CURR[2:0], PLLCFG_VCODIV, PLLCFG_LF_RES[4:0] (for Cyclone IV), PLLCFG_LF_CAP[1:0] (for Cyclone IV)
-			mem(6)		<= "0000000000001010";	--	12 free, M_ODDDIV, M_BYP, N_ODDDIV, N_BYP
-			mem(7)		<= "1010101010101010";	--	0  free,  C7_ODDDIV,  C7_BYP,  C6_ODDDIV,  C6_BYP,  C5_ODDDIV,  C5_BYP,  C4_ODDDIV,  C4_BYP,  C3_ODDDIV,  C3_BYP,  C2_ODDDIV,  C2_BYP, C1_ODDDIV, C1_BYP, C0_ODDDIV, C0_BYP
-			mem(8)		<= "1010101010101010";	--	0  free, C15_ODDDIV, C15_BYP, C14_ODDDIV, C14_BYP, C13_ODDDIV, C13_BYP, C12_ODDDIV, C12_BYP, C11_ODDDIV, C11_BYP, C10_ODDDIV, C10_BYP, C9_ODDDIV, C9_BYP, C8_ODDDIV, C8_BYP
-			mem(9)		<= "1010101010101010";	--	0  free, RESERVED_FOR_C_COUNTER_ODDIV_AND_BYP
-			mem(10)  	<= "0000000000000000";	--  0  free, N_HCNT[15:8], N_LCNT[7:0]
-			mem(11)		<= "0000000000000000";	--  0  free, M_HCNT[15:8], M_LCNT[7:0]
-			mem(12)		<= "0000000000000000";	--  0  free, M_FRAC[15:0]
-			mem(13)		<= "0000000000000000";	--  0  free, M_FRAC[31:16]
-			mem(14)		<= "0000000000000000";	--  0  free, C0_HCNT[15:8], C0_LCNT[7:0]
-			mem(15)		<= "0000000000000000";	--  0  free, C1_HCNT[15:8], C1_LCNT[7:0]
-			mem(16)		<= "0000000000000000";	--  0  free, C2_HCNT[15:8], C2_LCNT[7:0]
-			mem(17)		<= "0000000000000000";	--  0  free, C3_HCNT[15:8], C3_LCNT[7:0]
-			mem(18)		<= "0000000000000000";	--  0  free, C4_HCNT[15:8], C4_LCNT[7:0]
-			mem(19)		<= "0000000000000000";	--  0  free, C5_HCNT[15:8], C5_LCNT[7:0]
-			mem(20)		<= "0000000000000000";	--  0  free, C6_HCNT[15:8], C6_LCNT[7:0]
-			mem(21)		<= "0000000000000000";	--  0  free, C7_HCNT[15:8], C7_LCNT[7:0]
-			mem(22)		<= "0000000000000000";	--  0  free, C8_HCNT[15:8], C8_LCNT[7:0]
-			mem(23)		<= "0000000000000000";	--  0  free, C9_HCNT[15:8], C9_LCNT[7:0]
+			mem(6)	<= "0000000000001010";	--	12 free, M_ODDDIV, M_BYP, N_ODDDIV, N_BYP
+			mem(7)	<= "1010101010101010";	--	 0  free,  C7_ODDDIV,  C7_BYP,  C6_ODDDIV,  C6_BYP,  C5_ODDDIV,  C5_BYP,  C4_ODDDIV,  C4_BYP,  C3_ODDDIV,  C3_BYP,  C2_ODDDIV,  C2_BYP, C1_ODDDIV, C1_BYP, C0_ODDDIV, C0_BYP
+			mem(8)	<= "1010101010101010";	--	 0  free, C15_ODDDIV, C15_BYP, C14_ODDDIV, C14_BYP, C13_ODDDIV, C13_BYP, C12_ODDDIV, C12_BYP, C11_ODDDIV, C11_BYP, C10_ODDDIV, C10_BYP, C9_ODDDIV, C9_BYP, C8_ODDDIV, C8_BYP
+			mem(9)	<= "1010101010101010";	--	 0  free, RESERVED_FOR_C_COUNTER_ODDIV_AND_BYP
+			mem(10)  <= "0000000000000000";	--  0  free, N_HCNT[15:8], N_LCNT[7:0]
+			mem(11)	<= "0000000000000000";	--  0  free, M_HCNT[15:8], M_LCNT[7:0]
+			mem(12)	<= "0000000000000000";	--  0  free, M_FRAC[15:0]
+			mem(13)	<= "0000000000000000";	--  0  free, M_FRAC[31:16]
+			mem(14)	<= "0000000000000000";	--  0  free, C0_HCNT[15:8], C0_LCNT[7:0]
+			mem(15)	<= "0000000000000000";	--  0  free, C1_HCNT[15:8], C1_LCNT[7:0]
+			mem(16)	<= "0000000000000000";	--  0  free, C2_HCNT[15:8], C2_LCNT[7:0]
+			mem(17)	<= "0000000000000000";	--  0  free, C3_HCNT[15:8], C3_LCNT[7:0]
+			mem(18)	<= "0000000000000000";	--  0  free, C4_HCNT[15:8], C4_LCNT[7:0]
+			mem(19)	<= "0000000000000000";	--  0  free, C5_HCNT[15:8], C5_LCNT[7:0]
+			mem(20)	<= "0000000000000000";	--  0  free, C6_HCNT[15:8], C6_LCNT[7:0]
+			mem(21)	<= "0000000000000000";	--  0  free, C7_HCNT[15:8], C7_LCNT[7:0]
+			mem(22)	<= "0000000000000000";	--  0  free, C8_HCNT[15:8], C8_LCNT[7:0]
+			mem(23)	<= "0000000000000000";	--  0  free, C9_HCNT[15:8], C9_LCNT[7:0]
 																				--	Rest of the addresses reserved for Cx counters
-			
+			mem(30)  <= "0000111111111111"; -- 0  free, auto_phcfg_smpls[15:0]
+         mem(31)  <= "0000000000000010"; -- 0  free, auto_phcfg_step
 		elsif sclkA'event and sclkA = '1' then
 				if mem_weA = '1' then
 					mem(to_integer(unsigned(inst_regA(4 downto 0)))) <= din_regA(14 downto 0) & sdinA;
@@ -329,11 +332,11 @@ begin
 				
 				-- Capture read-only values from the pins
 				if dout_regA_len = '0' then
-					for_lop : for i in 2 to 15 loop
+					for_lop : for i in 4 to 15 loop
 						mem(1)(i) <= '0';  
 					end loop;
-					mem(1)(1 downto 0)	<= pllcfg_busy & pllcfg_done;
-					mem(2)  <= pll_lock_int;
+					mem(1)(3 downto 0)	<= phcfg_error & phcfg_done & pllcfg_busy & pllcfg_done;
+					mem(2)  <= pll_lock;
 					
 					mem(2)(15 downto 8) <= pllcfg_err;
 				end if;
@@ -346,15 +349,16 @@ begin
 	-- ---------------------------------------------------------------------------------------------
 	
 
-	
---	phcfg_updn		<= mem(3)(13);
---	cnt_ind				<= mem(3)(12 downto 8);
---	pll_ind				<= mem(3)(7 downto 3);
+	phcfg_tst      <= mem(3)(15);   
+   phcfg_mode     <= mem(3)(14);
+	phcfg_updn		<= mem(3)(13);
+	cnt_ind        <= mem(3)(12 downto 8);
+	pll_ind        <= mem(3)(7 downto 3);
 	pllrst_start	<= mem(3)(2);
 	phcfg_start		<= mem(3)(1);
 	pllcfg_start	<= mem(3)(0);
 	
---	cnt_phase			<= mem(4);
+	cnt_phase		<= mem(4);
 --	
 --	pllcfg_bs			<= mem(5)(14 downto 11);
 --	chp_curr			<= mem(5)(10 downto 8);
@@ -401,6 +405,9 @@ begin
 --	c7_cnt 				<= mem(21);
 --	c8_cnt 				<= mem(22);
 --	c9_cnt				<= mem(23);
+
+   auto_phcfg_smpls <= mem(30);
+   auto_phcfg_step  <= mem(31);
 
 
 end pllcfg_arch;

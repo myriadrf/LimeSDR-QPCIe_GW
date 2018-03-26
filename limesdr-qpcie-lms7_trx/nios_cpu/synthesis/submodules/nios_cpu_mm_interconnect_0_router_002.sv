@@ -44,26 +44,26 @@
 
 module nios_cpu_mm_interconnect_0_router_002_default_decode
   #(
-     parameter DEFAULT_CHANNEL = 0,
+     parameter DEFAULT_CHANNEL = 1,
                DEFAULT_WR_CHANNEL = -1,
                DEFAULT_RD_CHANNEL = -1,
-               DEFAULT_DESTID = 0 
+               DEFAULT_DESTID = 13 
    )
-  (output [83 - 79 : 0] default_destination_id,
-   output [20-1 : 0] default_wr_channel,
-   output [20-1 : 0] default_rd_channel,
-   output [20-1 : 0] default_src_channel
+  (output [98 - 94 : 0] default_destination_id,
+   output [22-1 : 0] default_wr_channel,
+   output [22-1 : 0] default_rd_channel,
+   output [22-1 : 0] default_src_channel
   );
 
   assign default_destination_id = 
-    DEFAULT_DESTID[83 - 79 : 0];
+    DEFAULT_DESTID[98 - 94 : 0];
 
   generate
     if (DEFAULT_CHANNEL == -1) begin : no_default_channel_assignment
       assign default_src_channel = '0;
     end
     else begin : default_channel_assignment
-      assign default_src_channel = 20'b1 << DEFAULT_CHANNEL;
+      assign default_src_channel = 22'b1 << DEFAULT_CHANNEL;
     end
   endgenerate
 
@@ -73,8 +73,8 @@ module nios_cpu_mm_interconnect_0_router_002_default_decode
       assign default_rd_channel = '0;
     end
     else begin : default_rw_channel_assignment
-      assign default_wr_channel = 20'b1 << DEFAULT_WR_CHANNEL;
-      assign default_rd_channel = 20'b1 << DEFAULT_RD_CHANNEL;
+      assign default_wr_channel = 22'b1 << DEFAULT_WR_CHANNEL;
+      assign default_rd_channel = 22'b1 << DEFAULT_RD_CHANNEL;
     end
   endgenerate
 
@@ -93,7 +93,7 @@ module nios_cpu_mm_interconnect_0_router_002
     // Command Sink (Input)
     // -------------------
     input                       sink_valid,
-    input  [97-1 : 0]    sink_data,
+    input  [112-1 : 0]    sink_data,
     input                       sink_startofpacket,
     input                       sink_endofpacket,
     output                      sink_ready,
@@ -102,8 +102,8 @@ module nios_cpu_mm_interconnect_0_router_002
     // Command Source (Output)
     // -------------------
     output                          src_valid,
-    output reg [97-1    : 0] src_data,
-    output reg [20-1 : 0] src_channel,
+    output reg [112-1    : 0] src_data,
+    output reg [22-1 : 0] src_channel,
     output                          src_startofpacket,
     output                          src_endofpacket,
     input                           src_ready
@@ -112,18 +112,18 @@ module nios_cpu_mm_interconnect_0_router_002
     // -------------------------------------------------------
     // Local parameters and variables
     // -------------------------------------------------------
-    localparam PKT_ADDR_H = 52;
+    localparam PKT_ADDR_H = 67;
     localparam PKT_ADDR_L = 36;
-    localparam PKT_DEST_ID_H = 83;
-    localparam PKT_DEST_ID_L = 79;
-    localparam PKT_PROTECTION_H = 87;
-    localparam PKT_PROTECTION_L = 85;
-    localparam ST_DATA_W = 97;
-    localparam ST_CHANNEL_W = 20;
-    localparam DECODER_TYPE = 1;
+    localparam PKT_DEST_ID_H = 98;
+    localparam PKT_DEST_ID_L = 94;
+    localparam PKT_PROTECTION_H = 102;
+    localparam PKT_PROTECTION_L = 100;
+    localparam ST_DATA_W = 112;
+    localparam ST_CHANNEL_W = 22;
+    localparam DECODER_TYPE = 0;
 
-    localparam PKT_TRANS_WRITE = 55;
-    localparam PKT_TRANS_READ  = 56;
+    localparam PKT_TRANS_WRITE = 70;
+    localparam PKT_TRANS_READ  = 71;
 
     localparam PKT_ADDR_W = PKT_ADDR_H-PKT_ADDR_L + 1;
     localparam PKT_DEST_ID_W = PKT_DEST_ID_H-PKT_DEST_ID_L + 1;
@@ -134,22 +134,28 @@ module nios_cpu_mm_interconnect_0_router_002
     // Figure out the number of bits to mask off for each slave span
     // during address decoding
     // -------------------------------------------------------
+    localparam PAD0 = log2ceil(64'h1800 - 64'h1000); 
+    localparam PAD1 = log2ceil(64'h18000 - 64'h10000); 
     // -------------------------------------------------------
     // Work out which address bits are significant based on the
     // address range of the slaves. If the required width is too
     // large or too small, we use the address field width instead.
     // -------------------------------------------------------
-    localparam ADDR_RANGE = 64'h0;
+    localparam ADDR_RANGE = 64'h18000;
     localparam RANGE_ADDR_WIDTH = log2ceil(ADDR_RANGE);
     localparam OPTIMIZED_ADDR_H = (RANGE_ADDR_WIDTH > PKT_ADDR_W) ||
                                   (RANGE_ADDR_WIDTH == 0) ?
                                         PKT_ADDR_H :
                                         PKT_ADDR_L + RANGE_ADDR_WIDTH - 1;
 
-    localparam RG = RANGE_ADDR_WIDTH;
+    localparam RG = RANGE_ADDR_WIDTH-1;
     localparam REAL_ADDRESS_RANGE = OPTIMIZED_ADDR_H - PKT_ADDR_L;
 
-    reg [PKT_DEST_ID_W-1 : 0] destid;
+      reg [PKT_ADDR_W-1 : 0] address;
+      always @* begin
+        address = {PKT_ADDR_W{1'b0}};
+        address [REAL_ADDRESS_RANGE:0] = sink_data[OPTIMIZED_ADDR_H : PKT_ADDR_L];
+      end   
 
     // -------------------------------------------------------
     // Pass almost everything through, untouched
@@ -158,7 +164,8 @@ module nios_cpu_mm_interconnect_0_router_002
     assign src_valid         = sink_valid;
     assign src_startofpacket = sink_startofpacket;
     assign src_endofpacket   = sink_endofpacket;
-    wire [20-1 : 0] default_src_channel;
+    wire [PKT_DEST_ID_W-1:0] default_destid;
+    wire [22-1 : 0] default_src_channel;
 
 
 
@@ -166,7 +173,7 @@ module nios_cpu_mm_interconnect_0_router_002
 
 
     nios_cpu_mm_interconnect_0_router_002_default_decode the_default_decode(
-      .default_destination_id (),
+      .default_destination_id (default_destid),
       .default_wr_channel   (),
       .default_rd_channel   (),
       .default_src_channel  (default_src_channel)
@@ -175,19 +182,24 @@ module nios_cpu_mm_interconnect_0_router_002
     always @* begin
         src_data    = sink_data;
         src_channel = default_src_channel;
+        src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = default_destid;
 
         // --------------------------------------------------
-        // DestinationID Decoder
-        // Sets the channel based on the destination ID.
+        // Address Decoder
+        // Sets the channel and destination ID based on the address
         // --------------------------------------------------
-        destid      = sink_data[PKT_DEST_ID_H : PKT_DEST_ID_L];
 
+    // ( 0x1000 .. 0x1800 )
+    if ( {address[RG:PAD0],{PAD0{1'b0}}} == 17'h1000   ) begin
+            src_channel = 22'b01;
+            src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 12;
+    end
 
-
-        if (destid == 0 ) begin
-            src_channel = 20'b1;
-        end
-
+    // ( 0x10000 .. 0x18000 )
+    if ( {address[RG:PAD1],{PAD1{1'b0}}} == 17'h10000   ) begin
+            src_channel = 22'b10;
+            src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 13;
+    end
 
 end
 

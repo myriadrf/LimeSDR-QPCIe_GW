@@ -17,9 +17,12 @@
 							</builder>
 							<tool id="altera.tool.gnu.c.compiler.mingw.752689545" name="Nios II GCC C Compiler" superClass="altera.tool.gnu.c.compiler.mingw">
 								<option id="gnu.c.compiler.option.include.paths.1183209238" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nios4usb_bsp}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;C:\altera\15.0\ip\altera\nios2_ip\altera_nios2\HAL\inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;C:\altera\15.0\ip\altera\alt_mem_if\altera_mem_if_qseq\software_110\sequencer_bfm&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;H:\working_dir\altera\qSpark\lms7_ADPD\software\nios4usb_bsp\drivers\inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;H:\working_dir\altera\LimeSDR-QPCIe\LimeSDR-QPCIe-lms7_trx_pcie\limesdr-qpcie-lms7_trx\ip\i2c_opencores_v13\HAL\inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;H:\working_dir\altera\LimeSDR-QPCIe\LimeSDR-QPCIe-lms7_trx_pcie\limesdr-qpcie-lms7_trx\software\nios4usb_bsp\drivers\inc&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.850495082" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
@@ -37,7 +40,6 @@
 								<option id="gnu.both.asm.option.include.paths.1799857038" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;C:\altera\15.0\ip\altera\nios2_ip\altera_nios2\HAL\inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;C:\altera\15.0\ip\altera\alt_mem_if\altera_mem_if_qseq\software_110\sequencer_bfm&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;H:\working_dir\altera\qSpark\lms7_ADPD\software\nios4usb_bsp\drivers\inc&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.2131222526" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>

@@ -63,7 +63,11 @@ entity limelight_top is
       rx_pct_fifo_wrusedw     : in std_logic_vector(rx_pct_fifo_wrusedw_w-1 downto 0);
       rx_pct_fifo_wrreq       : out std_logic;
       rx_pct_fifo_wdata       : out std_logic_vector(63 downto 0);
-      
+      --sample compare
+      rx_smpl_cmp_start       : in std_logic;
+      rx_smpl_cmp_length      : in std_logic_vector(15 downto 0);
+      rx_smpl_cmp_done        : out std_logic;
+      rx_smpl_cmp_err         : out std_logic;  
       
       --TX interface (BB2RF, FPGA transmit)      
       tx_clk                  : in std_logic;
@@ -81,11 +85,8 @@ entity limelight_top is
       tx_diqab_h              : out std_logic_vector(tx_diq_width downto 0);
       tx_diqab_l              : out std_logic_vector(tx_diq_width downto 0);
       tx_diqb_h               : out std_logic_vector(tx_diq_width downto 0);
-      tx_diqb_l               : out std_logic_vector(tx_diq_width downto 0)      
-      
-      
-
-
+      tx_diqb_l               : out std_logic_vector(tx_diq_width downto 0)
+    
         );
 end limelight_top;
 
@@ -165,7 +166,11 @@ begin
       smpl_nr_cnt          => inst0_smpl_nr_cnt,
       --flag control       
       tx_pct_loss          => inst1_pct_loss_flg,
-      tx_pct_loss_clr      => rx_pct_loss_flg_clr
+      tx_pct_loss_clr      => rx_pct_loss_flg_clr,
+      smpl_cmp_start       => rx_smpl_cmp_start, 
+      smpl_cmp_length      => rx_smpl_cmp_length,
+      smpl_cmp_done        => rx_smpl_cmp_done,  
+      smpl_cmp_err         => rx_smpl_cmp_err     
      
         );
         
