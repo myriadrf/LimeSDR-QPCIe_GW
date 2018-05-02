@@ -6,11 +6,11 @@
  */
 
 #include "io.h"
-#include "system.h"
+#include <system.h>
+#include <stdbool.h>
 #include "alt_types.h"
 #include <stdint.h>
 #include <string.h>
-#include <stdio.h>
 
 #include "pll_rcfg.h"
 
@@ -19,11 +19,13 @@
 #include "LMS64C_protocol.h"
 #include "limesdr_qpcie_brd.h"
 #include "i2c_opencores.h"
+#include "vctcxo_tamer.h"
+#include "math.h"
 
 #define sbi(p,n) ((p) |= (1UL << (n)))
 #define cbi(p,n) ((p) &= ~(1 << (n)))
 
-#define FW_VER				1 //Initial version
+//#define FW_VER			1 //Initial version
 #define FW_VER				2 //NIOS memory increased up to 32kB
 							  //I2C module added
 							  //POT, ADF4002, TCXO DAC, LM75, Si5351C control implemented
@@ -44,14 +46,13 @@
 #define LMS2_SS			8
 #define LMS2_RESET		9
 
-unsigned short int dac_val = 134;	//TCXO DAC value
+unsigned short int dac_val = 30714;		//TCXO DAC value
 signed short int converted_val = 300;	//Temperature
 
 
 uint8_t test, block, cmd_errors, glEp0Buffer_Rx[64], glEp0Buffer_Tx[64];
 tLMS_Ctrl_Packet *LMS_Ctrl_Packet_Tx = (tLMS_Ctrl_Packet*)glEp0Buffer_Tx;
 tLMS_Ctrl_Packet *LMS_Ctrl_Packet_Rx = (tLMS_Ctrl_Packet*)glEp0Buffer_Rx;
-
 
 
 /**	This function checks if all blocks could fit in data field.
@@ -267,6 +268,8 @@ void Control_TCXO_DAC (unsigned char oe, unsigned short int *data) //controls DA
 		DAC_data[1] = ((*data) >>8) & 0xFF;
 		DAC_data[2] = ((*data) >>0) & 0xFF;
 
+	    /* Update cached value of trim DAC setting */
+	    vctcxo_trim_dac_value = (uint16_t) *data;
 		spirez = alt_avalon_spi_command(DAC_SPI1_BASE, SPI_NR_TCXO_DAC, 3, DAC_data, 0, NULL, 0);
 	}
 }
@@ -567,134 +570,6 @@ uint8_t UpdatePHCFG(void)
 	return pllcfgrez;
 }
 
-uint8_t smpl_cmp(uint8_t pll_ind){
-
-	uint8_t smpl_cmp_status;
-
-	//clean sample compare en bits
-	IOWR_8DIRECT(SMPL_CMP_EN_BASE, 0x00, 0x00);	//Set to 0
-	while((IORD_8DIRECT(SMPL_CMP_STATUS_BASE, 0x00) & 0x01) == 0x01);
-
-	//trigger sample compare enable
-	if (pll_ind < 2) {
-		IOWR_8DIRECT(SMPL_CMP_EN_BASE, 0x00, 0x01);	//Set to 1
-	}
-	else {
-		IOWR_8DIRECT(SMPL_CMP_EN_BASE, 0x00, 0x02);	//Set to 2
-	}
-
-	//wait for sample compare done
-	while(((IORD_8DIRECT(SMPL_CMP_STATUS_BASE, 0x00)) & 0x01) == 0x00);
-	smpl_cmp_status = (IORD_8DIRECT(SMPL_CMP_STATUS_BASE, 0x00));
-
-	return smpl_cmp_status;
-
-
-}
-
-
-uint8_t *AutoPHCFG(uint8_t status[2])
-{
-	uint32_t PLL_BASE;
-	uint32_t Val, Cx, Dir;
-	uint8_t pll_ind;
-	uint8_t wr_buf[2];
-	uint8_t rd_buf[2];
-	uint8_t pllcfgrez;
-	uint8_t smpl_cmp_status;
-	uint8_t min_found = 0;
-	uint8_t max_found = 0;
-	int phase_min = 0;
-	int phase_max = 0;
-	int phase_midle = 0;
-	int phase_reverse = 0;
-	int timeout = 0;
-	int spirez;
-
-
-
-	//Reset PLL to get default phase relationship
-	ResetPLL();
-
-	// Read
-	wr_buf[0] = 0x00;	// Command and Address
-	wr_buf[1] = 0x23;	// Command and Address
-	spirez = alt_avalon_spi_command(PLLCFG_SPI_BASE, 0, 2, wr_buf, 2, rd_buf, 0);
-
-	// Get PLL base address
-	PLL_BASE = GetPLLCFG_Base( PLL_IND(rd_buf[1]) );
-	pll_ind = PLL_IND(rd_buf[1]);
-
-	//Write in Mode Register "0" for waitrequest mode, "1" for polling mode
-	IOWR_32DIRECT(PLL_BASE, MODE, 0x01);
-
-	// Set Up/Down
-	Dir = PH_DIR(rd_buf[0]); //(rd_buf[1] >> 5) & 0x01;
-
-	// Set Cx
-	Cx = CX_IND(rd_buf[0]) - 2; //(rd_buf[1] & 0x1F);
-
-	// Read step size
-	wr_buf[0] = 0x00;	// Command and Address
-	wr_buf[1] = 0x3F;	// Command and Address
-	spirez = alt_avalon_spi_command(PLLCFG_SPI_BASE, 0, 2, wr_buf, 2, rd_buf, 0);
-	Val = CX_PHASE(rd_buf[0], rd_buf[1]); //(rd_buf[1] << 8) | rd_buf[0];
-
-	//pll_lock_status = IORD_8DIRECT(PLL_LOCK_BASE, 0x00);
-	//current_pll_lock_status = ( ((IORD_8DIRECT(PLL_LOCK_BASE, 0x00)) >> pll_ind) & 0x01);
-
-	//wait for pll lock
-	while((((IORD_8DIRECT(PLL_LOCK_BASE, 0x00)) >> pll_ind) & 0x01) == 0x00) {
-		timeout++;
-		if (timeout > 255) break;
-	}
-
-	// if pll is locked without timeout start phase search
-	if (timeout < 255) {
-		for (int i = 0; i < 1023; i++ ) {
-			// get sample compare status
-			smpl_cmp_status = smpl_cmp(pll_ind);
-
-			if (((smpl_cmp_status & 0x02) == 0x00) && (min_found == 0)) {
-				min_found = 1;
-				phase_min = i * Val;
-			}
-
-			if (((smpl_cmp_status & 0x02) == 0x02) && (min_found == 1)){
-				max_found = 1;
-				phase_max = i * Val;
-			}
-
-			if ((min_found == 1) && (max_found == 1)) {
-				phase_midle = phase_min + ((phase_max - Val - phase_min) /2);
-				phase_reverse = phase_max - phase_midle;
-				// Set Phase shift register to bring back phase to middle value
-				set_Phase(PLL_BASE, Cx, phase_reverse, Dir ^ 1);
-				// Apply PLL configuration
-				pllcfgrez = start_Reconfig(PLL_BASE);
-				smpl_cmp_status= smpl_cmp(pll_ind);
-				status[1] = smpl_cmp(pll_ind);
-
-				break;
-			}
-
-			// Set Phase shift register
-			set_Phase(PLL_BASE, Cx, Val, Dir);
-			// Apply PLL configuration
-			pllcfgrez = start_Reconfig(PLL_BASE);
-			status[1] = 0x03;
-
-
-
-		}
-	}
-
-	status[0] = pllcfgrez;
-	return status;
-
-}
-
-
 //
 void ResetPLL(void)
 {
@@ -770,6 +645,7 @@ void Modify_BRDSPI16_Reg_bits (unsigned short int SPI_reg_addr, unsigned char MS
 	spirez = alt_avalon_spi_command(FPGA_SPI0_BASE, SPI_NR_FPGA, 4, WrBuff, 0, NULL, 0);
 }
 
+
 int main(void)
 {
 	uint32_t i, ui32_tmp, ui32_c0, ui32_c1;
@@ -777,11 +653,9 @@ int main(void)
 	uint8_t phcfg_start_old, phcfg_start;
 	uint8_t pllcfg_start_old, pllcfg_start;
 	uint8_t pllrst_start_old, pllrst_start;
-	uint8_t phcfg_mode	= 0;
+	uint8_t phcfg_mode;
 	//tPLL_CFG pll_config;
 	uint8_t pllcfgrez;
-	uint8_t autophcfg_status[2];
-	uint8_t temp;
 
 	uint8_t wr_buf[2];
 	uint8_t rd_buf[2];
@@ -793,6 +667,28 @@ int main(void)
 	unsigned char MCP_data[2];
 	uint16_t wiper_pos[2];
 
+    uint8_t vctcxo_tamer_irq = 0;
+    uint8_t vctcxo_tamer_en=0,	vctcxo_tamer_en_old = 0;
+
+    // Trim DAC constants
+    const uint16_t trimdac_min       = 0x1938;  // Decimal value  = 6456
+    const uint16_t trimdac_max       = 0xE2F3;	// Decimal value  = 58099
+
+    // Trim DAC calibration line
+    line_t trimdac_cal_line;
+
+    // VCTCXO Tune State machine
+    state_t tune_state = COARSE_TUNE_MIN;
+
+    // Set the known/default values of the trim DAC cal line
+    trimdac_cal_line.point[0].x  = 0;
+    trimdac_cal_line.point[0].y  = trimdac_min;
+    trimdac_cal_line.point[1].x  = 0;
+    trimdac_cal_line.point[1].y  = trimdac_max;
+    trimdac_cal_line.slope       = 0;
+    trimdac_cal_line.y_intercept = 0;
+    struct vctcxo_tamer_pkt_buf vctcxo_tamer_pkt;
+	vctcxo_tamer_pkt.ready = false;
 
     // I2C initialiazation
     I2C_init(I2C_OPENCORES_0_BASE, ALT_CPU_FREQ, 100000);
@@ -814,7 +710,7 @@ int main(void)
 
 	//write default TCXO DAC value
 	Control_TCXO_ADF (0, NULL); //set ADF4002 CP to three-state
-	dac_val = 30714; //default DAC value
+	dac_val = 30714;
 	Control_TCXO_DAC (1, &dac_val); //enable DAC output, set new val
 
 	//default dig pot wiper values
@@ -897,19 +793,15 @@ int main(void)
 	    {
 	    	IOWR(PLLCFG_STATUS_BASE, 0x00, PLLCFG_BUSY);
 	    	phcfg_mode = (IORD(PLLCFG_COMMAND_BASE, 0x00) & 0x08) >> 3;
-	    	if (phcfg_mode == 0x01) {
-	    		AutoPHCFG(autophcfg_status); //autophcfg_status[2] = AUTO_PHCFG_ERR[1], AUTO_PHCFG_DONE[0]
+	    	if (phcfg_mode){
 
-	    		// AUTO_PHCFG_ERR[3], AUTO_PHCFG_DONE[2], BUSY[1], DONE[0]
-	    		IOWR(PLLCFG_STATUS_BASE, 0x00, ((autophcfg_status[1] & 0x02) << 2) | PHCFG_DONE | PLLCFG_DONE);
-	    		IOWR(PLLCFG_ERR_BASE, 0x00, pllcfgrez);
 	    	}
-	    	else {
+	    	else{
 	    		pllcfgrez = UpdatePHCFG();
-	    		IOWR(PLLCFG_STATUS_BASE, 0x00, PLLCFG_DONE);
-	    		IOWR(PLLCFG_ERR_BASE, 0x00, pllcfgrez << 2);
-	    	}
 
+	    	};
+
+	    	IOWR(PLLCFG_STATUS_BASE, 0x00, (pllcfgrez << 2) | PLLCFG_DONE);
 	    }
 
 	    // Check if there is a request for PLL configuration update
@@ -937,6 +829,145 @@ int main(void)
 	    pllcfg_start = IORD(PLLCFG_COMMAND_BASE, 0x00) & 0x01;
 
 
+    	vctcxo_tamer_irq = (IORD_8DIRECT(VCTCXO_TAMER_0_CTRL_BASE, 0x00) & 0x02);
+	    // Clear VCTCXO tamer interrupt
+	    if(vctcxo_tamer_irq != 0)
+	    {	vctcxo_tamer_isr(&vctcxo_tamer_pkt);
+	    	//IOWR_8DIRECT(VCTCXO_TAMER_0_BASE, 0, 0x70);
+	    }
+
+    	//Get vctcxo tamer enable bit status
+    	vctcxo_tamer_en_old = vctcxo_tamer_en;
+    	vctcxo_tamer_en = (IORD_8DIRECT(VCTCXO_TAMER_0_CTRL_BASE, 0x00) & 0x01);
+
+    	if (vctcxo_tamer_en_old != vctcxo_tamer_en){
+    		if (vctcxo_tamer_en == 0x01){
+    			vctcxo_tamer_init();
+    			vctcxo_tamer_pkt.ready = true;
+    		}
+    		else {
+    			vctcxo_tamer_dis();
+    			tune_state = COARSE_TUNE_MIN;
+    			vctcxo_tamer_pkt.ready = false;
+    		}
+    	}
+
+        /* Temporarily putting the VCTCXO Calibration stuff here. */
+        if( vctcxo_tamer_pkt.ready ) {
+
+            vctcxo_tamer_pkt.ready = false;
+
+            switch(tune_state) {
+
+            case COARSE_TUNE_MIN:
+
+                /* Tune to the minimum DAC value */
+                vctcxo_trim_dac_write( 0x08, trimdac_min );
+                dac_val = (unsigned short int) trimdac_min;
+            	Control_TCXO_DAC (1, &dac_val); //enable DAC output, set new val
+
+                /* State to enter upon the next interrupt */
+                tune_state = COARSE_TUNE_MAX;
+
+                break;
+
+            case COARSE_TUNE_MAX:
+
+                /* We have the error from the minimum DAC setting, store it
+                 * as the 'x' coordinate for the first point */
+                trimdac_cal_line.point[0].x = vctcxo_tamer_pkt.pps_1s_error;
+
+                /* Tune to the maximum DAC value */
+                vctcxo_trim_dac_write( 0x08, trimdac_max );
+                dac_val = (unsigned short int) trimdac_max;
+            	Control_TCXO_DAC (1, &dac_val); //enable DAC output, set new val
+
+                /* State to enter upon the next interrupt */
+                tune_state = COARSE_TUNE_DONE;
+
+                break;
+
+            case COARSE_TUNE_DONE:
+            	/* Write status to to state register*/
+            	vctcxo_tamer_write(VT_STATE_ADDR, 0x01);
+
+                /* We have the error from the maximum DAC setting, store it
+                 * as the 'x' coordinate for the second point */
+                trimdac_cal_line.point[1].x = vctcxo_tamer_pkt.pps_1s_error;
+
+                /* We now have two points, so we can calculate the equation
+                 * for a line plotted with DAC counts on the Y axis and
+                 * error on the X axis. We want a PPM of zero, which ideally
+                 * corresponds to the y-intercept of the line. */
+                trimdac_cal_line.slope = ( (float) (trimdac_cal_line.point[1].y - trimdac_cal_line.point[0].y) / (float)
+                                           (trimdac_cal_line.point[1].x - trimdac_cal_line.point[0].x) );
+
+                trimdac_cal_line.y_intercept = ( trimdac_cal_line.point[0].y -
+                                                 (uint16_t)(round(trimdac_cal_line.slope * (float) trimdac_cal_line.point[0].x)));
+
+                /* Set the trim DAC count to the y-intercept */
+                vctcxo_trim_dac_write( 0x08, trimdac_cal_line.y_intercept );
+                dac_val = (unsigned short int) trimdac_cal_line.y_intercept;
+            	Control_TCXO_DAC (1, &dac_val); //enable DAC output, set new val
+
+
+                /* State to enter upon the next interrupt */
+                tune_state = FINE_TUNE;
+
+                break;
+
+            case FINE_TUNE:
+
+                /* We should be extremely close to a perfectly tuned
+                 * VCTCXO, but some minor adjustments need to be made */
+
+                /* Check the magnitude of the errors starting with the
+                 * one second count. If an error is greater than the maxium
+                 * tolerated error, adjust the trim DAC by the error (Hz)
+                 * multiplied by the slope (in counts/Hz) and scale the
+                 * result by the precision interval (e.g. 1s, 10s, 100s). */
+                if( vctcxo_tamer_pkt.pps_1s_error_flag ) {
+                	vctcxo_trim_dac_value = (vctcxo_trim_dac_value -
+                	                    		(uint16_t) (round((float)vctcxo_tamer_pkt.pps_1s_error * trimdac_cal_line.slope)/1));
+                	// Write tuned val to VCTCXO_tamer MM registers
+                    vctcxo_trim_dac_write( 0x08, vctcxo_trim_dac_value);
+                    // Change DAC value
+                    dac_val = (unsigned short int) vctcxo_trim_dac_value;
+                	Control_TCXO_DAC (1, &dac_val); //enable DAC output, set new val
+
+                } else if( vctcxo_tamer_pkt.pps_10s_error_flag ) {
+                	vctcxo_trim_dac_value = (vctcxo_trim_dac_value -
+                    							(uint16_t)(round((float)vctcxo_tamer_pkt.pps_10s_error * trimdac_cal_line.slope)/10));
+                	// Write tuned val to VCTCXO_tamer MM registers
+                    vctcxo_trim_dac_write( 0x08, vctcxo_trim_dac_value);
+                    // Change DAC value
+                    dac_val = (unsigned short int) vctcxo_trim_dac_value;
+                	Control_TCXO_DAC (1, &dac_val); //enable DAC output, set new val
+
+                } else if( vctcxo_tamer_pkt.pps_100s_error_flag ) {
+                	vctcxo_trim_dac_value = (vctcxo_trim_dac_value -
+                    							(uint16_t)(round((float)vctcxo_tamer_pkt.pps_100s_error * trimdac_cal_line.slope)/100));
+                	// Write tuned val to VCTCXO_tamer MM registers
+                    vctcxo_trim_dac_write( 0x08, vctcxo_trim_dac_value);
+                    // Change DAC value
+                    dac_val = (unsigned short int) vctcxo_trim_dac_value;
+                	Control_TCXO_DAC (1, &dac_val); //enable DAC output, set new val
+                }
+
+                break;
+
+            default:
+                break;
+
+            } /* switch */
+
+            /* Take PPS counters out of reset */
+            vctcxo_tamer_reset_counters( false );
+
+            /* Enable interrupts */
+            vctcxo_tamer_enable_isr( true );
+
+        } /* VCTCXO Tamer interrupt */
 
         spirez = IORD(AV_FIFO_INT_0_BASE, 2);	// Read FIFO Status
         if(!(spirez & 0x01))

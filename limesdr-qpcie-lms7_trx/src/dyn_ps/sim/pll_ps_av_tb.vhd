@@ -27,9 +27,12 @@ architecture tb_behave of pll_ps_av_tb is
    constant clk0_period    : time := 10 ns;
    constant clk1_period    : time := 10 ns; 
    --signals
-   signal clk0,clk1        : std_logic;
-   signal reset_n          : std_logic;
-   signal reset            : std_logic;
+   signal clk0,clk1              : std_logic;
+   signal reset_n                : std_logic;
+   signal reset                  : std_logic;
+   signal dut0_mgmt_waitrequest  : std_logic;
+   signal dut0_mgmt_write        : std_logic;
+   signal dut0_mgmt_read         : std_logic;
   
 begin 
   
@@ -53,6 +56,16 @@ begin
    
    reset <= not reset_n;
    
+   process is
+   begin
+      dut0_mgmt_waitrequest <= '1';
+      wait until (rising_edge(dut0_mgmt_write) OR rising_edge(dut0_mgmt_read));
+      wait until rising_edge(clk0);
+      dut0_mgmt_waitrequest <= '0';
+      wait until rising_edge(clk0);
+   end process;
+   
+   
       -- design under test  
 
 phsft_dut0 : entity work.pll_ps_av 
@@ -65,9 +78,9 @@ port map(
    cnt               => "00001",
    updown            => '1',
    mgmt_readdata     => x"00000001",
-   mgmt_waitrequest  => '0',
-   mgmt_read         => open,
-   mgmt_write        => open,
+   mgmt_waitrequest  => dut0_mgmt_waitrequest,
+   mgmt_read         => dut0_mgmt_read,
+   mgmt_write        => dut0_mgmt_write,
    mgmt_address      => open,
    mgmt_writedata    => open
    );

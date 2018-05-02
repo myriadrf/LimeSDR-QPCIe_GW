@@ -37,7 +37,6 @@ set library_file_list {
                                             general/bus_sync_reg.vhd
                                             
                                             dyn_ps/synth/pll_ps_av.v
-                                            dyn_ps/synth/Example_SM.v
                                             dyn_ps/sim/pll_ps_av_tb.vhd
                                             
                            }
