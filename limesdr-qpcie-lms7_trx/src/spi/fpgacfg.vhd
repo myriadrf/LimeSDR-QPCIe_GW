@@ -215,7 +215,7 @@ begin
 		-- Defaults
 		if mreset = '0' then	
 			--Read only registers
-			mem(0)	<= "0000000000001111"; -- 00 frre, Board ID (LimeSDR-qPCIE)
+			mem(0)	<= "0000000000010000"; -- 00 frre, Board ID (LimeSDR-qPCIE)
 			mem(1)	<= "0000000000000000"; -- 00 free, GW version
 			mem(2)	<= "0000000000000000"; -- 00 free, GW revision
 			mem(3)	<= "0000000000000000"; --  9 free, BOM_VER[7:4],HW_VER[3:0]
