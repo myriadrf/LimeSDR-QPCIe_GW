@@ -8,7 +8,6 @@
 
 -- ----------------------------------------------------------------------------
 -- Notes:
--- TODO: implement changeable in_pct_data_w parameter,
 -- TODO: implement changeable pct_size_w parameter
 -- ----------------------------------------------------------------------------
 
@@ -16,7 +15,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.math_real.all;
-use ieee.math_real.all;
+
 
 -- ----------------------------------------------------------------------------
 -- Entity declaration
@@ -43,7 +42,7 @@ entity p2d_wr_fsm is
       pct_hdr_1         : out std_logic_vector(63 downto 0);
       pct_hdr_1_valid   : out std_logic_vector(n_buff-1 downto 0);
       
-      pct_data          : out std_logic_vector(31 downto 0);
+      pct_data          : out std_logic_vector(in_pct_data_w-1 downto 0);
       pct_data_wrreq    : out std_logic_vector(n_buff-1 downto 0);
 
       pct_buff_rdy      : in std_logic_vector(n_buff-1 downto 0)
@@ -61,6 +60,10 @@ signal in_pct_data_reg        : std_logic_vector(in_pct_data_w-1 downto 0);
 
 signal wr_cnt                 : unsigned(pct_size_w-1 downto 0);
 signal wr_cnt_end             : std_logic;
+constant hdr0_words           : integer := 64 / in_pct_data_w; -- 64b of header0 in packet
+constant hdr1_words           : integer := 64 / in_pct_data_w; -- 64b of header1 in packet
+constant hdr0_cnt_val         : integer := hdr0_words; 
+constant hdr1_cnt_val         : integer := hdr0_words + hdr1_words; 
 
 
 signal pct_hdr_0_reg          : std_logic_vector(63 downto 0);      
@@ -72,14 +75,15 @@ signal pct_hdr_1_valid_reg    : std_logic;
 signal pct_data_wrreq_int     : std_logic;
 
 signal buff_sel               : std_logic_vector(n_buff-1 downto 0);
-signal buff_sel_cnt           : unsigned(integer(ceil(log2(real(n_buff))))-1 downto 0); 
-signal buff_sel_cnt_reg       : unsigned(integer(ceil(log2(real(n_buff))))-1 downto 0);
-signal buff_rdy               : std_logic;
+signal next_buff_sel_cnt      : unsigned(integer(ceil(log2(real(n_buff))))-1 downto 0); 
+signal current_buff_sel_cnt   : unsigned(integer(ceil(log2(real(n_buff))))-1 downto 0);
+signal current_buff_rdy       : std_logic;
+signal next_buff_rdy          : std_logic;
 signal buff_check_limit       : unsigned(pct_size_w-1 downto 0);
 signal pct_size_limit         : unsigned(pct_size_w-1 downto 0);
 signal in_pct_wrfull_int      : std_logic;
 
-signal pct_data_reg           : std_logic_vector(31 downto 0);    
+signal pct_data_reg           : std_logic_vector(in_pct_data_w-1 downto 0);    
 signal pct_data_wrreq_reg     : std_logic_vector(n_buff-1 downto 0);
 signal pct_data_wrreq_comb    : std_logic_vector(n_buff-1 downto 0);
 
@@ -95,16 +99,32 @@ begin
 -- ----------------------------------------------------------------------------
 -- To calculate limits
 -- ----------------------------------------------------------------------------
+lim_32_gen : if in_pct_data_w = 32 generate
 process(clk, reset_n)
 begin
    if reset_n = '0' then 
-      buff_check_limit <= (others=>'1');
-      pct_size_limit <= (others=>'1');
+      buff_check_limit  <= (others=>'1');
+      pct_size_limit    <= (others=>'1');
    elsif (clk'event AND clk='1') then 
       buff_check_limit  <= unsigned(pct_size)-2;
       pct_size_limit    <= unsigned(pct_size)-1;
    end if;
 end process;
+end generate lim_32_gen;
+
+-- when in_pct_data_w = 32 limits are divided by 2
+lim_64_gen : if in_pct_data_w = 64 generate
+process(clk, reset_n)
+begin
+   if reset_n = '0' then 
+      buff_check_limit  <= (others=>'1');
+      pct_size_limit    <= (others=>'1');
+   elsif (clk'event AND clk='1') then 
+      buff_check_limit  <= unsigned('0' & pct_size(pct_size_w-1 downto 1))-2;
+      pct_size_limit    <= unsigned('0' & pct_size(pct_size_w-1 downto 1))-1;
+   end if;
+end process;
+end generate lim_64_gen;
 
 -- ----------------------------------------------------------------------------
 -- Counter for selecting new buffer
@@ -112,19 +132,19 @@ end process;
 process(clk, reset_n)
 begin
    if reset_n = '0' then 
-      buff_sel_cnt <= (others=>'0');
-      buff_sel_cnt_reg <= (others=>'0');
+      next_buff_sel_cnt <= (others=>'0');
+      current_buff_sel_cnt <= (others=>'0');
    elsif (clk'event AND clk='1') then
       if pct_hdr_0_valid_reg = '1' then 
-         buff_sel_cnt <= buff_sel_cnt+1;
+         next_buff_sel_cnt <= next_buff_sel_cnt+1;
       else 
-         buff_sel_cnt <= buff_sel_cnt;
+         next_buff_sel_cnt <= next_buff_sel_cnt;
       end if;
       
       if current_state = switch_buff then 
-         buff_sel_cnt_reg <= buff_sel_cnt;
+         current_buff_sel_cnt <= next_buff_sel_cnt;
       else
-         buff_sel_cnt_reg <= buff_sel_cnt_reg;
+         current_buff_sel_cnt <= current_buff_sel_cnt;
       end if;
       
    end if;
@@ -133,19 +153,25 @@ end process;
 -- ----------------------------------------------------------------------------
 -- To select buffer and show selected buffer status
 -- ----------------------------------------------------------------------------
-process(buff_sel_cnt,pct_buff_rdy)
+process(pct_buff_rdy,current_buff_sel_cnt)
 begin
-   buff_rdy <= pct_buff_rdy(to_integer(buff_sel_cnt));
+   current_buff_rdy <= pct_buff_rdy(to_integer(current_buff_sel_cnt));
+end process;
+
+process(pct_buff_rdy,next_buff_sel_cnt)
+begin
+   next_buff_rdy <= pct_buff_rdy(to_integer(next_buff_sel_cnt));
 end process;
 
 
-process(in_pct_wrreq,wr_cnt_end,buff_rdy, in_pct_wrfull_int)
+
+process(current_state)
 begin
-      if wr_cnt_end = '1' AND in_pct_wrreq = '1' then 
-         in_pct_wrfull_int <= NOT buff_rdy;
-      else
-         in_pct_wrfull_int <= '0';
-      end if;
+   if current_state = wait_rdy  OR current_state = switch_buff then 
+      in_pct_wrfull_int <= '1';
+   else
+      in_pct_wrfull_int <= '0';
+   end if;
 end process;
 
 -- ----------------------------------------------------------------------------
@@ -155,23 +181,20 @@ fsm_f : process(clk, reset_n)begin
 	if(reset_n = '0')then
 		current_state <= idle;
 	elsif(clk'event and clk = '1')then
-      if in_pct_wrreq = '1' then 
-         current_state <= next_state;
-      else 
-         current_state <= current_state;
-      end if;
+      current_state <= next_state;
 	end if;	
 end process;
 
 -- ----------------------------------------------------------------------------
 --state machine combo
 -- ----------------------------------------------------------------------------
-fsm : process(current_state, pct_hdr_1_valid_reg, wr_cnt_end, buff_rdy, in_pct_wrreq, wr_cnt) begin
+fsm : process(current_state, pct_hdr_1_valid_reg, wr_cnt_end, current_buff_rdy, 
+               next_buff_rdy, in_pct_wrreq, wr_cnt) begin
 	next_state <= current_state;
 	case current_state is
 	  
 		when idle =>
-         if buff_rdy = '1' then
+         if current_buff_rdy = '1' then
             next_state <= wait_hdr_1;
          else 
             next_state <= idle;
@@ -186,7 +209,7 @@ fsm : process(current_state, pct_hdr_1_valid_reg, wr_cnt_end, buff_rdy, in_pct_w
          
       when wait_pct_end =>
          if wr_cnt_end = '1' then
-            if buff_rdy = '1' then 
+            if next_buff_rdy = '1' then 
                next_state <= switch_buff;
             else 
                next_state <= wait_rdy;
@@ -196,7 +219,7 @@ fsm : process(current_state, pct_hdr_1_valid_reg, wr_cnt_end, buff_rdy, in_pct_w
          end if;
        
       when wait_rdy => 
-         if buff_rdy = '1' then 
+         if next_buff_rdy = '1' then 
             next_state <= switch_buff;
          else 
             next_state <= wait_rdy;
@@ -258,13 +281,17 @@ end process;
 -- ----------------------------------------------------------------------------
 -- Packet header 0 register
 -- ----------------------------------------------------------------------------
-hdr0_reg : process(clk, reset_n)
-begin
+
+-- depending from in_pct_data_w two different processes are generated
+-- if in_pct_data_w = 32
+hdr0_reg32_gen : if in_pct_data_w = 32 generate
+   hdr0_reg_32 : process(clk, reset_n)
+   begin
    if reset_n = '0' then 
       pct_hdr_0_reg        <= (others=>'0');     
       pct_hdr_0_valid_reg  <= '0';
    elsif (clk'event AND clk='1') then 
-      if in_pct_wrreq = '1' AND wr_cnt = 1 then
+      if in_pct_wrreq = '1' AND wr_cnt = hdr0_cnt_val - 1 then
          pct_hdr_0_reg        <= in_pct_data & in_pct_data_reg;     
          pct_hdr_0_valid_reg  <= '1';
       else 
@@ -272,26 +299,70 @@ begin
          pct_hdr_0_valid_reg  <= '0';
       end if;
    end if;
-end process;
+   end process;
+end generate hdr0_reg32_gen;
+
+-- if in_pct_data_w = 64
+hdr0_reg64_gen : if in_pct_data_w = 64 generate
+   hdr0_reg_32 : process(clk, reset_n)
+   begin
+   if reset_n = '0' then 
+      pct_hdr_0_reg        <= (others=>'0');     
+      pct_hdr_0_valid_reg  <= '0';
+   elsif (clk'event AND clk='1') then 
+      if in_pct_wrreq = '1' AND wr_cnt = hdr0_cnt_val - 1 then
+         pct_hdr_0_reg        <= in_pct_data;     
+         pct_hdr_0_valid_reg  <= '1';
+      else 
+         pct_hdr_0_reg        <= pct_hdr_0_reg;     
+         pct_hdr_0_valid_reg  <= '0';
+      end if;
+   end if;
+   end process;
+end generate hdr0_reg64_gen;
 
 -- ----------------------------------------------------------------------------
 -- Packet header 1 register
 -- ----------------------------------------------------------------------------
-hdr1_reg : process(clk, reset_n)
-begin
-   if reset_n = '0' then 
-      pct_hdr_1_reg        <= (others=>'0');     
-      pct_hdr_1_valid_reg  <= '0';
-   elsif (clk'event AND clk='1') then 
-      if in_pct_wrreq = '1' AND wr_cnt = 3 then
-         pct_hdr_1_reg        <= in_pct_data & in_pct_data_reg;     
-         pct_hdr_1_valid_reg  <= '1';
-      else 
-         pct_hdr_1_reg        <= pct_hdr_1_reg;     
+-- depending from in_pct_data_w two different processes are generated
+-- if in_pct_data_w = 32
+hdr1_reg32_gen : if in_pct_data_w = 32 generate
+   hdr1_reg : process(clk, reset_n)
+   begin
+      if reset_n = '0' then 
+         pct_hdr_1_reg        <= (others=>'0');     
          pct_hdr_1_valid_reg  <= '0';
+      elsif (clk'event AND clk='1') then 
+         if in_pct_wrreq = '1' AND wr_cnt = hdr1_cnt_val - 1 then
+            pct_hdr_1_reg        <= in_pct_data & in_pct_data_reg;     
+            pct_hdr_1_valid_reg  <= '1';
+         else 
+            pct_hdr_1_reg        <= pct_hdr_1_reg;     
+            pct_hdr_1_valid_reg  <= '0';
+         end if;
       end if;
-   end if;
-end process;
+   end process;
+end generate hdr1_reg32_gen;
+
+-- if in_pct_data_w = 64
+hdr1_reg64_gen : if in_pct_data_w = 64 generate
+   hdr1_reg : process(clk, reset_n)
+   begin
+      if reset_n = '0' then 
+         pct_hdr_1_reg        <= (others=>'0');     
+         pct_hdr_1_valid_reg  <= '0';
+      elsif (clk'event AND clk='1') then 
+         if in_pct_wrreq = '1' AND wr_cnt = hdr1_cnt_val - 1 then
+            pct_hdr_1_reg        <= in_pct_data;     
+            pct_hdr_1_valid_reg  <= '1';
+         else 
+            pct_hdr_1_reg        <= pct_hdr_1_reg;     
+            pct_hdr_1_valid_reg  <= '0';
+         end if;
+      end if;
+   end process;
+end generate hdr1_reg64_gen;
+
 
 
 -- ----------------------------------------------------------------------------
@@ -322,7 +393,7 @@ begin
    elsif (clk'event AND clk='1') then 
       if current_state = switch_buff then 
          for i in 0 to n_buff-1 loop
-            if i = buff_sel_cnt then 
+            if i = next_buff_sel_cnt then 
                buff_sel(i) <= '1';
             else 
                buff_sel(i) <= '0';
@@ -336,10 +407,10 @@ end process;
 -- ----------------------------------------------------------------------------
 -- Buffer write select signal 
 -- ----------------------------------------------------------------------------
-process(pct_data_wrreq_int,buff_sel_cnt_reg)
+process(pct_data_wrreq_int,current_buff_sel_cnt)
 begin
    for i in 0 to n_buff-1 loop
-      if i = buff_sel_cnt_reg then 
+      if i = current_buff_sel_cnt then 
          pct_data_wrreq_comb(i) <= pct_data_wrreq_int;
       else 
          pct_data_wrreq_comb(i) <= '0';
