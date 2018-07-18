@@ -1,112 +1,156 @@
--- ----------------------------------------------------------------------------	
--- FILE: 	pcie_top.vhd
--- DESCRIPTION:	top module of PCIE 
--- DATE:	 Nov 08, 2016
--- AUTHOR(s):	Lime Microsystems
+-- ----------------------------------------------------------------------------
+-- FILE:          pcie_top.vhd
+-- DESCRIPTION:   Top module for PCIe connection
+-- DATE:          11:11 AM Thursday, June 28, 2018
+-- AUTHOR(s):     Lime Microsystems
 -- REVISIONS:
--- ----------------------------------------------------------------------------	
+-- ----------------------------------------------------------------------------
+
+-- ----------------------------------------------------------------------------
+--NOTES:
+-- ----------------------------------------------------------------------------
+-- altera vhdl_input_version vhdl_2008
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use work.FIFO_PACK.all;
 
-
+LIBRARY altera_mf;
+USE altera_mf.all;
 -- ----------------------------------------------------------------------------
 -- Entity declaration
 -- ----------------------------------------------------------------------------
 entity pcie_top is
-	generic(
-		dev_family				: string  := "Cyclone V GX";
-		pcie_ctrl0_dataw		: integer := 32; --xillybus_control0 bus width
-		pcie_strm0_dataw		: integer := 32; --xillybus_stream0 bus width
-		pcie_strm1_dataw		: integer := 32; --xillybus_stream1 bus width
-		pcie_strm2_dataw		: integer := 32  --xillybus_stream1 bus width
-		);
-	port (
-		--PCIE external pins
-		pcie_perstn 			: IN std_logic;
-		pcie_refclk 			: IN std_logic;
-      clk100               : IN std_logic;
-		pcie_rx 					: IN std_logic_vector(3 DOWNTO 0);
-		pcie_tx 					: OUT std_logic_vector(3 DOWNTO 0);
-		--pcie internal data clock
-		pcie_bus_clk			: out std_logic;
-		--Control 0 data fifo (PC -> FPGA) 
-		ctrl0_IN_rdclk			: in std_logic;
-		ctrl0_IN_aclr_n		: in std_logic;
-		ctrl0_IN_rdempty		: out std_logic;
-		ctrl0_IN_rdusedw		: out std_logic_vector(8 downto 0);
-		ctrl0_IN_rdreq			: in std_logic;
-		ctrl0_IN_q				: out std_logic_vector(31 downto 0);
-		--Control 0 data fifo (FPGA -> PC) 
-		ctrl0_OUT_wrclk		: in std_logic;
-		ctrl0_OUT_aclr_n		: in std_logic;
-		ctrl0_OUT_wrfull		: out std_logic;
-		ctrl0_OUT_wrusedw		: out std_logic_vector(8 downto 0);
-		ctrl0_OUT_wrreq		: in std_logic;
-		ctrl0_OUT_data			: in std_logic_vector(31 downto 0);
-		--Stream 0 data fifo (PC -> FPGA) 
-      --FIFO insterface (not used)
---		strm0_IN_rdclk			: in std_logic;
---		strm0_IN_rdempty		: out std_logic;
---		strm0_IN_rdusedw		: out std_logic_vector(8 downto 0);
---		strm0_IN_rdreq			: in std_logic;
-      --Direct pcie data
-		strm0_IN_q				: out std_logic_vector(31 downto 0);
-		strm0_IN_ext_q_valid	: out std_logic;
-		strm0_IN_ext_rdy		: in std_logic;
-      strm0_IN_open        : out std_logic;
-		--Stream 0 data fifo (FPGA -> PC) 
---		strm0_OUT_SW			: in std_logic;
-		strm0_OUT_wrclk		: in std_logic;
-		strm0_OUT_aclr_n		: in std_logic;
-		strm0_OUT_wrfull		: out std_logic;
-		strm0_OUT_wrusedw		: out std_logic_vector(11 downto 0);
-		strm0_OUT_wrreq		: in std_logic;
-		strm0_OUT_data			: in std_logic_vector(63 downto 0);
---		strm0_OUT_EXT_rdreq	: out std_logic;
---		strm0_OUT_EXT_rdempty: in std_logic;
---		strm0_OUT_EXT_q		: in std_logic_vector(31 downto 0);		
-		--Stream 1 data fifo (PC -> FPGA) 
---		strm1_IN_rdclk			: in std_logic;
---		strm1_IN_rdempty		: out std_logic;
---		strm1_IN_rdusedw		: out std_logic_vector(8 downto 0);
---		strm1_IN_rdreq			: in std_logic;
-		strm1_IN_q				: out std_logic_vector(31 downto 0);
-		strm1_IN_ext_q_valid	: out std_logic;
-		strm1_IN_ext_rdy		: in std_logic;
-      strm1_IN_open        : out std_logic;
-		--Stream 1 data fifo (FPGA -> PC) 
---		strm1_OUT_SW			: in std_logic;
-		strm1_OUT_wrclk		: in std_logic;
-		strm1_OUT_aclr_n		: in std_logic;
-		strm1_OUT_wrfull		: out std_logic;
-		strm1_OUT_wrusedw		: out std_logic_vector(11 downto 0);
-		strm1_OUT_wrreq		: in std_logic;
-		strm1_OUT_data			: in std_logic_vector(63 downto 0);
---		strm1_OUT_EXT_rdreq	: out std_logic;
---		strm1_OUT_EXT_rdempty: in std_logic;
---		strm1_OUT_EXT_q		: in std_logic_vector(31 downto 0);
-		--Stream 2 data fifo (PC -> FPGA) 
---		strm2_IN_rdclk			: in std_logic;
---		strm2_IN_rdempty		: out std_logic;
---		strm2_IN_rdusedw		: out std_logic_vector(8 downto 0);
---		strm2_IN_rdreq			: in std_logic;
-		strm2_IN_q				: out std_logic_vector(31 downto 0);
-		strm2_IN_ext_q_valid	: out std_logic;
-		strm2_IN_ext_rdy		: in std_logic;
-      strm2_IN_open        : out std_logic;
-		--Stream 2 data fifo (FPGA -> PC) 
---		strm2_OUT_SW			: in std_logic;
-		strm2_OUT_wrclk		: in std_logic;
-		strm2_OUT_aclr_n		: in std_logic;
-		strm2_OUT_wrfull		: out std_logic;
-		strm2_OUT_wrusedw		: out std_logic_vector(11 downto 0);
-		strm2_OUT_wrreq		: in std_logic;
-		strm2_OUT_data			: in std_logic_vector(63 downto 0)
---		strm2_OUT_EXT_rdreq	: out std_logic;
---		strm2_OUT_EXT_rdempty: in std_logic;
---		strm2_OUT_EXT_q		: in std_logic_vector(31 downto 0)
-		
+   generic(
+      g_DEV_FAMILY               : string := "Cyclone V GX";
+      g_S0_DATA_WIDTH            : integer := 32;
+      g_S1_DATA_WIDTH            : integer := 32;
+      g_S2_DATA_WIDTH            : integer := 32;
+      g_C0_DATA_WIDTH            : integer := 8;
+      -- Stream (Host->FPGA) 
+      g_H2F_S0_0_RDUSEDW_WIDTH   : integer := 11;
+      g_H2F_S0_0_RWIDTH          : integer := 32;
+      g_H2F_S0_1_RDUSEDW_WIDTH   : integer := 11;
+      g_H2F_S0_1_RWIDTH          : integer := 32;
+      g_H2F_S1_0_RDUSEDW_WIDTH   : integer := 11;
+      g_H2F_S1_0_RWIDTH          : integer := 32;
+      g_H2F_S1_1_RDUSEDW_WIDTH   : integer := 11;
+      g_H2F_S1_1_RWIDTH          : integer := 32;
+      g_H2F_S2_0_RDUSEDW_WIDTH   : integer := 11;
+      g_H2F_S2_0_RWIDTH          : integer := 32;
+      g_H2F_S2_1_RDUSEDW_WIDTH   : integer := 11;
+      g_H2F_S2_1_RWIDTH          : integer := 32;      
+      -- Stream (FPGA->Host)
+      g_F2H_S0_WRUSEDW_WIDTH     : integer := 10;
+      g_F2H_S0_WWIDTH            : integer := 64;
+      g_F2H_S1_WRUSEDW_WIDTH     : integer := 10;
+      g_F2H_S1_WWIDTH            : integer := 64;
+      g_F2H_S2_WRUSEDW_WIDTH     : integer := 10;
+      g_F2H_S2_WWIDTH            : integer := 64;
+      -- Control (Host->FPGA)
+      g_H2F_C0_RDUSEDW_WIDTH     : integer := 11;
+      g_H2F_C0_RWIDTH            : integer := 8;
+      -- Control (FPGA->Host)
+      g_F2H_C0_WRUSEDW_WIDTH     : integer := 11;
+      g_F2H_C0_WWIDTH            : integer := 8
+      
+   );
+   port (
+      clk                  : in  std_logic;   -- Input clock for PLL
+      reset_n              : in  std_logic;
+      --PCIE external pins
+      pcie_perstn          : in  std_logic;
+      pcie_refclk          : in  std_logic;
+      pcie_rx              : in  std_logic_vector(3 downto 0);
+      pcie_tx              : out std_logic_vector(3 downto 0);
+      pcie_bus_clk         : out std_logic;  -- PCIe data clock output
+      -- FIFO buffers
+      H2F_S0_sel           : in std_logic;   -- 0 - S0_0, 1 - S0_1
+      H2F_S1_sel           : in std_logic;   -- 0 - S1_0, 1 - S1_1
+      H2F_S2_sel           : in std_logic;   -- 0 - S2_0, 1 - S2_1
+      --Stream 0 endpoint FIFO 0 (Host->FPGA) 
+      H2F_S0_0_rdclk       : in std_logic;
+      H2F_S0_0_aclrn       : in std_logic;
+      H2F_S0_0_rd          : in std_logic;
+      H2F_S0_0_rdata       : out std_logic_vector(g_H2F_S0_0_RWIDTH-1 downto 0);
+      H2F_S0_0_rempty      : out std_logic;
+      H2F_S0_0_rdusedw     : out std_logic_vector(g_H2F_S0_0_RDUSEDW_WIDTH-1 downto 0);
+      --Stream 0 endpoint FIFO 1 (Host->FPGA) 
+      H2F_S0_1_rdclk       : in std_logic;
+      H2F_S0_1_aclrn       : in std_logic;
+      H2F_S0_1_rd          : in std_logic;
+      H2F_S0_1_rdata       : out std_logic_vector(g_H2F_S0_1_RWIDTH-1 downto 0);
+      H2F_S0_1_rempty      : out std_logic;
+      H2F_S0_1_rdusedw     : out std_logic_vector(g_H2F_S0_1_RDUSEDW_WIDTH-1 downto 0);
+      --Stream 1 endpoint FIFO 0 (Host->FPGA) 
+      H2F_S1_0_rdclk       : in std_logic;
+      H2F_S1_0_aclrn       : in std_logic;
+      H2F_S1_0_rd          : in std_logic;
+      H2F_S1_0_rdata       : out std_logic_vector(g_H2F_S1_0_RWIDTH-1 downto 0);
+      H2F_S1_0_rempty      : out std_logic;
+      H2F_S1_0_rdusedw     : out std_logic_vector(g_H2F_S1_0_RDUSEDW_WIDTH-1 downto 0);
+      --Stream 1 endpoint FIFO 1 (Host->FPGA) 
+      H2F_S1_1_rdclk       : in std_logic;
+      H2F_S1_1_aclrn       : in std_logic;
+      H2F_S1_1_rd          : in std_logic;
+      H2F_S1_1_rdata       : out std_logic_vector(g_H2F_S1_1_RWIDTH-1 downto 0);
+      H2F_S1_1_rempty      : out std_logic;
+      H2F_S1_1_rdusedw     : out std_logic_vector(g_H2F_S1_1_RDUSEDW_WIDTH-1 downto 0);
+      --Stream 2 endpoint FIFO 0 (Host->FPGA) 
+      H2F_S2_0_rdclk       : in std_logic;
+      H2F_S2_0_aclrn       : in std_logic;
+      H2F_S2_0_rd          : in std_logic;
+      H2F_S2_0_rdata       : out std_logic_vector(g_H2F_S2_0_RWIDTH-1 downto 0);
+      H2F_S2_0_rempty      : out std_logic;
+      H2F_S2_0_rdusedw     : out std_logic_vector(g_H2F_S2_0_RDUSEDW_WIDTH-1 downto 0);
+      --Stream 2 endpoint FIFO 1 (Host->FPGA) 
+      H2F_S2_1_rdclk       : in std_logic;
+      H2F_S2_1_aclrn       : in std_logic;
+      H2F_S2_1_rd          : in std_logic;
+      H2F_S2_1_rdata       : out std_logic_vector(g_H2F_S2_1_RWIDTH-1 downto 0);
+      H2F_S2_1_rempty      : out std_logic;
+      H2F_S2_1_rdusedw     : out std_logic_vector(g_H2F_S2_1_RDUSEDW_WIDTH-1 downto 0);
+      --Stream 0 endpoint FIFO (FPGA->Host)
+      F2H_S0_wclk          : in std_logic;
+      F2H_S0_aclrn         : in std_logic;
+      F2H_S0_wr            : in std_logic;
+      F2H_S0_wdata         : in std_logic_vector(g_F2H_S0_WWIDTH-1 downto 0);
+      F2H_S0_wfull         : out std_logic;
+      F2H_S0_wrusedw       : out std_logic_vector(g_F2H_S0_WRUSEDW_WIDTH-1 downto 0);
+      --Stream 1 endpoint FIFO (FPGA->Host)
+      F2H_S1_wclk          : in std_logic;
+      F2H_S1_aclrn         : in std_logic;
+      F2H_S1_wr            : in std_logic;
+      F2H_S1_wdata         : in std_logic_vector(g_F2H_S1_WWIDTH-1 downto 0);
+      F2H_S1_wfull         : out std_logic;
+      F2H_S1_wrusedw       : out std_logic_vector(g_F2H_S1_WRUSEDW_WIDTH-1 downto 0);      
+      --Stream 2 endpoint FIFO (FPGA->Host)
+      F2H_S2_wclk          : in std_logic;
+      F2H_S2_aclrn         : in std_logic;
+      F2H_S2_wr            : in std_logic;
+      F2H_S2_wdata         : in std_logic_vector(g_F2H_S2_WWIDTH-1 downto 0);
+      F2H_S2_wfull         : out std_logic;
+      F2H_S2_wrusedw       : out std_logic_vector(g_F2H_S2_WRUSEDW_WIDTH-1 downto 0);
+      --Control endpoint FIFO (Host->FPGA)
+      H2F_C0_rdclk         : in std_logic;
+      H2F_C0_aclrn         : in std_logic;
+      H2F_C0_rd            : in std_logic;
+      H2F_C0_rdata         : out std_logic_vector(g_H2F_C0_RWIDTH-1 downto 0);
+      H2F_C0_rempty        : out std_logic;
+      --Control endpoint FIFO (FPGA->Host)
+      F2H_C0_wclk          : in std_logic;
+      F2H_C0_aclrn         : in std_logic;
+      F2H_C0_wr            : in std_logic;
+      F2H_C0_wdata         : in std_logic_vector(g_F2H_C0_WWIDTH-1 downto 0);
+      F2H_C0_wfull         : out std_logic;
+      
+      S0_rx_en             : in std_logic;
+      S1_rx_en             : in std_logic;
+      S2_rx_en             : in std_logic;
+      
+      F2H_S0_open          : out std_logic;
+      F2H_S1_open          : out std_logic;
+      F2H_S2_open          : out std_logic
 		
 	);
 end pcie_top;
@@ -116,9 +160,180 @@ end pcie_top;
 -- ----------------------------------------------------------------------------
 architecture arch of pcie_top is
 --declare signals,  components here
+   -- Module constants
+   constant c_H2F_S0_0_WRUSEDW_WIDTH   : integer := FIFOWR_SIZE (g_S0_DATA_WIDTH, g_H2F_S0_0_RWIDTH, g_H2F_S0_0_RDUSEDW_WIDTH);
+   constant c_H2F_S0_0_RDUSEDW_WIDTH   : integer := g_H2F_S0_0_RDUSEDW_WIDTH; 
+   constant c_H2F_S0_1_WRUSEDW_WIDTH   : integer := FIFOWR_SIZE (g_S0_DATA_WIDTH, g_H2F_S0_1_RWIDTH, g_H2F_S0_1_RDUSEDW_WIDTH);
+   constant c_H2F_S0_1_RDUSEDW_WIDTH   : integer := g_H2F_S0_1_RDUSEDW_WIDTH;
+  
+   constant c_H2F_S1_0_WRUSEDW_WIDTH   : integer := FIFOWR_SIZE (g_S1_DATA_WIDTH, g_H2F_S1_0_RWIDTH, g_H2F_S1_0_RDUSEDW_WIDTH);
+   constant c_H2F_S1_0_RDUSEDW_WIDTH   : integer := g_H2F_S1_0_RDUSEDW_WIDTH; 
+   constant c_H2F_S1_1_WRUSEDW_WIDTH   : integer := FIFOWR_SIZE (g_S1_DATA_WIDTH, g_H2F_S1_1_RWIDTH, g_H2F_S1_1_RDUSEDW_WIDTH);
+   constant c_H2F_S1_1_RDUSEDW_WIDTH   : integer := g_H2F_S1_1_RDUSEDW_WIDTH;
+  
+   constant c_H2F_S2_0_WRUSEDW_WIDTH   : integer := FIFOWR_SIZE (g_S2_DATA_WIDTH, g_H2F_S2_0_RWIDTH, g_H2F_S2_0_RDUSEDW_WIDTH);
+   constant c_H2F_S2_0_RDUSEDW_WIDTH   : integer := g_H2F_S2_0_RDUSEDW_WIDTH; 
+   constant c_H2F_S2_1_WRUSEDW_WIDTH   : integer := FIFOWR_SIZE (g_S2_DATA_WIDTH, g_H2F_S2_1_RWIDTH, g_H2F_S2_1_RDUSEDW_WIDTH);
+   constant c_H2F_S2_1_RDUSEDW_WIDTH   : integer := g_H2F_S2_1_RDUSEDW_WIDTH; 
 
+   constant c_H2F_C0_WRUSEDW_WIDTH     : integer := FIFOWR_SIZE (g_C0_DATA_WIDTH, g_H2F_C0_RWIDTH, g_H2F_C0_RDUSEDW_WIDTH);
+   constant c_H2F_C0_RDUSEDW_WIDTH     : integer := g_H2F_C0_RDUSEDW_WIDTH; 
+   
+   constant c_F2H_S0_WRUSEDW_WIDTH     : integer := g_F2H_S0_WRUSEDW_WIDTH;
+   constant c_F2H_S0_RDUSEDW_WIDTH     : integer := FIFORD_SIZE (g_F2H_S0_WWIDTH, g_S0_DATA_WIDTH, g_F2H_S0_WRUSEDW_WIDTH); 
+   constant c_F2H_S1_WRUSEDW_WIDTH     : integer := g_F2H_S1_WRUSEDW_WIDTH;
+   constant c_F2H_S1_RDUSEDW_WIDTH     : integer := FIFORD_SIZE (g_F2H_S1_WWIDTH, g_S1_DATA_WIDTH, g_F2H_S1_WRUSEDW_WIDTH);
+   constant c_F2H_S2_WRUSEDW_WIDTH     : integer := g_F2H_S2_WRUSEDW_WIDTH;
+   constant c_F2H_S2_RDUSEDW_WIDTH     : integer := FIFORD_SIZE (g_F2H_S2_WWIDTH, g_S2_DATA_WIDTH, g_F2H_S2_WRUSEDW_WIDTH);
+   
+   constant c_F2H_C0_WRUSEDW_WIDTH     : integer := g_F2H_C0_WRUSEDW_WIDTH;
+   constant c_F2H_C0_RDUSEDW_WIDTH     : integer := FIFORD_SIZE (g_F2H_C0_WWIDTH, g_C0_DATA_WIDTH, g_F2H_C0_WRUSEDW_WIDTH);
+  
+   signal H2F_S0_sel_sync              : std_logic;
+   signal H2F_S1_sel_sync              : std_logic;
+   signal H2F_S2_sel_sync              : std_logic;
+   
+   signal S0_rx_en_sync                : std_logic;
+   signal S1_rx_en_sync                : std_logic;
+   signal S2_rx_en_sync                : std_logic;
+   
+   signal H2F_S0_0_sclrn               : std_logic;
+   signal H2F_S0_1_sclrn               : std_logic;
+   signal H2F_S0_0_sclrn_reg           : std_logic;
+   signal H2F_S0_1_sclrn_reg           : std_logic;
 
-component xillybus
+   type demo_mem is array(0 TO 31) of std_logic_vector(7 DOWNTO 0);
+   signal demoarray : demo_mem;
+   
+   signal bus_clk :  std_logic;
+   signal quiesce : std_logic;
+   
+   signal control0_reset_32 : std_logic;
+   signal stream0_reset_32 : std_logic;
+   signal stream1_reset_32 : std_logic;
+   
+   signal ram_addr : integer range 0 to 31;
+   
+   -- inst1
+   signal inst1_user_r_control0_read_32_rden    :  std_logic;
+   signal inst1_user_r_control0_read_32_empty   :  std_logic;
+   signal inst1_user_r_control0_read_32_data    :  std_logic_vector(g_C0_DATA_WIDTH-1 DOWNTO 0);
+   signal inst1_user_r_control0_read_32_eof     :  std_logic;
+   signal inst1_user_r_control0_read_32_open    :  std_logic;
+   signal inst1_user_w_control0_write_32_wren   :  std_logic;
+   signal inst1_user_w_control0_write_32_full   :  std_logic;
+   signal inst1_user_w_control0_write_32_data   :  std_logic_vector(g_C0_DATA_WIDTH-1 DOWNTO 0);
+   signal inst1_user_w_control0_write_32_open   :  std_logic;
+   signal inst1_user_r_mem_8_rden               :  std_logic;
+   signal inst1_user_r_mem_8_empty              :  std_logic;
+   signal inst1_user_r_mem_8_data               :  std_logic_vector(7 DOWNTO 0);
+   signal inst1_user_r_mem_8_eof                :  std_logic;
+   signal inst1_user_r_mem_8_open               :  std_logic;
+   signal inst1_user_w_mem_8_wren               :  std_logic;
+   signal inst1_user_w_mem_8_full               :  std_logic;
+   signal inst1_user_w_mem_8_data               :  std_logic_vector(7 DOWNTO 0);
+   signal inst1_user_w_mem_8_open               :  std_logic;
+   signal inst1_user_mem_8_addr                 :  std_logic_vector(4 DOWNTO 0);
+   signal inst1_user_mem_8_addr_update          :  std_logic;
+   signal inst1_user_r_stream0_read_32_rden     :  std_logic;
+   signal inst1_user_r_stream0_read_32_empty    :  std_logic;
+   signal inst1_user_r_stream0_read_32_data     :  std_logic_vector(31 DOWNTO 0);
+   signal inst1_user_r_stream0_read_32_eof      :  std_logic;
+   signal inst1_user_r_stream0_read_32_open     :  std_logic;
+   signal inst1_user_w_stream0_write_32_wren    :  std_logic;
+   signal inst1_user_w_stream0_write_32_full    :  std_logic;
+   signal inst1_user_w_stream0_write_32_data    :  std_logic_vector(31 DOWNTO 0);
+   signal inst1_user_w_stream0_write_32_open    :  std_logic;
+   signal inst1_user_r_stream1_read_32_rden     :  std_logic;
+   signal inst1_user_r_stream1_read_32_empty    :  std_logic;
+   signal inst1_user_r_stream1_read_32_data     :  std_logic_vector(31 DOWNTO 0);
+   signal inst1_user_r_stream1_read_32_eof      :  std_logic;
+   signal inst1_user_r_stream1_read_32_open     :  std_logic;
+   signal inst1_user_w_stream1_write_32_wren    :  std_logic;
+   signal inst1_user_w_stream1_write_32_full    :  std_logic;
+   signal inst1_user_w_stream1_write_32_data    :  std_logic_vector(31 DOWNTO 0);
+   signal inst1_user_w_stream1_write_32_open    :  std_logic;  
+   signal inst1_user_r_stream2_read_32_rden     :  std_logic;
+   signal inst1_user_r_stream2_read_32_empty    :  std_logic;
+   signal inst1_user_r_stream2_read_32_data     :  std_logic_vector(31 DOWNTO 0);
+   signal inst1_user_r_stream2_read_32_eof      :  std_logic;
+   signal inst1_user_r_stream2_read_32_open     :  std_logic;
+   signal inst1_user_w_stream2_write_32_wren    :  std_logic;
+   signal inst1_user_w_stream2_write_32_full    :  std_logic;
+   signal inst1_user_w_stream2_write_32_data    :  std_logic_vector(31 DOWNTO 0);
+   signal inst1_user_w_stream2_write_32_open    :  std_logic;    
+   signal inst1_user_led                        : std_logic_vector(3 downto 0);
+  
+   --inst2
+   signal inst2_reset_n          : std_logic;
+   signal inst2_wrreq            : std_logic;
+   signal inst2_wrfull           : std_logic;
+ 
+   --inst3
+   signal inst3_reset_n          : std_logic;
+   signal inst3_pct_wr           : std_logic;
+   signal inst3_pct_payload_data : std_logic_vector(g_S0_DATA_WIDTH-1 downto 0);
+   signal inst3_pct_payload_valid: std_logic;
+   --inst4
+   signal inst4_reset_n          : std_logic;
+   signal inst4_wrreq            : std_logic;
+   signal inst4_wrfull           : std_logic;
+   
+   --inst5
+   signal inst5_reset_n          : std_logic;
+   signal inst5_wrreq            : std_logic;
+   signal inst5_wrfull           : std_logic;
+ 
+   --inst6
+   signal inst6_reset_n          : std_logic;
+   signal inst6_pct_wr           : std_logic;
+   signal inst6_pct_payload_data : std_logic_vector(g_S1_DATA_WIDTH-1 downto 0);
+   signal inst6_pct_payload_valid: std_logic;
+   --inst7
+   signal inst7_reset_n          : std_logic;
+   signal inst7_wrreq            : std_logic;
+   signal inst7_wrfull           : std_logic;
+   
+   --inst8
+   signal inst8_reset_n          : std_logic;
+   signal inst8_wrreq            : std_logic;
+   signal inst8_wrfull           : std_logic;
+ 
+   --inst9
+   signal inst9_reset_n          : std_logic;
+   signal inst9_pct_wr           : std_logic;
+   signal inst9_pct_payload_data : std_logic_vector(g_S2_DATA_WIDTH-1 downto 0);
+   signal inst9_pct_payload_valid: std_logic;
+   --inst10
+   signal inst10_reset_n         : std_logic;
+   signal inst10_wrreq           : std_logic;
+   signal inst10_wrfull          : std_logic;
+   
+   --inst11
+   signal inst11_reset_n         : std_logic;
+   signal inst11_wrfull          : std_logic;
+   
+   --inst12
+   signal inst12_reset_n          : std_logic;
+   signal inst12_rdempty          : std_logic;
+   signal inst12_q                : std_logic_vector(g_S0_DATA_WIDTH-1 downto 0);
+
+   --inst13
+   signal inst13_reset_n          : std_logic;
+   signal inst13_rdempty          : std_logic;
+   signal inst13_q                : std_logic_vector(g_S1_DATA_WIDTH-1 downto 0);  
+   
+   --inst14
+   signal inst14_reset_n          : std_logic;
+   signal inst14_rdempty          : std_logic;
+   signal inst14_q                : std_logic_vector(g_S2_DATA_WIDTH-1 downto 0);
+   
+   --inst15
+   signal inst15_reset_n          : std_logic;
+   signal inst15_rdempty          : std_logic;
+   signal inst15_q                : std_logic_vector(g_C0_DATA_WIDTH-1 downto 0);
+   
+  component xillybus
     port (
 		pcie_perstn 						: IN std_logic;
       clk100                        : IN std_logic;
@@ -179,562 +394,543 @@ component xillybus
   end component;
   
   
-  component fifo_inst is
-  generic(dev_family	     : string  := "Cyclone IV E";
-          wrwidth         : integer := 24;
-          wrusedw_witdth  : integer := 12; --12=2048 words 
-          rdwidth         : integer := 48;
-          rdusedw_width   : integer := 11;
-          show_ahead      : string  := "ON"
-  );  
-  port (
-      --input ports 
-      reset_n       : in std_logic;
-      wrclk         : in std_logic;
-      wrreq         : in std_logic;
-      data          : in std_logic_vector(wrwidth-1 downto 0);
-      wrfull        : out std_logic;
-		wrempty		  : out std_logic;
-      wrusedw       : out std_logic_vector(wrusedw_witdth-1 downto 0);
-      rdclk 	     : in std_logic;
-      rdreq         : in std_logic;
-      q             : out std_logic_vector(rdwidth-1 downto 0);
-      rdempty       : out std_logic;
-      rdusedw       : out std_logic_vector(rdusedw_width-1 downto 0)     
-        
-        );
-end component;
-
-  type demo_mem is array(0 TO 31) of std_logic_vector(7 DOWNTO 0);
-  signal demoarray : demo_mem;
-  
-  signal bus_clk :  std_logic;
-  signal quiesce : std_logic;
-
-  signal control0_reset_32 : std_logic;
-  signal stream0_reset_32 : std_logic;
-  signal stream1_reset_32 : std_logic;
-
-  signal ram_addr : integer range 0 to 31;
-  
-  signal user_r_control0_read_32_rden 		:  std_logic;
-  signal user_r_control0_read_32_empty 	:  std_logic;
-  signal user_r_control0_read_32_data 		:  std_logic_vector(pcie_ctrl0_dataw-1 DOWNTO 0);
-  signal user_r_control0_read_32_eof 		:  std_logic;
-  signal user_r_control0_read_32_open 		:  std_logic;
-  signal user_w_control0_write_32_wren 	:  std_logic;
-  signal user_w_control0_write_32_full 	:  std_logic;
-  signal user_w_control0_write_32_data 	:  std_logic_vector(pcie_ctrl0_dataw-1 DOWNTO 0);
-  signal user_w_control0_write_32_open 	:  std_logic;
-  signal user_r_mem_8_rden 					:  std_logic;
-  signal user_r_mem_8_empty 					:  std_logic;
-  signal user_r_mem_8_data 					:  std_logic_vector(7 DOWNTO 0);
-  signal user_r_mem_8_eof 						:  std_logic;
-  signal user_r_mem_8_open 					:  std_logic;
-  signal user_w_mem_8_wren 					:  std_logic;
-  signal user_w_mem_8_full 					:  std_logic;
-  signal user_w_mem_8_data 					:  std_logic_vector(7 DOWNTO 0);
-  signal user_w_mem_8_open 					:  std_logic;
-  signal user_mem_8_addr 						:  std_logic_vector(4 DOWNTO 0);
-  signal user_mem_8_addr_update 				:  std_logic;
-  signal user_r_stream0_read_32_rden 		:  std_logic;
-  signal user_r_stream0_read_32_empty 		:  std_logic;
-  signal user_r_stream0_read_32_data 		:  std_logic_vector(31 DOWNTO 0);
-  signal user_r_stream0_read_32_eof 		:  std_logic;
-  signal user_r_stream0_read_32_open 		:  std_logic;
-  signal user_w_stream0_write_32_wren 		:  std_logic;
-  signal user_w_stream0_write_32_full 		:  std_logic;
-  signal user_w_stream0_write_32_data 		:  std_logic_vector(31 DOWNTO 0);
-  signal user_w_stream0_write_32_open 		:  std_logic;
-  signal user_r_stream1_read_32_rden 		:  std_logic;
-  signal user_r_stream1_read_32_empty 		:  std_logic;
-  signal user_r_stream1_read_32_data 		:  std_logic_vector(31 DOWNTO 0);
-  signal user_r_stream1_read_32_eof 		:  std_logic;
-  signal user_r_stream1_read_32_open 		:  std_logic;
-  signal user_w_stream1_write_32_wren 		:  std_logic;
-  signal user_w_stream1_write_32_full 		:  std_logic;
-  signal user_w_stream1_write_32_data 		:  std_logic_vector(31 DOWNTO 0);
-  signal user_w_stream1_write_32_open 		:  std_logic;  
-  signal user_r_stream2_read_32_rden 		:  std_logic;
-  signal user_r_stream2_read_32_empty 		:  std_logic;
-  signal user_r_stream2_read_32_data 		:  std_logic_vector(31 DOWNTO 0);
-  signal user_r_stream2_read_32_eof 		:  std_logic;
-  signal user_r_stream2_read_32_open 		:  std_logic;
-  signal user_w_stream2_write_32_wren 		:  std_logic;
-  signal user_w_stream2_write_32_full 		:  std_logic;
-  signal user_w_stream2_write_32_data 		:  std_logic_vector(31 DOWNTO 0);
-  signal user_w_stream2_write_32_open 		:  std_logic;  
-
-  signal user_led_sign			: std_logic_vector(3 downto 0);
-  
-  
-  --inst2 signals
-  signal inst2_reset_n 							: std_logic;
-  signal inst3_reset_n 							: std_logic;
-  
-  --inst5 signals
-  signal inst5_rdreq		: std_logic;
-  signal inst5_q 			: std_logic_vector(31 downto 0);
-  signal inst5_rdempty	: std_logic;
-  
-  --inst7 signals
-  signal inst7_rdreq		: std_logic;
-  signal inst7_q 			: std_logic_vector(31 downto 0);
-  signal inst7_rdempty	: std_logic;
-  
-  --inst9 signals
-  signal inst9_rdreq		: std_logic;
-  signal inst9_q 			: std_logic_vector(31 downto 0);
-  signal inst9_rdempty	: std_logic;
-  
 begin
-
---	user_r_stream0_read_32_data	<= inst5_q 								when strm0_OUT_SW='1' else strm0_OUT_EXT_q;
---	user_r_stream0_read_32_empty	<= inst5_rdempty 						when strm0_OUT_SW='1' else strm0_OUT_EXT_rdempty;
---	strm0_OUT_EXT_rdreq				<= user_r_stream0_read_32_rden 	when strm0_OUT_SW='0' else '0';
---	
---	user_r_stream1_read_32_data	<= inst7_q 								when strm1_OUT_SW='1' else strm1_OUT_EXT_q;
---	user_r_stream1_read_32_empty	<= inst7_rdempty 						when strm1_OUT_SW='1' else strm1_OUT_EXT_rdempty;
---	strm1_OUT_EXT_rdreq				<= user_r_stream1_read_32_rden 	when strm1_OUT_SW='0' else '0';
---	
---	--only external data currently is connected
---	user_r_stream2_read_32_data	<= inst9_q								when strm2_OUT_SW='1' else strm2_OUT_EXT_q;
---	user_r_stream2_read_32_empty	<= inst9_rdempty 						when strm2_OUT_SW='1' else strm2_OUT_EXT_rdempty;
---	strm2_OUT_EXT_rdreq				<= user_r_stream2_read_32_rden 	when strm2_OUT_SW='0' else '0';
-
+-- ----------------------------------------------------------------------------
+-- Reset logic
+-- ----------------------------------------------------------------------------  
+   -- Reset signal with synchronous removal to clk clock domain, 
+   sync_reg0 : entity work.sync_reg 
+   port map(bus_clk, H2F_S0_0_aclrn, '1', H2F_S0_0_sclrn);
+   
+   sync_reg1 : entity work.sync_reg 
+   port map(bus_clk, H2F_S0_1_aclrn, '1', H2F_S0_1_sclrn); 
+   
+   
+   inst2_reset_n <= H2F_S0_0_sclrn;
+   --For Stream endpoint, Host->FPGA
+   inst3_reset_n <= inst1_user_w_stream0_write_32_open OR H2F_S0_1_sclrn;   
+   inst4_reset_n <= inst3_reset_n;
+   --For Control endpoint, Host->FPGA
+   inst5_reset_n <= inst1_user_w_control0_write_32_open;
+   --For stream endpoint, FPGA->Host
+   inst6_reset_n <= inst1_user_r_stream0_read_32_open;  
+   --For control endpoint, FPGA->Host
+   inst7_reset_n <= inst1_user_r_control0_read_32_open;
+   
+-- ----------------------------------------------------------------------------
+-- Sync registers
+-- ----------------------------------------------------------------------------   
+   sync_reg3 : entity work.sync_reg 
+   port map(bus_clk, reset_n, H2F_S0_sel, H2F_S0_sel_sync);
+   
+   sync_reg4 : entity work.sync_reg 
+   port map(bus_clk, reset_n, H2F_S1_sel, H2F_S1_sel_sync);
+   
+   sync_reg5 : entity work.sync_reg 
+   port map(bus_clk, reset_n, H2F_S2_sel, H2F_S2_sel_sync);
+     
+   sync_reg6 : entity work.sync_reg 
+   port map(bus_clk, '1', S0_rx_en, S0_rx_en_sync);
+   
+   sync_reg7 : entity work.sync_reg 
+   port map(bus_clk, '1', S1_rx_en, S1_rx_en_sync);
+   
+   sync_reg8 : entity work.sync_reg 
+   port map(bus_clk, '1', S2_rx_en, S2_rx_en_sync);
+   
+-- ----------------------------------------------------------------------------
+-- Xillybus instance
+-- ----------------------------------------------------------------------------    
    inst1_xillybus : xillybus
    port map (
-   
       -- Ports related to /dev/xillybus_control0_read_32
       -- FPGA to CPU signals:
-      user_r_control0_read_32_rden 		=> user_r_control0_read_32_rden,
-      user_r_control0_read_32_empty 	=> user_r_control0_read_32_empty,
-      user_r_control0_read_32_data 		=> user_r_control0_read_32_data,
-      user_r_control0_read_32_eof 		=> user_r_control0_read_32_eof,
-      user_r_control0_read_32_open 		=> user_r_control0_read_32_open,
+      user_r_control0_read_32_rden     => inst1_user_r_control0_read_32_rden,
+      user_r_control0_read_32_empty    => inst15_rdempty,
+      user_r_control0_read_32_data     => inst15_q,
+      user_r_control0_read_32_eof      => inst1_user_r_control0_read_32_eof,
+      user_r_control0_read_32_open     => inst1_user_r_control0_read_32_open,
    
       -- Ports related to /dev/xillybus_control0_write_32
       -- CPU to FPGA signals:
-      user_w_control0_write_32_wren 	=> user_w_control0_write_32_wren,
-      user_w_control0_write_32_full 	=> user_w_control0_write_32_full,
-      user_w_control0_write_32_data 	=> user_w_control0_write_32_data,
-      user_w_control0_write_32_open 	=> user_w_control0_write_32_open,
+      user_w_control0_write_32_wren    => inst1_user_w_control0_write_32_wren,
+      user_w_control0_write_32_full    => inst1_user_w_control0_write_32_full,
+      user_w_control0_write_32_data    => inst1_user_w_control0_write_32_data,
+      user_w_control0_write_32_open    => inst1_user_w_control0_write_32_open,
    
       -- Ports related to /dev/xillybus_mem_8
       -- FPGA to CPU signals:
-      user_r_mem_8_rden 		         => user_r_mem_8_rden,
-      user_r_mem_8_empty 		         => user_r_mem_8_empty,
-      user_r_mem_8_data 		         => user_r_mem_8_data,
-      user_r_mem_8_eof 			         => user_r_mem_8_eof,
-      user_r_mem_8_open 		         => user_r_mem_8_open,
+      user_r_mem_8_rden                => inst1_user_r_mem_8_rden,
+      user_r_mem_8_empty               => inst1_user_r_mem_8_empty,
+      user_r_mem_8_data                => inst1_user_r_mem_8_data,
+      user_r_mem_8_eof                 => inst1_user_r_mem_8_eof,
+      user_r_mem_8_open                => inst1_user_r_mem_8_open,
       -- CPU to FPGA signals:
-      user_w_mem_8_wren                => user_w_mem_8_wren,
-      user_w_mem_8_full                => user_w_mem_8_full,
-      user_w_mem_8_data                => user_w_mem_8_data,
-      user_w_mem_8_open                => user_w_mem_8_open,
+      user_w_mem_8_wren                => inst1_user_w_mem_8_wren,
+      user_w_mem_8_full                => inst1_user_w_mem_8_full,
+      user_w_mem_8_data                => inst1_user_w_mem_8_data,
+      user_w_mem_8_open                => inst1_user_w_mem_8_open,
       -- Address signals:
-      user_mem_8_addr 			         => user_mem_8_addr,
-      user_mem_8_addr_update 	         => user_mem_8_addr_update,
+      user_mem_8_addr                  => inst1_user_mem_8_addr,
+      user_mem_8_addr_update           => inst1_user_mem_8_addr_update,
    
       -- Ports related to /dev/xillybus_stream0_read_32
       -- FPGA to CPU signals:
-      user_r_stream0_read_32_rden 	   => user_r_stream0_read_32_rden,
-      user_r_stream0_read_32_empty 	   => user_r_stream0_read_32_empty,
-      user_r_stream0_read_32_data 	   => user_r_stream0_read_32_data,
-      user_r_stream0_read_32_eof 	   => user_r_stream0_read_32_eof,
-      user_r_stream0_read_32_open 	   => user_r_stream0_read_32_open,
+      user_r_stream0_read_32_rden      => inst1_user_r_stream0_read_32_rden,
+      user_r_stream0_read_32_empty     => inst1_user_r_stream0_read_32_empty,
+      user_r_stream0_read_32_data      => inst1_user_r_stream0_read_32_data,
+      user_r_stream0_read_32_eof       => inst1_user_r_stream0_read_32_eof,
+      user_r_stream0_read_32_open      => inst1_user_r_stream0_read_32_open,
    
       -- Ports related to /dev/xillybus_stream0_write_32
       -- CPU to FPGA signals:
-      user_w_stream0_write_32_wren     => user_w_stream0_write_32_wren,
-      user_w_stream0_write_32_full     => user_w_stream0_write_32_full,
-      user_w_stream0_write_32_data     => user_w_stream0_write_32_data,
-      user_w_stream0_write_32_open     => user_w_stream0_write_32_open,
+      user_w_stream0_write_32_wren     => inst1_user_w_stream0_write_32_wren,
+      user_w_stream0_write_32_full     => inst1_user_w_stream0_write_32_full,
+      user_w_stream0_write_32_data     => inst1_user_w_stream0_write_32_data,
+      user_w_stream0_write_32_open     => inst1_user_w_stream0_write_32_open,
    
       -- Ports related to /dev/xillybus_stream1_read_32
       -- FPGA to CPU signals:
-      user_r_stream1_read_32_rden 	   => user_r_stream1_read_32_rden,
-      user_r_stream1_read_32_empty 	   => user_r_stream1_read_32_empty,
-      user_r_stream1_read_32_data 	   => user_r_stream1_read_32_data,
-      user_r_stream1_read_32_eof 	   => user_r_stream1_read_32_eof,
-      user_r_stream1_read_32_open 	   => user_r_stream1_read_32_open,
+      user_r_stream1_read_32_rden      => inst1_user_r_stream1_read_32_rden,
+      user_r_stream1_read_32_empty     => inst1_user_r_stream1_read_32_empty,
+      user_r_stream1_read_32_data      => inst1_user_r_stream1_read_32_data,
+      user_r_stream1_read_32_eof       => inst1_user_r_stream1_read_32_eof,
+      user_r_stream1_read_32_open      => inst1_user_r_stream1_read_32_open,
    
       -- Ports related to /dev/xillybus_stream1_write_32
       -- CPU to FPGA signals:
-      user_w_stream1_write_32_wren     => user_w_stream1_write_32_wren,
-      user_w_stream1_write_32_full     => user_w_stream1_write_32_full,
-      user_w_stream1_write_32_data     => user_w_stream1_write_32_data,
-      user_w_stream1_write_32_open     => user_w_stream1_write_32_open,
+      user_w_stream1_write_32_wren     => inst1_user_w_stream1_write_32_wren,
+      user_w_stream1_write_32_full     => inst1_user_w_stream1_write_32_full,
+      user_w_stream1_write_32_data     => inst1_user_w_stream1_write_32_data,
+      user_w_stream1_write_32_open     => inst1_user_w_stream1_write_32_open,
       
       -- Ports related to /dev/xillybus_stream2_read_32
       -- FPGA to CPU signals:
-      user_r_stream2_read_32_rden 	   => user_r_stream2_read_32_rden,
-      user_r_stream2_read_32_empty 	   => user_r_stream2_read_32_empty,
-      user_r_stream2_read_32_data 	   => user_r_stream2_read_32_data,
-      user_r_stream2_read_32_eof 	   => user_r_stream2_read_32_eof,
-      user_r_stream2_read_32_open 	   => user_r_stream2_read_32_open,
+      user_r_stream2_read_32_rden      => inst1_user_r_stream2_read_32_rden,
+      user_r_stream2_read_32_empty     => inst1_user_r_stream2_read_32_empty,
+      user_r_stream2_read_32_data      => inst1_user_r_stream2_read_32_data,
+      user_r_stream2_read_32_eof       => inst1_user_r_stream2_read_32_eof,
+      user_r_stream2_read_32_open      => inst1_user_r_stream2_read_32_open,
    
       -- Ports related to /dev/xillybus_stream2_write_32
       -- CPU to FPGA signals:
-      user_w_stream2_write_32_wren     => user_w_stream2_write_32_wren,
-      user_w_stream2_write_32_full     => user_w_stream2_write_32_full,
-      user_w_stream2_write_32_data     => user_w_stream2_write_32_data,
-      user_w_stream2_write_32_open     => user_w_stream2_write_32_open,
+      user_w_stream2_write_32_wren     => inst1_user_w_stream2_write_32_wren,
+      user_w_stream2_write_32_full     => inst1_user_w_stream2_write_32_full,
+      user_w_stream2_write_32_data     => inst1_user_w_stream2_write_32_data,
+      user_w_stream2_write_32_open     => inst1_user_w_stream2_write_32_open,
    
       -- General signals
-      pcie_perstn 	                  => pcie_perstn,
-      pcie_refclk 	                  => pcie_refclk,
-      clk100                           => clk100,
-      pcie_rx 			                  => pcie_rx,
-      bus_clk 			                  => bus_clk,
-      pcie_tx 			                  => pcie_tx,
-      quiesce 			                  => quiesce,
-      user_led 		                  => user_led_sign 
-      );
-		
-		
-	pcie_bus_clk<=bus_clk;
+      pcie_perstn                      => pcie_perstn,
+      pcie_refclk                      => pcie_refclk,
+      clk100                           => clk,
+      pcie_rx                          => pcie_rx,
+      bus_clk                          => bus_clk,
+      pcie_tx                          => pcie_tx,
+      quiesce                          => quiesce,
+      user_led                         => inst1_user_led
+   );
    
-   strm0_IN_open <= user_w_stream0_write_32_open;
-   strm1_IN_open <= user_w_stream1_write_32_open;
-   strm2_IN_open <= user_w_stream2_write_32_open;
    
-		
-		
---  A simple inferred RAM
-
-  ram_addr <= to_integer(unsigned(user_mem_8_addr));
+   pcie_bus_clk<=bus_clk;
+   
+-- ----------------------------------------------------------------------------
+--  A simple inferred RAM for Xillybus
+-- ----------------------------------------------------------------------------
+--  ram_addr <= to_integer(unsigned(user_mem_8_addr));
   
-  process (bus_clk)
-  begin
-    if (bus_clk'event and bus_clk = '1') then
-      if (user_w_mem_8_wren = '1') then 
-        demoarray(ram_addr) <= user_w_mem_8_data;
-      end if;
-      if (user_r_mem_8_rden = '1') then
-        user_r_mem_8_data <= demoarray(ram_addr);
-      end if;
-    end if;
-  end process;
+--  process (bus_clk)
+--  begin
+--    if (bus_clk'event and bus_clk = '1') then
+--      if (user_w_mem_8_wren = '1') then 
+--        demoarray(ram_addr) <= user_w_mem_8_data;
+--      end if;
+--      if (user_r_mem_8_rden = '1') then
+--        user_r_mem_8_data <= demoarray(ram_addr);
+--      end if;
+--    end if;
+--  end process;
 
-  user_r_mem_8_empty <= '0';
-  user_r_mem_8_eof <= '0';
-  user_w_mem_8_full <= '0';		
+  inst1_user_r_mem_8_empty <= '0';
+  inst1_user_r_mem_8_eof   <= '0';
+  inst1_user_w_mem_8_full  <= '0';		
 
---ctrl0_IN fifo
-
-
-inst2_reset_n <= user_w_control0_write_32_open AND ctrl0_IN_aclr_n;
-		
-inst2 : fifo_inst
-GENERIC MAP(
-			dev_family 		=> dev_family,
-			rdusedw_width 	=> 9,
-			rdwidth 			=> 32,
-			show_ahead 		=> "OFF",
-			wrusedw_witdth => 9,
-			wrwidth 			=> pcie_ctrl0_dataw
-			)
-PORT MAP(
-			reset_n 			=> inst2_reset_n,
-			wrclk 			=> bus_clk,
-			wrreq 			=> user_w_control0_write_32_wren,
-			data 				=> user_w_control0_write_32_data,
-			rdclk 			=> ctrl0_IN_rdclk,
-			rdreq 			=> ctrl0_IN_rdreq,
-			wrfull 			=> user_w_control0_write_32_full,
-			wrempty			=> open,
-			wrusedw			=> open, 
-			q 					=> ctrl0_IN_q,
-			rdempty 			=> ctrl0_IN_rdempty,
-			rdusedw 			=> ctrl0_IN_rdusedw
-			);
+-- ----------------------------------------------------------------------------
+-- For Stream S0 endpoint, Host->FPGA
+-- There are two FIFO buffers for this endpoint. Buffer is selected with H2F_S0_0_sel
+-- ----------------------------------------------------------------------------
+   inst2_wrreq    <= inst1_user_w_stream0_write_32_wren when H2F_S0_sel_sync = '0' else '0';
+ 
+   -- First FIFO, dedicated for TX stream
+   inst2_H2F_S0_0_FIFO : entity work.two_fifo_inst 
+   generic map(
+      dev_family     => g_DEV_FAMILY,
+      wrwidth        => g_S0_DATA_WIDTH,
+      wrusedw_witdth => 10,  
+      rdwidth        => g_H2F_S0_0_RWIDTH,
+      rdusedw_width  => c_H2F_S0_0_RDUSEDW_WIDTH,
+      show_ahead     => "OFF",
+      TRNSF_SIZE     => 512, 
+      TRNSF_N        => 8
+   )
+   port map(
+      --input ports 
+      reset_0_n   => inst1_user_w_stream0_write_32_open,
+      reset_1_n   => inst2_reset_n,
+      wrclk       => bus_clk,
+      wrreq       => inst2_wrreq,
+      data        => inst1_user_w_stream0_write_32_data,
+      wrfull      => inst2_wrfull,
+      wrempty     => open,
+      wrusedw     => open,
+      rdclk       => H2F_S0_0_rdclk,
+      rdreq       => H2F_S0_0_rd,
+      q           => H2F_S0_0_rdata,
+      rdempty     => H2F_S0_0_rempty,
+      rdusedw     => H2F_S0_0_rdusedw   
+   );
+   
+   inst3_pct_wr    <= inst1_user_w_stream0_write_32_wren when H2F_S0_sel_sync = '1' else '0'; 
+   -- This module takes only IQ data from packet, and discards packet header
+   pct_payload_extrct_inst3 : entity work.pct_payload_extrct
+   generic map(
+      data_w         => g_S0_DATA_WIDTH,
+      header_size    => 16, 
+      pct_size       => 4096
+   ) 
+   port map(
+      clk               => bus_clk,
+      reset_n           => inst3_reset_n,
+      pct_data          => inst1_user_w_stream0_write_32_data, 
+      pct_wr            => inst3_pct_wr,
+      pct_payload_data  => inst3_pct_payload_data,
+      pct_payload_valid => inst3_pct_payload_valid,
+      pct_payload_dest  => open
+   );
+   
+   -- Second FIFO, dedicated for WFM player
+   inst4_H2F_S0_1_FIFO : entity work.fifo_inst 
+   generic map(
+      dev_family     => g_DEV_FAMILY,
+      wrwidth        => g_S0_DATA_WIDTH,
+      wrusedw_witdth => c_H2F_S0_1_WRUSEDW_WIDTH,  
+      rdwidth        => g_H2F_S0_1_RWIDTH,
+      rdusedw_width  => c_H2F_S0_1_RDUSEDW_WIDTH,
+      show_ahead     => "ON"
+   )
+   port map(
+      --input ports 
+      reset_n  => inst4_reset_n,
+      wrclk    => bus_clk,
+      wrreq    => inst3_pct_payload_valid,
+      data     => inst3_pct_payload_data,
+      wrfull   => inst4_wrfull,
+      wrempty  => open,
+      wrusedw  => open,
+      rdclk    => H2F_S0_1_rdclk,
+      rdreq    => H2F_S0_1_rd,
+      q        => H2F_S0_1_rdata,
+      rdempty  => H2F_S0_1_rempty,
+      rdusedw  => H2F_S0_1_rdusedw   
+   );
 			
-			
-inst3_reset_n <= user_r_control0_read_32_open AND ctrl0_OUT_aclr_n;
+-- ----------------------------------------------------------------------------
+-- For Stream S1 endpoint, Host->FPGA
+-- There are two FIFO buffers for this endpoint. Buffer is selected with H2F_S1_0_sel
+-- ----------------------------------------------------------------------------
+   inst5_wrreq    <= inst1_user_w_stream1_write_32_wren when H2F_S1_sel_sync = '0' else '0';
+ 
+   -- First FIFO, dedicated for TX stream
+   inst5_H2F_S1_0_FIFO : entity work.two_fifo_inst 
+   generic map(
+      dev_family     => g_DEV_FAMILY,
+      wrwidth        => g_S1_DATA_WIDTH,
+      wrusedw_witdth => 10,  
+      rdwidth        => g_H2F_S1_0_RWIDTH,
+      rdusedw_width  => c_H2F_S1_0_RDUSEDW_WIDTH,
+      show_ahead     => "OFF",
+      TRNSF_SIZE     => 512, 
+      TRNSF_N        => 8
+   )
+   port map(
+      --input ports 
+      reset_0_n   => inst1_user_w_stream1_write_32_open,
+      reset_1_n   => inst5_reset_n,
+      wrclk       => bus_clk,
+      wrreq       => inst5_wrreq,
+      data        => inst1_user_w_stream1_write_32_data,
+      wrfull      => inst5_wrfull,
+      wrempty     => open,
+      wrusedw     => open,
+      rdclk       => H2F_S1_0_rdclk,
+      rdreq       => H2F_S1_0_rd,
+      q           => H2F_S1_0_rdata,
+      rdempty     => H2F_S1_0_rempty,
+      rdusedw     => H2F_S1_0_rdusedw   
+   );
+   
+   inst6_pct_wr    <= inst1_user_w_stream1_write_32_wren when H2F_S1_sel_sync = '1' else '0'; 
+   -- This module takes only IQ data from packet, and discards packet header
+   pct_payload_extrct_inst6 : entity work.pct_payload_extrct
+   generic map(
+      data_w         => g_S1_DATA_WIDTH,
+      header_size    => 16, 
+      pct_size       => 4096
+   ) 
+   port map(
+      clk               => bus_clk,
+      reset_n           => inst6_reset_n,
+      pct_data          => inst1_user_w_stream1_write_32_data, 
+      pct_wr            => inst6_pct_wr,
+      pct_payload_data  => inst6_pct_payload_data,
+      pct_payload_valid => inst6_pct_payload_valid,
+      pct_payload_dest  => open
+   );
+   
+   -- Second FIFO, dedicated for WFM player
+   inst7_H2F_S1_1_FIFO : entity work.fifo_inst 
+   generic map(
+      dev_family     => g_DEV_FAMILY,
+      wrwidth        => g_S1_DATA_WIDTH,
+      wrusedw_witdth => c_H2F_S1_1_WRUSEDW_WIDTH,  
+      rdwidth        => g_H2F_S1_1_RWIDTH,
+      rdusedw_width  => c_H2F_S1_1_RDUSEDW_WIDTH,
+      show_ahead     => "ON"
+   )
+   port map(
+      --input ports 
+      reset_n  => inst7_reset_n,
+      wrclk    => bus_clk,
+      wrreq    => inst6_pct_payload_valid,
+      data     => inst6_pct_payload_data,
+      wrfull   => inst7_wrfull,
+      wrempty  => open,
+      wrusedw  => open,
+      rdclk    => H2F_S1_1_rdclk,
+      rdreq    => H2F_S1_1_rd,
+      q        => H2F_S1_1_rdata,
+      rdempty  => H2F_S1_1_rempty,
+      rdusedw  => H2F_S1_1_rdusedw   
+   );	
+ 
+ -- ----------------------------------------------------------------------------
+-- For Stream S2 endpoint, Host->FPGA
+-- There are two FIFO buffers for this endpoint. Buffer is selected with H2F_S2_0_sel
+-- ----------------------------------------------------------------------------
+   inst8_wrreq    <= inst1_user_w_stream2_write_32_wren when H2F_S2_sel_sync = '0' else '0';
+ 
+   -- First FIFO, dedicated for TX stream
+   inst8_H2F_S2_0_FIFO : entity work.two_fifo_inst 
+   generic map(
+      dev_family     => g_DEV_FAMILY,
+      wrwidth        => g_S2_DATA_WIDTH,
+      wrusedw_witdth => 10,  
+      rdwidth        => g_H2F_S2_0_RWIDTH,
+      rdusedw_width  => c_H2F_S2_0_RDUSEDW_WIDTH,
+      show_ahead     => "OFF",
+      TRNSF_SIZE     => 512, 
+      TRNSF_N        => 8
+   )
+   port map(
+      --input ports 
+      reset_0_n   => inst1_user_w_stream2_write_32_open,
+      reset_1_n   => inst8_reset_n,
+      wrclk       => bus_clk,
+      wrreq       => inst8_wrreq,
+      data        => inst1_user_w_stream2_write_32_data,
+      wrfull      => inst8_wrfull,
+      wrempty     => open,
+      wrusedw     => open,
+      rdclk       => H2F_S2_0_rdclk,
+      rdreq       => H2F_S2_0_rd,
+      q           => H2F_S2_0_rdata,
+      rdempty     => H2F_S2_0_rempty,
+      rdusedw     => H2F_S2_0_rdusedw   
+   );
+   
+   inst9_pct_wr    <= inst1_user_w_stream2_write_32_wren when H2F_S2_sel_sync = '1' else '0'; 
+   -- This module takes only IQ data from packet, and discards packet header
+   pct_payload_extrct_inst9 : entity work.pct_payload_extrct
+   generic map(
+      data_w         => g_S2_DATA_WIDTH,
+      header_size    => 16, 
+      pct_size       => 4096
+   ) 
+   port map(
+      clk               => bus_clk,
+      reset_n           => inst9_reset_n,
+      pct_data          => inst1_user_w_stream2_write_32_data, 
+      pct_wr            => inst9_pct_wr,
+      pct_payload_data  => inst9_pct_payload_data,
+      pct_payload_valid => inst9_pct_payload_valid,
+      pct_payload_dest  => open
+   );
+   
+   -- Second FIFO, dedicated for WFM player
+   inst10_H2F_S2_1_FIFO : entity work.fifo_inst 
+   generic map(
+      dev_family     => g_DEV_FAMILY,
+      wrwidth        => g_S2_DATA_WIDTH,
+      wrusedw_witdth => c_H2F_S2_1_WRUSEDW_WIDTH,  
+      rdwidth        => g_H2F_S2_1_RWIDTH,
+      rdusedw_width  => c_H2F_S2_1_RDUSEDW_WIDTH,
+      show_ahead     => "ON"
+   )
+   port map(
+      --input ports 
+      reset_n  => inst10_reset_n,
+      wrclk    => bus_clk,
+      wrreq    => inst9_pct_payload_valid,
+      data     => inst9_pct_payload_data,
+      wrfull   => inst10_wrfull,
+      wrempty  => open,
+      wrusedw  => open,
+      rdclk    => H2F_S2_1_rdclk,
+      rdreq    => H2F_S2_1_rd,
+      q        => H2F_S2_1_rdata,
+      rdempty  => H2F_S2_1_rempty,
+      rdusedw  => H2F_S2_1_rdusedw   
+   );	
+   
+-- ----------------------------------------------------------------------------
+-- For C0 Control endpoint, Host->FPGA
+-- ---------------------------------------------------------------------------- 
+   inst11_H2F_C0_FIFO : entity work.fifo_inst 
+   generic map(
+      dev_family     => g_DEV_FAMILY,
+      wrwidth        => g_C0_DATA_WIDTH,
+      wrusedw_witdth => c_H2F_C0_WRUSEDW_WIDTH,  
+      rdwidth        => g_H2F_C0_RWIDTH,
+      rdusedw_width  => c_H2F_C0_RDUSEDW_WIDTH,
+      show_ahead     => "OFF"
+   )
+   port map(
+      --input ports 
+      reset_n  => inst1_user_w_control0_write_32_open,
+      wrclk    => bus_clk,
+      wrreq    => inst1_user_w_control0_write_32_wren,
+      data     => inst1_user_w_control0_write_32_data,
+      wrfull   => inst11_wrfull,
+      wrempty  => open,
+      wrusedw  => open,
+      rdclk    => H2F_C0_rdclk,
+      rdreq    => H2F_C0_rd,
+      q        => H2F_C0_rdata,
+      rdempty  => H2F_C0_rempty,
+      rdusedw  => open     
+   );
+   
+-- ----------------------------------------------------------------------------
+-- For S0 stream endpoint, FPGA->Host
+-- ---------------------------------------------------------------------------- 
+   inst12_F2H_S0_FIFO : entity work.fifo_inst 
+   generic map(
+      dev_family     => g_DEV_FAMILY,
+      wrwidth        => g_F2H_S0_WWIDTH,
+      wrusedw_witdth => c_F2H_S0_WRUSEDW_WIDTH,  
+      rdwidth        => g_S0_DATA_WIDTH,
+      rdusedw_width  => c_F2H_S0_RDUSEDW_WIDTH,
+      show_ahead     => "OFF"
+   ) 
+   port map(
+      --input ports 
+      reset_n  => inst12_reset_n,
+      wrclk    => F2H_S0_wclk,
+      wrreq    => F2H_S0_wr,
+      data     => F2H_S0_wdata,
+      wrfull   => F2H_S0_wfull,
+      wrempty  => open,
+      wrusedw  => F2H_S0_wrusedw,
+      rdclk    => bus_clk,
+      rdreq    => inst1_user_r_stream0_read_32_rden,
+      q        => inst12_q,
+      rdempty  => inst12_rdempty,
+      rdusedw  => open    
+   );  
+   
+-- ----------------------------------------------------------------------------
+-- For S1 stream endpoint, FPGA->Host
+-- ---------------------------------------------------------------------------- 
+   inst13_F2H_S1_FIFO : entity work.fifo_inst 
+   generic map(
+      dev_family     => g_DEV_FAMILY,
+      wrwidth        => g_F2H_S1_WWIDTH,
+      wrusedw_witdth => c_F2H_S1_WRUSEDW_WIDTH,  
+      rdwidth        => g_S1_DATA_WIDTH,
+      rdusedw_width  => c_F2H_S1_RDUSEDW_WIDTH,
+      show_ahead     => "OFF"
+   ) 
+   port map(
+      --input ports 
+      reset_n  => inst13_reset_n,
+      wrclk    => F2H_S1_wclk,
+      wrreq    => F2H_S1_wr,
+      data     => F2H_S1_wdata,
+      wrfull   => F2H_S1_wfull,
+      wrempty  => open,
+      wrusedw  => F2H_S1_wrusedw,
+      rdclk    => bus_clk,
+      rdreq    => inst1_user_r_stream1_read_32_rden,
+      q        => inst13_q,
+      rdempty  => inst13_rdempty,
+      rdusedw  => open    
+   );
+   
+-- ----------------------------------------------------------------------------
+-- For S2 stream endpoint, FPGA->Host
+-- ---------------------------------------------------------------------------- 
+   inst14_F2H_S1_FIFO : entity work.fifo_inst 
+   generic map(
+      dev_family     => g_DEV_FAMILY,
+      wrwidth        => g_F2H_S2_WWIDTH,
+      wrusedw_witdth => c_F2H_S2_WRUSEDW_WIDTH,  
+      rdwidth        => g_S2_DATA_WIDTH,
+      rdusedw_width  => c_F2H_S2_RDUSEDW_WIDTH,
+      show_ahead     => "OFF"
+   ) 
+   port map(
+      --input ports 
+      reset_n  => inst14_reset_n,
+      wrclk    => F2H_S2_wclk,
+      wrreq    => F2H_S2_wr,
+      data     => F2H_S2_wdata,
+      wrfull   => F2H_S2_wfull,
+      wrempty  => open,
+      wrusedw  => F2H_S2_wrusedw,
+      rdclk    => bus_clk,
+      rdreq    => inst1_user_r_stream2_read_32_rden,
+      q        => inst14_q,
+      rdempty  => inst14_rdempty,
+      rdusedw  => open    
+   );
 
---ctrl0_OUT fifo		
-inst3 : fifo_inst
-GENERIC MAP(
-			dev_family 		=> dev_family,
-			rdusedw_width 	=> 9,
-			rdwidth 			=> 32,
-			show_ahead 		=> "OFF",
-			wrusedw_witdth => 9,
-			wrwidth 			=> pcie_ctrl0_dataw
-			)
-PORT MAP(
-			reset_n 			=> inst3_reset_n,
-			wrclk 			=> ctrl0_OUT_wrclk,
-			wrreq 			=> ctrl0_OUT_wrreq,
-			data 				=> ctrl0_OUT_data,
-			rdclk 			=> bus_clk,
-			rdreq 			=> user_r_control0_read_32_rden,
-			wrfull 			=> ctrl0_OUT_wrfull,
-			wrempty			=> open,
-			wrusedw			=> ctrl0_OUT_wrusedw, 
-			q 					=> user_r_control0_read_32_data,
-			rdempty 			=> user_r_control0_read_32_empty,
-			rdusedw 			=> open
-			);
-			
-user_r_control0_read_32_eof <= '0';			
-
---strm0_IN fifo
---currently fifo is not used, data is written to external buffer		
---inst4 : fifo_inst
---GENERIC MAP(
---			dev_family 		=> dev_family,
---			rdusedw_width 	=> 9,
---			rdwidth 			=> 32,
---			show_ahead 		=> "OFF",
---			wrusedw_witdth => 9,
---			wrwidth 			=> pcie_strm0_dataw
---			)
---PORT MAP(
---			reset_n 			=> user_w_stream0_write_32_open,
---			wrclk 			=> bus_clk,
---			wrreq 			=> user_w_stream0_write_32_wren,
---			data 				=> user_w_stream0_write_32_data,
---			rdclk 			=> strm0_IN_rdclk,
---			rdreq 			=> strm0_IN_rdreq,
---			wrfull 			=> user_w_stream0_write_32_full,
---			wrempty			=> open,
---			wrusedw			=> open, 
---			q 					=> strm0_IN_q,
---			rdempty 			=> strm0_IN_rdempty,
---			rdusedw 			=> strm0_IN_rdusedw
---			);	
-
-strm0_IN_ext_q_valid				<= user_w_stream0_write_32_wren;		
-strm0_IN_q 							<= user_w_stream0_write_32_data;
-user_w_stream0_write_32_full	<= not strm0_IN_ext_rdy;
-
---strm0_OUT fifo		
---inst5 : fifo_inst
---GENERIC MAP(
---			dev_family 		=> dev_family,
---			rdusedw_width 	=> 13,
---			rdwidth 			=> pcie_strm0_dataw,
---			show_ahead 		=> "OFF",
---			wrusedw_witdth => 12,
---			wrwidth 			=> 64
---			)
---PORT MAP(
---			reset_n 			=> strm0_OUT_aclr_n,
---			wrclk 			=> strm0_OUT_wrclk,
---			wrreq 			=> strm0_OUT_wrreq,
---			data 				=> strm0_OUT_data,
---			rdclk 			=> bus_clk,
---			rdreq 			=> inst5_rdreq, --user_r_stream0_read_32_rden,
---			wrfull 			=> strm0_OUT_wrfull,
---			wrempty			=> open,
---			wrusedw			=> strm0_OUT_wrusedw, 
---			q 					=> inst5_q, --user_r_stream0_read_32_data,
---			rdempty 			=> inst5_rdempty, --user_r_stream0_read_32_empty,
---			rdusedw 			=> open
---			);	
-
-inst5 : fifo_inst
-GENERIC MAP(
-			dev_family 		=> dev_family,
-			rdusedw_width 	=> 13,
-			rdwidth 			=> pcie_strm0_dataw,
-			show_ahead 		=> "OFF",
-			wrusedw_witdth => 12,
-			wrwidth 			=> 64
-			)
-PORT MAP(
-			reset_n 			=> strm0_OUT_aclr_n,
-			wrclk 			=> strm0_OUT_wrclk,
-			wrreq 			=> strm0_OUT_wrreq,
-			data 				=> strm0_OUT_data,
-			rdclk 			=> bus_clk,
-			rdreq 			=> user_r_stream0_read_32_rden,
-			wrfull 			=> strm0_OUT_wrfull,
-			wrempty			=> open,
-			wrusedw			=> strm0_OUT_wrusedw, 
-			q 					=> user_r_stream0_read_32_data,
-			rdempty 			=> user_r_stream0_read_32_empty,
-			rdusedw 			=> open
-			);	
-
---inst5_rdreq <= user_r_stream0_read_32_rden when strm0_OUT_SW='1' else '0';
-
-user_r_stream0_read_32_eof	 <= '0';				
-		
-
---strm1_IN fifo	
---currently fifo is not used, data is written to external buffer		
---inst6 : fifo_inst
---GENERIC MAP(
---			dev_family 		=> dev_family,
---			rdusedw_width 	=> 9,
---			rdwidth 			=> 32,
---			show_ahead 		=> "OFF",
---			wrusedw_witdth => 9,
---			wrwidth 			=> pcie_strm1_dataw
---			)
---PORT MAP(
---			reset_n 			=> user_w_stream1_write_32_open,
---			wrclk 			=> bus_clk,
---			wrreq 			=> user_w_stream1_write_32_wren,
---			data 				=> user_w_stream1_write_32_data,
---			rdclk 			=> strm1_IN_rdclk,
---			rdreq 			=> strm1_IN_rdreq,
---			wrfull 			=> user_w_stream1_write_32_full,
---			wrempty			=> open,
---			wrusedw			=> open, 
---			q 					=> strm1_IN_q,
---			rdempty 			=> strm1_IN_rdempty,
---			rdusedw 			=> strm1_IN_rdusedw
---			);	
-
-strm1_IN_ext_q_valid				<= user_w_stream1_write_32_wren;		
-strm1_IN_q 							<= user_w_stream1_write_32_data;
-user_w_stream1_write_32_full	<= not strm1_IN_ext_rdy;	
-
-	
---strm1_OUT fifo		
---inst7 : fifo_inst
---GENERIC MAP(
---			dev_family 		=> dev_family,
---			rdusedw_width 	=> 13,
---			rdwidth 			=> pcie_strm1_dataw,
---			show_ahead 		=> "OFF",
---			wrusedw_witdth => 12,
---			wrwidth 			=> 64
---			)
---PORT MAP(
---			reset_n 			=> strm1_OUT_aclr_n,
---			wrclk 			=> strm1_OUT_wrclk,
---			wrreq 			=> strm1_OUT_wrreq,
---			data 				=> strm1_OUT_data,
---			rdclk 			=> bus_clk,
---			rdreq 			=> inst7_rdreq, --user_r_stream1_read_32_rden,
---			wrfull 			=> strm1_OUT_wrfull,
---			wrempty			=> open,
---			wrusedw			=> strm1_OUT_wrusedw, 
---			q 					=> inst7_q, --user_r_stream1_read_32_data,
---			rdempty 			=> inst7_rdempty, --user_r_stream1_read_32_empty,
---			rdusedw 			=> open
---			);
-         
-         
-inst7 : fifo_inst
-GENERIC MAP(
-			dev_family 		=> dev_family,
-			rdusedw_width 	=> 13,
-			rdwidth 			=> pcie_strm1_dataw,
-			show_ahead 		=> "OFF",
-			wrusedw_witdth => 12,
-			wrwidth 			=> 64
-			)
-PORT MAP(
-			reset_n 			=> strm1_OUT_aclr_n,
-			wrclk 			=> strm1_OUT_wrclk,
-			wrreq 			=> strm1_OUT_wrreq,
-			data 				=> strm1_OUT_data,
-			rdclk 			=> bus_clk,
-			rdreq 			=> user_r_stream1_read_32_rden,
-			wrfull 			=> strm1_OUT_wrfull,
-			wrempty			=> open,
-			wrusedw			=> strm1_OUT_wrusedw, 
-			q 					=> user_r_stream1_read_32_data,
-			rdempty 			=> user_r_stream1_read_32_empty,
-			rdusedw 			=> open
-			);
-		
---sinst7_rdreq <= user_r_stream1_read_32_rden when strm1_OUT_SW='1' else '0';	
-		
-user_r_stream1_read_32_eof	 <= '0';	
-
-
-
---strm2_IN fifo	
---currently fifo is not used, data is written to external buffer		
---inst8 : fifo_inst
---GENERIC MAP(
---			dev_family 		=> dev_family,
---			rdusedw_width 	=> 9,
---			rdwidth 			=> 32,
---			show_ahead 		=> "OFF",
---			wrusedw_witdth => 9,
---			wrwidth 			=> pcie_strm2_dataw
---			)
---PORT MAP(
---			reset_n 			=> user_w_stream2_write_32_open,
---			wrclk 			=> bus_clk,
---			wrreq 			=> user_w_stream2_write_32_wren,
---			data 				=> user_w_stream2_write_32_data,
---			rdclk 			=> strm2_IN_rdclk,
---			rdreq 			=> strm2_IN_rdreq,
---			wrfull 			=> user_w_stream2_write_32_full,
---			wrempty			=> open,
---			wrusedw			=> open, 
---			q 					=> strm2_IN_q,
---			rdempty 			=> strm2_IN_rdempty,
---			rdusedw 			=> strm2_IN_rdusedw
---			);	
-
-strm2_IN_ext_q_valid				<= user_w_stream2_write_32_wren;		
-strm2_IN_q 							<= user_w_stream2_write_32_data;
-user_w_stream2_write_32_full	<= not strm2_IN_ext_rdy;	
-
-	
---strm2_OUT fifo		
---inst9 : fifo_inst
---GENERIC MAP(
---			dev_family 		=> dev_family,
---			rdusedw_width 	=> 13,
---			rdwidth 			=> pcie_strm2_dataw,
---			show_ahead 		=> "OFF",
---			wrusedw_witdth => 12,
---			wrwidth 			=> 64
---			)
---PORT MAP(
---			reset_n 			=> strm2_OUT_aclr_n,
---			wrclk 			=> strm2_OUT_wrclk,
---			wrreq 			=> strm2_OUT_wrreq,
---			data 				=> strm2_OUT_data,
---			rdclk 			=> bus_clk,
---			rdreq 			=> inst9_rdreq, --user_r_stream2_read_32_rden,
---			wrfull 			=> strm2_OUT_wrfull,
---			wrempty			=> open,
---			wrusedw			=> strm2_OUT_wrusedw, 
---			q 					=> inst9_q, --user_r_stream2_read_32_data,
---			rdempty 			=> inst9_rdempty, --user_r_stream2_read_32_empty,
---			rdusedw 			=> open
---			);
-         
-         
-inst9 : fifo_inst
-GENERIC MAP(
-			dev_family 		=> dev_family,
-			rdusedw_width 	=> 13,
-			rdwidth 			=> pcie_strm2_dataw,
-			show_ahead 		=> "OFF",
-			wrusedw_witdth => 12,
-			wrwidth 			=> 64
-			)
-PORT MAP(
-			reset_n 			=> strm2_OUT_aclr_n,
-			wrclk 			=> strm2_OUT_wrclk,
-			wrreq 			=> strm2_OUT_wrreq,
-			data 				=> strm2_OUT_data,
-			rdclk 			=> bus_clk,
-			rdreq 			=> user_r_stream2_read_32_rden,
-			wrfull 			=> strm2_OUT_wrfull,
-			wrempty			=> open,
-			wrusedw			=> strm2_OUT_wrusedw, 
-			q 					=> user_r_stream2_read_32_data,
-			rdempty 			=> user_r_stream2_read_32_empty,
-			rdusedw 			=> open
-			);
-		
---inst9_rdreq <= user_r_stream2_read_32_rden when strm2_OUT_SW='1' else '0';	
-		
-user_r_stream2_read_32_eof	 <= '0';
+-- ----------------------------------------------------------------------------
+-- For C0 control endpoint, FPGA->Host
+-- ---------------------------------------------------------------------------- 
+   inst15_F2H_C0_FIFO : entity work.fifo_inst 
+   generic map(
+      dev_family     => g_DEV_FAMILY,
+      wrwidth        => g_F2H_C0_WWIDTH,
+      wrusedw_witdth => c_F2H_C0_WRUSEDW_WIDTH,  
+      rdwidth        => g_C0_DATA_WIDTH,
+      rdusedw_width  => c_F2H_C0_RDUSEDW_WIDTH,
+      show_ahead     => "OFF"
+   ) 
+   port map(
+      --input ports 
+      reset_n  => inst1_user_r_control0_read_32_open,
+      wrclk    => F2H_C0_wclk,
+      wrreq    => F2H_C0_wr,
+      data     => F2H_C0_wdata,
+      wrfull   => F2H_C0_wfull,
+      wrempty  => open,
+      wrusedw  => open,
+      rdclk    => bus_clk,
+      rdreq    => inst1_user_r_control0_read_32_rden,
+      q        => inst15_q,
+      rdempty  => inst15_rdempty,
+      rdusedw  => open    
+   );   
+   
 		
 end arch;
 
