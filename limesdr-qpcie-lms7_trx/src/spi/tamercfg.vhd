@@ -1,5 +1,5 @@
 -- ----------------------------------------------------------------------------
--- FILE:          vctcxo_tamercfg.vhd
+-- FILE:          tamercfg.vhd
 -- DESCRIPTION:   SPI configuration registers 
 -- DATE:          2:58 PM Thursday, February 22, 2018
 -- AUTHOR(s):     Lime Microsystems
@@ -18,7 +18,7 @@ use work.tamercfg_pkg.all;
 -- ----------------------------------------------------------------------------
 -- Entity declaration
 -- ----------------------------------------------------------------------------
-entity vctcxo_tamercfg is
+entity tamercfg is
    port (
       -- Address and location of this module
       -- Will be hard wired at the top level
@@ -43,12 +43,12 @@ entity vctcxo_tamercfg is
      
       
    );
-end vctcxo_tamercfg;
+end tamercfg;
 
 -- ----------------------------------------------------------------------------
 -- Architecture
 -- ----------------------------------------------------------------------------
-architecture arch of vctcxo_tamercfg is
+architecture arch of tamercfg is
 
    signal inst_reg: std_logic_vector(15 downto 0);    -- Instruction register
    signal inst_reg_en: std_logic;
