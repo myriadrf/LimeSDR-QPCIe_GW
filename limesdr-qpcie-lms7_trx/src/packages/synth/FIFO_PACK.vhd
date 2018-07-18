@@ -9,6 +9,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use ieee.math_real.all;
 
 -- ----------------------------------------------------------------------------
 -- Package declaration
@@ -19,6 +20,9 @@ package FIFO_PACK is
       return integer;
       
    function FIFOWR_SIZE (wr_width : integer; rd_width : integer; rd_size : integer)
+      return integer;
+      
+   function FIFO_WORDS_TO_Nbits (n_words : integer; add_msb : boolean)
       return integer;
       
 end  FIFO_PACK;
@@ -56,8 +60,20 @@ package body FIFO_PACK is
       else 
          return rd_size;
       end if;     
-   end FIFOWR_SIZE;   
+   end FIFOWR_SIZE;
    
+-- ----------------------------------------------------------------------------
+-- Return FIFO required bits to represent number of words
+-- ---------------------------------------------------------------------------- 
+   function FIFO_WORDS_TO_Nbits (n_words : integer; add_msb : boolean)  
+      return integer is     
+   begin 
+      if add_msb then 
+         return integer(ceil(log2(real(n_words))))+1;
+      else 
+         return integer(ceil(log2(real(n_words))));
+      end if;
+   end FIFO_WORDS_TO_Nbits;
 end FIFO_PACK;
       
       

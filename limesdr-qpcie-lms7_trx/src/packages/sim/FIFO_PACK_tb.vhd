@@ -27,7 +27,9 @@ architecture tb_behave of FIFO_PACK_tb is
    signal clk0,clk1        : std_logic;
    signal reset_n          : std_logic; 
    
-   signal rdwidth          : integer:= FIFORD_SIZE(64, 16, 10);
+   signal rdwidth          : integer := FIFORD_SIZE(64, 16, 10);
+   
+   constant bits           : integer := FIFO_WORDS_TO_Nbits(512, true);
    
 begin 
    
