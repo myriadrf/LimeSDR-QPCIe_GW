@@ -353,14 +353,44 @@ signal inst0_to_gnsscfg          : t_TO_GNSSCFG;
 
 
 --inst1 (pll_top instance)
-signal inst1_txpll_c1            : std_logic;
-signal inst1_txpll_locked        : std_logic;
-signal inst1_txpll_smpl_cmp_en   : std_logic;
-signal inst1_txpll_smpl_cmp_cnt  : std_logic_vector(15 downto 0);
-signal inst1_rxpll_c1            : std_logic;
-signal inst1_rxpll_locked        : std_logic;
-signal inst1_rxpll_smpl_cmp_en   : std_logic;
-signal inst1_rxpll_smpl_cmp_cnt  : std_logic_vector(15 downto 0);
+signal inst1_lms1_txpll_c1             : std_logic;
+signal inst1_lms1_txpll_locked         : std_logic;
+signal inst1_lms1_txpll_smpl_cmp_en    : std_logic;
+signal inst1_lms1_txpll_smpl_cmp_cnt   : std_logic_vector(15 downto 0);
+signal inst1_lms1_txpll_rcnfg_from_pll : std_logic_vector(63 downto 0);
+signal inst1_lms1_rxpll_c1             : std_logic;
+signal inst1_lms1_rxpll_locked         : std_logic;
+signal inst1_lms1_rxpll_smpl_cmp_en    : std_logic;
+signal inst1_lms1_rxpll_smpl_cmp_cnt   : std_logic_vector(15 downto 0);
+signal inst1_lms1_rxpll_rcnfg_from_pll : std_logic_vector(63 downto 0);
+
+
+signal inst1_lms2_txpll_c1             : std_logic;
+signal inst1_lms2_txpll_locked         : std_logic;
+signal inst1_lms2_txpll_smpl_cmp_en    : std_logic;
+signal inst1_lms2_txpll_smpl_cmp_cnt   : std_logic_vector(15 downto 0);
+signal inst1_lms2_txpll_rcnfg_from_pll : std_logic_vector(63 downto 0);
+signal inst1_lms2_rxpll_c1             : std_logic;
+signal inst1_lms2_rxpll_locked         : std_logic;
+signal inst1_lms2_rxpll_smpl_cmp_en    : std_logic;
+signal inst1_lms2_rxpll_smpl_cmp_cnt   : std_logic_vector(15 downto 0);
+signal inst1_lms2_rxpll_rcnfg_from_pll : std_logic_vector(63 downto 0);
+
+signal inst1_pll_0_c0                  : std_logic;
+signal inst1_pll_0_c1                  : std_logic;
+signal inst1_pll_0_locked              : std_logic;
+signal inst1_pll_0_rcnfg_from_pll      : std_logic_vector(63 downto 0);
+
+signal inst1_rcnfg_0_mgmt_read         : std_logic;
+signal inst1_rcnfg_0_mgmt_write        : std_logic;
+signal inst1_rcnfg_0_mgmt_address      : std_logic_vector(5 downto 0);
+signal inst1_rcnfg_0_mgmt_writedata    : std_logic_vector(31 downto 0);
+
+signal inst1_rcnfg_1_mgmt_read         : std_logic;
+signal inst1_rcnfg_1_mgmt_write        : std_logic;
+signal inst1_rcnfg_1_mgmt_address      : std_logic_vector(5 downto 0);
+signal inst1_rcnfg_1_mgmt_writedata    : std_logic_vector(31 downto 0);
+
 
 --inst2
 constant c_H2F_S0_0_RDUSEDW_WIDTH: integer := FIFO_WORDS_TO_Nbits(g_HOST2FPGA_S0_0_SIZE/(c_H2F_S0_0_RWIDTH/8),true);
@@ -572,78 +602,106 @@ begin
    
 -- ----------------------------------------------------------------------------
 -- pll_top instance.
--- Clock source for LMS7002 RX and TX logic
+-- Clock source for LMS#1, LMS#2 RX and TX logic
 -- ----------------------------------------------------------------------------   
---   inst1_pll_top : entity work.pll_top
---   generic map(
---      N_PLL                         => 2,
---      -- TX pll parameters          
---      TXPLL_BANDWIDTH_TYPE          => "AUTO",
---      TXPLL_CLK0_DIVIDE_BY          => 1,
---      TXPLL_CLK0_DUTY_CYCLE         => 50,
---      TXPLL_CLK0_MULTIPLY_BY        => 1,
---      TXPLL_CLK0_PHASE_SHIFT        => "0",
---      TXPLL_CLK1_DIVIDE_BY          => 1,
---      TXPLL_CLK1_DUTY_CYCLE         => 50,
---      TXPLL_CLK1_MULTIPLY_BY        => 1,
---      TXPLL_CLK1_PHASE_SHIFT        => "0",
---      TXPLL_COMPENSATE_CLOCK        => "CLK1",
---      TXPLL_INCLK0_INPUT_FREQUENCY  => 6250,
---      TXPLL_INTENDED_DEVICE_FAMILY  => "Cyclone IV E",
---      TXPLL_OPERATION_MODE          => "SOURCE_SYNCHRONOUS",
---      TXPLL_SCAN_CHAIN_MIF_FILE     => "ip/txpll/pll.mif",
---      TXPLL_DRCT_C0_NDLY            => 1,
---      TXPLL_DRCT_C1_NDLY            => 2,
---      -- RX pll parameters         
---      RXPLL_BANDWIDTH_TYPE          => "AUTO",
---      RXPLL_CLK0_DIVIDE_BY          => 1,
---      RXPLL_CLK0_DUTY_CYCLE         => 50,
---      RXPLL_CLK0_MULTIPLY_BY        => 1,
---      RXPLL_CLK0_PHASE_SHIFT        => "0",
---      RXPLL_CLK1_DIVIDE_BY          => 1,
---      RXPLL_CLK1_DUTY_CYCLE         => 50,
---      RXPLL_CLK1_MULTIPLY_BY        => 1,
---      RXPLL_CLK1_PHASE_SHIFT        => "0",
---      RXPLL_COMPENSATE_CLOCK        => "CLK1",
---      RXPLL_INCLK0_INPUT_FREQUENCY  => 6250,
---      RXPLL_INTENDED_DEVICE_FAMILY  => "Cyclone IV E",
---      RXPLL_OPERATION_MODE          => "SOURCE_SYNCHRONOUS",
---      RXPLL_SCAN_CHAIN_MIF_FILE     => "ip/pll/pll.mif",
---      RXPLL_DRCT_C0_NDLY            => 1,
---      RXPLL_DRCT_C1_NDLY            => 2
---   )
---   port map(
---      -- TX PLL ports
---      txpll_inclk          => LMS_MCLK1,
---      txpll_reconfig_clk   => LMK_CLK,
---      txpll_logic_reset_n  => reset_n,
---      txpll_clk_ena        => inst0_from_fpgacfg.CLK_ENA(1 downto 0),
---      txpll_drct_clk_en    => inst0_from_fpgacfg.drct_clk_en(0) & inst0_from_fpgacfg.drct_clk_en(0),
---      txpll_c0             => LMS_FCLK1,
---      txpll_c1             => inst1_txpll_c1,
---      txpll_locked         => inst1_txpll_locked,
---      txpll_smpl_cmp_en    => inst1_txpll_smpl_cmp_en,
---      txpll_smpl_cmp_done  => inst6_rx_smpl_cmp_done,
---      txpll_smpl_cmp_error => inst6_rx_smpl_cmp_err,
---      txpll_smpl_cmp_cnt   => inst1_txpll_smpl_cmp_cnt,
---
---      -- RX pll ports
---      rxpll_inclk          => LMS_MCLK2,
---      rxpll_reconfig_clk   => LMK_CLK,
---      rxpll_logic_reset_n  => reset_n,
---      rxpll_clk_ena        => inst0_from_fpgacfg.CLK_ENA(3 downto 2),
---      rxpll_drct_clk_en    => inst0_from_fpgacfg.drct_clk_en(1) & inst0_from_fpgacfg.drct_clk_en(1),
---      rxpll_c0             => LMS_FCLK2,
---      rxpll_c1             => inst1_rxpll_c1,
---      rxpll_locked         => inst1_rxpll_locked,
---      rxpll_smpl_cmp_en    => inst1_rxpll_smpl_cmp_en,      
---      rxpll_smpl_cmp_done  => inst6_rx_smpl_cmp_done,
---      rxpll_smpl_cmp_error => inst6_rx_smpl_cmp_err,
---      rxpll_smpl_cmp_cnt   => inst1_rxpll_smpl_cmp_cnt,       
---      -- pllcfg ports
---      from_pllcfg          => inst0_from_pllcfg,
---      to_pllcfg            => inst0_to_pllcfg
---   );
+   inst1_pll_top : entity work.pll_top
+   generic map(
+      INTENDED_DEVICE_FAMILY  => g_DEV_FAMILY,
+      N_PLL                   => 5,
+      -- TX pll parameters
+      LMS1_TXPLL_DRCT_C0_NDLY => 1,
+      LMS1_TXPLL_DRCT_C1_NDLY => 2,
+      -- RX pll parameters
+      LMS1_RXPLL_DRCT_C0_NDLY => 1,
+      LMS1_RXPLL_DRCT_C1_NDLY => 2,
+      -- TX pll parameters
+      LMS2_TXPLL_DRCT_C0_NDLY => 1,
+      LMS2_TXPLL_DRCT_C1_NDLY => 2,
+      -- RX pll parameters
+      LMS2_RXPLL_DRCT_C0_NDLY => 1,
+      LMS2_RXPLL_DRCT_C1_NDLY => 2
+   )
+   port map(
+      -- LMS#1 TX PLL 0 ports
+      lms1_txpll_inclk           => LMS1_MCLK1,
+      lms1_txpll_reconfig_clk    => CLK_LMK_FPGA_IN,
+      lms1_txpll_rcnfg_to_pll    => inst0_pll_rcfg_to_pll_0,
+      lms1_txpll_rcnfg_from_pll  => inst1_lms1_txpll_rcnfg_from_pll,
+      lms1_txpll_logic_reset_n   => reset_n,
+      lms1_txpll_clk_ena         => inst0_from_fpgacfg_0.CLK_ENA(1 downto 0),
+      lms1_txpll_drct_clk_en     => inst0_from_fpgacfg_0.drct_clk_en(0) & inst0_from_fpgacfg_0.drct_clk_en(0),
+      lms1_txpll_c0              => LMS1_FCLK1,
+      lms1_txpll_c1              => inst1_lms1_txpll_c1,
+      lms1_txpll_locked          => inst1_lms1_txpll_locked,
+      -- LMS#1 RX PLL ports
+      lms1_rxpll_inclk           => LMS1_MCLK2,
+      lms1_rxpll_reconfig_clk    => CLK_LMK_FPGA_IN,
+      lms1_rxpll_rcnfg_to_pll    => inst0_pll_rcfg_to_pll_1,
+      lms1_rxpll_rcnfg_from_pll  => inst1_lms1_rxpll_rcnfg_from_pll,
+      lms1_rxpll_logic_reset_n   => reset_n,
+      lms1_rxpll_clk_ena         => inst0_from_fpgacfg_0.CLK_ENA(3 downto 2),
+      lms1_rxpll_drct_clk_en     => inst0_from_fpgacfg_0.drct_clk_en(1) & inst0_from_fpgacfg_0.drct_clk_en(1),
+      lms1_rxpll_c0              => LMS1_FCLK2,
+      lms1_rxpll_c1              => inst1_lms1_rxpll_c1,
+      lms1_rxpll_locked          => inst1_lms1_rxpll_locked,
+      -- Sample comparing ports from LMS#1 RX interface
+      lms1_smpl_cmp_en           => inst1_lms1_rxpll_smpl_cmp_en,      
+      lms1_smpl_cmp_done         => inst6_rx_smpl_cmp_done,
+      lms1_smpl_cmp_error        => inst6_rx_smpl_cmp_err,
+      lms1_smpl_cmp_cnt          => inst1_lms1_rxpll_smpl_cmp_cnt, 
+      
+      -- LMS#2 TX PLL 0 ports
+      lms2_txpll_inclk           => LMS2_MCLK1,
+      lms2_txpll_reconfig_clk    => CLK_LMK_FPGA_IN,
+      lms2_txpll_rcnfg_to_pll    => inst0_pll_rcfg_to_pll_2,
+      lms2_txpll_rcnfg_from_pll  => inst1_lms2_txpll_rcnfg_from_pll,
+      lms2_txpll_logic_reset_n   => reset_n,
+      lms2_txpll_clk_ena         => inst0_from_fpgacfg_0.CLK_ENA(5 downto 4),
+      lms2_txpll_drct_clk_en     => inst0_from_fpgacfg_0.drct_clk_en(2) & inst0_from_fpgacfg_0.drct_clk_en(2),
+      lms2_txpll_c0              => LMS2_FCLK1,
+      lms2_txpll_c1              => inst1_lms2_txpll_c1,
+      lms2_txpll_locked          => inst1_lms2_txpll_locked,
+      -- LMS#2 RX PLL  0 ports
+      lms2_rxpll_inclk           => LMS2_MCLK2,
+      lms2_rxpll_reconfig_clk    => CLK_LMK_FPGA_IN,
+      lms2_rxpll_rcnfg_to_pll    => inst0_pll_rcfg_to_pll_3,
+      lms2_rxpll_rcnfg_from_pll  => inst1_lms2_rxpll_rcnfg_from_pll,
+      lms2_rxpll_logic_reset_n   => reset_n,
+      lms2_rxpll_clk_ena         => inst0_from_fpgacfg_0.CLK_ENA(7 downto 6),
+      lms2_rxpll_drct_clk_en     => inst0_from_fpgacfg_0.drct_clk_en(3) & inst0_from_fpgacfg_0.drct_clk_en(3),
+      lms2_rxpll_c0              => LMS2_FCLK2,
+      lms2_rxpll_c1              => inst1_lms2_rxpll_c1,
+      lms2_rxpll_locked          => inst1_lms2_rxpll_locked,
+      -- Sample comparing ports from LMS#2 RX interface 
+      lms2_smpl_cmp_en           => inst1_lms1_rxpll_smpl_cmp_en,      
+      lms2_smpl_cmp_done         => inst6_rx_smpl_cmp_done,
+      lms2_smpl_cmp_error        => inst6_rx_smpl_cmp_err,
+      lms2_smpl_cmp_cnt          => inst1_lms1_rxpll_smpl_cmp_cnt,
+      -- PLL for DAC, ADC
+      pll_0_inclk                => CLK_LMK_FPGA_IN,
+      pll_0_rcnfg_to_pll         => inst0_pll_rcfg_to_pll_2,
+      pll_0_rcnfg_from_pll       => inst1_pll_0_rcnfg_from_pll,
+      pll_0_c0                   => inst1_pll_0_c0,
+      pll_0_c1                   => inst1_pll_0_c1,
+      pll_0_locked               => inst1_pll_0_locked, 
+         --Reconfiguration  0 ports
+      rcnfg_0_mgmt_readdata      => inst0_avmm_s0_readdata,		
+      rcnfg_0_mgmt_waitrequest   => inst0_avmm_s0_waitrequest,
+      rcnfg_0_mgmt_read          => inst1_rcnfg_0_mgmt_read,
+      rcnfg_0_mgmt_write         => inst1_rcnfg_0_mgmt_write,
+      rcnfg_0_mgmt_address       => inst1_rcnfg_0_mgmt_address,
+      rcnfg_0_mgmt_writedata     => inst1_rcnfg_0_mgmt_writedata,
+         --Reconfiguration  1 ports
+      rcnfg_1_mgmt_readdata      => inst0_avmm_s1_readdata,		
+      rcnfg_1_mgmt_waitrequest   => inst0_avmm_s1_waitrequest,
+      rcnfg_1_mgmt_read          => inst1_rcnfg_1_mgmt_read,
+      rcnfg_1_mgmt_write         => inst1_rcnfg_1_mgmt_write,
+      rcnfg_1_mgmt_address       => inst1_rcnfg_1_mgmt_address,
+      rcnfg_1_mgmt_writedata     => inst1_rcnfg_1_mgmt_writedata,        
+      -- pllcfg ports
+      from_pllcfg                => inst0_from_pllcfg,
+      to_pllcfg                  => inst0_to_pllcfg
+   );
       
 -- ----------------------------------------------------------------------------
 -- pcie_top instance.
@@ -697,63 +755,63 @@ begin
       H2F_S1_sel           => inst0_from_fpgacfg_1.wfm_load,
       H2F_S2_sel           => inst0_from_fpgacfg_2.wfm_load,
       --Stream endpoint FIFO (Host->FPGA) 
-      H2F_S0_0_rdclk       => inst1_txpll_c1,
+      H2F_S0_0_rdclk       => inst1_lms1_txpll_c1,
       H2F_S0_0_aclrn       => inst6_tx_in_pct_reset_n_req,
       H2F_S0_0_rd          => inst6_tx_in_pct_rdreq,
       H2F_S0_0_rdata       => inst2_H2F_S0_0_rdata,
       H2F_S0_0_rempty      => inst2_H2F_S0_0_rempty,
       H2F_S0_0_rdusedw     => inst2_H2F_S0_0_rdusedw,
      
-      H2F_S0_1_rdclk       => inst1_txpll_c1,
+      H2F_S0_1_rdclk       => inst1_lms1_txpll_c1,
       H2F_S0_1_aclrn       => inst0_from_fpgacfg_0.wfm_load,
       H2F_S0_1_rd          => inst6_wfm_in_pct_rdreq,
       H2F_S0_1_rdata       => inst2_H2F_S0_1_rdata,
       H2F_S0_1_rempty      => inst2_H2F_S0_1_rempty,
       H2F_S0_1_rdusedw     => inst2_H2F_S0_1_rdusedw,
 
-      H2F_S1_0_rdclk       => inst1_txpll_c1,
+      H2F_S1_0_rdclk       => inst1_lms2_txpll_c1,
       H2F_S1_0_aclrn       => inst6_tx_in_pct_reset_n_req,
       H2F_S1_0_rd          => inst6_tx_in_pct_rdreq,
       H2F_S1_0_rdata       => inst2_H2F_S1_0_rdata,
       H2F_S1_0_rempty      => inst2_H2F_S1_0_rempty,
       H2F_S1_0_rdusedw     => inst2_H2F_S1_0_rdusedw,
      
-      H2F_S1_1_rdclk       => inst1_txpll_c1,
+      H2F_S1_1_rdclk       => inst1_lms2_txpll_c1,
       H2F_S1_1_aclrn       => inst0_from_fpgacfg_1.wfm_load,
       H2F_S1_1_rd          => inst6_wfm_in_pct_rdreq,
       H2F_S1_1_rdata       => inst2_H2F_S1_1_rdata,
       H2F_S1_1_rempty      => inst2_H2F_S1_1_rempty,
       H2F_S1_1_rdusedw     => inst2_H2F_S1_1_rdusedw, 
 
-      H2F_S2_0_rdclk       => inst1_txpll_c1,
+      H2F_S2_0_rdclk       => inst1_lms2_txpll_c1,
       H2F_S2_0_aclrn       => inst6_tx_in_pct_reset_n_req,
       H2F_S2_0_rd          => inst6_tx_in_pct_rdreq,
       H2F_S2_0_rdata       => inst2_H2F_S2_0_rdata,
       H2F_S2_0_rempty      => inst2_H2F_S2_0_rempty,
       H2F_S2_0_rdusedw     => inst2_H2F_S2_0_rdusedw,
      
-      H2F_S2_1_rdclk       => inst1_txpll_c1,
+      H2F_S2_1_rdclk       => inst1_lms2_txpll_c1,
       H2F_S2_1_aclrn       => inst0_from_fpgacfg_1.wfm_load,
       H2F_S2_1_rd          => inst6_wfm_in_pct_rdreq,
       H2F_S2_1_rdata       => inst2_H2F_S2_1_rdata,
       H2F_S2_1_rempty      => inst2_H2F_S2_1_rempty,
       H2F_S2_1_rdusedw     => inst2_H2F_S2_1_rdusedw,       
       --Stream endpoint FIFO (FPGA->Host)
-      F2H_S0_wclk          => inst1_rxpll_c1,
+      F2H_S0_wclk          => inst1_lms1_rxpll_c1,
       F2H_S0_aclrn         => inst6_rx_pct_fifo_aclrn_req,
       F2H_S0_wr            => inst6_rx_pct_fifo_wrreq,
       F2H_S0_wdata         => inst6_rx_pct_fifo_wdata,
       F2H_S0_wfull         => inst2_F2H_S0_wfull,
       F2H_S0_wrusedw       => inst2_F2H_S0_wrusedw,
       
-      F2H_S1_wclk          => inst1_rxpll_c1,
+      F2H_S1_wclk          => inst1_lms2_rxpll_c1,
       F2H_S1_aclrn         => inst6_rx_pct_fifo_aclrn_req,
       F2H_S1_wr            => inst6_rx_pct_fifo_wrreq,
       F2H_S1_wdata         => inst6_rx_pct_fifo_wdata,
       F2H_S1_wfull         => inst2_F2H_S1_wfull,
       F2H_S1_wrusedw       => inst2_F2H_S1_wrusedw,
       
-      F2H_S2_wclk          => inst1_rxpll_c1,
+      F2H_S2_wclk          => inst1_lms2_rxpll_c1,
       F2H_S2_aclrn         => inst6_rx_pct_fifo_aclrn_req,
       F2H_S2_wr            => inst6_rx_pct_fifo_wrreq,
       F2H_S2_wdata         => inst6_rx_pct_fifo_wdata,
@@ -772,8 +830,8 @@ begin
       F2H_C0_wdata         => inst0_exfifo_of_d,
       F2H_C0_wfull         => inst2_F2H_C0_wfull,
       S0_rx_en             => inst0_from_fpgacfg_0.rx_en,
-      S1_rx_en             => inst0_from_fpgacfg_0.rx_en,
-      S2_rx_en             => inst0_from_fpgacfg_0.rx_en,
+      S1_rx_en             => inst0_from_fpgacfg_1.rx_en,
+      S2_rx_en             => inst0_from_fpgacfg_2.rx_en,
       F2H_S0_open          => inst2_user_read_32_open,
       F2H_S0_open          => open, 
       F2H_S0_open          => open

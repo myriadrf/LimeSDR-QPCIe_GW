@@ -215,7 +215,7 @@ begin
          mem(26)  <= "0000000000000000";  --  0 free, Reserved[15:8],FPGA_LED2_G,FPGA_LED2_R,FPGA_LED2_OVRD,Reserved,FPGA_LED1_G,FPGA_LED1_R,FPGA_LED1_OVRD
          mem(27)  <= "0000000000000000";  --  0 free, Reserved[15:0]
          mem(28)  <= "0000000000000000";  --  0 free, Reserved[15:4],FX3_LED_G,FX3_LED_R,FX3_LED_OVRD
-         mem(29)  <= "0000000000001111";  --  0 free, CLK_ENA[1:0]
+         mem(29)  <= "0000000011111111";  --  0 free, CLK_ENA[1:0]
          mem(30)  <= x"0003";             --  0 free, sync_pulse_period MSb 
          mem(31)  <= x"D090";             --  0 free, sync_pulse_period LSb
          
@@ -295,7 +295,7 @@ begin
 		from_fpgacfg.FPGA_LED5_CTRL      <= mem(27)(2 downto 0);
 		from_fpgacfg.FPGA_LED6_CTRL      <= mem(27)(6 downto 4);
       from_fpgacfg.FX3_LED_CTRL        <= mem(28)(2 downto 0);
-      from_fpgacfg.CLK_ENA             <= mem(29)(3 downto 0);
+      from_fpgacfg.CLK_ENA             <= mem(29)(7 downto 0);
       from_fpgacfg.sync_pulse_period   <= mem(30)(15 downto 0) & mem(31)(15 downto 0);
 
 
