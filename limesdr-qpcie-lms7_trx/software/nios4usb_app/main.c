@@ -797,7 +797,7 @@ int main(void)
 
 	    	}
 	    	else{
-	    		pllcfgrez = UpdatePHCFG();
+	    		//pllcfgrez = UpdatePHCFG();
 
 	    	};
 

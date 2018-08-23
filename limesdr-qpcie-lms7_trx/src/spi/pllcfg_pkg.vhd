@@ -84,6 +84,7 @@ package pllcfg_pkg is
       -- Status Inputs
       pllcfg_busy    : std_logic;
       pllcfg_done    : std_logic;
+      pllcfg_err     : std_logic_vector(7 downto 0);
       phcfg_done     : std_logic;
       phcfg_error    : std_logic;
       -- PLL Lock flags

@@ -103,15 +103,15 @@ entity pll_top is
       rcnfg_0_mgmt_waitrequest      : in  std_logic;
       rcnfg_0_mgmt_read             : out std_logic;
       rcnfg_0_mgmt_write            : out std_logic;
-      rcnfg_0_mgmt_address          : out std_logic_vector(5 downto 0);
+      rcnfg_0_mgmt_address          : out std_logic_vector(8 downto 0);
       rcnfg_0_mgmt_writedata        : out std_logic_vector(31 downto 0);
          --Reconfiguration  1 ports
       rcnfg_1_mgmt_readdata         : in  std_logic_vector(31 downto 0);		
       rcnfg_1_mgmt_waitrequest      : in  std_logic;
       rcnfg_1_mgmt_read             : out std_logic;
       rcnfg_1_mgmt_write            : out std_logic;
-      rcnfg_1_mgmt_address          : out std_logic_vector(5 downto 0);
-      rcnfg_1_mgmt_writedata        : out std_logic_vector(31 downto 0);   
+      rcnfg_1_mgmt_address          : out std_logic_vector(8 downto 0);
+      rcnfg_1_mgmt_writedata        : out std_logic_vector(31 downto 0);
       -- pllcfg ports
       to_pllcfg                     : out t_TO_PLLCFG;
       from_pllcfg                   : in  t_FROM_PLLCFG
@@ -130,14 +130,10 @@ architecture arch of pll_top is
    signal inst0_dynps_done             : std_logic;
    signal inst0_dynps_status           : std_logic;
    signal inst0_rcnfig_status          : std_logic;
-   signal inst0_rcnfg_mgmt_readdata    : std_logic_vector(31 downto 0);		
-   signal inst0_rcnfg_mgmt_waitrequest : std_logic;
    signal inst0_rcnfg_mgmt_read        : std_logic;
    signal inst0_rcnfg_mgmt_write       : std_logic;
    signal inst0_rcnfg_mgmt_address     : std_logic_vector(5 downto 0);
    signal inst0_rcnfg_mgmt_writedata   : std_logic_vector(31 downto 0);
-   signal inst0_rcnfg_to_pll           : std_logic_vector(63 downto 0);
-   signal inst0_rcnfg_from_pll         : std_logic_vector(63 downto 0);
 
    --inst1
    signal inst1_pll_locked             : std_logic;
@@ -146,8 +142,6 @@ architecture arch of pll_top is
    signal inst1_dynps_done             : std_logic;
    signal inst1_dynps_status           : std_logic;
    signal inst1_rcnfig_status          : std_logic;
-   signal inst1_rcnfg_mgmt_readdata    : std_logic_vector(31 downto 0);		
-   signal inst1_rcnfg_mgmt_waitrequest : std_logic;
    signal inst1_rcnfg_mgmt_read        : std_logic;
    signal inst1_rcnfg_mgmt_write       : std_logic;
    signal inst1_rcnfg_mgmt_address     : std_logic_vector(5 downto 0);
@@ -156,25 +150,25 @@ architecture arch of pll_top is
    signal inst1_rcnfg_from_pll         : std_logic_vector(63 downto 0);
    
    --inst2
-   signal inst2_pllcfg_busy      : std_logic_vector(N_PLL-1 downto 0);
-   signal inst2_pllcfg_done      : std_logic_vector(N_PLL-1 downto 0);
-   signal inst2_pll_lock         : std_logic_vector(N_PLL-1 downto 0);
-   signal inst2_phcfg_start      : std_logic_vector(N_PLL-1 downto 0);
-   signal inst2_pllcfg_start     : std_logic_vector(N_PLL-1 downto 0);
-   signal inst2_pllrst_start     : std_logic_vector(N_PLL-1 downto 0);
-   signal inst2_auto_phcfg_done  : std_logic_vector(N_PLL-1 downto 0);
-   signal inst2_auto_phcfg_err   : std_logic_vector(N_PLL-1 downto 0);
-   signal inst2_phcfg_mode       : std_logic;
-   signal inst2_phcfg_tst        : std_logic;
-   signal inst2_phcfg_updn       : std_logic;
-   signal inst2_cnt_ind          : std_logic_vector(4 downto 0);
-   signal inst2_cnt_phase        : std_logic_vector(15 downto 0);
-   signal inst2_pllcfg_data      : std_logic_vector(143 downto 0);
-   signal inst2_auto_phcfg_smpls : std_logic_vector(15 downto 0);
-   signal inst2_auto_phcfg_step  : std_logic_vector(15 downto 0);
+   signal inst2_pllcfg_busy            : std_logic_vector(N_PLL-1 downto 0);
+   signal inst2_pllcfg_done            : std_logic_vector(N_PLL-1 downto 0);
+   signal inst2_pll_lock               : std_logic_vector(N_PLL-1 downto 0);
+   signal inst2_phcfg_start            : std_logic_vector(N_PLL-1 downto 0);
+   signal inst2_pllcfg_start           : std_logic_vector(N_PLL-1 downto 0);
+   signal inst2_pllrst_start           : std_logic_vector(N_PLL-1 downto 0);
+   signal inst2_auto_phcfg_done        : std_logic_vector(N_PLL-1 downto 0);
+   signal inst2_auto_phcfg_err         : std_logic_vector(N_PLL-1 downto 0);
+   signal inst2_phcfg_mode             : std_logic;
+   signal inst2_phcfg_tst              : std_logic;
+   signal inst2_phcfg_updn             : std_logic;
+   signal inst2_cnt_ind                : std_logic_vector(4 downto 0);
+   signal inst2_cnt_phase              : std_logic_vector(15 downto 0);
+   signal inst2_pllcfg_data            : std_logic_vector(143 downto 0);
+   signal inst2_auto_phcfg_smpls       : std_logic_vector(15 downto 0);
+   signal inst2_auto_phcfg_step        : std_logic_vector(15 downto 0);
    
-   signal pllcfg_busy            : std_logic;
-   signal pllcfg_done            : std_logic;
+   signal pllcfg_busy                  : std_logic;
+   signal pllcfg_done                  : std_logic;
    
   
 begin
@@ -193,8 +187,8 @@ begin
    free_running_clk           => lms1_txpll_reconfig_clk,
    --PLL input    
    pll_inclk                  => lms1_txpll_inclk,
-   pll_areset                 => inst2_pllrst_start(0),
-   pll_logic_reset_n          => lms1_txpll_logic_reset_n,
+   pll_areset                 => not lms1_txpll_logic_reset_n,
+   pll_logic_reset_n          => '1',
    inv_c0                     => '0',
    c0                         => lms1_txpll_c0, --muxed clock output
    c1                         => lms1_txpll_c1, --muxed clock output
@@ -203,17 +197,17 @@ begin
    clk_ena                    => lms1_txpll_clk_ena,       --clock output enable
    drct_clk_en                => lms1_txpll_drct_clk_en,   --1 - Direct clk, 0 - PLL clocks  
    --Reconfiguration ports
-   rcnfg_mgmt_readdata        => inst0_rcnfg_mgmt_readdata,	
-   rcnfg_mgmt_waitrequest     => inst0_rcnfg_mgmt_waitrequest,
+   rcnfg_mgmt_readdata        => rcnfg_0_mgmt_readdata,	
+   rcnfg_mgmt_waitrequest     => rcnfg_0_mgmt_waitrequest,
    rcnfg_mgmt_read            => inst0_rcnfg_mgmt_read,
    rcnfg_mgmt_write           => inst0_rcnfg_mgmt_write,
    rcnfg_mgmt_address         => inst0_rcnfg_mgmt_address,
-   rcnfg_mgmt_writedata       => inst0_rcnfg_mgmt_writedata,
-   rcnfg_to_pll               => inst0_rcnfg_to_pll,
-   rcnfg_from_pll             => inst0_rcnfg_from_pll,
+   rcnfg_mgmt_writedata       => inst0_rcnfg_mgmt_writedata,   
+   rcnfg_to_pll               => lms1_txpll_rcnfg_to_pll,
+   rcnfg_from_pll             => lms1_txpll_rcnfg_from_pll,
    --Dynamic phase shift ports
    dynps_mode                 => inst2_phcfg_mode, -- 0 - manual, 1 - auto
-   dynps_areset_n             => not inst2_pllrst_start(0),
+   dynps_areset_n             => lms1_txpll_logic_reset_n,
    dynps_en                   => inst2_phcfg_start(0),
    dynps_tst                  => inst2_phcfg_tst,
    dynps_dir                  => inst2_phcfg_updn,
@@ -244,8 +238,8 @@ begin
    free_running_clk           => lms1_rxpll_reconfig_clk,
    --PLL input
    pll_inclk                  => lms1_rxpll_inclk,
-   pll_areset                 => inst2_pllrst_start(1),
-   pll_logic_reset_n          => lms1_rxpll_logic_reset_n,
+   pll_areset                 => not lms1_rxpll_logic_reset_n,
+   pll_logic_reset_n          => '1',
    inv_c0                     => '0',
    c0                         => lms1_rxpll_c0, --muxed clock output
    c1                         => lms1_rxpll_c1, --muxed clock output
@@ -254,17 +248,17 @@ begin
    clk_ena                    => lms1_rxpll_clk_ena,       --clock output enable
    drct_clk_en                => lms1_rxpll_drct_clk_en,   --1 - Direct clk, 0 - PLL clocks 
    --Reconfiguration ports
-   rcnfg_mgmt_readdata        => inst1_rcnfg_mgmt_readdata,   
-   rcnfg_mgmt_waitrequest     => inst1_rcnfg_mgmt_waitrequest,
-   rcnfg_mgmt_read            => inst1_rcnfg_mgmt_read,   
-   rcnfg_mgmt_write           => inst1_rcnfg_mgmt_write,      
-   rcnfg_mgmt_address         => inst1_rcnfg_mgmt_address,    
-   rcnfg_mgmt_writedata       => inst1_rcnfg_mgmt_writedata,  
-   rcnfg_to_pll               => inst1_rcnfg_to_pll,          
-   rcnfg_from_pll             => inst1_rcnfg_from_pll,        
+   rcnfg_mgmt_readdata        => rcnfg_0_mgmt_readdata,	
+   rcnfg_mgmt_waitrequest     => rcnfg_0_mgmt_waitrequest,
+   rcnfg_mgmt_read            => inst1_rcnfg_mgmt_read,
+   rcnfg_mgmt_write           => inst1_rcnfg_mgmt_write,
+   rcnfg_mgmt_address         => inst1_rcnfg_mgmt_address,
+   rcnfg_mgmt_writedata       => inst1_rcnfg_mgmt_writedata,   
+   rcnfg_to_pll               => lms1_rxpll_rcnfg_to_pll,          
+   rcnfg_from_pll             => lms1_rxpll_rcnfg_from_pll,        
    --Dynamic phase shift ports
    dynps_mode                 => inst2_phcfg_mode, -- 0 - manual, 1 - auto
-   dynps_areset_n             => not inst2_pllrst_start(1),
+   dynps_areset_n             => lms1_rxpll_logic_reset_n,
    dynps_en                   => inst2_phcfg_start(1),
    dynps_tst                  => inst2_phcfg_tst,
    dynps_dir                  => inst2_phcfg_updn,
@@ -361,7 +355,21 @@ lms1_smpl_cmp_en     <= inst0_smpl_cmp_en OR inst1_smpl_cmp_en;
 lms1_smpl_cmp_cnt    <= inst2_auto_phcfg_smpls;
 
 
-lms2_smpl_cmp_cnt    <= inst2_auto_phcfg_smpls;
+lms2_smpl_cmp_cnt       <= inst2_auto_phcfg_smpls;
+
+rcnfg_0_mgmt_read       <= inst1_rcnfg_mgmt_read when (inst2_phcfg_start(1) = '1' AND inst2_phcfg_mode = '1') else 
+                           inst0_rcnfg_mgmt_read;
+                           
+rcnfg_0_mgmt_write      <= inst1_rcnfg_mgmt_write when (inst2_phcfg_start(1) = '1' AND inst2_phcfg_mode = '1') else 
+                           inst0_rcnfg_mgmt_write;
+                           
+--address range 0 to FF when TX pll and 100 to 1FF when RX pll                              
+rcnfg_0_mgmt_address    <= "100" & inst1_rcnfg_mgmt_address when (inst2_phcfg_start(1) = '1' AND inst2_phcfg_mode = '1') else 
+                           "000" & inst0_rcnfg_mgmt_address;
+                           
+rcnfg_0_mgmt_writedata  <= inst1_rcnfg_mgmt_writedata when (inst2_phcfg_start(1) = '1' AND inst2_phcfg_mode = '1') else 
+                           inst0_rcnfg_mgmt_writedata;
+
 
 
 end arch;   

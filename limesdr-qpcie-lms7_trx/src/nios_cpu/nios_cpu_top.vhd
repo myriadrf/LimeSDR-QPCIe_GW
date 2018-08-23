@@ -73,8 +73,6 @@ entity nios_cpu_top is
       vctcxo_tune_en       : in     std_logic;
       vctcxo_irq           : in     std_logic;
       -- PLL reconfiguration
-      pll_cmd              : in     std_logic_vector(3 downto 0);
-      pll_stat             : out    std_logic_vector(9 downto 0);
       pll_rst              : out    std_logic_vector(31 downto 0);
       pll_rcfg_from_pll_0  : in     std_logic_vector(63 downto 0) := (others => '0');
       pll_rcfg_to_pll_0    : out    std_logic_vector(63 downto 0);
@@ -141,15 +139,26 @@ end nios_cpu_top;
 architecture arch of nios_cpu_top is
 --declare signals,  components here
 
+   signal to_pllcfg_int             : t_TO_PLLCFG;
+
    -- inst0
-   signal inst0_dac_spi1_SS_n    : std_logic;
-   signal inst0_dac_spi1_MOSI    : std_logic;
-   signal inst0_dac_spi1_SCLK    : std_logic;
-   signal inst0_fpga_spi0_MOSI   : std_logic;
-   signal inst0_fpga_spi0_SCLK   : std_logic;
-   signal inst0_fpga_spi0_SS_n   : std_logic_vector(7 downto 0);
+   signal inst0_dac_spi1_SS_n       : std_logic;
+   signal inst0_dac_spi1_MOSI       : std_logic;
+   signal inst0_dac_spi1_SCLK       : std_logic;
+   signal inst0_fpga_spi0_MOSI      : std_logic;
+   signal inst0_fpga_spi0_SCLK      : std_logic;
+   signal inst0_fpga_spi0_SS_n      : std_logic_vector(7 downto 0);
+   signal inst0_pllcfg_spi_MOSI     : std_logic;
+   signal inst0_pllcfg_spi_SCLK     : std_logic;
+   signal inst0_pllcfg_spi_SS_n     : std_logic;
+   signal inst0_pllcfg_cmd_export   : std_logic_vector(3 downto 0);
+   signal inst0_pllcfg_stat_export  : std_logic_vector(9 downto 0);
+   
+   
+   
    --inst1
    signal inst1_sdout            : std_logic;
+   signal inst1_pllcfg_sdout     : std_logic;
    
    signal avmm_s0_address_int    : std_logic_vector(31 downto 0);
    signal avmm_s1_address_int    : std_logic_vector(31 downto 0);
@@ -285,12 +294,12 @@ begin
       pll_recfg_from_pll_5_reconfig_from_pll => pll_rcfg_from_pll_5,
       pll_recfg_to_pll_5_reconfig_to_pll     => pll_rcfg_to_pll_5,
       pll_rst_export                         => pll_rst,
-      pllcfg_cmd_export                      => pll_cmd,
-      pllcfg_stat_export                     => pll_stat,
-      pllcfg_spi_MISO                        => spi_1_MISO,
-      pllcfg_spi_MOSI                        => spi_1_MOSI,
-      pllcfg_spi_SCLK                        => spi_1_SCLK, 
-      pllcfg_spi_SS_n                        => spi_1_SS_n,
+      pllcfg_cmd_export                      => inst0_pllcfg_cmd_export,
+      pllcfg_stat_export                     => inst0_pllcfg_stat_export,
+      pllcfg_spi_MISO                        => inst1_pllcfg_sdout,
+      pllcfg_spi_MOSI                        => inst0_pllcfg_spi_MOSI,
+      pllcfg_spi_SCLK                        => inst0_pllcfg_spi_SCLK, 
+      pllcfg_spi_SS_n                        => inst0_pllcfg_spi_SS_n,
       scl_export                             => i2c_scl,
       sda_export                             => i2c_sda,
       avmm_s0_address                        => avmm_s0_address_int,    
@@ -317,6 +326,17 @@ begin
       avmm_m0_reset_reset                    => avmm_m0_reset_reset
    );
    
+   inst0_pllcfg_cmd_export <= from_pllcfg.phcfg_mode & from_pllcfg.pllrst_start & 
+                              from_pllcfg.phcfg_start & from_pllcfg.pllcfg_start;
+                              
+   process(to_pllcfg, inst0_pllcfg_stat_export)
+   begin 
+      to_pllcfg_int <= to_pllcfg;
+      to_pllcfg_int.pllcfg_done  <= inst0_pllcfg_stat_export(0);
+      to_pllcfg_int.pllcfg_busy  <= inst0_pllcfg_stat_export(1);
+      to_pllcfg_int.pllcfg_err   <= inst0_pllcfg_stat_export(9 downto 2);
+   end process;
+   
 -- ----------------------------------------------------------------------------
 -- cfg_top instance
 -- ----------------------------------------------------------------------------    
@@ -334,7 +354,11 @@ begin
       sdin                 => inst0_fpga_spi0_MOSI,
       sclk                 => inst0_fpga_spi0_SCLK,
       sen                  => inst0_fpga_spi0_SS_n(6),
-      sdout                => inst1_sdout,  
+      sdout                => inst1_sdout, 
+      pllcfg_sdin          => inst0_pllcfg_spi_MOSI,
+      pllcfg_sclk          => inst0_pllcfg_spi_SCLK,
+      pllcfg_sen           => inst0_pllcfg_spi_SS_n,
+      pllcfg_sdout         => inst1_pllcfg_sdout, 
       -- Signals coming from the pins or top level serial interface
       lreset               => reset_n,   -- Logic reset signal, resets logic cells only  (use only one reset)
       mreset               => reset_n,   -- Memory reset signal, resets configuration memory only (use only one reset)          
@@ -344,7 +368,7 @@ begin
       from_fpgacfg_1       => from_fpgacfg_1,
       to_fpgacfg_2         => to_fpgacfg_2,
       from_fpgacfg_2       => from_fpgacfg_2,
-      to_pllcfg            => to_pllcfg,
+      to_pllcfg            => to_pllcfg_int,
       from_pllcfg          => from_pllcfg,
       to_tstcfg            => to_tstcfg,
       from_tstcfg          => from_tstcfg,

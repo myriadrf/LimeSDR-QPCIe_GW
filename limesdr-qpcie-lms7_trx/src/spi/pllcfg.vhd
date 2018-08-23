@@ -291,6 +291,7 @@ begin
          end loop;
          mem(1)(3 downto 0)<= to_pllcfg.phcfg_error & to_pllcfg.phcfg_done & to_pllcfg.pllcfg_busy & to_pllcfg.pllcfg_done;
          mem(2)  <= to_pllcfg.pll_lock;
+         mem(2)(15 downto 8)  <= to_pllcfg.pllcfg_err;
       end if;
    end if;
 end process ram;

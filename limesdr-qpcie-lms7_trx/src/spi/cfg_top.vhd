@@ -36,10 +36,16 @@ entity cfg_top is
       );
    port (
       -- Serial port IOs
-      sdin                 : in  std_logic;   -- Data in
-      sclk                 : in  std_logic;   -- Data clock
-      sen                  : in  std_logic;   -- Enable signal (active low)
-      sdout                : out std_logic;  -- Data out      
+      sdin                 : in  std_logic;  -- Data in
+      sclk                 : in  std_logic;  -- Data clock
+      sen                  : in  std_logic;  -- Enable signal (active low)
+      sdout                : out std_logic;  -- Data out
+      
+      pllcfg_sdin          : in  std_logic;  -- Data in
+      pllcfg_sclk          : in  std_logic;  -- Data clock
+      pllcfg_sen           : in  std_logic;  -- Enable signal (active low)
+      pllcfg_sdout         : out std_logic;  -- Data out
+      
       -- Signals coming from the pins or top level serial interface
       lreset               : in  std_logic;   -- Logic reset signal, resets logic cells only  (use only one reset)
       mreset               : in  std_logic;   -- Memory reset signal, resets configuration memory only (use only one reset)
@@ -189,10 +195,10 @@ begin
       sdoutA         => inst3_sdoutA,    
       oenA           => open,     
       -- Serial port B IOs
-      sdinB          => '0',
-      sclkB          => '0',
-      senB           => '1',
-      sdoutB         => open,    
+      sdinB          => pllcfg_sdin,
+      sclkB          => pllcfg_sclk,
+      senB           => pllcfg_sen,
+      sdoutB         => pllcfg_sdout,    
       oenB           => open,       
       -- Signals coming from the pins or top level serial interface
       lreset         => lreset, -- Logic reset signal, resets logic cells only  (use only one reset)

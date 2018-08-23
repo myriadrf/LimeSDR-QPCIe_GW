@@ -38,11 +38,8 @@ end lms7002_ddin;
 -- ----------------------------------------------------------------------------
 architecture arch of lms7002_ddin is
 --declare signals,  components here
-signal aclr 	         : std_logic;
-signal datain	         : std_logic_vector(iq_width downto 0);
-
-signal dataout_h        : std_logic_vector(iq_width downto 0);
-signal dataout_l        : std_logic_vector(iq_width downto 0);
+signal aclr 	: std_logic;
+signal datain	: std_logic_vector(iq_width downto 0);
 
 begin
 
@@ -63,23 +60,9 @@ aclr<=not reset_n;
 		aclr 			=> aclr,
 		datain 		=> datain,
 		inclock 		=> clk,
-		dataout_h 	=> dataout_h,
-		dataout_l 	=> dataout_l
+		dataout_h 	=> data_out_h,
+		dataout_l 	=> data_out_l
 	);
-   
-out_reg : process(clk, reset_n)
-begin
-   if reset_n = '0' then 
-      data_out_h <= (others=>'0');
-      data_out_l <= (others=>'0');  
-   elsif (clk'event AND clk='1') then 
-      data_out_h <= dataout_h;
-      data_out_l <= dataout_l;
-   end if;
-end process;
-   
-   
-   
   
 end arch;   
 
