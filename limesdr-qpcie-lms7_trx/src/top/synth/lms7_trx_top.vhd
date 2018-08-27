@@ -429,7 +429,7 @@ signal inst2_H2F_S2_0_rdusedw    : std_logic_vector(c_H2F_S2_0_RDUSEDW_WIDTH-1 d
 signal inst2_H2F_S2_1_rdata      : std_logic_vector(c_H2F_S2_1_RWIDTH-1 downto 0);
 signal inst2_H2F_S2_1_rempty     : std_logic;
 signal inst2_H2F_S2_1_rdusedw    : std_logic_vector(c_H2F_S2_1_RDUSEDW_WIDTH-1 downto 0);
-signal inst2_user_read_32_open   : std_logic;
+signal inst2_F2H_S0_open         : std_logic;
 
 
 --inst5
@@ -491,8 +491,8 @@ begin
       MEMCFG_START_ADDR    => g_MEMCFG_START_ADDR
    )
    port map(
-      clk                        => CLK100_FPGA,
-      reset_n                    => reset_n_clk100_fpga,
+      clk                        => CLK_LMK_FPGA_IN,
+      reset_n                    => reset_n_lmk_clk,
       -- Control data FIFO
       exfifo_if_d                => inst2_H2F_C0_rdata,
       exfifo_if_rd               => inst0_exfifo_if_rd, 
@@ -549,11 +549,11 @@ begin
       avmm_s0_writedata          => inst1_rcnfg_0_mgmt_writedata, 
       avmm_s0_waitrequest        => inst0_avmm_s0_waitrequest,
       -- Avalon Slave port 1
-      avmm_s1_address            => (others=>'0'),
-      avmm_s1_read               => '0',
+      avmm_s1_address            => inst1_rcnfg_1_mgmt_address,
+      avmm_s1_read               => inst1_rcnfg_1_mgmt_read,
       avmm_s1_readdata           => inst0_avmm_s1_readdata,
-      avmm_s1_write              => '0',
-      avmm_s1_writedata          => (others=>'0'), 
+      avmm_s1_write              => inst1_rcnfg_1_mgmt_write,
+      avmm_s1_writedata          => inst1_rcnfg_1_mgmt_writedata, 
       avmm_s1_waitrequest        => inst0_avmm_s1_waitrequest,
       -- Avalon master
       avmm_m0_address            => inst0_avmm_m0_address,
@@ -814,13 +814,13 @@ begin
       F2H_S2_wfull         => inst2_F2H_S2_wfull,
       F2H_S2_wrusedw       => inst2_F2H_S2_wrusedw,
       --Control endpoint FIFO (Host->FPGA)
-      H2F_C0_rdclk         => CLK100_FPGA,
+      H2F_C0_rdclk         => CLK_LMK_FPGA_IN,
       H2F_C0_aclrn         => reset_n,
       H2F_C0_rd            => inst0_exfifo_if_rd,
       H2F_C0_rdata         => inst2_H2F_C0_rdata,
       H2F_C0_rempty        => inst2_H2F_C0_rempty,
       --Control endpoint FIFO (FPGA->Host)
-      F2H_C0_wclk          => CLK100_FPGA,
+      F2H_C0_wclk          => CLK_LMK_FPGA_IN,
       F2H_C0_aclrn         => not inst0_exfifo_of_rst,
       F2H_C0_wr            => inst0_exfifo_of_wr,
       F2H_C0_wdata         => inst0_exfifo_of_d,
@@ -828,9 +828,9 @@ begin
       S0_rx_en             => inst0_from_fpgacfg_0.rx_en,
       S1_rx_en             => inst0_from_fpgacfg_1.rx_en,
       S2_rx_en             => inst0_from_fpgacfg_2.rx_en,
-      F2H_S0_open          => inst2_user_read_32_open,
-      F2H_S0_open          => open, 
-      F2H_S0_open          => open
+      F2H_S0_open          => inst2_F2H_S0_open,
+      F2H_S1_open          => open, 
+      F2H_S2_open          => open
       );
       
 -- ----------------------------------------------------------------------------
@@ -942,10 +942,10 @@ begin
 -- Receive and transmit interface for LMS7002
 -- ----------------------------------------------------------------------------
    -- Rx interface is enabled only when user_read_32 port is opened from Host. 
-   process(inst0_from_fpgacfg_0, inst2_user_read_32_open)
+   process(inst0_from_fpgacfg_0, inst2_F2H_S0_open)
    begin 
       inst0_from_fpgacfg_mod_0        <= inst0_from_fpgacfg_0;
-      inst0_from_fpgacfg_mod_0.rx_en  <= inst0_from_fpgacfg_0.rx_en AND inst2_user_read_32_open;
+      inst0_from_fpgacfg_mod_0.rx_en  <= inst0_from_fpgacfg_0.rx_en AND inst2_F2H_S0_open;
    end process;
    
    inst6_rxtx_top : entity work.rxtx_top

@@ -412,10 +412,13 @@ begin
    inst4_reset_n <= inst3_reset_n;
    --For Control endpoint, Host->FPGA
    inst5_reset_n <= inst1_user_w_control0_write_32_open;
-   --For stream endpoint, FPGA->Host
+
    inst6_reset_n <= inst1_user_r_stream0_read_32_open;  
    --For control endpoint, FPGA->Host
    inst7_reset_n <= inst1_user_r_control0_read_32_open;
+   
+   --For stream endpoint, FPGA->Host
+   inst12_reset_n <= inst1_user_r_stream0_read_32_open;
    
 -- ----------------------------------------------------------------------------
 -- Sync registers
@@ -931,6 +934,12 @@ begin
       rdusedw  => open    
    );   
    
+-- ----------------------------------------------------------------------------
+-- Output ports
+-- ----------------------------------------------------------------------------    
+   F2H_S0_open <= inst1_user_r_stream0_read_32_open;
+   F2H_S1_open <= inst1_user_r_stream1_read_32_open;
+   F2H_S2_open <= inst1_user_r_stream2_read_32_open;
 		
 end arch;
 

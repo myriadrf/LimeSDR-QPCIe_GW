@@ -146,26 +146,48 @@ architecture arch of pll_top is
    signal inst1_rcnfg_mgmt_write       : std_logic;
    signal inst1_rcnfg_mgmt_address     : std_logic_vector(5 downto 0);
    signal inst1_rcnfg_mgmt_writedata   : std_logic_vector(31 downto 0);
-   signal inst1_rcnfg_to_pll           : std_logic_vector(63 downto 0);
-   signal inst1_rcnfg_from_pll         : std_logic_vector(63 downto 0);
    
    --inst2
-   signal inst2_pllcfg_busy            : std_logic_vector(N_PLL-1 downto 0);
-   signal inst2_pllcfg_done            : std_logic_vector(N_PLL-1 downto 0);
-   signal inst2_pll_lock               : std_logic_vector(N_PLL-1 downto 0);
-   signal inst2_phcfg_start            : std_logic_vector(N_PLL-1 downto 0);
-   signal inst2_pllcfg_start           : std_logic_vector(N_PLL-1 downto 0);
-   signal inst2_pllrst_start           : std_logic_vector(N_PLL-1 downto 0);
-   signal inst2_auto_phcfg_done        : std_logic_vector(N_PLL-1 downto 0);
-   signal inst2_auto_phcfg_err         : std_logic_vector(N_PLL-1 downto 0);
-   signal inst2_phcfg_mode             : std_logic;
-   signal inst2_phcfg_tst              : std_logic;
-   signal inst2_phcfg_updn             : std_logic;
-   signal inst2_cnt_ind                : std_logic_vector(4 downto 0);
-   signal inst2_cnt_phase              : std_logic_vector(15 downto 0);
-   signal inst2_pllcfg_data            : std_logic_vector(143 downto 0);
-   signal inst2_auto_phcfg_smpls       : std_logic_vector(15 downto 0);
-   signal inst2_auto_phcfg_step        : std_logic_vector(15 downto 0);
+   signal inst2_pll_locked             : std_logic;
+   signal inst2_smpl_cmp_en            : std_logic;
+   signal inst2_busy                   : std_logic;
+   signal inst2_dynps_done             : std_logic;
+   signal inst2_dynps_status           : std_logic;
+   signal inst2_rcnfig_status          : std_logic;
+   signal inst2_rcnfg_mgmt_read        : std_logic;
+   signal inst2_rcnfg_mgmt_write       : std_logic;
+   signal inst2_rcnfg_mgmt_address     : std_logic_vector(5 downto 0);
+   signal inst2_rcnfg_mgmt_writedata   : std_logic_vector(31 downto 0);
+   
+   --inst3
+   signal inst3_pll_locked             : std_logic;
+   signal inst3_smpl_cmp_en            : std_logic;
+   signal inst3_busy                   : std_logic;
+   signal inst3_dynps_done             : std_logic;
+   signal inst3_dynps_status           : std_logic;
+   signal inst3_rcnfig_status          : std_logic;
+   signal inst3_rcnfg_mgmt_read        : std_logic;
+   signal inst3_rcnfg_mgmt_write       : std_logic;
+   signal inst3_rcnfg_mgmt_address     : std_logic_vector(5 downto 0);
+   signal inst3_rcnfg_mgmt_writedata   : std_logic_vector(31 downto 0);
+   
+   --inst2
+   signal inst4_pllcfg_busy            : std_logic_vector(N_PLL-1 downto 0);
+   signal inst4_pllcfg_done            : std_logic_vector(N_PLL-1 downto 0);
+   signal inst4_pll_lock               : std_logic_vector(N_PLL-1 downto 0);
+   signal inst4_phcfg_start            : std_logic_vector(N_PLL-1 downto 0);
+   signal inst4_pllcfg_start           : std_logic_vector(N_PLL-1 downto 0);
+   signal inst4_pllrst_start           : std_logic_vector(N_PLL-1 downto 0);
+   signal inst4_auto_phcfg_done        : std_logic_vector(N_PLL-1 downto 0);
+   signal inst4_auto_phcfg_err         : std_logic_vector(N_PLL-1 downto 0);
+   signal inst4_phcfg_mode             : std_logic;
+   signal inst4_phcfg_tst              : std_logic;
+   signal inst4_phcfg_updn             : std_logic;
+   signal inst4_cnt_ind                : std_logic_vector(4 downto 0);
+   signal inst4_cnt_phase              : std_logic_vector(15 downto 0);
+   signal inst4_pllcfg_data            : std_logic_vector(143 downto 0);
+   signal inst4_auto_phcfg_smpls       : std_logic_vector(15 downto 0);
+   signal inst4_auto_phcfg_step        : std_logic_vector(15 downto 0);
    
    signal pllcfg_busy                  : std_logic;
    signal pllcfg_done                  : std_logic;
@@ -174,7 +196,7 @@ architecture arch of pll_top is
 begin
 
 -- ----------------------------------------------------------------------------
--- TX PLL instance
+-- TX PLL instance for LMS#1
 -- ----------------------------------------------------------------------------
    inst0_tx_pll_top_cyc5 : entity work.tx_pll_top_cyc5
    generic map(
@@ -206,15 +228,15 @@ begin
    rcnfg_to_pll               => lms1_txpll_rcnfg_to_pll,
    rcnfg_from_pll             => lms1_txpll_rcnfg_from_pll,
    --Dynamic phase shift ports
-   dynps_mode                 => inst2_phcfg_mode, -- 0 - manual, 1 - auto
+   dynps_mode                 => inst4_phcfg_mode, -- 0 - manual, 1 - auto
    dynps_areset_n             => lms1_txpll_logic_reset_n,
-   dynps_en                   => inst2_phcfg_start(0),
-   dynps_tst                  => inst2_phcfg_tst,
-   dynps_dir                  => inst2_phcfg_updn,
-   dynps_cnt_sel              => inst2_cnt_ind(4 downto 0),
+   dynps_en                   => inst4_phcfg_start(0),
+   dynps_tst                  => inst4_phcfg_tst,
+   dynps_dir                  => inst4_phcfg_updn,
+   dynps_cnt_sel              => inst4_cnt_ind(4 downto 0),
    -- max phase steps in auto mode, phase steps to shift in manual mode 
-   dynps_phase                => inst2_cnt_phase(9 downto 0),
-   dynps_step_size            => inst2_auto_phcfg_step(9 downto 0),
+   dynps_phase                => inst4_cnt_phase(9 downto 0),
+   dynps_step_size            => inst4_auto_phcfg_step(9 downto 0),
    dynps_busy                 => open,
    dynps_done                 => inst0_dynps_done,
    dynps_status               => inst0_dynps_status,
@@ -225,7 +247,7 @@ begin
    );
    
 -- ----------------------------------------------------------------------------
--- RX PLL instance
+-- RX PLL instance for LMS#1
 -- ----------------------------------------------------------------------------
    inst1_rx_pll_top_cyc5 : entity work.rx_pll_top_cyc5
    generic map(
@@ -257,15 +279,15 @@ begin
    rcnfg_to_pll               => lms1_rxpll_rcnfg_to_pll,          
    rcnfg_from_pll             => lms1_rxpll_rcnfg_from_pll,        
    --Dynamic phase shift ports
-   dynps_mode                 => inst2_phcfg_mode, -- 0 - manual, 1 - auto
+   dynps_mode                 => inst4_phcfg_mode, -- 0 - manual, 1 - auto
    dynps_areset_n             => lms1_rxpll_logic_reset_n,
-   dynps_en                   => inst2_phcfg_start(1),
-   dynps_tst                  => inst2_phcfg_tst,
-   dynps_dir                  => inst2_phcfg_updn,
-   dynps_cnt_sel              => inst2_cnt_ind(4 downto 0),
+   dynps_en                   => inst4_phcfg_start(1),
+   dynps_tst                  => inst4_phcfg_tst,
+   dynps_dir                  => inst4_phcfg_updn,
+   dynps_cnt_sel              => inst4_cnt_ind(4 downto 0),
    -- max phase steps in auto mode, phase steps to shift in manual mode 
-   dynps_phase                => inst2_cnt_phase(9 downto 0),
-   dynps_step_size            => inst2_auto_phcfg_step(9 downto 0),
+   dynps_phase                => inst4_cnt_phase(9 downto 0),
+   dynps_step_size            => inst4_auto_phcfg_step(9 downto 0),
    dynps_busy                 => open,
    dynps_done                 => inst1_dynps_done,
    dynps_status               => inst1_dynps_status,
@@ -275,46 +297,148 @@ begin
    smpl_cmp_error             => lms1_smpl_cmp_error
    
    );
-
-
-   pllcfg_busy <= inst1_busy OR inst0_busy;
-   pllcfg_done <= not pllcfg_busy;
    
+-- ----------------------------------------------------------------------------
+-- TX PLL instance for LMS#2
+-- ----------------------------------------------------------------------------
+   inst2_tx_pll_top_cyc5 : entity work.tx_pll_top_cyc5
+   generic map(
+      intended_device_family  => INTENDED_DEVICE_FAMILY,
+      drct_c0_ndly            => LMS2_TXPLL_DRCT_C0_NDLY,
+      drct_c1_ndly            => LMS2_TXPLL_DRCT_C1_NDLY,
+      cntsel_width            => 5
+   )
+   port map(
+   free_running_clk           => lms2_txpll_reconfig_clk,
+   --PLL input    
+   pll_inclk                  => lms2_txpll_inclk,
+   pll_areset                 => not lms2_txpll_logic_reset_n,
+   pll_logic_reset_n          => '1',
+   inv_c0                     => '0',
+   c0                         => lms2_txpll_c0, --muxed clock output
+   c1                         => lms2_txpll_c1, --muxed clock output
+   pll_locked                 => inst2_pll_locked,
+   --Bypass control
+   clk_ena                    => lms2_txpll_clk_ena,       --clock output enable
+   drct_clk_en                => lms2_txpll_drct_clk_en,   --1 - Direct clk, 0 - PLL clocks  
+   --Reconfiguration ports
+   rcnfg_mgmt_readdata        => rcnfg_1_mgmt_readdata,	
+   rcnfg_mgmt_waitrequest     => rcnfg_1_mgmt_waitrequest,
+   rcnfg_mgmt_read            => inst2_rcnfg_mgmt_read,
+   rcnfg_mgmt_write           => inst2_rcnfg_mgmt_write,
+   rcnfg_mgmt_address         => inst2_rcnfg_mgmt_address,
+   rcnfg_mgmt_writedata       => inst2_rcnfg_mgmt_writedata,   
+   rcnfg_to_pll               => lms2_txpll_rcnfg_to_pll,
+   rcnfg_from_pll             => lms2_txpll_rcnfg_from_pll,
+   --Dynamic phase shift ports
+   dynps_mode                 => inst4_phcfg_mode, -- 0 - manual, 1 - auto
+   dynps_areset_n             => lms2_txpll_logic_reset_n,
+   dynps_en                   => inst4_phcfg_start(2),
+   dynps_tst                  => inst4_phcfg_tst,
+   dynps_dir                  => inst4_phcfg_updn,
+   dynps_cnt_sel              => inst4_cnt_ind(4 downto 0),
+   -- max phase steps in auto mode, phase steps to shift in manual mode 
+   dynps_phase                => inst4_cnt_phase(9 downto 0),
+   dynps_step_size            => inst4_auto_phcfg_step(9 downto 0),
+   dynps_busy                 => open,
+   dynps_done                 => inst2_dynps_done,
+   dynps_status               => inst2_dynps_status,
+   --signals from sample compare module (required for automatic phase searching)
+   smpl_cmp_en                => inst2_smpl_cmp_en,
+   smpl_cmp_done              => lms2_smpl_cmp_done,
+   smpl_cmp_error             => lms2_smpl_cmp_error
+   );
+
+-- ----------------------------------------------------------------------------
+-- RX PLL instance for LMS#2
+-- ----------------------------------------------------------------------------
+   inst3_rx_pll_top_cyc5 : entity work.rx_pll_top_cyc5
+   generic map(
+      intended_device_family  => INTENDED_DEVICE_FAMILY,
+      drct_c0_ndly            => LMS2_RXPLL_DRCT_C0_NDLY,
+      drct_c1_ndly            => LMS2_RXPLL_DRCT_C1_NDLY,
+      cntsel_width            => 5
+   )
+   port map(
+   free_running_clk           => lms2_rxpll_reconfig_clk,
+   --PLL input
+   pll_inclk                  => lms2_rxpll_inclk,
+   pll_areset                 => not lms2_rxpll_logic_reset_n,
+   pll_logic_reset_n          => '1',
+   inv_c0                     => '0',
+   c0                         => lms2_rxpll_c0, --muxed clock output
+   c1                         => lms2_rxpll_c1, --muxed clock output
+   pll_locked                 => inst3_pll_locked,
+   --Bypass control
+   clk_ena                    => lms2_rxpll_clk_ena,       --clock output enable
+   drct_clk_en                => lms2_rxpll_drct_clk_en,   --1 - Direct clk, 0 - PLL clocks 
+   --Reconfiguration ports
+   rcnfg_mgmt_readdata        => rcnfg_1_mgmt_readdata,	
+   rcnfg_mgmt_waitrequest     => rcnfg_1_mgmt_waitrequest,
+   rcnfg_mgmt_read            => inst3_rcnfg_mgmt_read,
+   rcnfg_mgmt_write           => inst3_rcnfg_mgmt_write,
+   rcnfg_mgmt_address         => inst3_rcnfg_mgmt_address,
+   rcnfg_mgmt_writedata       => inst3_rcnfg_mgmt_writedata,   
+   rcnfg_to_pll               => lms2_rxpll_rcnfg_to_pll,          
+   rcnfg_from_pll             => lms2_rxpll_rcnfg_from_pll,        
+   --Dynamic phase shift ports
+   dynps_mode                 => inst4_phcfg_mode, -- 0 - manual, 1 - auto
+   dynps_areset_n             => lms2_rxpll_logic_reset_n,
+   dynps_en                   => inst4_phcfg_start(3),
+   dynps_tst                  => inst4_phcfg_tst,
+   dynps_dir                  => inst4_phcfg_updn,
+   dynps_cnt_sel              => inst4_cnt_ind(4 downto 0),
+   -- max phase steps in auto mode, phase steps to shift in manual mode 
+   dynps_phase                => inst4_cnt_phase(9 downto 0),
+   dynps_step_size            => inst4_auto_phcfg_step(9 downto 0),
+   dynps_busy                 => open,
+   dynps_done                 => inst3_dynps_done,
+   dynps_status               => inst3_dynps_status,
+   --signals from sample compare module (required for automatic phase searching)
+   smpl_cmp_en                => inst3_smpl_cmp_en,
+   smpl_cmp_done              => lms2_smpl_cmp_done,
+   smpl_cmp_error             => lms2_smpl_cmp_error
    
+   );   
+    
 -- ----------------------------------------------------------------------------
 -- pllcfg_top instance
 -- ----------------------------------------------------------------------------
-   process(pllcfg_busy) 
+   process(pllcfg_busy) --Unused
       begin 
-         inst2_pllcfg_busy <= (others=>'0');
-         inst2_pllcfg_busy(0) <= pllcfg_busy;
+         inst4_pllcfg_busy <= (others=>'0');
    end process;
    
-   process(pllcfg_done) 
+   process(pllcfg_done) --Unused
       begin 
-         inst2_pllcfg_done <= (others=>'1');
-         inst2_pllcfg_done(0) <= pllcfg_done;
+         inst4_pllcfg_done <= (others=>'1');
    end process;
    
    process(inst1_pll_locked, inst0_pll_locked) 
       begin 
-         inst2_pll_lock    <= (others=>'0');
-         inst2_pll_lock(0) <= inst0_pll_locked;
-         inst2_pll_lock(1) <= inst1_pll_locked;
+         inst4_pll_lock    <= (others=>'0');
+         inst4_pll_lock(0) <= inst0_pll_locked;
+         inst4_pll_lock(1) <= inst1_pll_locked;
+         inst4_pll_lock(2) <= inst2_pll_locked;
+         inst4_pll_lock(3) <= inst3_pll_locked;
    end process;
    
    process(inst0_dynps_done, inst1_dynps_done) 
       begin 
-         inst2_auto_phcfg_done <= (others=>'0');
-         inst2_auto_phcfg_done(0) <= inst0_dynps_done;
-         inst2_auto_phcfg_done(1) <= inst1_dynps_done;
+         inst4_auto_phcfg_done <= (others=>'0');
+         inst4_auto_phcfg_done(0) <= inst0_dynps_done;
+         inst4_auto_phcfg_done(1) <= inst1_dynps_done;
+         inst4_auto_phcfg_done(2) <= inst2_dynps_done;
+         inst4_auto_phcfg_done(3) <= inst3_dynps_done;
    end process;
    
    process(inst0_dynps_status) 
       begin 
-         inst2_auto_phcfg_err <= (others=>'1');
-         inst2_auto_phcfg_err(0) <= inst0_dynps_status;
-         inst2_auto_phcfg_err(1) <= inst1_dynps_status;
+         inst4_auto_phcfg_err <= (others=>'1');
+         inst4_auto_phcfg_err(0) <= inst0_dynps_status;
+         inst4_auto_phcfg_err(1) <= inst1_dynps_status;
+         inst4_auto_phcfg_err(2) <= inst2_dynps_status;
+         inst4_auto_phcfg_err(3) <= inst3_dynps_status;         
    end process;
      
 
@@ -326,24 +450,24 @@ begin
       to_pllcfg         => to_pllcfg,
       from_pllcfg       => from_pllcfg,
          -- Status Inputs
-      pllcfg_busy       => inst2_pllcfg_busy,
-      pllcfg_done       => inst2_pllcfg_done,
+      pllcfg_busy       => inst4_pllcfg_busy,
+      pllcfg_done       => inst4_pllcfg_done,
          -- PLL Lock flags
-      pll_lock          => inst2_pll_lock,
+      pll_lock          => inst4_pll_lock,
          -- PLL Configuration Related
-      phcfg_mode        => inst2_phcfg_mode,
-      phcfg_tst         => inst2_phcfg_tst,
-      phcfg_start       => inst2_phcfg_start,   --
-      pllcfg_start      => inst2_pllcfg_start,  --
-      pllrst_start      => inst2_pllrst_start,  --
-      phcfg_updn        => inst2_phcfg_updn,
-      cnt_ind           => inst2_cnt_ind,       --
-      cnt_phase         => inst2_cnt_phase,     --
-      pllcfg_data       => inst2_pllcfg_data,
-      auto_phcfg_done   => inst2_auto_phcfg_done,
-      auto_phcfg_err    => inst2_auto_phcfg_err,
-      auto_phcfg_smpls  => inst2_auto_phcfg_smpls,
-      auto_phcfg_step   => inst2_auto_phcfg_step
+      phcfg_mode        => inst4_phcfg_mode,
+      phcfg_tst         => inst4_phcfg_tst,
+      phcfg_start       => inst4_phcfg_start,   --
+      pllcfg_start      => inst4_pllcfg_start,  --
+      pllrst_start      => inst4_pllrst_start,  --
+      phcfg_updn        => inst4_phcfg_updn,
+      cnt_ind           => inst4_cnt_ind,       --
+      cnt_phase         => inst4_cnt_phase,     --
+      pllcfg_data       => inst4_pllcfg_data,
+      auto_phcfg_done   => inst4_auto_phcfg_done,
+      auto_phcfg_err    => inst4_auto_phcfg_err,
+      auto_phcfg_smpls  => inst4_auto_phcfg_smpls,
+      auto_phcfg_step   => inst4_auto_phcfg_step
         
       );
 -- ----------------------------------------------------------------------------
@@ -352,25 +476,39 @@ begin
 lms1_txpll_locked    <= inst0_pll_locked;
 lms1_rxpll_locked    <= inst1_pll_locked;
 lms1_smpl_cmp_en     <= inst0_smpl_cmp_en OR inst1_smpl_cmp_en;
-lms1_smpl_cmp_cnt    <= inst2_auto_phcfg_smpls;
+lms1_smpl_cmp_cnt    <= inst4_auto_phcfg_smpls;
 
+lms2_txpll_locked    <= inst2_pll_locked;
+lms2_rxpll_locked    <= inst3_pll_locked;
+lms2_smpl_cmp_en     <= inst2_smpl_cmp_en OR inst3_smpl_cmp_en;
+lms2_smpl_cmp_cnt    <= inst4_auto_phcfg_smpls;
 
-lms2_smpl_cmp_cnt       <= inst2_auto_phcfg_smpls;
-
-rcnfg_0_mgmt_read       <= inst1_rcnfg_mgmt_read when (inst2_phcfg_start(1) = '1' AND inst2_phcfg_mode = '1') else 
+rcnfg_0_mgmt_read       <= inst1_rcnfg_mgmt_read when (inst4_phcfg_start(1) = '1' AND inst4_phcfg_mode = '1') else 
                            inst0_rcnfg_mgmt_read;
                            
-rcnfg_0_mgmt_write      <= inst1_rcnfg_mgmt_write when (inst2_phcfg_start(1) = '1' AND inst2_phcfg_mode = '1') else 
+rcnfg_0_mgmt_write      <= inst1_rcnfg_mgmt_write when (inst4_phcfg_start(1) = '1' AND inst4_phcfg_mode = '1') else 
                            inst0_rcnfg_mgmt_write;
                            
 --address range 0 to FF when TX pll and 100 to 1FF when RX pll                              
-rcnfg_0_mgmt_address    <= "100" & inst1_rcnfg_mgmt_address when (inst2_phcfg_start(1) = '1' AND inst2_phcfg_mode = '1') else 
+rcnfg_0_mgmt_address    <= "100" & inst1_rcnfg_mgmt_address when (inst4_phcfg_start(1) = '1' AND inst4_phcfg_mode = '1') else 
                            "000" & inst0_rcnfg_mgmt_address;
                            
-rcnfg_0_mgmt_writedata  <= inst1_rcnfg_mgmt_writedata when (inst2_phcfg_start(1) = '1' AND inst2_phcfg_mode = '1') else 
+rcnfg_0_mgmt_writedata  <= inst1_rcnfg_mgmt_writedata when (inst4_phcfg_start(1) = '1' AND inst4_phcfg_mode = '1') else 
                            inst0_rcnfg_mgmt_writedata;
 
 
+rcnfg_1_mgmt_read       <= inst3_rcnfg_mgmt_read when (inst4_phcfg_start(3) = '1' AND inst4_phcfg_mode = '1') else 
+                           inst2_rcnfg_mgmt_read;
+                           
+rcnfg_1_mgmt_write      <= inst3_rcnfg_mgmt_write when (inst4_phcfg_start(3) = '1' AND inst4_phcfg_mode = '1') else 
+                           inst2_rcnfg_mgmt_write;
+                           
+--address range 0 to FF when TX pll and 100 to 1FF when RX pll                              
+rcnfg_1_mgmt_address    <= "100" & inst3_rcnfg_mgmt_address when (inst4_phcfg_start(3) = '1' AND inst4_phcfg_mode = '1') else 
+                           "000" & inst2_rcnfg_mgmt_address;
+                           
+rcnfg_1_mgmt_writedata  <= inst3_rcnfg_mgmt_writedata when (inst4_phcfg_start(3) = '1' AND inst4_phcfg_mode = '1') else 
+                           inst2_rcnfg_mgmt_writedata;                           
 
 end arch;   
 
