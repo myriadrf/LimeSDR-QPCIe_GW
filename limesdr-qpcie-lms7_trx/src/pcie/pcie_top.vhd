@@ -151,8 +151,8 @@ entity pcie_top is
       F2H_S0_open          : out std_logic;
       F2H_S1_open          : out std_logic;
       F2H_S2_open          : out std_logic
-		
-	);
+      
+   );
 end pcie_top;
 
 -- ----------------------------------------------------------------------------
@@ -201,6 +201,10 @@ architecture arch of pcie_top is
    signal H2F_S0_1_sclrn               : std_logic;
    signal H2F_S0_0_sclrn_reg           : std_logic;
    signal H2F_S0_1_sclrn_reg           : std_logic;
+	signal H2F_S1_0_sclrn               : std_logic;
+   signal H2F_S1_1_sclrn               : std_logic;
+   signal H2F_S2_0_sclrn               : std_logic;
+   signal H2F_S2_1_sclrn               : std_logic;
 
    type demo_mem is array(0 TO 31) of std_logic_vector(7 DOWNTO 0);
    signal demoarray : demo_mem;
@@ -335,62 +339,62 @@ architecture arch of pcie_top is
    
   component xillybus
     port (
-		pcie_perstn 						: IN std_logic;
+      pcie_perstn                   : IN std_logic;
       clk100                        : IN std_logic;
-      pcie_refclk 						: IN std_logic;
-      pcie_rx 								: IN std_logic_vector(3 DOWNTO 0);
-      bus_clk 								: OUT std_logic;
-      pcie_tx 								: OUT std_logic_vector(3 DOWNTO 0);
-      quiesce 								: OUT std_logic;
-      user_led 							: OUT std_logic_vector(3 DOWNTO 0);
-      user_r_control0_read_32_rden 	: OUT std_logic;
+      pcie_refclk                   : IN std_logic;
+      pcie_rx                       : IN std_logic_vector(3 DOWNTO 0);
+      bus_clk                       : OUT std_logic;
+      pcie_tx                       : OUT std_logic_vector(3 DOWNTO 0);
+      quiesce                       : OUT std_logic;
+      user_led                      : OUT std_logic_vector(3 DOWNTO 0);
+      user_r_control0_read_32_rden  : OUT std_logic;
       user_r_control0_read_32_empty : IN std_logic;
-      user_r_control0_read_32_data 	: IN std_logic_vector(31 DOWNTO 0);
-      user_r_control0_read_32_eof 	: IN std_logic;
-      user_r_control0_read_32_open 	: OUT std_logic;
+      user_r_control0_read_32_data  : IN std_logic_vector(31 DOWNTO 0);
+      user_r_control0_read_32_eof   : IN std_logic;
+      user_r_control0_read_32_open  : OUT std_logic;
       user_w_control0_write_32_wren : OUT std_logic;
       user_w_control0_write_32_full : IN std_logic;
       user_w_control0_write_32_data : OUT std_logic_vector(31 DOWNTO 0);
       user_w_control0_write_32_open : OUT std_logic;
-      user_r_mem_8_rden	 				: OUT std_logic;
-      user_r_mem_8_empty 				: IN std_logic;
-      user_r_mem_8_data 				: IN std_logic_vector(7 DOWNTO 0);
-      user_r_mem_8_eof 					: IN std_logic;
-      user_r_mem_8_open 				: OUT std_logic;
-      user_w_mem_8_wren 				: OUT std_logic;
-      user_w_mem_8_full 				: IN std_logic;
-      user_w_mem_8_data 				: OUT std_logic_vector(7 DOWNTO 0);
-      user_w_mem_8_open 				: OUT std_logic;
-      user_mem_8_addr 					: OUT std_logic_vector(4 DOWNTO 0);
-      user_mem_8_addr_update 			: OUT std_logic;
-      user_r_stream0_read_32_rden 	: OUT std_logic;
-      user_r_stream0_read_32_empty 	: IN std_logic;
-      user_r_stream0_read_32_data 	: IN std_logic_vector(31 DOWNTO 0);
-      user_r_stream0_read_32_eof 	: IN std_logic;
-      user_r_stream0_read_32_open 	: OUT std_logic;
-      user_w_stream0_write_32_wren 	: OUT std_logic;
-      user_w_stream0_write_32_full 	: IN std_logic;
-      user_w_stream0_write_32_data 	: OUT std_logic_vector(31 DOWNTO 0);
-      user_w_stream0_write_32_open 	: OUT std_logic;
-      user_r_stream1_read_32_rden 	: OUT std_logic;
-      user_r_stream1_read_32_empty 	: IN std_logic;
-      user_r_stream1_read_32_data 	: IN std_logic_vector(31 DOWNTO 0);
-      user_r_stream1_read_32_eof 	: IN std_logic;
-      user_r_stream1_read_32_open 	: OUT std_logic;
-      user_w_stream1_write_32_wren 	: OUT std_logic;
-      user_w_stream1_write_32_full 	: IN std_logic;
-      user_w_stream1_write_32_data 	: OUT std_logic_vector(31 DOWNTO 0);
-      user_w_stream1_write_32_open 	: OUT std_logic;
-	   user_r_stream2_read_32_rden 	: OUT std_logic;
-      user_r_stream2_read_32_empty 	: IN std_logic;
-      user_r_stream2_read_32_data 	: IN std_logic_vector(31 DOWNTO 0);
-      user_r_stream2_read_32_eof 	: IN std_logic;
-      user_r_stream2_read_32_open 	: OUT std_logic;
-      user_w_stream2_write_32_wren 	: OUT std_logic;
-      user_w_stream2_write_32_full 	: IN std_logic;
-      user_w_stream2_write_32_data 	: OUT std_logic_vector(31 DOWNTO 0);
-      user_w_stream2_write_32_open 	: OUT std_logic		
-		);
+      user_r_mem_8_rden             : OUT std_logic;
+      user_r_mem_8_empty            : IN std_logic;
+      user_r_mem_8_data             : IN std_logic_vector(7 DOWNTO 0);
+      user_r_mem_8_eof              : IN std_logic;
+      user_r_mem_8_open             : OUT std_logic;
+      user_w_mem_8_wren             : OUT std_logic;
+      user_w_mem_8_full             : IN std_logic;
+      user_w_mem_8_data             : OUT std_logic_vector(7 DOWNTO 0);
+      user_w_mem_8_open             : OUT std_logic;
+      user_mem_8_addr               : OUT std_logic_vector(4 DOWNTO 0);
+      user_mem_8_addr_update        : OUT std_logic;
+      user_r_stream0_read_32_rden   : OUT std_logic;
+      user_r_stream0_read_32_empty  : IN std_logic;
+      user_r_stream0_read_32_data   : IN std_logic_vector(31 DOWNTO 0);
+      user_r_stream0_read_32_eof    : IN std_logic;
+      user_r_stream0_read_32_open   : OUT std_logic;
+      user_w_stream0_write_32_wren  : OUT std_logic;
+      user_w_stream0_write_32_full  : IN std_logic;
+      user_w_stream0_write_32_data  : OUT std_logic_vector(31 DOWNTO 0);
+      user_w_stream0_write_32_open  : OUT std_logic;
+      user_r_stream1_read_32_rden   : OUT std_logic;
+      user_r_stream1_read_32_empty  : IN std_logic;
+      user_r_stream1_read_32_data   : IN std_logic_vector(31 DOWNTO 0);
+      user_r_stream1_read_32_eof    : IN std_logic;
+      user_r_stream1_read_32_open   : OUT std_logic;
+      user_w_stream1_write_32_wren  : OUT std_logic;
+      user_w_stream1_write_32_full  : IN std_logic;
+      user_w_stream1_write_32_data  : OUT std_logic_vector(31 DOWNTO 0);
+      user_w_stream1_write_32_open  : OUT std_logic;
+      user_r_stream2_read_32_rden   : OUT std_logic;
+      user_r_stream2_read_32_empty  : IN std_logic;
+      user_r_stream2_read_32_data   : IN std_logic_vector(31 DOWNTO 0);
+      user_r_stream2_read_32_eof    : IN std_logic;
+      user_r_stream2_read_32_open   : OUT std_logic;
+      user_w_stream2_write_32_wren  : OUT std_logic;
+      user_w_stream2_write_32_full  : IN std_logic;
+      user_w_stream2_write_32_data  : OUT std_logic_vector(31 DOWNTO 0);
+      user_w_stream2_write_32_open  : OUT std_logic   
+      );
   end component;
   
   
@@ -405,40 +409,31 @@ begin
    sync_reg1 : entity work.sync_reg 
    port map(bus_clk, H2F_S0_1_aclrn, '1', H2F_S0_1_sclrn); 
    
+   sync_reg2 : entity work.sync_reg 
+   port map(bus_clk, H2F_S1_0_aclrn, '1', H2F_S1_0_sclrn);
    
-   inst2_reset_n <= H2F_S0_0_sclrn;
-   --For Stream endpoint, Host->FPGA
-   inst3_reset_n <= inst1_user_w_stream0_write_32_open OR H2F_S0_1_sclrn;   
-   inst4_reset_n <= inst3_reset_n;
-   --For Control endpoint, Host->FPGA
-   inst5_reset_n <= inst1_user_w_control0_write_32_open;
-
-   inst6_reset_n <= inst1_user_r_stream0_read_32_open;  
-   --For control endpoint, FPGA->Host
-   inst7_reset_n <= inst1_user_r_control0_read_32_open;
-   
-   --For stream endpoint, FPGA->Host
-   inst12_reset_n <= inst1_user_r_stream0_read_32_open;
-   
+   sync_reg3 : entity work.sync_reg 
+   port map(bus_clk, H2F_S1_1_aclrn, '1', H2F_S1_1_sclrn);
+     
 -- ----------------------------------------------------------------------------
 -- Sync registers
 -- ----------------------------------------------------------------------------   
-   sync_reg3 : entity work.sync_reg 
+   sync_reg4 : entity work.sync_reg 
    port map(bus_clk, reset_n, H2F_S0_sel, H2F_S0_sel_sync);
    
-   sync_reg4 : entity work.sync_reg 
+   sync_reg5 : entity work.sync_reg 
    port map(bus_clk, reset_n, H2F_S1_sel, H2F_S1_sel_sync);
    
-   sync_reg5 : entity work.sync_reg 
+   sync_reg6 : entity work.sync_reg 
    port map(bus_clk, reset_n, H2F_S2_sel, H2F_S2_sel_sync);
      
-   sync_reg6 : entity work.sync_reg 
+   sync_reg7 : entity work.sync_reg 
    port map(bus_clk, '1', S0_rx_en, S0_rx_en_sync);
    
-   sync_reg7 : entity work.sync_reg 
+   sync_reg8 : entity work.sync_reg 
    port map(bus_clk, '1', S1_rx_en, S1_rx_en_sync);
    
-   sync_reg8 : entity work.sync_reg 
+   sync_reg9 : entity work.sync_reg 
    port map(bus_clk, '1', S2_rx_en, S2_rx_en_sync);
    
 -- ----------------------------------------------------------------------------
@@ -457,7 +452,7 @@ begin
       -- Ports related to /dev/xillybus_control0_write_32
       -- CPU to FPGA signals:
       user_w_control0_write_32_wren    => inst1_user_w_control0_write_32_wren,
-      user_w_control0_write_32_full    => inst1_user_w_control0_write_32_full,
+      user_w_control0_write_32_full    => inst11_wrfull,
       user_w_control0_write_32_data    => inst1_user_w_control0_write_32_data,
       user_w_control0_write_32_open    => inst1_user_w_control0_write_32_open,
    
@@ -480,8 +475,8 @@ begin
       -- Ports related to /dev/xillybus_stream0_read_32
       -- FPGA to CPU signals:
       user_r_stream0_read_32_rden      => inst1_user_r_stream0_read_32_rden,
-      user_r_stream0_read_32_empty     => inst1_user_r_stream0_read_32_empty,
-      user_r_stream0_read_32_data      => inst1_user_r_stream0_read_32_data,
+      user_r_stream0_read_32_empty     => inst12_rdempty,
+      user_r_stream0_read_32_data      => inst12_q,
       user_r_stream0_read_32_eof       => inst1_user_r_stream0_read_32_eof,
       user_r_stream0_read_32_open      => inst1_user_r_stream0_read_32_open,
    
@@ -495,8 +490,8 @@ begin
       -- Ports related to /dev/xillybus_stream1_read_32
       -- FPGA to CPU signals:
       user_r_stream1_read_32_rden      => inst1_user_r_stream1_read_32_rden,
-      user_r_stream1_read_32_empty     => inst1_user_r_stream1_read_32_empty,
-      user_r_stream1_read_32_data      => inst1_user_r_stream1_read_32_data,
+      user_r_stream1_read_32_empty     => inst13_rdempty,
+      user_r_stream1_read_32_data      => inst13_q,
       user_r_stream1_read_32_eof       => inst1_user_r_stream1_read_32_eof,
       user_r_stream1_read_32_open      => inst1_user_r_stream1_read_32_open,
    
@@ -510,8 +505,8 @@ begin
       -- Ports related to /dev/xillybus_stream2_read_32
       -- FPGA to CPU signals:
       user_r_stream2_read_32_rden      => inst1_user_r_stream2_read_32_rden,
-      user_r_stream2_read_32_empty     => inst1_user_r_stream2_read_32_empty,
-      user_r_stream2_read_32_data      => inst1_user_r_stream2_read_32_data,
+      user_r_stream2_read_32_empty     => inst14_rdempty,
+      user_r_stream2_read_32_data      => inst14_q,
       user_r_stream2_read_32_eof       => inst1_user_r_stream2_read_32_eof,
       user_r_stream2_read_32_open      => inst1_user_r_stream2_read_32_open,
    
@@ -535,6 +530,10 @@ begin
    
    
    pcie_bus_clk<=bus_clk;
+	
+	inst1_user_w_stream0_write_32_full <= inst2_wrfull when H2F_S0_sel_sync = '0' else inst4_wrfull;
+	inst1_user_w_stream1_write_32_full <= inst5_wrfull when H2F_S0_sel_sync = '0' else inst7_wrfull;
+	inst1_user_w_stream2_write_32_full <= inst8_wrfull when H2F_S0_sel_sync = '0' else inst10_wrfull;
    
 -- ----------------------------------------------------------------------------
 --  A simple inferred RAM for Xillybus
@@ -561,6 +560,7 @@ begin
 -- For Stream S0 endpoint, Host->FPGA
 -- There are two FIFO buffers for this endpoint. Buffer is selected with H2F_S0_0_sel
 -- ----------------------------------------------------------------------------
+   inst2_reset_n  <= H2F_S0_0_sclrn;
    inst2_wrreq    <= inst1_user_w_stream0_write_32_wren when H2F_S0_sel_sync = '0' else '0';
  
    -- First FIFO, dedicated for TX stream
@@ -592,7 +592,10 @@ begin
       rdusedw     => H2F_S0_0_rdusedw   
    );
    
-   inst3_pct_wr    <= inst1_user_w_stream0_write_32_wren when H2F_S0_sel_sync = '1' else '0'; 
+   --For Stream endpoint, Host->FPGA
+   inst3_reset_n  <= inst1_user_w_stream0_write_32_open OR H2F_S0_1_sclrn;  
+   inst3_pct_wr   <= inst1_user_w_stream0_write_32_wren when H2F_S0_sel_sync = '1' else '0'; 
+   
    -- This module takes only IQ data from packet, and discards packet header
    pct_payload_extrct_inst3 : entity work.pct_payload_extrct
    generic map(
@@ -611,6 +614,8 @@ begin
    );
    
    -- Second FIFO, dedicated for WFM player
+   inst4_reset_n <= inst3_reset_n;
+   
    inst4_H2F_S0_1_FIFO : entity work.fifo_inst 
    generic map(
       dev_family     => g_DEV_FAMILY,
@@ -635,11 +640,12 @@ begin
       rdempty  => H2F_S0_1_rempty,
       rdusedw  => H2F_S0_1_rdusedw   
    );
-			
+   
 -- ----------------------------------------------------------------------------
 -- For Stream S1 endpoint, Host->FPGA
 -- There are two FIFO buffers for this endpoint. Buffer is selected with H2F_S1_0_sel
 -- ----------------------------------------------------------------------------
+   inst5_reset_n  <= H2F_S1_0_sclrn;
    inst5_wrreq    <= inst1_user_w_stream1_write_32_wren when H2F_S1_sel_sync = '0' else '0';
  
    -- First FIFO, dedicated for TX stream
@@ -671,7 +677,9 @@ begin
       rdusedw     => H2F_S1_0_rdusedw   
    );
    
-   inst6_pct_wr    <= inst1_user_w_stream1_write_32_wren when H2F_S1_sel_sync = '1' else '0'; 
+   inst6_reset_n  <= inst1_user_w_stream1_write_32_open OR H2F_S1_1_sclrn;
+   inst6_pct_wr   <= inst1_user_w_stream1_write_32_wren when H2F_S1_sel_sync = '1' else '0'; 
+   
    -- This module takes only IQ data from packet, and discards packet header
    pct_payload_extrct_inst6 : entity work.pct_payload_extrct
    generic map(
@@ -688,6 +696,8 @@ begin
       pct_payload_valid => inst6_pct_payload_valid,
       pct_payload_dest  => open
    );
+   
+   inst7_reset_n <= inst1_user_w_stream1_write_32_open OR H2F_S1_1_sclrn;
    
    -- Second FIFO, dedicated for WFM player
    inst7_H2F_S1_1_FIFO : entity work.fifo_inst 
@@ -719,6 +729,7 @@ begin
 -- For Stream S2 endpoint, Host->FPGA
 -- There are two FIFO buffers for this endpoint. Buffer is selected with H2F_S2_0_sel
 -- ----------------------------------------------------------------------------
+   inst8_reset_n  <= H2F_S2_0_sclrn;
    inst8_wrreq    <= inst1_user_w_stream2_write_32_wren when H2F_S2_sel_sync = '0' else '0';
  
    -- First FIFO, dedicated for TX stream
@@ -750,7 +761,9 @@ begin
       rdusedw     => H2F_S2_0_rdusedw   
    );
    
-   inst9_pct_wr    <= inst1_user_w_stream2_write_32_wren when H2F_S2_sel_sync = '1' else '0'; 
+   inst9_reset_n  <= inst1_user_w_stream2_write_32_open OR H2F_S2_1_sclrn;
+   inst9_pct_wr   <= inst1_user_w_stream2_write_32_wren when H2F_S2_sel_sync = '1' else '0'; 
+   
    -- This module takes only IQ data from packet, and discards packet header
    pct_payload_extrct_inst9 : entity work.pct_payload_extrct
    generic map(
@@ -768,6 +781,7 @@ begin
       pct_payload_dest  => open
    );
    
+   inst10_reset_n <= inst1_user_w_stream2_write_32_open OR H2F_S2_1_sclrn;
    -- Second FIFO, dedicated for WFM player
    inst10_H2F_S2_1_FIFO : entity work.fifo_inst 
    generic map(
@@ -825,6 +839,8 @@ begin
 -- ----------------------------------------------------------------------------
 -- For S0 stream endpoint, FPGA->Host
 -- ---------------------------------------------------------------------------- 
+   inst12_reset_n <= inst1_user_r_stream0_read_32_open;
+   
    inst12_F2H_S0_FIFO : entity work.fifo_inst 
    generic map(
       dev_family     => g_DEV_FAMILY,
@@ -852,7 +868,9 @@ begin
    
 -- ----------------------------------------------------------------------------
 -- For S1 stream endpoint, FPGA->Host
--- ---------------------------------------------------------------------------- 
+-- ----------------------------------------------------------------------------
+   inst13_reset_n <= inst1_user_r_stream1_read_32_open;
+
    inst13_F2H_S1_FIFO : entity work.fifo_inst 
    generic map(
       dev_family     => g_DEV_FAMILY,
@@ -881,7 +899,9 @@ begin
 -- ----------------------------------------------------------------------------
 -- For S2 stream endpoint, FPGA->Host
 -- ---------------------------------------------------------------------------- 
-   inst14_F2H_S1_FIFO : entity work.fifo_inst 
+   inst14_reset_n <= inst1_user_r_stream2_read_32_open;
+   
+   inst14_F2H_S2_FIFO : entity work.fifo_inst 
    generic map(
       dev_family     => g_DEV_FAMILY,
       wrwidth        => g_F2H_S2_WWIDTH,
@@ -940,7 +960,7 @@ begin
    F2H_S0_open <= inst1_user_r_stream0_read_32_open;
    F2H_S1_open <= inst1_user_r_stream1_read_32_open;
    F2H_S2_open <= inst1_user_r_stream2_read_32_open;
-		
+   
 end arch;
 
 
