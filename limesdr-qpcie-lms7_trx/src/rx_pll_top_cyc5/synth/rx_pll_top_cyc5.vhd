@@ -214,7 +214,7 @@ process(free_running_clk, pll_logic_reset_n)
  
  
 ----------------------------------------------------------------------------
-   -- Global clock controll block
+   -- Global clock control block
 ----------------------------------------------------------------------------
    clkctrl_c5_inst0 : clkctrl_c5
    port map(

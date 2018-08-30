@@ -95,8 +95,11 @@ entity pll_top is
       pll_0_inclk                   : in  std_logic;
       pll_0_rcnfg_to_pll            : in  std_logic_vector(63 downto 0);
       pll_0_rcnfg_from_pll          : out std_logic_vector(63 downto 0);
+      pll_0_logic_reset_n           : in  std_logic;
       pll_0_c0                      : out std_logic;
+      pll_0_c0_pin                  : out std_logic;
       pll_0_c1                      : out std_logic;
+      pll_0_c1_pin                  : out std_logic;
       pll_0_locked                  : out std_logic;
          --Reconfiguration  0 ports
       rcnfg_0_mgmt_readdata         : in  std_logic_vector(31 downto 0);		
@@ -400,7 +403,23 @@ begin
    smpl_cmp_error             => lms2_smpl_cmp_error
    
    );   
-    
+   
+   adc_dac_pll_top_inst6 : entity work.adc_dac_pll_top
+   generic map(
+      intended_device_family  => INTENDED_DEVICE_FAMILY
+   )
+   port map(
+      pll_inclk            => pll_0_inclk,
+      pll_rcnfg_to_pll     => pll_0_rcnfg_to_pll,
+      pll_rcnfg_from_pll   => pll_0_rcnfg_from_pll,
+      pll_areset_n         => pll_0_logic_reset_n,
+      pll_c0               => pll_0_c0,
+      pll_c0_pin           => pll_0_c0_pin,            
+      pll_c1               => pll_0_c1,
+      pll_c1_pin           => pll_0_c1_pin, 
+      pll_locked           => pll_0_locked
+   );
+   
 -- ----------------------------------------------------------------------------
 -- pllcfg_top instance
 -- ----------------------------------------------------------------------------
