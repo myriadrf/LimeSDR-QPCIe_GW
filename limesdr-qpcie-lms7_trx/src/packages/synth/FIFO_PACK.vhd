@@ -1,11 +1,14 @@
--- ----------------------------------------------------------------------------	
--- FILE: 	FIFO_PACK.vhd
--- DESCRIPTION:	Package for functions related to altera FIFO
--- DATE:	June 8, 2017
--- AUTHOR(s):	Lime Microsystems
+-- ----------------------------------------------------------------------------
+-- FILE:          FIFO_PACK.vhd
+-- DESCRIPTION:   Package for functions related to altera FIFO
+-- DATE:          12:29 PM Wednesday, August 29, 2018
+-- AUTHOR(s):     Lime Microsystems
 -- REVISIONS:
 -- ----------------------------------------------------------------------------
 
+-- ----------------------------------------------------------------------------
+--NOTES:
+-- ----------------------------------------------------------------------------
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
@@ -24,7 +27,39 @@ package FIFO_PACK is
       
    function FIFO_WORDS_TO_Nbits (n_words : integer; add_msb : boolean)
       return integer;
-      
+   
+   -- Outputs from the FIFO.
+   type t_FROM_FIFO is record
+      wrfull   : std_logic;          -- Write full flag
+      wrempty  : std_logic;          -- Write empty flag
+      wrusedw  : std_logic_vector(31 downto 0);    -- Write used words 
+      q        : std_logic_vector(255 downto 0);   -- Read data
+      rdempty  : std_logic;          -- Read empty flag
+      rdusedw  : std_logic_vector(31 downto 0);
+   end record t_FROM_FIFO; 
+
+   -- Inputs to the FIFO.
+   type t_TO_FIFO is record
+      wrreq    : std_logic;         -- Write request
+      data     : std_logic_vector(255 downto 0);  -- Write data
+      rdreq    : std_logic;         -- Read request
+   end record t_TO_FIFO;
+   
+   -- Initialize FIFO ports with constants
+   constant c_FROM_FIFO_INIT : t_FROM_FIFO := ( wrfull   => '0',
+                                                wrempty  => '1',
+                                                wrusedw  => (others=> '0'),
+                                                q        => (others=> '0'),
+                                                rdempty  => '1',
+                                                rdusedw  => (others => '0')
+                                                );
+                                                
+   constant c_TO_FIFO_INIT : t_TO_FIFO := (  wrreq => '0',
+                                             data  => (others=> '0'),
+                                             rdreq => '0'
+                                             );                                               
+
+   
 end  FIFO_PACK;
 
 -- ----------------------------------------------------------------------------
