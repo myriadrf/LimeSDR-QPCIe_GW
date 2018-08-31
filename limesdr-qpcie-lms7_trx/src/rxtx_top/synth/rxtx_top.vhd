@@ -57,23 +57,18 @@ entity rxtx_top is
       tx_in_pct_data          : in     std_logic_vector(TX_IN_PCT_DATA_W-1 downto 0);
       tx_in_pct_rdempty       : in     std_logic;
       tx_in_pct_rdusedw       : in     std_logic_vector(TX_IN_PCT_RDUSEDW_W-1 downto 0);
-       
       -- RX path
       rx_clk                  : in     std_logic;
       rx_clk_reset_n          : in     std_logic;
-         --Rx interface data 
-      rx_DIQ                  : in     std_logic_vector(RX_IQ_WIDTH-1 downto 0);
-      rx_fsync                : in     std_logic;
-         --Packet fifo ports
+         --RX Sample FIFO ports
+      rx_smpl_fifo_wrreq      : in     std_logic;
+      rx_smpl_fifo_data       : in     std_logic_vector(RX_IQ_WIDTH*4-1 downto 0);
+      rx_smpl_fifo_wrfull     : out    std_logic;   
+         --RX Packet FIFO ports
       rx_pct_fifo_aclrn_req   : out    std_logic;
       rx_pct_fifo_wusedw      : in     std_logic_vector(RX_PCT_BUFF_WRUSEDW_W-1 downto 0);
       rx_pct_fifo_wrreq       : out    std_logic;
-      rx_pct_fifo_wdata       : out    std_logic_vector(63 downto 0);
-         --sample compare
-      rx_smpl_cmp_start       : in     std_logic;
-      rx_smpl_cmp_length      : in     std_logic_vector(15 downto 0);
-      rx_smpl_cmp_done        : out    std_logic;
-      rx_smpl_cmp_err         : out    std_logic      
+      rx_pct_fifo_wdata       : out    std_logic_vector(63 downto 0)
       );
 end rxtx_top;
 
@@ -275,11 +270,10 @@ begin
       mimo_en              => from_fpgacfg.mimo_int_en,    -- SISO: 1; MIMO: 0
       ch_en                => from_fpgacfg.ch_en(1 downto 0),      --"01" - Ch. A, "10" - Ch. B, "11" - Ch. A and Ch. B. 
       fidm                 => '0',       -- Frame start at fsync = 0, when 0. Frame start at fsync = 1, when 1.
-      --Rx interface data 
-      DIQ                  => rx_DIQ,
-      fsync                => rx_fsync,
-      --samples
-      smpl_fifo_wrreq_out  => open,
+      --Rx interface data
+      smpl_fifo_wrreq      => rx_smpl_fifo_wrreq,
+      smpl_fifo_data       => rx_smpl_fifo_data,
+      smpl_fifo_wrfull     => rx_smpl_fifo_wrfull,
       --Packet fifo ports 
       pct_fifo_wusedw      => rx_pct_fifo_wusedw,
       pct_fifo_wrreq       => rx_pct_fifo_wrreq,
@@ -292,12 +286,7 @@ begin
       smpl_nr_cnt          => inst5_smpl_nr_cnt,
       --flag control
       tx_pct_loss          => inst1_pct_loss_flg,
-      tx_pct_loss_clr      => from_fpgacfg.txpct_loss_clr,
-      --sample compare
-      smpl_cmp_start       => rx_smpl_cmp_start,
-      smpl_cmp_length      => rx_smpl_cmp_length,
-      smpl_cmp_done        => rx_smpl_cmp_done,
-      smpl_cmp_err         => rx_smpl_cmp_err
+      tx_pct_loss_clr      => from_fpgacfg.txpct_loss_clr
    );
    
 -- ----------------------------------------------------------------------------

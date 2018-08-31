@@ -32,12 +32,11 @@ entity rx_path_top is
       mimo_en              : in std_logic; -- SISO: 1; MIMO: 0
       ch_en                : in std_logic_vector(1 downto 0); --"01" - Ch. A, "10" - Ch. B, "11" - Ch. A and Ch. B. 
       fidm                 : in std_logic; -- External Frame ID mode. Frame start at fsync = 0, when 0. Frame start at fsync = 1, when 1.
-      --Rx interface data 
-      DIQ                  : in std_logic_vector(iq_width-1 downto 0);
-      fsync                : in std_logic;
-      --samples
-      smpl_fifo_wrreq_out  : out std_logic;
-      --Packet fifo ports 
+      --RX FIFO for IQ samples
+      smpl_fifo_wrreq      : in std_logic;
+      smpl_fifo_data       : in std_logic_vector(iq_width*4-1 downto 0);
+      smpl_fifo_wrfull     : out std_logic;
+      --Packet FIFO ports 
       pct_fifo_wusedw      : in std_logic_vector(pct_buff_wrusedw_w-1 downto 0);
       pct_fifo_wrreq       : out std_logic;
       pct_fifo_wdata       : out std_logic_vector(63 downto 0);
@@ -49,12 +48,7 @@ entity rx_path_top is
       smpl_nr_cnt          : out std_logic_vector(63 downto 0);
       --flag control
       tx_pct_loss          : in std_logic;
-      tx_pct_loss_clr      : in std_logic;
-      --sample compare
-      smpl_cmp_start       : in std_logic;
-      smpl_cmp_length      : in std_logic_vector(15 downto 0);
-      smpl_cmp_done        : out std_logic;
-      smpl_cmp_err         : out std_logic
+      tx_pct_loss_clr      : in std_logic
      
    );
 end rx_path_top;
@@ -64,8 +58,6 @@ end rx_path_top;
 -- ----------------------------------------------------------------------------
 architecture arch of rx_path_top is
 --declare signals,  components here
-
-
 --sync registers
 signal test_ptrn_en_sync      : std_logic;
 signal reset_n_sync           : std_logic;
@@ -81,11 +73,6 @@ signal fidm_sync              : std_logic;
 signal clr_smpl_nr_sync       : std_logic;
 signal ld_smpl_nr_sync        : std_logic;
 signal smpl_nr_in_sync        : std_logic_vector(63 downto 0);	
-
-signal smpl_cmp_start_sync    : std_logic;
-signal smpl_cmp_length_sync   : std_logic_vector(15 downto 0);
-
-
 
 --inst0 
 signal inst0_fifo_wrreq       : std_logic;
@@ -109,11 +96,7 @@ signal delay_chain   : my_array;
 signal tx_pct_loss_detect     : std_logic;
 
 
-
-
-
 begin
-
 
 sync_reg0 : entity work.sync_reg 
 port map(clk, '1', reset_n, reset_n_sync);
@@ -148,10 +131,6 @@ port map(clk, '1', ld_smpl_nr, ld_smpl_nr_sync);
 sync_reg10 : entity work.sync_reg 
 port map(clk, '1', test_ptrn_en, test_ptrn_en_sync);
 
-sync_reg11 : entity work.sync_reg 
-port map(clk, '1', smpl_cmp_start, smpl_cmp_start_sync);
-
-
 bus_sync_reg0 : entity work.bus_sync_reg
 generic map (2)
 port map(clk, '1', sample_width, sample_width_sync);
@@ -164,52 +143,7 @@ bus_sync_reg2 : entity work.bus_sync_reg
 generic map (64)
 port map(clk, '1', smpl_nr_in, smpl_nr_in_sync);
 
-bus_sync_reg3 : entity work.bus_sync_reg
-generic map (16)
-port map(clk, '1', smpl_cmp_length, smpl_cmp_length_sync);
-
-
-
-
-
--- ----------------------------------------------------------------------------
--- diq2fifo instance
--- ----------------------------------------------------------------------------
-diq2fifo_inst0 : entity work.diq2fifo
-   generic map( 
-      dev_family           => dev_family,
-      iq_width             => iq_width,
-      invert_input_clocks  => invert_input_clocks
-      )
-   port map(
-      clk               => clk,
-      reset_n           => reset_n_sync,
-      --Mode settings
-      test_ptrn_en      => test_ptrn_en_sync,
-      mode              => mode_sync, -- JESD207: 1; TRXIQ: 0
-      trxiqpulse        => trxiqpulse_sync, -- trxiqpulse on: 1; trxiqpulse off: 0
-      ddr_en            => ddr_en_sync, -- DDR: 1; SDR: 0
-      mimo_en           => mimo_en_sync, -- SISO: 1; MIMO: 0
-      ch_en             => ch_en_sync, --"01" - Ch. A, "10" - Ch. B, "11" - Ch. A and Ch. B. 
-      fidm              => fidm_sync, -- External Frame ID mode. Frame start at fsync = 0, when 0. Frame start at fsync = 1, when 1.
-      --Rx interface data 
-      DIQ               => DIQ,
-      fsync             => fsync,
-      --fifo ports 
-      fifo_wfull        => inst1_wrfull,
-      fifo_wrreq        => inst0_fifo_wrreq,
-      fifo_wdata        => inst0_fifo_wdata, 
-      smpl_cmp_start    => smpl_cmp_start_sync,
-      smpl_cmp_length   => smpl_cmp_length_sync,
-      smpl_cmp_done     => smpl_cmp_done,
-      smpl_cmp_err      => smpl_cmp_err
-        );
-        
-        
-smpl_fifo_wrreq_out <= inst0_fifo_wrreq; 
-        
-               
--- ----------------------------------------------------------------------------
+----------------------------------------------------------------------------
 -- FIFO for storing samples
 -- ----------------------------------------------------------------------------       
 smpl_fifo_inst1 : entity work.fifo_inst
@@ -226,9 +160,9 @@ smpl_fifo_inst1 : entity work.fifo_inst
       --input ports 
       reset_n        => reset_n_sync,
       wrclk          => clk,
-      wrreq          => inst0_fifo_wrreq,
-      data           => inst0_fifo_wdata,
-      wrfull         => inst1_wrfull,
+      wrreq          => smpl_fifo_wrreq,
+      data           => smpl_fifo_data,
+      wrfull         => smpl_fifo_wrfull,
       wrempty        => open,
       wrusedw        => open,
       rdclk          => clk,
@@ -317,7 +251,7 @@ smpl_cnt_inst4 : entity work.smpl_cnt
       sclr        => clr_smpl_nr_sync,
       sload       => ld_smpl_nr_sync,
       data        => smpl_nr_in_sync,
-      cnt_en      => inst0_fifo_wrreq,
+      cnt_en      => smpl_fifo_wrreq,
       q           => smpl_nr_cnt        
         );
         
