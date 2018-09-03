@@ -53,12 +53,11 @@ entity packets2data_top is
       in_pct_clr_flag   : out std_logic;
       in_pct_buff_rdy   : out std_logic_vector(n_buff-1 downto 0);
       
-      smpl_buff_rdempty : out std_logic;
-      smpl_buff_wrfull  : out std_logic;
-      smpl_buff_q       : out std_logic_vector(out_pct_data_w-1 downto 0);
-      smpl_buff_rdreq   : in std_logic
-      
-        );
+      smpl_fifo_wrreq   : out std_logic;
+      smpl_fifo_wrfull  : in  std_logic;
+      smpl_fifo_wrusedw : in  std_logic_vector(decomp_fifo_size-1 downto 0);
+      smpl_fifo_data    : out std_logic_vector(127 downto 0)
+   );
 end packets2data_top;
 
 -- ----------------------------------------------------------------------------
@@ -102,15 +101,14 @@ begin
    if reset_n = '0' then 
       fifo_full_sig <= '0';
    elsif (rclk'event AND rclk='1') then 
-      if unsigned(inst2_wrusedw) > fifo_limit then
+      --if unsigned(inst2_wrusedw) > fifo_limit then
+      if unsigned(smpl_fifo_wrusedw) > fifo_limit then
          fifo_full_sig <= '1';
       else
          fifo_full_sig <= '0';
       end if;
    end if;
 end process;
-
-smpl_buff_wrfull <= fifo_full_sig;
 
 
   packets2data_inst0 : entity work.packets2data
@@ -165,32 +163,9 @@ bit_unpack_64_inst1 : entity work.bit_unpack_64
         data_out_valid  => inst1_data_out_valid
         );
         
-        
-   fifo_inst_isnt2 : entity work.fifo_inst
-      generic map(
-         dev_family	    => dev_family,
-         wrwidth         => 128,
-         wrusedw_witdth  => decomp_fifo_size,
-         rdwidth         => out_pct_data_w,
-         rdusedw_width   => decomp_fifo_size+1,
-         show_ahead      => "OFF"
-      ) 
-      port map(
-         --input ports 
-         reset_n       => reset_n,
-         wrclk         => rclk,
-         wrreq         => inst1_data_out_valid,
-         data          => inst1_data_out,
-         wrfull        => open,
-         wrempty		  => open,
-         wrusedw       => inst2_wrusedw,
-         rdclk 	     => rclk,
-         rdreq         => smpl_buff_rdreq,
-         q             => smpl_buff_q,
-         rdempty       => smpl_buff_rdempty,
-         rdusedw       => open          
-         );
   
+smpl_fifo_wrreq   <= inst1_data_out_valid;   
+smpl_fifo_data    <= inst1_data_out;
   
   
 end arch;   

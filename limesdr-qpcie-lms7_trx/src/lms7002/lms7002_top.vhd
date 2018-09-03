@@ -21,9 +21,11 @@ use work.tstcfg_pkg.all;
 -- ----------------------------------------------------------------------------
 entity lms7002_top is
    generic(
-      g_DEV_FAMILY      : string := "Cyclone IV E";
-      g_IQ_WIDTH        : integer := 12;
-      g_INV_INPUT_CLK   : string := "ON"
+      g_DEV_FAMILY            : string := "Cyclone IV E";
+      g_IQ_WIDTH              : integer := 12;
+      g_INV_INPUT_CLK         : string := "ON";
+      g_TX_SMPL_FIFO_WRUSEDW  : integer := 9;
+      g_TX_SMPL_FIFO_DATAW    : integer := 128
    );
    port (  
       from_fpgacfg      : in  t_FROM_FPGACFG;
@@ -51,8 +53,9 @@ entity lms7002_top is
       tx_diq_h          : in  std_logic_vector(g_IQ_WIDTH downto 0);
       tx_diq_l          : in  std_logic_vector(g_IQ_WIDTH downto 0);
       tx_wrfull         : out std_logic;
+      tx_wrusedw        : out std_logic_vector(g_TX_SMPL_FIFO_WRUSEDW-1 downto 0);
       tx_wrreq          : in  std_logic;
-      tx_data           : in  std_logic_vector(g_IQ_WIDTH*4-1 downto 0);
+      tx_data           : in  std_logic_vector(g_TX_SMPL_FIFO_DATAW-1 downto 0);
       -- Internal RX ports
       rx_reset_n        : in  std_logic;
       rx_diq_h          : out std_logic_vector(g_IQ_WIDTH downto 0);
@@ -123,47 +126,45 @@ inst0_diq2fifo : entity work.diq2fifo
    
 -- ----------------------------------------------------------------------------
 -- TX interface
--- ----------------------------------------------------------------------------  
-   -- TX MUX 
-   inst2_txiqmux : entity work.txiqmux
-   generic map(
-      diq_width   => g_IQ_WIDTH
-   )
-   port map(
-      clk               => MCLK1,
-      reset_n           => tx_reset_n,
-      test_ptrn_en      => from_fpgacfg.tx_ptrn_en,   -- Enables test pattern
-      test_ptrn_fidm    => '0',   -- External Frame ID mode. Frame start at fsync = 0, when 0. Frame start at fsync = 1, when 1.
-      test_ptrn_I       => from_tstcfg.TX_TST_I,
-      test_ptrn_Q       => from_tstcfg.TX_TST_Q,
-      test_data_en      => from_fpgacfg.tx_cnt_en,
-      test_data_mimo_en => '1',
-      mux_sel           => from_fpgacfg.wfm_play,   -- Mux select: 0 - tx, 1 - wfm
-      tx_diq_h          => (others => '0'),
-      tx_diq_l          => (others => '0'),
-      wfm_diq_h         => (others => '0'),
-      wfm_diq_l         => (others => '0'),
-      diq_h             => inst2_diq_h,
-      diq_l             => inst2_diq_l
-   );
-   
-   -- lms7002_ddout instance. Double data rate cells
-   inst3_lms7002_ddout : entity work.lms7002_ddout
+-- ---------------------------------------------------------------------------- 
+inst1_lms7002_tx : entity work.lms7002_tx
    generic map( 
-      dev_family     => g_DEV_FAMILY,
-      iq_width       => g_IQ_WIDTH
-   )
+      g_DEV_FAMILY         => g_DEV_FAMILY,
+      g_IQ_WIDTH           => g_IQ_WIDTH,
+      g_SMPL_FIFO_WRUSEDW  => g_TX_SMPL_FIFO_WRUSEDW,
+      g_SMPL_FIFO_DATAW    => g_TX_SMPL_FIFO_DATAW
+      )
    port map(
-      --input ports 
-      clk            => MCLK1,
-      reset_n        => tx_reset_n,
-      data_in_h      => inst2_diq_h,
-      data_in_l      => inst2_diq_l,
-      --output ports 
-      txiq           => DIQ1,
-      txiqsel        => ENABLE_IQSEL1
-   ); 
- 
+      clk                  => MCLK1,
+      reset_n              => tx_reset_n,
+      --Mode settings
+      mode                 => from_fpgacfg.mode,-- JESD207: 1; TRXIQ: 0
+      trxiqpulse           => from_fpgacfg.trxiq_pulse,-- trxiqpulse on: 1; trxiqpulse off: 0
+      ddr_en               => from_fpgacfg.ddr_en,-- DDR: 1; SDR: 0
+      mimo_en              => from_fpgacfg.mimo_int_en,-- SISO: 1; MIMO: 0
+      ch_en                => from_fpgacfg.ch_en(1 downto 0), --"01" - Ch. A, "10" - Ch. B, "11" - Ch. A and Ch. B. 
+      fidm                 => '0', -- Frame start at fsync = 0, when 0. Frame start at fsync = 1, when 1.
+      --TX testing
+      test_ptrn_en         => from_fpgacfg.tx_ptrn_en,
+      test_ptrn_I          => from_tstcfg.TX_TST_I,
+      test_ptrn_Q          => from_tstcfg.TX_TST_Q,
+      test_cnt_en          => from_fpgacfg.tx_cnt_en,
+      txant_en             => open,                 
+      --Tx interface data 
+      DIQ                  => DIQ1,
+      fsync                => ENABLE_IQSEL1,
+      -- Source select
+      tx_src_sel           => from_fpgacfg.wfm_play,  -- 0 - FIFO, 1 - diq_h/diq_l
+      --TX sample FIFO ports 
+      fifo_wrreq           => tx_wrreq,
+      fifo_data            => tx_data,
+      fifo_wrfull          => tx_wrfull,
+      fifo_wrusedw         => tx_wrusedw,
+      --TX sample ports (direct access to DDR cells)
+      diq_h                => tx_diq_h,
+      diq_l                => tx_diq_l
+   );
+      
 -- ----------------------------------------------------------------------------
 -- Output ports
 -- ---------------------------------------------------------------------------- 

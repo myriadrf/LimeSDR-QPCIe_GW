@@ -56,10 +56,10 @@ entity tx_path_top is
       fidm                 : in std_logic; -- External Frame ID mode. Frame start at fsync = 0, when 0. Frame start at fsync = 1, when 1.
       sample_width         : in std_logic_vector(1 downto 0); --"10"-12bit, "01"-14bit, "00"-16bit;
       --Tx interface data 
-      DIQ                  : out std_logic_vector(iq_width-1 downto 0);
-      fsync                : out std_logic;
-      DIQ_h                : out std_logic_vector(iq_width downto 0);
-      DIQ_l                : out std_logic_vector(iq_width downto 0);
+      smpl_fifo_wrreq      : out    std_logic;    
+      smpl_fifo_wrfull     : in     std_logic;
+      smpl_fifo_wrusedw    : in     std_logic_vector(decomp_fifo_size-1 downto 0);
+      smpl_fifo_data       : out    std_logic_vector(127 downto 0);  
       --fifo ports
       in_pct_reset_n_req   : out std_logic;
       in_pct_rdreq         : out std_logic;
@@ -318,55 +318,15 @@ generic map(
       in_pct_clr_flag   => inst0_in_pct_clr_flag,
       in_pct_buff_rdy   => inst0_in_pct_buff_rdy,
       
-      smpl_buff_rdempty => inst0_smpl_buff_rdempty,
-      smpl_buff_wrfull  => inst0_smpl_buff_wrfull,
-      smpl_buff_q       => inst0_smpl_buff_q,    
-      smpl_buff_rdreq   => inst1_fifo_rdreq
-        );
+      smpl_fifo_wrreq   => smpl_fifo_wrreq,
+      smpl_fifo_wrfull  => smpl_fifo_wrfull,
+      smpl_fifo_wrusedw => smpl_fifo_wrusedw,
+      smpl_fifo_data    => smpl_fifo_data
+   );
         
-        
-pct_rdy_combined_vect <= inst0_in_pct_buff_rdy & inst0_smpl_buff_wrfull;
-        
+   pct_rdy_combined_vect <= inst0_in_pct_buff_rdy & smpl_fifo_wrfull;      
                
--- ----------------------------------------------------------------------------
--- fifo2diq instance
--- ----------------------------------------------------------------------------       
-inst1_fifo_q <=   inst0_smpl_buff_q(63 downto 52) & 
-                  inst0_smpl_buff_q(47 downto 36) &
-                  inst0_smpl_buff_q(31 downto 20) & 
-                  inst0_smpl_buff_q(15 downto 4);
 
-diq2fifo_inst1 : entity work.fifo2diq
-   generic map( 
-      dev_family     => dev_family,
-      iq_width       => iq_width
-   )
-   port map (
-      clk                  => iq_rdclk,
-      reset_n              => en_sync_iq_rdclk,
-      mode                 => mode_sync_iq_rdclk,
-      trxiqpulse           => trxiqpulse_sync_iq_rdclk,
-      ddr_en               => ddr_en_sync_iq_rdclk,
-      mimo_en              => mimo_en_sync_iq_rdclk,
-      ch_en                => ch_en_sync_iq_rdclk,
-      fidm                 => fidm_sync_iq_rdclk,
-      pct_sync_mode        => pct_sync_mode,      
-      pct_sync_pulse       => pct_sync_pulse,
-      pct_sync_size        => pct_sync_size,
-      pct_buff_rdy         => inst1_pct_buff_rdy,
-      --txant              
-      txant_cyc_before_en  => txant_cyc_before_en,
-      txant_cyc_after_en   => txant_cyc_after_en,
-      txant_en             => txant_en,
-      DIQ                  => DIQ,
-      fsync                => fsync,
-      DIQ_h                => DIQ_h,
-      DIQ_l                => DIQ_l,
-      fifo_rdempty         => inst0_smpl_buff_rdempty,
-      fifo_rdreq           => inst1_fifo_rdreq,
-      fifo_q               => inst1_fifo_q 
-   
-      );
 end arch;   
 
 

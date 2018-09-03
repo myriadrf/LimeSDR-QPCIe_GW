@@ -30,6 +30,7 @@ entity rxtx_top is
       TX_IN_PCT_DATA_W        : integer := 128;
       TX_IN_PCT_RDUSEDW_W     : integer := 11;
       TX_OUT_PCT_DATA_W       : integer := 64;
+      TX_SMPL_FIFO_WRUSEDW_W  : integer := 9;
       
       -- RX parameters
       RX_IQ_WIDTH             : integer := 12;
@@ -48,9 +49,11 @@ entity rxtx_top is
       tx_clk_reset_n          : in     std_logic;    
       tx_pct_loss_flg         : out    std_logic;
       tx_txant_en             : out    std_logic;  
-         -- Tx interface data 
-      tx_DIQ                  : out    std_logic_vector(TX_IQ_WIDTH-1 downto 0);
-      tx_fsync                : out    std_logic;
+         -- Tx interface data
+      tx_smpl_fifo_wrreq      : out    std_logic;    
+      tx_smpl_fifo_wrfull     : in     std_logic;
+      tx_smpl_fifo_wrusedw    : in     std_logic_vector(TX_SMPL_FIFO_WRUSEDW_W-1 downto 0);
+      tx_smpl_fifo_data       : out    std_logic_vector(127 downto 0);   
          -- TX FIFO read ports
       tx_in_pct_reset_n_req   : out    std_logic;
       tx_in_pct_rdreq         : out    std_logic;
@@ -188,11 +191,11 @@ begin
       ch_en                => from_fpgacfg.ch_en(1 downto 0),      --"11" - Ch. A, "10" - Ch. B, "11" - Ch. A and Ch. B. 
       fidm                 => '0',       -- Frame start at fsync = 0, when 0. Frame start at fsync = 1, when 1.
       sample_width         => from_fpgacfg.smpl_width, --"10"-12bit, "01"-14bit, "00"-16bit;
-      --Tx interface data 
-      DIQ                  => open,
-      fsync                => open, 
-      DIQ_h                => inst1_DIQ_h,
-      DIQ_l                => inst1_DIQ_l,
+      --Tx interface data
+      smpl_fifo_wrreq      => tx_smpl_fifo_wrreq,
+      smpl_fifo_wrfull     => tx_smpl_fifo_wrfull,
+      smpl_fifo_wrusedw    => tx_smpl_fifo_wrusedw,
+      smpl_fifo_data       => tx_smpl_fifo_data,
       --fifo ports
       in_pct_reset_n_req   => inst1_in_pct_reset_n_req,
       in_pct_rdreq         => tx_in_pct_rdreq,
@@ -200,52 +203,6 @@ begin
       in_pct_rdy           => inst1_in_pct_rdy
       );
       
-           
--- ----------------------------------------------------------------------------
--- txiqmux instance.
--- 
--- ----------------------------------------------------------------------------       
-   txiqmux_inst3 : entity work.txiqmux
-   generic map(
-      diq_width   => TX_IQ_WIDTH
-   )
-   port map(
-      clk               => tx_clk,
-      reset_n           => tx_clk_reset_n,
-      test_ptrn_en      => from_fpgacfg.tx_ptrn_en,   -- Enables test pattern
-      test_ptrn_fidm    => '0',   -- External Frame ID mode. Frame start at fsync = 0, when 0. Frame start at fsync = 1, when 1.
-      test_ptrn_I       => from_tstcfg.TX_TST_I,
-      test_ptrn_Q       => from_tstcfg.TX_TST_Q,
-      test_data_en      => from_fpgacfg.tx_cnt_en,
-      test_data_mimo_en => '1',
-      mux_sel           => from_fpgacfg.wfm_play,   -- Mux select: 0 - tx, 1 - wfm
-      tx_diq_h          => inst1_DIQ_h,
-      tx_diq_l          => inst1_DIQ_l,
-      wfm_diq_h         => inst2_dd_iq_h(TX_IQ_WIDTH downto 0),
-      wfm_diq_l         => inst2_dd_iq_l(TX_IQ_WIDTH downto 0),
-      diq_h             => inst3_diq_h,
-      diq_l             => inst3_diq_l
-   );
-   
--- ----------------------------------------------------------------------------
--- lms7002_ddout instance.
--- 
--- ----------------------------------------------------------------------------   
-   lms7002_ddout_inst4 : entity work.lms7002_ddout
-   generic map( 
-      dev_family     => DEV_FAMILY,
-      iq_width       => TX_IQ_WIDTH
-   )
-   port map(
-      --input ports 
-      clk            => tx_clk,
-      reset_n        => tx_clk_reset_n,
-      data_in_h      => inst3_diq_h,
-      data_in_l      => inst3_diq_l,
-      --output ports 
-      txiq           => tx_DIQ,
-      txiqsel        => tx_fsync
-   );  
 -- ----------------------------------------------------------------------------
 -- rx_path_top instance instance.
 -- 
