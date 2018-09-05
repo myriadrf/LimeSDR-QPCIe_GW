@@ -15,6 +15,7 @@ use ieee.numeric_std.all;
 use work.fpgacfg_pkg.all;
 use work.pllcfg_pkg.all;
 use work.tstcfg_pkg.all;
+use work.rxtspcfg_pkg.all;
 use work.periphcfg_pkg.all;
 use work.tamercfg_pkg.all;
 use work.gnsscfg_pkg.all;
@@ -28,7 +29,8 @@ entity cfg_top is
       -- CFG_START_ADDR has to be multiple of 32, because there are 32 addresses
       FPGACFG_START_ADDR   : integer := 0;
       PLLCFG_START_ADDR    : integer := 32;
-      TSTCFG_START_ADDR    : integer := 64;
+      TSTCFG_START_ADDR    : integer := 96;
+      RXTSPCFG_START_ADDR  : integer := 160;
       PERIPHCFG_START_ADDR : integer := 192;
       TAMERCFG_START_ADDR  : integer := 224;
       GNSSCFG_START_ADDR   : integer := 256;
@@ -60,6 +62,8 @@ entity cfg_top is
       to_tstcfg            : in  t_TO_TSTCFG;
       to_tstcfg_from_rxtx  : in  t_TO_TSTCFG_FROM_RXTX;
       from_tstcfg          : out t_FROM_TSTCFG;
+      to_rxtspcfg          : in  t_TO_RXTSPCFG;
+      from_rxtspcfg        : out t_FROM_RXTSPCFG;    
       to_periphcfg         : in  t_TO_PERIPHCFG;
       from_periphcfg       : out t_FROM_PERIPHCFG;
       to_tamercfg          : in  t_TO_TAMERCFG;
@@ -74,25 +78,26 @@ end cfg_top;
 -- ----------------------------------------------------------------------------
 architecture arch of cfg_top is
 --declare signals,  components here
---inst0
-signal inst0_sen     : std_logic; 
-signal inst0_sdout   : std_logic;
+--inst0_0
+signal inst0_0_sen     : std_logic; 
+signal inst0_0_sdout   : std_logic;
+
+--inst0_1
+signal inst0_1_sen     : std_logic;
+signal inst0_1_sdout   : std_logic;
+
+--inst0_2
+signal inst0_2_sen     : std_logic;
+signal inst0_2_sdout   : std_logic;
 
 --inst1
-signal inst1_sen     : std_logic;
-signal inst1_sdout   : std_logic;
-
---inst2
-signal inst2_sen     : std_logic;
-signal inst2_sdout   : std_logic;
+signal inst1_sdoutA  : std_logic;
 
 --inst3
-signal inst3_sdoutA  : std_logic;
-
---inst4
-signal inst4_sdout   : std_logic;
+signal inst3_sdout   : std_logic;
 
 --inst5
+signal inst5_sen     : std_logic;
 signal inst5_sdout   : std_logic;
 
 --inst6
@@ -102,19 +107,22 @@ signal inst6_sdout   : std_logic;
 signal inst7_sdout   : std_logic;
 
 --inst8
-signal inst8_sdout         : std_logic;
-signal inst8_to_memcfg     : t_TO_MEMCFG;
-signal inst8_from_memcfg   : t_FROM_MEMCFG;
+signal inst8_sdout   : std_logic;
+
+--inst255
+signal inst255_sdout         : std_logic;
+signal inst255_to_memcfg     : t_TO_MEMCFG;
+signal inst255_from_memcfg   : t_FROM_MEMCFG;
 
 begin
 
 -- ----------------------------------------------------------------------------
 -- fpgacfg instance
 -- ----------------------------------------------------------------------------
-   inst0_sen <= sen when inst8_from_memcfg.mac(0)='1' else '1';
+   inst0_0_sen <= sen when inst255_from_memcfg.mac(0)='1' else '1';
 
       
-   inst0_fpgacfg : entity work.fpgacfg
+   inst0_0_fpgacfg : entity work.fpgacfg
    port map(
       -- Address and location of this module
       -- Will be hard wired at the top level
@@ -123,8 +131,8 @@ begin
       -- Serial port IOs
       sdin        => sdin,
       sclk        => sclk,
-      sen         => inst0_sen,
-      sdout       => inst0_sdout,  
+      sen         => inst0_0_sen,
+      sdout       => inst0_0_sdout,  
       -- Signals coming from the pins or top level serial interface
       lreset      => lreset,   -- Logic reset signal, resets logic cells only  (use only one reset)
       mreset      => mreset,   -- Memory reset signal, resets configuration memory only (use only one reset)      
@@ -135,9 +143,9 @@ begin
    );
    
    
-   inst1_sen <= sen when inst8_from_memcfg.mac(1)='1' else '1';
+   inst0_1_sen <= sen when inst255_from_memcfg.mac(1)='1' else '1';
    
-   inst1_fpgacfg : entity work.fpgacfg
+   inst0_1_fpgacfg : entity work.fpgacfg
    port map(
       -- Address and location of this module
       -- Will be hard wired at the top level
@@ -146,8 +154,8 @@ begin
       -- Serial port IOs
       sdin        => sdin,
       sclk        => sclk,
-      sen         => inst1_sen,
-      sdout       => inst1_sdout,  
+      sen         => inst0_1_sen,
+      sdout       => inst0_1_sdout,  
       -- Signals coming from the pins or top level serial interface
       lreset      => lreset,   -- Logic reset signal, resets logic cells only  (use only one reset)
       mreset      => mreset,   -- Memory reset signal, resets configuration memory only (use only one reset)      
@@ -157,9 +165,9 @@ begin
       from_fpgacfg=> from_fpgacfg_1
    );
    
-   inst2_sen <= sen when inst8_from_memcfg.mac(2)='1' else '1';
+   inst0_2_sen <= sen when inst255_from_memcfg.mac(2)='1' else '1';
    
-   inst2_fpgacfg : entity work.fpgacfg
+   inst0_2_fpgacfg : entity work.fpgacfg
    port map(
       -- Address and location of this module
       -- Will be hard wired at the top level
@@ -168,8 +176,8 @@ begin
       -- Serial port IOs
       sdin        => sdin,
       sclk        => sclk,
-      sen         => inst2_sen,
-      sdout       => inst2_sdout,  
+      sen         => inst0_2_sen,
+      sdout       => inst0_2_sdout,  
       -- Signals coming from the pins or top level serial interface
       lreset      => lreset,   -- Logic reset signal, resets logic cells only  (use only one reset)
       mreset      => mreset,   -- Memory reset signal, resets configuration memory only (use only one reset)      
@@ -182,7 +190,7 @@ begin
 -- ----------------------------------------------------------------------------
 -- pllcfg instance
 -- ----------------------------------------------------------------------------  
-   inst3_pllcfg : entity work.pllcfg
+   inst1_pllcfg : entity work.pllcfg
    port map(
       -- Address and location of this module
       -- Will be hard wired at the top level
@@ -192,7 +200,7 @@ begin
       sdinA          => sdin,
       sclkA          => sclk,
       senA           => sen,
-      sdoutA         => inst3_sdoutA,    
+      sdoutA         => inst1_sdoutA,    
       oenA           => open,     
       -- Serial port B IOs
       sdinB          => pllcfg_sdin,
@@ -210,7 +218,7 @@ begin
 -- ----------------------------------------------------------------------------
 -- tstcfg instance
 -- ----------------------------------------------------------------------------    
-   inst4_tstcfg : entity work.tstcfg
+   inst3_tstcfg : entity work.tstcfg
    port map(
       -- Address and location of this module
       -- Will be hard wired at the top level
@@ -220,7 +228,7 @@ begin
       sdin                 => sdin,
       sclk                 => sclk,
       sen                  => sen,
-      sdout                => inst4_sdout,  
+      sdout                => inst3_sdout,  
       -- Signals coming from the pins or top level serial interface
       lreset               => lreset,   -- Logic reset signal, resets logic cells only  (use only one reset)
       mreset               => mreset,   -- Memory reset signal, resets configuration memory only (use only one reset)      
@@ -231,11 +239,35 @@ begin
       from_tstcfg          => from_tstcfg
    );
 
+-- ----------------------------------------------------------------------------
+-- rxtspcfg instance
+-- ---------------------------------------------------------------------------- 
+   inst5_sen <= sen when inst255_from_memcfg.mac(0)='1' else '1';
+   
+   inst5_rxtspcfg : entity work.rxtspcfg
+   port map(
+      -- Address and location of this module
+      -- Will be hard wired at the top level
+      maddress             => std_logic_vector(to_unsigned(RXTSPCFG_START_ADDR/32,10)),
+      mimo_en              => '1',   
+      -- Serial port IOs
+      sdin                 => sdin,
+      sclk                 => sclk,
+      sen                  => inst5_sen,
+      sdout                => inst5_sdout,  
+      -- Signals coming from the pins or top level serial interface
+      lreset               => lreset,   -- Logic reset signal, resets logic cells only  (use only one reset)
+      mreset               => mreset,   -- Memory reset signal, resets configuration memory only (use only one reset)      
+      oen                  => open,
+      stateo               => open,    
+      to_rxtspcfg          => to_rxtspcfg,
+      from_rxtspcfg        => from_rxtspcfg
+   );
    
 -- ----------------------------------------------------------------------------
--- tstcfg instance
+-- periphcfg instance
 -- ----------------------------------------------------------------------------    
-   inst5_periphcfg : entity work.periphcfg
+   inst6_periphcfg : entity work.periphcfg
    port map(
       -- Address and location of this module
       -- Will be hard wired at the top level
@@ -245,7 +277,7 @@ begin
       sdin        => sdin,
       sclk        => sclk,
       sen         => sen,
-      sdout       => inst5_sdout,  
+      sdout       => inst6_sdout,  
       -- Signals coming from the pins or top level serial interface
       lreset      => lreset,   -- Logic reset signal, resets logic cells only  (use only one reset)
       mreset      => mreset,   -- Memory reset signal, resets configuration memory only (use only one reset)      
@@ -258,7 +290,7 @@ begin
 -- ----------------------------------------------------------------------------
 -- tamercfg instance
 -- ----------------------------------------------------------------------------    
-   inst6_tamercfg : entity work.tamercfg
+   inst7_tamercfg : entity work.tamercfg
    port map(
       -- Address and location of this module
       -- Will be hard wired at the top level
@@ -268,7 +300,7 @@ begin
       sdin        => sdin,
       sclk        => sclk,
       sen         => sen,
-      sdout       => inst6_sdout,  
+      sdout       => inst7_sdout,  
       -- Signals coming from the pins or top level serial interface
       lreset      => lreset,   -- Logic reset signal, resets logic cells only  (use only one reset)
       mreset      => mreset,   -- Memory reset signal, resets configuration memory only (use only one reset)      
@@ -281,7 +313,7 @@ begin
 -- ----------------------------------------------------------------------------
 -- gnsscfg instance
 -- ----------------------------------------------------------------------------    
-   inst7_gnsscfg : entity work.gnsscfg
+   inst8_gnsscfg : entity work.gnsscfg
    port map(
       -- Address and location of this module
       -- Will be hard wired at the top level
@@ -291,7 +323,7 @@ begin
       sdin        => sdin,
       sclk        => sclk,
       sen         => sen,
-      sdout       => inst7_sdout,  
+      sdout       => inst8_sdout,  
       -- Signals coming from the pins or top level serial interface
       lreset      => lreset,   -- Logic reset signal, resets logic cells only  (use only one reset)
       mreset      => mreset,   -- Memory reset signal, resets configuration memory only (use only one reset)      
@@ -304,7 +336,7 @@ begin
 -- ----------------------------------------------------------------------------
 -- memcfg instance
 -- ----------------------------------------------------------------------------     
-   inst8_memcfg : entity work.memcfg
+   inst255_memcfg : entity work.memcfg
    port map(
       -- Address and location of this module
       -- Will be hard wired at the top level
@@ -314,20 +346,21 @@ begin
       sdin        => sdin,
       sclk        => sclk,
       sen         => sen,
-      sdout       => inst8_sdout,  
+      sdout       => inst255_sdout,  
       -- Signals coming from the pins or top level serial interface
       lreset      => lreset,   -- Logic reset signal, resets logic cells only  (use only one reset)
       mreset      => mreset,   -- Memory reset signal, resets configuration memory only (use only one reset)      
       oen         => open,
       stateo      => open,      
-      to_memcfg   => inst8_to_memcfg,
-      from_memcfg => inst8_from_memcfg
+      to_memcfg   => inst255_to_memcfg,
+      from_memcfg => inst255_from_memcfg
    );
 -- ----------------------------------------------------------------------------
 -- Output ports
 -- ----------------------------------------------------------------------------    
-   sdout <= inst0_sdout OR inst1_sdout OR inst3_sdoutA OR inst4_sdout OR 
-            inst5_sdout OR inst6_sdout OR inst7_sdout OR inst8_sdout;
+   sdout <= inst0_0_sdout OR inst0_1_sdout OR inst0_2_sdout OR inst1_sdoutA OR 
+            inst3_sdout OR inst5_sdout OR inst6_sdout OR inst7_sdout OR 
+            inst8_sdout OR inst255_sdout;
   
 end arch;   
 

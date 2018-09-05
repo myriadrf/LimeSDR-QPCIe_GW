@@ -18,27 +18,26 @@
 -- CREATED		"Wed May 24 09:24:42 2017"
 
 LIBRARY ieee;
-USE ieee.std_logic_1164.all; 
+USE ieee.std_logic_1164.all;
+
 
 LIBRARY work;
+use work.rxtspcfg_pkg.all; 
 
 ENTITY rx_chain IS 
 	PORT
 	(
-		clk :  IN  STD_LOGIC;
-		nrst :  IN  STD_LOGIC;
-		sclk :  IN  STD_LOGIC;
-		sdin :  IN  STD_LOGIC;
-		sen :  IN  STD_LOGIC;
-		memrstn :  IN  STD_LOGIC;
-      mac_en      : in std_logic := '1';
-		HBD_ratio :  IN  STD_LOGIC_VECTOR(7 DOWNTO 0);
-		RXI :  IN  STD_LOGIC_VECTOR(17 DOWNTO 0);
-		RXQ :  IN  STD_LOGIC_VECTOR(17 DOWNTO 0);
-		sdout :  OUT  STD_LOGIC;
-		xen :  OUT  STD_LOGIC;
-		RYI :  OUT  STD_LOGIC_VECTOR(17 DOWNTO 0);
-		RYQ :  OUT  STD_LOGIC_VECTOR(17 DOWNTO 0)
+      clk            : IN  STD_LOGIC;
+      nrst           : IN  STD_LOGIC;
+      HBD_ratio      : IN  STD_LOGIC_VECTOR(7 DOWNTO 0);
+      RXI            : IN  STD_LOGIC_VECTOR(17 DOWNTO 0);
+      RXQ            : IN  STD_LOGIC_VECTOR(17 DOWNTO 0);
+      xen            : OUT STD_LOGIC;
+      RYI            : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
+      RYQ            : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
+      to_rxtspcfg    : out t_TO_RXTSPCFG;
+      from_rxtspcfg  : in  t_FROM_RXTSPCFG
+      
 	);
 END rx_chain;
 
@@ -243,7 +242,7 @@ bus_sync_reg3 : entity work.bus_sync_reg
       sync_out    => iqcorrctr_sync
         );
 
-sen_int <= sen when mac_en = '1' else '1';
+--sen_int <= sen when mac_en = '1' else '1';
 
 SYNTHESIZED_WIRE_0 <= "00000000000000000000000000000000";
 SYNTHESIZED_WIRE_1 <= "0000000000000000";
@@ -299,34 +298,47 @@ PORT MAP(clk => clk,
 		 yq => RYQ);
 
 
-b2v_inst4 : rxtspcfg
-PORT MAP(mimo_en => H,
-		 sdin => sdin,
-		 sclk => sclk,
-		 sen => sen_int,
-		 lreset => memrstn,
-		 mreset => memrstn,
-		 rxen => H,
-		 capd => SYNTHESIZED_WIRE_0,
-		 maddress => GDFX_TEMP_SIGNAL_0,
-		 rxtspout_i => SYNTHESIZED_WIRE_1,
-		 rxtspout_q => SYNTHESIZED_WIRE_2,
-		 sdout => sdout,
-		 en => mod_en,
-		 gc_byp => gc_byp,
-		 ph_byp => ph_byp,
-		 dc_byp => dc_byp,
-		 dccorr_avg => dccorr,
-		 gcorri => gci,
-		 gcorrq => gcq,
-		 iqcorr => iqcorrctr);
+--b2v_inst4 : rxtspcfg
+--PORT MAP(mimo_en => H,
+--		 sdin => sdin,
+--		 sclk => sclk,
+--		 sen => sen_int,
+--		 lreset => memrstn,
+--		 mreset => memrstn,
+--		 rxen => H,
+--		 capd => SYNTHESIZED_WIRE_0,
+--		 maddress => GDFX_TEMP_SIGNAL_0,
+--		 rxtspout_i => SYNTHESIZED_WIRE_1,
+--		 rxtspout_q => SYNTHESIZED_WIRE_2,
+--		 sdout => sdout,
+--		 en => mod_en,
+--		 gc_byp => gc_byp,
+--		 ph_byp => ph_byp,
+--		 dc_byp => dc_byp,
+--		 dccorr_avg => dccorr,
+--		 gcorri => gci,
+--		 gcorrq => gcq,
+--		 iqcorr => iqcorrctr);
+       
+      to_rxtspcfg.rxen        <= '1';
+      to_rxtspcfg.capd        <= SYNTHESIZED_WIRE_0;
+      to_rxtspcfg.rxtspout_i  <= SYNTHESIZED_WIRE_1;
+      to_rxtspcfg.rxtspout_q  <= SYNTHESIZED_WIRE_2;
+      
+      mod_en   <= from_rxtspcfg.en;
+      gc_byp   <= from_rxtspcfg.gc_byp; 
+      ph_byp   <= from_rxtspcfg.ph_byp;
+      dc_byp   <= from_rxtspcfg.dc_byp;
+      dccorr   <= from_rxtspcfg.dccorr_avg;
+      gci      <= from_rxtspcfg.gcorri;
+      gcq      <= from_rxtspcfg.gcorrq;
+      iqcorrctr<= from_rxtspcfg.iqcorr; 
 
-
-b2v_inst47 : pulse_gen
-PORT MAP(clk => clk,
-		 reset_n => nrst,
-		 n => HBD_ratio,
-		 pulse_out => xen);
+--b2v_inst47 : pulse_gen
+--PORT MAP(clk => clk,
+--		 reset_n => nrst,
+--		 n => HBD_ratio,
+--		 pulse_out => xen);
 
 
 

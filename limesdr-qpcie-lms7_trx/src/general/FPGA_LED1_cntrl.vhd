@@ -47,7 +47,7 @@ led_r_ovr<= '1' when led_ctrl(1)='1' and led_ctrl(2)='0' else '0';
 
 all_pll_locked <= pll1_locked and pll2_locked;
 led_r_def      <= not alive when all_pll_locked='0' else 
-                  '0';
+                  '1';
                   
 led_g <= alive when led_ctrl(0)='0' else led_g_ovr;
 led_r <= led_r_def when led_ctrl(0)='0' else led_r_ovr;

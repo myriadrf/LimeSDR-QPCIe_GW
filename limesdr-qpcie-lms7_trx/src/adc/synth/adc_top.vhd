@@ -8,6 +8,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use work.rxtspcfg_pkg.all;
 
 -- ----------------------------------------------------------------------------
 -- Entity declaration
@@ -19,17 +20,12 @@ entity adc_top is
       smpls_to_capture     : integer := 4 -- 2,4,6,8...
       );
    port (
+   
+      
 
       clk               : in std_logic;
       reset_n           : in std_logic;
       en                : in std_logic;
-      
-      sclk              : IN STD_LOGIC;
-      sdin              : IN STD_LOGIC;
-      sen               : IN STD_LOGIC;
-      memrstn           : IN STD_LOGIC;
-      sdout             : OUT STD_LOGIC;
-      mac_en            : in std_logic := '1';
       
       ch_a              : in std_logic_vector(data_width-1 downto 0); 	--Input to DDR cells from pins
       ch_b              : in std_logic_vector(data_width-1 downto 0); 	--Input to DDR cells from pins
@@ -40,7 +36,9 @@ entity adc_top is
       --Interleaved samples of both channels
       data_ch_ab        : out std_logic_vector(data_width*2*smpls_to_capture-1 downto 0); -- ... B1 A1 B0 A0 
       data_ch_ab_valid  : out std_logic;
-      test_out          : out std_logic_vector(55 downto 0)
+      test_out          : out std_logic_vector(55 downto 0);
+      to_rxtspcfg       : out t_TO_RXTSPCFG;
+      from_rxtspcfg     : in  t_FROM_RXTSPCFG
 
         );
 end adc_top;
@@ -96,20 +94,16 @@ inst1_RXQ <= inst0_data_ch_b & "0000";
 rx_chain_inst1 : entity work.rx_chain 
    port map
    (
-      clk         => clk,
-      nrst        => reset_n_sync,
-      sclk        => sclk,
-      sdin        => sdin,
-      sen         => sen,
-      memrstn     => memrstn,
-      mac_en      => mac_en,
-      HBD_ratio   => (others=>'0'),
-      RXI         => inst1_RXI,
-      RXQ         => inst1_RXQ,
-      sdout       => sdout,
-      xen         => open,
-      RYI         => inst1_RYI,
-      RYQ         => inst1_RYQ
+      clk            => clk,
+      nrst           => reset_n_sync,
+      HBD_ratio      => (others=>'0'),
+      RXI            => inst1_RXI,
+      RXQ            => inst1_RXQ,
+      xen            => open,
+      RYI            => inst1_RYI,
+      RYQ            => inst1_RYQ,
+      to_rxtspcfg    => to_rxtspcfg,
+      from_rxtspcfg  => from_rxtspcfg
    );
 
 --for testing rx_chain is bypassed

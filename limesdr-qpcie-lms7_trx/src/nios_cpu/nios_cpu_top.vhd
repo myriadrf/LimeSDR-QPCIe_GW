@@ -16,6 +16,7 @@ use ieee.numeric_std.all;
 use work.fpgacfg_pkg.all;
 use work.pllcfg_pkg.all;
 use work.tstcfg_pkg.all;
+use work.rxtspcfg_pkg.all;
 use work.periphcfg_pkg.all;
 use work.tamercfg_pkg.all;
 use work.gnsscfg_pkg.all;
@@ -30,6 +31,7 @@ entity nios_cpu_top is
       FPGACFG_START_ADDR   : integer := 0;
       PLLCFG_START_ADDR    : integer := 32;
       TSTCFG_START_ADDR    : integer := 64;
+      RXTSPCFG_START_ADDR  : integer := 160;
       PERIPHCFG_START_ADDR : integer := 192;
       TAMERCFG_START_ADDR  : integer := 224;
       GNSSCFG_START_ADDR   : integer := 256;
@@ -122,6 +124,8 @@ entity nios_cpu_top is
       from_tstcfg          : out    t_FROM_TSTCFG;
       to_tstcfg            : in     t_TO_TSTCFG;
       to_tstcfg_from_rxtx  : in     t_TO_TSTCFG_FROM_RXTX;
+      to_rxtspcfg          : in     t_TO_RXTSPCFG;
+      from_rxtspcfg        : out    t_FROM_RXTSPCFG;
       to_periphcfg         : in     t_TO_PERIPHCFG;
       from_periphcfg       : out    t_FROM_PERIPHCFG;
       to_tamercfg          : in     t_TO_TAMERCFG;
@@ -345,6 +349,7 @@ begin
       FPGACFG_START_ADDR   => FPGACFG_START_ADDR,
       PLLCFG_START_ADDR    => PLLCFG_START_ADDR,
       TSTCFG_START_ADDR    => TSTCFG_START_ADDR,
+      RXTSPCFG_START_ADDR  => RXTSPCFG_START_ADDR,
       PERIPHCFG_START_ADDR => PERIPHCFG_START_ADDR,
       TAMERCFG_START_ADDR  => TAMERCFG_START_ADDR,
       GNSSCFG_START_ADDR   => GNSSCFG_START_ADDR
@@ -373,6 +378,8 @@ begin
       to_tstcfg            => to_tstcfg,
       from_tstcfg          => from_tstcfg,
       to_tstcfg_from_rxtx  => to_tstcfg_from_rxtx,
+      to_rxtspcfg          => to_rxtspcfg,
+      from_rxtspcfg        => from_rxtspcfg,
       to_periphcfg         => to_periphcfg,
       from_periphcfg       => from_periphcfg,
       to_tamercfg          => to_tamercfg,
