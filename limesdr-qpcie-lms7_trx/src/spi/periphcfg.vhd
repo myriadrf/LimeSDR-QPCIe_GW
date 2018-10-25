@@ -168,8 +168,8 @@ begin
          mem(9)	<= "0000000000000000"; --  0 free, PERIPH_INPUT_RD_1
          mem(10)	<= "0000000000000000"; --  0 free, Reserved
          mem(11)	<= "0000000000000000"; --  0 free, Reserved			
-         mem(12)	<= "0000000000000000"; --  0 free, PERIPH_OUTPUT_OVRD_0
-         mem(13)	<= "0000000000000000"; --  0 free, PERIPH_OUTPUT_VAL_0
+         mem(12)	<= "0000000000000001"; --  0 free, PERIPH_OUTPUT_OVRD_0
+         mem(13)	<= "0000000000000001"; --  0 free, PERIPH_OUTPUT_VAL_0
          mem(14)	<= "0000000000000000"; --  0 free, PERIPH_OUTPUT_OVRD_1
          mem(15)	<= "0000000000000000"; --  0 free, PERIPH_OUTPUT_VAL_1
          mem(16)	<= "0000000000000000"; --  0 free, Reserved

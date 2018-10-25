@@ -12,6 +12,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use work.fpgacfg_pkg.all;
 
 -- ----------------------------------------------------------------------------
 -- Entity declaration
@@ -68,14 +69,7 @@ entity wfm_player_x2_top is
       reset_n                 : in     std_logic;
       
       ----------------WFM port 0------------------
-      wfm_0_load              : in     std_logic := '0';
-      wfm_0_play_stop         : in     std_logic := '0'; -- 1- play, 0- stop
-      --control ports   
-      wfm_0_sample_width      : in     std_logic_vector(1 downto 0) := "10"; -- "00"-16bit, "01"-14bit, "10"-12bit
-      wfm_0_fr_start          : in     std_logic := '0';
-      wfm_0_ch_en             : in     std_logic_vector(1 downto 0) := "01";
-      wfm_0_mimo_en           : in     std_logic := '1';
-      wfm_0_intrlv_dis        : in     std_logic := '0'; -- 0 - interleaved data, 1 - parallel data
+      from_fpgacfg_0          : in     t_FROM_FPGACFG;
       --infifo 
       wfm_0_infifo_wclk       : in     std_logic;
       wfm_0_infifo_reset_n    : in     std_logic;
@@ -93,14 +87,7 @@ entity wfm_player_x2_top is
       wfm_0_Biq_l             : out    std_logic_vector(wfm_0_iq_width downto 0);
       
       ----------------WFM port 1------------------
-      wfm_1_load              : in     std_logic := '0';
-      wfm_1_play_stop         : in     std_logic := '0'; -- 1- play, 0- stop
-      --control ports   
-      wfm_1_sample_width      : in     std_logic_vector(1 downto 0) := "00"; -- "00"-16bit, "01"-14bit, "10"-12bit
-      wfm_1_fr_start          : in     std_logic := '0';
-      wfm_1_ch_en             : in     std_logic_vector(1 downto 0) := "01";
-      wfm_1_mimo_en           : in     std_logic := '1';
-      wfm_1_intrlv_dis        : in     std_logic := '0'; -- 0 - interleaved data, 1 - parallel data
+      from_fpgacfg_1          : in     t_FROM_FPGACFG;
       --infifo 
       wfm_1_infifo_wclk       : in     std_logic;
       wfm_1_infifo_reset_n    : in     std_logic;
@@ -143,6 +130,22 @@ end wfm_player_x2_top;
 -- ----------------------------------------------------------------------------
 architecture arch of wfm_player_x2_top is
 --declare signals,  components here
+signal wfm_0_load              : std_logic ;
+signal wfm_0_play_stop         : std_logic ; -- 1- play, 0- stop
+signal wfm_0_sample_width      : std_logic_vector(1 downto 0); -- "00"-16bit, "01"-14bit, "10"-12bit
+signal wfm_0_fr_start          : std_logic;
+signal wfm_0_ch_en             : std_logic_vector(1 downto 0);
+signal wfm_0_mimo_en           : std_logic;
+signal wfm_0_intrlv_dis        : std_logic; -- 0 - interleaved data, 1 - parallel data
+
+signal wfm_1_load              : std_logic;
+signal wfm_1_play_stop         : std_logic; -- 1- play, 0- stop  
+signal wfm_1_sample_width      : std_logic_vector(1 downto 0); -- "00"-16bit, "01"-14bit, "10"-12bit
+signal wfm_1_fr_start          : std_logic;
+signal wfm_1_ch_en             : std_logic_vector(1 downto 0);
+signal wfm_1_mimo_en           : std_logic;
+signal wfm_1_intrlv_dis        : std_logic; -- 0 - interleaved data, 1 - parallel data
+
 --inst0
 signal inst0_reset_n                   : std_logic;
 signal inst0_avl_write_req             : std_logic;
@@ -605,35 +608,35 @@ ext_mem_inst2 : ddr3_av_2x32
    
    
    
-fifo2diq_inst3 : entity work.fifo2diq
-   generic map( 
-      dev_family           => dev_family,
-      iq_width             => wfm_0_iq_width
-      )
-   port map(
-      clk                  => wfm_0_outfifo_rclk,
-      reset_n              => wfm_0_play_stop_inst2_afi_half_clk,
-      en                   => '1',
-      --Mode settings
-      mode                 => '0', -- JESD207: 1; TRXIQ: 0
-      trxiqpulse           => '0', -- trxiqpulse on: 1; trxiqpulse off: 0
-      ddr_en               => '1', -- DDR: 1; SDR: 0
-      mimo_en              => '1', -- SISO: 1; MIMO: 0
-      ch_en                => "11", --"11" - Ch. A, "10" - Ch. B, "11" - Ch. A and Ch. B. 
-      fidm                 => wfm_0_fr_start, -- External Frame ID mode. Frame start at fsync = 0, when 0. Frame start at fsync = 1, when 1.
-      par_mode_en          => '0', -- 1 - parallel data mode enabled, 0 - disabled
-      --Tx interface data 
-      DIQ                  => open,
-      fsync                => open,
-      DIQA_h               => wfm_0_Aiq_h,
-      DIQA_l               => wfm_0_Aiq_l,
-      DIQB_h               => wfm_0_Biq_h,
-      DIQB_l               => wfm_0_Biq_l,
-      --fifo ports 
-      fifo_rdempty         => inst0_wfm_outfifo_rdempty,
-      fifo_rdreq           => inst3_fifo_rdreq,
-      fifo_q               => inst3_fifo_q
-      );
+--fifo2diq_inst3 : entity work.fifo2diq
+--   generic map( 
+--      dev_family           => dev_family,
+--      iq_width             => wfm_0_iq_width
+--      )
+--   port map(
+--      clk                  => wfm_0_outfifo_rclk,
+--      reset_n              => wfm_0_play_stop_inst2_afi_half_clk,
+--      en                   => '1',
+--      --Mode settings
+--      mode                 => '0', -- JESD207: 1; TRXIQ: 0
+--      trxiqpulse           => '0', -- trxiqpulse on: 1; trxiqpulse off: 0
+--      ddr_en               => '1', -- DDR: 1; SDR: 0
+--      mimo_en              => '1', -- SISO: 1; MIMO: 0
+--      ch_en                => "11", --"11" - Ch. A, "10" - Ch. B, "11" - Ch. A and Ch. B. 
+--      fidm                 => wfm_0_fr_start, -- External Frame ID mode. Frame start at fsync = 0, when 0. Frame start at fsync = 1, when 1.
+--      par_mode_en          => '0', -- 1 - parallel data mode enabled, 0 - disabled
+--      --Tx interface data 
+--      DIQ                  => open,
+--      fsync                => open,
+--      DIQA_h               => wfm_0_Aiq_h,
+--      DIQA_l               => wfm_0_Aiq_l,
+--      DIQB_h               => wfm_0_Biq_h,
+--      DIQB_l               => wfm_0_Biq_l,
+--      --fifo ports 
+--      fifo_rdempty         => inst0_wfm_outfifo_rdempty,
+--      fifo_rdreq           => inst3_fifo_rdreq,
+--      fifo_q               => inst3_fifo_q
+--      );
       
       inst3_fifo_q <=   inst0_wfm_outfifo_q(63 downto 64-wfm_0_iq_width) & 
                         inst0_wfm_outfifo_q(47 downto 48-wfm_0_iq_width) &
@@ -641,35 +644,35 @@ fifo2diq_inst3 : entity work.fifo2diq
                         inst0_wfm_outfifo_q(15 downto 16-wfm_0_iq_width);
       
       
-fifo2diq_inst4 : entity work.fifo2diq
-   generic map( 
-      dev_family           => dev_family,
-      iq_width             => wfm_1_iq_width
-      )
-   port map(
-      clk                  => wfm_1_outfifo_rclk,
-      reset_n              => wfm_1_play_stop_inst2_afi_half_clk,
-      en                   => '1',
-      --Mode settings
-      mode                 => '0', -- JESD207: 1; TRXIQ: 0
-      trxiqpulse           => '0', -- trxiqpulse on: 1; trxiqpulse off: 0
-      ddr_en               => '1', -- DDR: 1; SDR: 0
-      mimo_en              => '1', -- SISO: 1; MIMO: 0
-      ch_en                => "11", --"11" - Ch. A, "10" - Ch. B, "11" - Ch. A and Ch. B. 
-      fidm                 => wfm_1_fr_start, -- External Frame ID mode. Frame start at fsync = 0, when 0. Frame start at fsync = 1, when 1.
-      par_mode_en          => '1', -- 1 - parallel data mode enabled, 0 - disabled
-      --Tx interface data 
-      DIQ                  => open,
-      fsync                => open,
-      DIQA_h               => wfm_1_Aiq_h,
-      DIQA_l               => wfm_1_Aiq_l,
-      DIQB_h               => wfm_1_Biq_h,
-      DIQB_l               => wfm_1_Biq_l,
-      --fifo ports 
-      fifo_rdempty         => inst1_wfm_outfifo_rdempty,
-      fifo_rdreq           => inst4_fifo_rdreq,
-      fifo_q               => inst4_fifo_q
-      );
+--fifo2diq_inst4 : entity work.fifo2diq
+--   generic map( 
+--      dev_family           => dev_family,
+--      iq_width             => wfm_1_iq_width
+--      )
+--   port map(
+--      clk                  => wfm_1_outfifo_rclk,
+--      reset_n              => wfm_1_play_stop_inst2_afi_half_clk,
+--      en                   => '1',
+--      --Mode settings
+--      mode                 => '0', -- JESD207: 1; TRXIQ: 0
+--      trxiqpulse           => '0', -- trxiqpulse on: 1; trxiqpulse off: 0
+--      ddr_en               => '1', -- DDR: 1; SDR: 0
+--      mimo_en              => '1', -- SISO: 1; MIMO: 0
+--      ch_en                => "11", --"11" - Ch. A, "10" - Ch. B, "11" - Ch. A and Ch. B. 
+--      fidm                 => wfm_1_fr_start, -- External Frame ID mode. Frame start at fsync = 0, when 0. Frame start at fsync = 1, when 1.
+--      par_mode_en          => '1', -- 1 - parallel data mode enabled, 0 - disabled
+--      --Tx interface data 
+--      DIQ                  => open,
+--      fsync                => open,
+--      DIQA_h               => wfm_1_Aiq_h,
+--      DIQA_l               => wfm_1_Aiq_l,
+--      DIQB_h               => wfm_1_Biq_h,
+--      DIQB_l               => wfm_1_Biq_l,
+--      --fifo ports 
+--      fifo_rdempty         => inst1_wfm_outfifo_rdempty,
+--      fifo_rdreq           => inst4_fifo_rdreq,
+--      fifo_q               => inst4_fifo_q
+--      );
 
 inst4_fifo_q <=   inst1_wfm_outfifo_q(63 downto 64-wfm_1_iq_width) & 
                   inst1_wfm_outfifo_q(47 downto 48-wfm_1_iq_width) &
