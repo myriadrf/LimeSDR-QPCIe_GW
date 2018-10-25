@@ -59,6 +59,10 @@
 		.pllcfg_stat_export                     (<connected-to-pllcfg_stat_export>),                     //          pllcfg_stat.export
 		.scl_export                             (<connected-to-scl_export>),                             //                  scl.export
 		.sda_export                             (<connected-to-sda_export>),                             //                  sda.export
-		.vctcxo_tamer_0_ctrl_export             (<connected-to-vctcxo_tamer_0_ctrl_export>)              //  vctcxo_tamer_0_ctrl.export
+		.vctcxo_tamer_0_ctrl_export             (<connected-to-vctcxo_tamer_0_ctrl_export>),             //  vctcxo_tamer_0_ctrl.export
+		.spi_2_MISO                             (<connected-to-spi_2_MISO>),                             //                spi_2.MISO
+		.spi_2_MOSI                             (<connected-to-spi_2_MOSI>),                             //                     .MOSI
+		.spi_2_SCLK                             (<connected-to-spi_2_SCLK>),                             //                     .SCLK
+		.spi_2_SS_n                             (<connected-to-spi_2_SS_n>)                              //                     .SS_n
 	);
 

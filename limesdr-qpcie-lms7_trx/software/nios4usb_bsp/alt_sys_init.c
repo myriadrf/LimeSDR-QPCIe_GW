@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_cpu' in SOPC Builder design 'nios_cpu'
  * SOPC Builder design path: ../../nios_cpu.sopcinfo
  *
- * Generated: Wed Dec 20 13:42:47 EET 2017
+ * Generated: Thu Sep 13 14:01:24 EEST 2018
  */
 
 /*
@@ -59,7 +59,6 @@
  */
 
 #include "altera_nios2_gen2_irq.h"
-#include "altera_avalon_jtag_uart.h"
 #include "altera_avalon_spi.h"
 #include "altera_avalon_sysid_qsys.h"
 #include "i2c_opencores.h"
@@ -69,10 +68,10 @@
  */
 
 ALTERA_NIOS2_GEN2_IRQ_INSTANCE ( NIOS2_CPU, nios2_cpu);
-ALTERA_AVALON_JTAG_UART_INSTANCE ( JTAG_UART_0, jtag_uart_0);
 ALTERA_AVALON_SPI_INSTANCE ( DAC_SPI1, dac_spi1);
 ALTERA_AVALON_SPI_INSTANCE ( FPGA_SPI0, fpga_spi0);
 ALTERA_AVALON_SPI_INSTANCE ( PLLCFG_SPI, PLLCFG_SPI);
+ALTERA_AVALON_SPI_INSTANCE ( SPI_2, spi_2);
 ALTERA_AVALON_SYSID_QSYS_INSTANCE ( SYSID_QSYS_0, sysid_qsys_0);
 I2C_OPENCORES_INSTANCE ( I2C_OPENCORES_0, i2c_opencores_0);
 
@@ -97,10 +96,10 @@ void alt_irq_init ( const void* base )
 
 void alt_sys_init( void )
 {
-    ALTERA_AVALON_JTAG_UART_INIT ( JTAG_UART_0, jtag_uart_0);
     ALTERA_AVALON_SPI_INIT ( DAC_SPI1, dac_spi1);
     ALTERA_AVALON_SPI_INIT ( FPGA_SPI0, fpga_spi0);
     ALTERA_AVALON_SPI_INIT ( PLLCFG_SPI, PLLCFG_SPI);
+    ALTERA_AVALON_SPI_INIT ( SPI_2, spi_2);
     ALTERA_AVALON_SYSID_QSYS_INIT ( SYSID_QSYS_0, sysid_qsys_0);
     I2C_OPENCORES_INIT ( I2C_OPENCORES_0, i2c_opencores_0);
 }

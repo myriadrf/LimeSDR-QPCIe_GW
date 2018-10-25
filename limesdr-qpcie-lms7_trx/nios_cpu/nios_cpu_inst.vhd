@@ -60,7 +60,11 @@
 			pllcfg_stat_export                     : out   std_logic_vector(9 downto 0);                     -- export
 			scl_export                             : inout std_logic                     := 'X';             -- export
 			sda_export                             : inout std_logic                     := 'X';             -- export
-			vctcxo_tamer_0_ctrl_export             : in    std_logic_vector(3 downto 0)  := (others => 'X')  -- export
+			vctcxo_tamer_0_ctrl_export             : in    std_logic_vector(3 downto 0)  := (others => 'X'); -- export
+			spi_2_MISO                             : in    std_logic                     := 'X';             -- MISO
+			spi_2_MOSI                             : out   std_logic;                                        -- MOSI
+			spi_2_SCLK                             : out   std_logic;                                        -- SCLK
+			spi_2_SS_n                             : out   std_logic                                         -- SS_n
 		);
 	end component nios_cpu;
 
@@ -126,6 +130,10 @@
 			pllcfg_stat_export                     => CONNECTED_TO_pllcfg_stat_export,                     --          pllcfg_stat.export
 			scl_export                             => CONNECTED_TO_scl_export,                             --                  scl.export
 			sda_export                             => CONNECTED_TO_sda_export,                             --                  sda.export
-			vctcxo_tamer_0_ctrl_export             => CONNECTED_TO_vctcxo_tamer_0_ctrl_export              --  vctcxo_tamer_0_ctrl.export
+			vctcxo_tamer_0_ctrl_export             => CONNECTED_TO_vctcxo_tamer_0_ctrl_export,             --  vctcxo_tamer_0_ctrl.export
+			spi_2_MISO                             => CONNECTED_TO_spi_2_MISO,                             --                spi_2.MISO
+			spi_2_MOSI                             => CONNECTED_TO_spi_2_MOSI,                             --                     .MOSI
+			spi_2_SCLK                             => CONNECTED_TO_spi_2_SCLK,                             --                     .SCLK
+			spi_2_SS_n                             => CONNECTED_TO_spi_2_SS_n                              --                     .SS_n
 		);
 

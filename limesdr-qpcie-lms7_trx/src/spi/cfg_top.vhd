@@ -15,6 +15,7 @@ use ieee.numeric_std.all;
 use work.fpgacfg_pkg.all;
 use work.pllcfg_pkg.all;
 use work.tstcfg_pkg.all;
+use work.txtspcfg_pkg.all;
 use work.rxtspcfg_pkg.all;
 use work.periphcfg_pkg.all;
 use work.tamercfg_pkg.all;
@@ -30,6 +31,7 @@ entity cfg_top is
       FPGACFG_START_ADDR   : integer := 0;
       PLLCFG_START_ADDR    : integer := 32;
       TSTCFG_START_ADDR    : integer := 96;
+      TXTSPCFG_START_ADDR  : integer := 128;
       RXTSPCFG_START_ADDR  : integer := 160;
       PERIPHCFG_START_ADDR : integer := 192;
       TAMERCFG_START_ADDR  : integer := 224;
@@ -62,6 +64,10 @@ entity cfg_top is
       to_tstcfg            : in  t_TO_TSTCFG;
       to_tstcfg_from_rxtx  : in  t_TO_TSTCFG_FROM_RXTX;
       from_tstcfg          : out t_FROM_TSTCFG;
+      to_txtspcfg_0        : in  t_TO_TXTSPCFG;
+      from_txtspcfg_0      : out t_FROM_TXTSPCFG;  
+      to_txtspcfg_1        : in  t_TO_TXTSPCFG;
+      from_txtspcfg_1      : out t_FROM_TXTSPCFG; 
       to_rxtspcfg          : in  t_TO_RXTSPCFG;
       from_rxtspcfg        : out t_FROM_RXTSPCFG;    
       to_periphcfg         : in  t_TO_PERIPHCFG;
@@ -95,6 +101,14 @@ signal inst1_sdoutA  : std_logic;
 
 --inst3
 signal inst3_sdout   : std_logic;
+
+--inst4_0
+signal inst4_0_sen     : std_logic; 
+signal inst4_0_sdout   : std_logic;
+
+--inst4_1
+signal inst4_1_sen     : std_logic; 
+signal inst4_1_sdout   : std_logic;
 
 --inst5
 signal inst5_sen     : std_logic;
@@ -240,6 +254,58 @@ begin
    );
 
 -- ----------------------------------------------------------------------------
+-- txtspcfg instance
+-- ----------------------------------------------------------------------------
+   inst4_0_sen <= sen when inst255_from_memcfg.mac(0)='1' else '1';
+    
+   inst4_0_txtsp : entity work.txtspcfg
+   port map(
+      -- Address and location of this module
+      -- Will be hard wired at the top level
+      maddress       => std_logic_vector(to_unsigned(TXTSPCFG_START_ADDR/32,10)),
+      mimo_en        => '1', -- MIMO enable, from TOP SPI
+   
+      -- Serial port IOs
+      sdin           => sdin, -- Data in
+      sclk           => sclk, -- Data clock
+      sen            => inst4_0_sen,  -- Enable signal (active low)
+      sdout          => inst4_0_sdout,   -- Data out
+      -- Signals coming from the pins or top level serial interface
+      lreset         => lreset, -- Logic reset signal, resets logic cells only
+      mreset         => mreset, -- Memory reset signal, resets configuration memory only    
+      oen            => open,
+      stateo         => open,
+      
+      to_txtspcfg    => to_txtspcfg_0,
+      from_txtspcfg  => from_txtspcfg_0
+
+   );
+   
+   inst4_1_sen <= sen when inst255_from_memcfg.mac(1)='1' else '1';
+      
+   inst4_1_txtsp : entity work.txtspcfg
+   port map(
+      -- Address and location of this module
+      -- Will be hard wired at the top level
+      maddress       => std_logic_vector(to_unsigned(TXTSPCFG_START_ADDR/32,10)),
+      mimo_en        => '1', -- MIMO enable, from TOP SPI
+   
+      -- Serial port IOs
+      sdin           => sdin, -- Data in
+      sclk           => sclk, -- Data clock
+      sen            => inst4_1_sen,  -- Enable signal (active low)
+      sdout          => inst4_1_sdout,   -- Data out
+      -- Signals coming from the pins or top level serial interface
+      lreset         => lreset, -- Logic reset signal, resets logic cells only
+      mreset         => mreset, -- Memory reset signal, resets configuration memory only    
+      oen            => open,
+      stateo         => open,
+      
+      to_txtspcfg    => to_txtspcfg_1,
+      from_txtspcfg  => from_txtspcfg_1
+
+   );
+-- ----------------------------------------------------------------------------
 -- rxtspcfg instance
 -- ---------------------------------------------------------------------------- 
    inst5_sen <= sen when inst255_from_memcfg.mac(0)='1' else '1';
@@ -359,8 +425,8 @@ begin
 -- Output ports
 -- ----------------------------------------------------------------------------    
    sdout <= inst0_0_sdout OR inst0_1_sdout OR inst0_2_sdout OR inst1_sdoutA OR 
-            inst3_sdout OR inst5_sdout OR inst6_sdout OR inst7_sdout OR 
-            inst8_sdout OR inst255_sdout;
+            inst3_sdout OR inst4_0_sdout OR inst4_1_sdout OR inst5_sdout OR 
+            inst6_sdout OR inst7_sdout OR inst8_sdout OR inst255_sdout;
   
 end arch;   
 

@@ -16,6 +16,7 @@ use ieee.numeric_std.all;
 use work.fpgacfg_pkg.all;
 use work.pllcfg_pkg.all;
 use work.tstcfg_pkg.all;
+use work.txtspcfg_pkg.all;
 use work.rxtspcfg_pkg.all;
 use work.periphcfg_pkg.all;
 use work.tamercfg_pkg.all;
@@ -30,7 +31,8 @@ entity nios_cpu_top is
       -- CFG_START_ADDR has to be multiple of 32, because there are 32 addresses
       FPGACFG_START_ADDR   : integer := 0;
       PLLCFG_START_ADDR    : integer := 32;
-      TSTCFG_START_ADDR    : integer := 64;
+      TSTCFG_START_ADDR    : integer := 96;
+      TXTSPCFG_START_ADDR  : integer := 128;
       RXTSPCFG_START_ADDR  : integer := 160;
       PERIPHCFG_START_ADDR : integer := 192;
       TAMERCFG_START_ADDR  : integer := 224;
@@ -124,6 +126,10 @@ entity nios_cpu_top is
       from_tstcfg          : out    t_FROM_TSTCFG;
       to_tstcfg            : in     t_TO_TSTCFG;
       to_tstcfg_from_rxtx  : in     t_TO_TSTCFG_FROM_RXTX;
+      to_txtspcfg_0        : in     t_TO_TXTSPCFG;
+      from_txtspcfg_0      : out    t_FROM_TXTSPCFG;
+      to_txtspcfg_1        : in     t_TO_TXTSPCFG;
+      from_txtspcfg_1      : out    t_FROM_TXTSPCFG;
       to_rxtspcfg          : in     t_TO_RXTSPCFG;
       from_rxtspcfg        : out    t_FROM_RXTSPCFG;
       to_periphcfg         : in     t_TO_PERIPHCFG;
@@ -142,10 +148,12 @@ end nios_cpu_top;
 -- ----------------------------------------------------------------------------
 architecture arch of nios_cpu_top is
 --declare signals,  components here
+   constant c_SPI_NR_FPGA           : integer := 6;
 
    signal to_pllcfg_int             : t_TO_PLLCFG;
 
    -- inst0
+   signal inst0_fpga_spi0_MISO      : std_logic;
    signal inst0_dac_spi1_SS_n       : std_logic;
    signal inst0_dac_spi1_MOSI       : std_logic;
    signal inst0_dac_spi1_SCLK       : std_logic;
@@ -157,7 +165,10 @@ architecture arch of nios_cpu_top is
    signal inst0_pllcfg_spi_SS_n     : std_logic;
    signal inst0_pllcfg_cmd_export   : std_logic_vector(3 downto 0);
    signal inst0_pllcfg_stat_export  : std_logic_vector(9 downto 0);
-   
+   signal inst0_spi_2_MISO          : std_logic;
+   signal inst0_spi_2_MOSI          : std_logic;
+   signal inst0_spi_2_SCLK          : std_logic;
+   signal inst0_spi_2_SS_n          : std_logic;
    
    
    --inst1
@@ -235,7 +246,11 @@ architecture arch of nios_cpu_top is
       avmm_m0_write                          : out   std_logic;                                        --                      .write
       avmm_m0_writedata                      : out   std_logic_vector(7 downto 0);                     --                      .writedata
       avmm_m0_clk_clk                        : out   std_logic;                                        --            avm_m0_clk.clk
-      avmm_m0_reset_reset                    : out   std_logic  
+      avmm_m0_reset_reset                    : out   std_logic;
+      spi_2_MISO                             : in    std_logic                     := 'X';             -- MISO
+      spi_2_MOSI                             : out   std_logic;                                        -- MOSI
+      spi_2_SCLK                             : out   std_logic;                                        -- SCLK
+      spi_2_SS_n                             : out   std_logic                                         -- SS_n  
    );
    end component nios_cpu;
 
@@ -264,7 +279,8 @@ begin
    
 -- ----------------------------------------------------------------------------
 -- NIOS instance
--- ----------------------------------------------------------------------------   
+-- ----------------------------------------------------------------------------
+   
    inst0_nios_cpu : component nios_cpu
    port map (
       clk_clk                                => clk,
@@ -327,7 +343,11 @@ begin
       avmm_m0_write                          => avmm_m0_write,
       avmm_m0_writedata                      => avmm_m0_writedata,
       avmm_m0_clk_clk                        => avmm_m0_clk_clk,
-      avmm_m0_reset_reset                    => avmm_m0_reset_reset
+      avmm_m0_reset_reset                    => avmm_m0_reset_reset,
+      spi_2_MISO                             => spi_0_MISO,
+      spi_2_MOSI                             => inst0_spi_2_MOSI,
+      spi_2_SCLK                             => inst0_spi_2_SCLK,
+      spi_2_SS_n                             => inst0_spi_2_SS_n
    );
    
    inst0_pllcfg_cmd_export <= from_pllcfg.phcfg_mode & from_pllcfg.pllrst_start & 
@@ -349,6 +369,7 @@ begin
       FPGACFG_START_ADDR   => FPGACFG_START_ADDR,
       PLLCFG_START_ADDR    => PLLCFG_START_ADDR,
       TSTCFG_START_ADDR    => TSTCFG_START_ADDR,
+      TXTSPCFG_START_ADDR  => TXTSPCFG_START_ADDR,
       RXTSPCFG_START_ADDR  => RXTSPCFG_START_ADDR,
       PERIPHCFG_START_ADDR => PERIPHCFG_START_ADDR,
       TAMERCFG_START_ADDR  => TAMERCFG_START_ADDR,
@@ -358,7 +379,7 @@ begin
       -- Serial port IOs
       sdin                 => inst0_fpga_spi0_MOSI,
       sclk                 => inst0_fpga_spi0_SCLK,
-      sen                  => inst0_fpga_spi0_SS_n(6),
+      sen                  => inst0_fpga_spi0_SS_n(c_SPI_NR_FPGA),
       sdout                => inst1_sdout, 
       pllcfg_sdin          => inst0_pllcfg_spi_MOSI,
       pllcfg_sclk          => inst0_pllcfg_spi_SCLK,
@@ -378,6 +399,10 @@ begin
       to_tstcfg            => to_tstcfg,
       from_tstcfg          => from_tstcfg,
       to_tstcfg_from_rxtx  => to_tstcfg_from_rxtx,
+      to_txtspcfg_0        => to_txtspcfg_0,
+      from_txtspcfg_0      => from_txtspcfg_0,
+      to_txtspcfg_1        => to_txtspcfg_1,
+      from_txtspcfg_1      => from_txtspcfg_1,
       to_rxtspcfg          => to_rxtspcfg,
       from_rxtspcfg        => from_rxtspcfg,
       to_periphcfg         => to_periphcfg,
@@ -391,12 +416,23 @@ begin
 -- ----------------------------------------------------------------------------
 -- Output ports
 -- ---------------------------------------------------------------------------- 
-   spi_0_SS_n(7 downto 0)  <= inst0_fpga_spi0_SS_n;
+   spi_0_SS_n(4 downto 0)  <= inst0_fpga_spi0_SS_n(4 downto 0);
+   spi_0_SS_n(5)           <= inst0_spi_2_SS_n;
+   spi_0_SS_n(7 downto 6)  <= inst0_fpga_spi0_SS_n(7 downto 6);
    spi_0_SS_n(8)           <= inst0_dac_spi1_SS_n;
+   
    -- SPI MUX
-   spi_0_MOSI <= inst0_fpga_spi0_MOSI when inst0_dac_spi1_SS_n = '1' else inst0_dac_spi1_MOSI;
-   spi_0_SCLK <= inst0_fpga_spi0_SCLK when inst0_dac_spi1_SS_n = '1' else inst0_dac_spi1_SCLK;
-
+--   spi_0_MOSI <= inst0_fpga_spi0_MOSI when inst0_dac_spi1_SS_n = '1' else inst0_dac_spi1_MOSI;
+--   spi_0_SCLK <= inst0_fpga_spi0_SCLK when inst0_dac_spi1_SS_n = '1' else inst0_dac_spi1_SCLK;
+   
+   spi_0_MOSI  <= inst0_dac_spi1_MOSI  when inst0_dac_spi1_SS_n = '0' else 
+                  inst0_spi_2_MOSI     when inst0_spi_2_SS_n = '0' else 
+                  inst0_fpga_spi0_MOSI;
+                  
+   spi_0_SCLK  <= inst0_dac_spi1_SCLK  when inst0_dac_spi1_SS_n = '0' else
+                  inst0_spi_2_SCLK     when inst0_spi_2_SS_n = '0' else 
+                  inst0_fpga_spi0_SCLK;
+   
    vctcxo_tamer_0_ctrl_export(0) <= vctcxo_tune_en_sync;
    vctcxo_tamer_0_ctrl_export(1) <= vctcxo_irq_sync;
    vctcxo_tamer_0_ctrl_export(2) <= '0';

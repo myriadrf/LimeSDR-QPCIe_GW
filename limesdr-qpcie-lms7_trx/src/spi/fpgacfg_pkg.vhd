@@ -34,6 +34,7 @@ package fpgacfg_pkg is
       trxiq_pulse    : std_logic;
       mimo_int_en    : std_logic;
       synch_dis      : std_logic;
+      dlb_en         : std_logic;
       synch_mode     : std_logic;
       smpl_nr_clr    : std_logic;
       txpct_loss_clr : std_logic;

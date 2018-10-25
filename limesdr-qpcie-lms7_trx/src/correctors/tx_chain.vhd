@@ -8,6 +8,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use work.txtspcfg_pkg.all;
 
 -- ----------------------------------------------------------------------------
 -- Entity declaration
@@ -15,19 +16,15 @@ use ieee.numeric_std.all;
 entity tx_chain is 
    port
    (
-      clk         : in std_logic;
-      nrst        : in std_logic;
-      maddress    : in std_logic_vector(9 downto 0);
-      sclk        : in std_logic;
-      sdin        : in std_logic;
-      sen         : in std_logic;
-      sdout       : out std_logic;
-      memrstn     : in std_logic;
-      mac_en      : in std_logic := '1';
-      TXI         : in std_logic_vector(17 downto 0);
-      TXQ         : in std_logic_vector(17 downto 0);
-      TYI         : out std_logic_vector(13 downto 0);
-      TYQ         : out std_logic_vector(13 downto 0)
+      clk            : in  std_logic;
+      nrst           : in  std_logic;
+      TXI            : in  std_logic_vector(17 downto 0);
+      TXQ            : in  std_logic_vector(17 downto 0);
+      TYI            : out std_logic_vector(13 downto 0);
+      TYQ            : out std_logic_vector(13 downto 0);
+      from_txtspcfg  : in  t_FROM_TXTSPCFG;
+      to_txtspcfg    : out t_TO_TXTSPCFG
+      
    );
 end tx_chain;
 
@@ -196,37 +193,54 @@ end component;
 begin 
 
 
-   sen_int <= sen when mac_en = '1' else '1';
+   --sen_int <= sen when mac_en = '1' else '1';
 
 -- ----------------------------------------------------------------------------
 -- SPI control registers
 -- ----------------------------------------------------------------------------
-txtspcfg_inst0 : txtspcfg
-port map(
-   mimo_en     => '1',
-   sdin        => sdin,
-   sclk        => sclk,
-   sen         => sen_int,
-   lreset      => memrstn,
-   mreset      => memrstn,
-   txen        => '1',
-   bstate      => '0',
-   bsigi       => inst0_bsigi,
-   bsigq       => inst0_bsigq,
-   maddress    => maddress,
-   sdout       => sdout,
-   en          => inst0_en,
-   insel       => inst0_insel,
-   ph_byp      => inst0_ph_byp,
-   gc_byp      => inst0_gc_byp,
-   dc_byp      => inst0_dc_byp,
-   dccorri     => inst0_dccorri,
-   dccorrq     => inst0_dccorrq,
-   gcorri      => inst0_gcorri,
-   gcorrq      => inst0_gcorrq,
-   iqcorr      => inst0_iqcorr,
-   nco_fcv     => inst0_nco_fcv
-   );
+-- txtspcfg_inst0 : txtspcfg
+-- port map(
+   -- mimo_en     => '1',
+   -- sdin        => sdin,
+   -- sclk        => sclk,
+   -- sen         => sen_int,
+   -- lreset      => memrstn,
+   -- mreset      => memrstn,
+   -- txen        => '1',
+   -- bstate      => '0',
+   -- bsigi       => inst0_bsigi,
+   -- bsigq       => inst0_bsigq,
+   -- maddress    => maddress,
+   -- sdout       => sdout,
+   -- en          => inst0_en,
+   -- insel       => inst0_insel,
+   -- ph_byp      => inst0_ph_byp,
+   -- gc_byp      => inst0_gc_byp,
+   -- dc_byp      => inst0_dc_byp,
+   -- dccorri     => inst0_dccorri,
+   -- dccorrq     => inst0_dccorrq,
+   -- gcorri      => inst0_gcorri,
+   -- gcorrq      => inst0_gcorrq,
+   -- iqcorr      => inst0_iqcorr,
+   -- nco_fcv     => inst0_nco_fcv
+   -- );
+   
+   to_txtspcfg.txen        <= '1';
+   to_txtspcfg.bstate      <= '0';
+   to_txtspcfg.bsigi       <= inst0_bsigi;
+   to_txtspcfg.bsigq       <= inst0_bsigq;
+   
+   inst0_en       <= from_txtspcfg.en;     
+   inst0_insel    <= from_txtspcfg.insel;  
+   inst0_ph_byp   <= from_txtspcfg.ph_byp; 
+   inst0_gc_byp   <= from_txtspcfg.gc_byp ;
+   inst0_dc_byp   <= from_txtspcfg.dc_byp ;
+   inst0_dccorri  <= from_txtspcfg.dccorri;
+   inst0_dccorrq  <= from_txtspcfg.dccorrq;
+   inst0_gcorri   <= from_txtspcfg.gcorri ;
+   inst0_gcorrq   <= from_txtspcfg.gcorrq ;
+   inst0_iqcorr   <= from_txtspcfg.iqcorr ;
+   inst0_nco_fcv  <= from_txtspcfg.nco_fcv;
    
    
 -- ----------------------------------------------------------------------------

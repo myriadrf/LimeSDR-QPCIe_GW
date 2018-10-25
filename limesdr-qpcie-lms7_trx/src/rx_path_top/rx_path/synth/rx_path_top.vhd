@@ -173,11 +173,22 @@ smpl_fifo_inst1 : entity work.fifo_inst
         );
  
 --samples are placed to MSb LSb ar filled with zeros 
-inst2_smpl_buff_rddata <=  inst1_q(47 downto 36) & "0000" & 
-                           inst1_q(35 downto 24) & "0000" & 
-                           inst1_q(23 downto 12) & "0000" & 
-                           inst1_q(11 downto 0) & "0000";
-    
+--inst2_smpl_buff_rddata <=  inst1_q(47 downto 36) & "0000" & 
+--                           inst1_q(35 downto 24) & "0000" & 
+--                           inst1_q(23 downto 12) & "0000" & 
+--                           inst1_q(11 downto 0) & "0000";
+                           
+inst2_smpl_buff_rddata(63 downto 64-iq_width) <= inst1_q(iq_width*4-1 downto iq_width*3);
+inst2_smpl_buff_rddata(64-iq_width-1 downto 48) <= (others=>'0');
+
+inst2_smpl_buff_rddata(47 downto 48-iq_width) <= inst1_q(iq_width*3-1 downto iq_width*2);
+inst2_smpl_buff_rddata(48-iq_width-1 downto 32) <= (others=>'0');
+
+inst2_smpl_buff_rddata(31 downto 32-iq_width) <= inst1_q(iq_width*2-1 downto iq_width);
+inst2_smpl_buff_rddata(32-iq_width-1 downto 16) <= (others=>'0');
+
+inst2_smpl_buff_rddata(15 downto 16-iq_width) <= inst1_q(iq_width-1 downto 0);
+inst2_smpl_buff_rddata(16-iq_width-1 downto 0) <= (others=>'0');    
     
 --packet reserved bits  
   inst2_pct_hdr_0(15 downto 0)   <="000000000000" & tx_pct_loss_sync & pct_fifo_wusedw(pct_buff_wrusedw_w-1 downto pct_buff_wrusedw_w-3);

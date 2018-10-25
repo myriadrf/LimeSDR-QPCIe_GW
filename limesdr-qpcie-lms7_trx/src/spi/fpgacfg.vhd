@@ -209,7 +209,7 @@ begin
          mem(20)  <= "0000000000000011";  --  0 free, (Reserved LMS control)
          mem(21)  <= "0000000000000000";  --  0 free, (Reserved LMS control)
          mem(22)  <= "0000000000000000";  --  0 free, (Reserved LMS control)
-         mem(23)  <= "0001000101000100";  --  0 free, (Reserved), GPIO[6:0]
+         mem(23)  <= "1001100110011001";  --  0 free, (Reserved), GPIO[6:0]
          mem(24)  <= "0000000000000000";  -- 16 free, (Reserved) 
          mem(25)  <= "0000000000000000";  -- 16 free, (Reserved)
          mem(26)  <= "0000000000000000";  --  0 free, Reserved[15:8],FPGA_LED2_G,FPGA_LED2_R,FPGA_LED2_OVRD,Reserved,FPGA_LED1_G,FPGA_LED1_R,FPGA_LED1_OVRD
@@ -250,7 +250,7 @@ begin
       from_fpgacfg.trxiq_pulse         <= mem(8) (7);
       from_fpgacfg.mimo_int_en         <= mem(8) (8);
       from_fpgacfg.synch_dis           <= mem(8) (9);
-      from_fpgacfg.synch_mode          <= mem(8) (10);
+      from_fpgacfg.dlb_en              <= mem(8) (10);
       from_fpgacfg.smpl_nr_clr         <= mem(9) (0);
       from_fpgacfg.txpct_loss_clr      <= mem(9) (1);
       from_fpgacfg.rx_en               <= mem(10) (0);

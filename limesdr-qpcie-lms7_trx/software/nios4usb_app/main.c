@@ -37,6 +37,7 @@
 #define SPI_NR_POT          4
 #define SPI_NR_EXTADC       5
 #define SPI_NR_FPGA         6
+#define SPI_2_NR_EXTADC    	0
 
 
 
@@ -46,7 +47,7 @@
 #define LMS2_SS			8
 #define LMS2_RESET		9
 
-unsigned short int dac_val = 30714;		//TCXO DAC value
+uint16_t dac_val = 30714;		//TCXO DAC value
 signed short int converted_val = 300;	//Temperature
 
 
@@ -125,6 +126,7 @@ void Configure_LM75(void)
 void init_ADC()
 {
 	uint8_t wr_buf[2];
+	uint8_t rd_buf[2];
 	int spirez;
 
 	// Reset ADC
@@ -133,114 +135,194 @@ void init_ADC()
     //asm("nop"); asm("nop"); asm("nop");
     //IOWR(GPIO_0_BASE, 0x00, ui32_tmp & 0xFFFFFFFE);	//Set to 0
 
+	//IOWR_8DIRECT(GPIO_0_BASE, 0x00, 0x01);	//Set to 1
+    //asm("nop"); asm("nop"); asm("nop");
+	IOWR_8DIRECT(GPIO_0_BASE, 0x00, 0x00);	//Set to 0
 
 	// Disable ADC readout and reset
 	wr_buf[0] = 0x00;	//Address
 	wr_buf[1] = 0x02;	//Data
 	//wr_buf[1] = 0x00;	//Data
-	spirez = alt_avalon_spi_command(FPGA_SPI0_BASE, SPI_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
+	spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
 
 	// 0x01
 	wr_buf[0] = 0x01;	//Address
 	wr_buf[1] = 0x00;	//Data
-	spirez = alt_avalon_spi_command(FPGA_SPI0_BASE, SPI_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
+	spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
 
 	// 0x03
 	wr_buf[0] = 0x03;	//Address
 	//wr_buf[1] = 0x53;	//Data
 	wr_buf[1] = 0x00;	//Data
-	spirez = alt_avalon_spi_command(FPGA_SPI0_BASE, SPI_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
+	spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
 
 	// 0x25
 	wr_buf[0] = 0x25;	//Address
 	wr_buf[1] = 0x04;	//Data
-	spirez = alt_avalon_spi_command(FPGA_SPI0_BASE, SPI_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
+	spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
 
 	// 0x29
 	wr_buf[0] = 0x29;	//Address
 	wr_buf[1] = 0x00;	//Data
-	spirez = alt_avalon_spi_command(FPGA_SPI0_BASE, SPI_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
+	spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
 
 	// 0x2B
 	wr_buf[0] = 0x2B;	//Address
 	wr_buf[1] = 0x04;	//Data
-	spirez = alt_avalon_spi_command(FPGA_SPI0_BASE, SPI_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
+	spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
 
 	// 0x3D
 	wr_buf[0] = 0x3D;	//Address
 	wr_buf[1] = 0x00;	//Data
-	spirez = alt_avalon_spi_command(FPGA_SPI0_BASE, SPI_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
+	spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
 
 	// 0x3F
 	wr_buf[0] = 0x3F;	//Address
 	wr_buf[1] = 0x00;	//Data
-	spirez = alt_avalon_spi_command(FPGA_SPI0_BASE, SPI_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
+	spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
 
 	// 0x40
 	wr_buf[0] = 0x40;	//Address
 	wr_buf[1] = 0x00;	//Data
-	spirez = alt_avalon_spi_command(FPGA_SPI0_BASE, SPI_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
+	spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
 
 	// 0x41
 	wr_buf[0] = 0x41;	//Address
 	wr_buf[1] = 0x00;	//Data
-	spirez = alt_avalon_spi_command(FPGA_SPI0_BASE, SPI_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
+	spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
 
 	// 0x42
 	wr_buf[0] = 0x42;	//Address
 	//wr_buf[1] = 0x08;	//Data
 	wr_buf[1] = 0x00;	//Data
-	spirez = alt_avalon_spi_command(FPGA_SPI0_BASE, SPI_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
+	spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
 
 	// 0x45
 	wr_buf[0] = 0x45;	//Address
 	wr_buf[1] = 0x00;	//Data
-	spirez = alt_avalon_spi_command(FPGA_SPI0_BASE, SPI_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
+	spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
 
 	// 0x4A
 	wr_buf[0] = 0x4A;	//Address
 	wr_buf[1] = 0x00;	//Data
-	spirez = alt_avalon_spi_command(FPGA_SPI0_BASE, SPI_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
+	spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
 
 	// 0x58
 	wr_buf[0] = 0x58;	//Address
 	wr_buf[1] = 0x00;	//Data
-	spirez = alt_avalon_spi_command(FPGA_SPI0_BASE, SPI_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
+	spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
 
 	// 0xBF
 	wr_buf[0] = 0xBF;	//Address
 	wr_buf[1] = 0x00;	//Data
-	spirez = alt_avalon_spi_command(FPGA_SPI0_BASE, SPI_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
+	spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
 
 	// 0xC1
 	wr_buf[0] = 0xC1;	//Address
 	wr_buf[1] = 0x00;	//Data
-	spirez = alt_avalon_spi_command(FPGA_SPI0_BASE, SPI_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
+	spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
 
 	// 0xCF
 	wr_buf[0] = 0xCF;	//Address
 	wr_buf[1] = 0x00;	//Data
-	spirez = alt_avalon_spi_command(FPGA_SPI0_BASE, SPI_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
+	spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
 
 	// 0xDB
 	wr_buf[0] = 0xDB;	//Address
 	wr_buf[1] = 0x01;	//Data (0x01 - Low Speed MODE CH B enabled, 0x00 - Low Speed MODE CH B disabled)
-	spirez = alt_avalon_spi_command(FPGA_SPI0_BASE, SPI_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
+	spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
 
 	// 0xEF
 	wr_buf[0] = 0xEF;	//Address
 	wr_buf[1] = 0x10;	//Data (0x10 - Low Speed MODE enabled, 0x00 - Low Speed MODE disabled)
-	spirez = alt_avalon_spi_command(FPGA_SPI0_BASE, SPI_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
+	spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
 
 	// 0xF1
 	wr_buf[0] = 0xF1;	//Address
 	wr_buf[1] = 0x00;	//Data
-	spirez = alt_avalon_spi_command(FPGA_SPI0_BASE, SPI_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
+	spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
 
 	// 0xF2
 	wr_buf[0] = 0xF2;	//Address
 	wr_buf[1] = 0x08;	//Data (0x08 - Low Speed MODE CH A enabled, 0x00 - Low Speed MODE CH A disabled)
-	spirez = alt_avalon_spi_command(FPGA_SPI0_BASE, SPI_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
+	spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
+
+	// ---------------Testing
+	// Enable ADC readout
+
+
+	wr_buf[0] = 0x00;	//Address
+	wr_buf[1] = 0x01;	//Data
+	spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
+
+	wr_buf[0] = 0x3F;	//Address
+	wr_buf[1] = 0x00;	//Data
+	spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 1, wr_buf, 1, rd_buf, 0);
+
+	wr_buf[0] = 0x40;	//Address
+	wr_buf[1] = 0x00;	//Data
+	spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 1, wr_buf, 1, rd_buf, 0);
+
+	wr_buf[0] = 0x41;	//Address
+	wr_buf[1] = 0x00;	//Data
+	spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 1, wr_buf, 1, rd_buf, 0);
+
+	wr_buf[0] = 0x42;	//Address
+	wr_buf[1] = 0x00;	//Data
+	spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 1, wr_buf, 1, rd_buf, 0);
+
+	wr_buf[0] = 0x45;	//Address
+	wr_buf[1] = 0x00;	//Data
+	spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 1, wr_buf, 1, rd_buf, 0);
+
+	wr_buf[0] = 0x4A;	//Address
+	wr_buf[1] = 0x00;	//Data
+	spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 1, wr_buf, 1, rd_buf, 0);
+
+	wr_buf[0] = 0x58;	//Address
+	wr_buf[1] = 0x00;	//Data
+	spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 1, wr_buf, 1, rd_buf, 0);
+
+	wr_buf[0] = 0xBF;	//Address
+	wr_buf[1] = 0x00;	//Data
+	spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 1, wr_buf, 1, rd_buf, 0);
+
+	wr_buf[0] = 0xC1;	//Address
+	wr_buf[1] = 0x00;	//Data
+	spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 1, wr_buf, 1, rd_buf, 0);
+
+	wr_buf[0] = 0xCF;	//Address
+	wr_buf[1] = 0x00;	//Data
+	spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 1, wr_buf, 1, rd_buf, 0);
+
+	wr_buf[0] = 0xDB;	//Address
+	wr_buf[1] = 0x00;	//Data
+	spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 1, wr_buf, 1, rd_buf, 0);
+
+	wr_buf[0] = 0xEF;	//Address
+	wr_buf[1] = 0x00;	//Data
+	spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 1, wr_buf, 1, rd_buf, 0);
+
+	wr_buf[0] = 0xF1;	//Address
+	wr_buf[1] = 0x00;	//Data
+	spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 1, wr_buf, 1, rd_buf, 0);
+
+	wr_buf[0] = 0xF2;	//Address
+	wr_buf[1] = 0x00;	//Data
+	spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 1, wr_buf, 1, rd_buf, 0);
+
+	// Disable ADC readout
+	wr_buf[0] = 0x00;	//Address
+	wr_buf[1] = 0x00;	//Data
+	spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
+
+
+
+
+
+
+
+
 
 }
 
@@ -249,7 +331,7 @@ void init_ADC()
  *	@param oe output enable control: 0 - output disabled, 1 - output enabled
  *	@param data pointer to DAC value (1 byte)
  */
-void Control_TCXO_DAC (unsigned char oe, unsigned short int *data) //controls DAC (AD5601)
+void Control_TCXO_DAC (unsigned char oe, uint16_t *data) //controls DAC (AD5601)
 {
 	volatile int spirez;
 	unsigned char DAC_data[3];
@@ -316,6 +398,7 @@ void Control_TCXO_ADF (unsigned char oe, unsigned char *data) //controls ADF4002
 void change_ADC_tpat(uint8_t mode)
 {
 	uint8_t wr_buf[2];
+	uint8_t rd_buf[2];
 	int spirez;
 
 	if(mode)
@@ -349,10 +432,54 @@ void change_ADC_tpat(uint8_t mode)
 		spirez = alt_avalon_spi_command(FPGA_SPI0_BASE, SPI_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
 		*/
 
+		// Disable ADC readout
+		wr_buf[0] = 0x00;	//Address
+		wr_buf[1] = 0x00;	//Data
+		spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
+
+		// 0x25
+		wr_buf[0] = 0x25;	//Address
+		wr_buf[1] = 0x03;	//Data
+		spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
+
+		// 0x2B
+		wr_buf[0] = 0x2B;	//Address
+		wr_buf[1] = 0x03;	//Data
+		spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
+
+		// 0x3F
+		wr_buf[0] = 0x3F;	//Address
+		wr_buf[1] = 0x1F;	//Data
+		spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
+
+		// 0x40
+		wr_buf[0] = 0x40;	//Address
+		wr_buf[1] = 0xFF;	//Data
+		spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
+
+
 		// 0x42 Enable Digital functions
 		wr_buf[0] = 0x42;	//Address
 		wr_buf[1] = 0x08;	//Data
-		spirez = alt_avalon_spi_command(FPGA_SPI0_BASE, SPI_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
+		spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
+
+		//testing
+			wr_buf[0] = 0x00;	//Address
+			wr_buf[1] = 0x01;	//Data
+			spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
+
+			wr_buf[0] = 0x3F;	//Address
+			wr_buf[1] = 0x00;	//Data
+			spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 1, wr_buf, 1, rd_buf, 0);
+
+			wr_buf[0] = 0x42;	//Address
+			wr_buf[1] = 0x00;	//Data
+			spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 1, wr_buf, 1, rd_buf, 0);
+
+			// Disable ADC readout
+			wr_buf[0] = 0x00;	//Address
+			wr_buf[1] = 0x00;	//Data
+			spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
 
 
 
@@ -391,7 +518,7 @@ void change_ADC_tpat(uint8_t mode)
 		// 0x42 Disable Digital functions
 		wr_buf[0] = 0x42;	//Address
 		wr_buf[1] = 0x00;	//Data
-		spirez = alt_avalon_spi_command(FPGA_SPI0_BASE, SPI_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
+		spirez = alt_avalon_spi_command(SPI_2_BASE, SPI_2_NR_EXTADC, 2, wr_buf, 0, NULL, 0);
 
 	};
 }
@@ -424,6 +551,25 @@ uint32_t GetPLLCFG_Base(uint8_t ind)
 	}
 
 	return PLL_BASE;
+}
+void ResetPLL(void)
+{
+	uint8_t wr_buf[2];
+	uint8_t rd_buf[2];
+	int pll_ind, spirez;
+
+	// Read
+	wr_buf[0] = 0x00;	// Command and Address
+	wr_buf[1] = 0x23;	// Command and Address
+	spirez = alt_avalon_spi_command(PLLCFG_SPI_BASE, 0, 2, wr_buf, 2, rd_buf, 0);
+
+	// Get PLL index
+	pll_ind = PLL_IND(rd_buf[1]); //(rd_buf[0] >> 3) & 0x3F;
+
+	// Toggle reset line of appropriate PLL
+    IOWR(PLL_RST_BASE, 0x00, 0x01 << pll_ind);	//Set to 1
+    asm("nop"); asm("nop");
+    IOWR(PLL_RST_BASE, 0x00, 0x00);	//Set to 0
 }
 
 // Updates PLL configuration
@@ -571,25 +717,6 @@ uint8_t UpdatePHCFG(void)
 }
 
 //
-void ResetPLL(void)
-{
-	uint8_t wr_buf[2];
-	uint8_t rd_buf[2];
-	int pll_ind, spirez;
-
-	// Read
-	wr_buf[0] = 0x00;	// Command and Address
-	wr_buf[1] = 0x23;	// Command and Address
-	spirez = alt_avalon_spi_command(PLLCFG_SPI_BASE, 0, 2, wr_buf, 2, rd_buf, 0);
-
-	// Get PLL index
-	pll_ind = PLL_IND(rd_buf[1]); //(rd_buf[0] >> 3) & 0x3F;
-
-	// Toggle reset line of appropriate PLL
-    IOWR(PLL_RST_BASE, 0x00, 0x01 << pll_ind);	//Set to 1
-    asm("nop"); asm("nop");
-    IOWR(PLL_RST_BASE, 0x00, 0x00);	//Set to 0
-}
 
 /**
  *	@brief Function to modify BRD (FPGA) spi register bits
@@ -648,7 +775,6 @@ void Modify_BRDSPI16_Reg_bits (unsigned short int SPI_reg_addr, unsigned char MS
 
 int main(void)
 {
-	uint32_t i, ui32_tmp, ui32_c0, ui32_c1;
 	uint8_t sw2_old, sw2;
 	uint8_t phcfg_start_old, phcfg_start;
 	uint8_t pllcfg_start_old, pllcfg_start;
@@ -657,10 +783,7 @@ int main(void)
 	//tPLL_CFG pll_config;
 	uint8_t pllcfgrez;
 
-	uint8_t wr_buf[2];
-	uint8_t rd_buf[2];
 	int spirez;
-	char cnt = 0;
 	uint32_t* dest = (uint32_t*)glEp0Buffer_Tx;
 
 	//MCP4261 wiper control
@@ -863,7 +986,7 @@ int main(void)
 
                 /* Tune to the minimum DAC value */
                 vctcxo_trim_dac_write( 0x08, trimdac_min );
-                dac_val = (unsigned short int) trimdac_min;
+                dac_val = (uint16_t) trimdac_min;
             	Control_TCXO_DAC (1, &dac_val); //enable DAC output, set new val
 
                 /* State to enter upon the next interrupt */
@@ -879,7 +1002,7 @@ int main(void)
 
                 /* Tune to the maximum DAC value */
                 vctcxo_trim_dac_write( 0x08, trimdac_max );
-                dac_val = (unsigned short int) trimdac_max;
+                dac_val = (uint16_t) trimdac_max;
             	Control_TCXO_DAC (1, &dac_val); //enable DAC output, set new val
 
                 /* State to enter upon the next interrupt */
@@ -907,7 +1030,7 @@ int main(void)
 
                 /* Set the trim DAC count to the y-intercept */
                 vctcxo_trim_dac_write( 0x08, trimdac_cal_line.y_intercept );
-                dac_val = (unsigned short int) trimdac_cal_line.y_intercept;
+                dac_val = (uint16_t) trimdac_cal_line.y_intercept;
             	Control_TCXO_DAC (1, &dac_val); //enable DAC output, set new val
 
 
@@ -932,7 +1055,7 @@ int main(void)
                 	// Write tuned val to VCTCXO_tamer MM registers
                     vctcxo_trim_dac_write( 0x08, vctcxo_trim_dac_value);
                     // Change DAC value
-                    dac_val = (unsigned short int) vctcxo_trim_dac_value;
+                    dac_val = (uint16_t) vctcxo_trim_dac_value;
                 	Control_TCXO_DAC (1, &dac_val); //enable DAC output, set new val
 
                 } else if( vctcxo_tamer_pkt.pps_10s_error_flag ) {
@@ -941,7 +1064,7 @@ int main(void)
                 	// Write tuned val to VCTCXO_tamer MM registers
                     vctcxo_trim_dac_write( 0x08, vctcxo_trim_dac_value);
                     // Change DAC value
-                    dac_val = (unsigned short int) vctcxo_trim_dac_value;
+                    dac_val = (uint16_t) vctcxo_trim_dac_value;
                 	Control_TCXO_DAC (1, &dac_val); //enable DAC output, set new val
 
                 } else if( vctcxo_tamer_pkt.pps_100s_error_flag ) {
@@ -950,7 +1073,7 @@ int main(void)
                 	// Write tuned val to VCTCXO_tamer MM registers
                     vctcxo_trim_dac_write( 0x08, vctcxo_trim_dac_value);
                     // Change DAC value
-                    dac_val = (unsigned short int) vctcxo_trim_dac_value;
+                    dac_val = (uint16_t) vctcxo_trim_dac_value;
                 	Control_TCXO_DAC (1, &dac_val); //enable DAC output, set new val
                 }
 
@@ -1329,9 +1452,9 @@ int main(void)
 
 
      		//Send response to the command
-        	for(cnt=0; cnt<64/sizeof(uint32_t); ++cnt)
+        	for(int i=0; i<64/sizeof(uint32_t); ++i)
         	{
-        		IOWR(AV_FIFO_INT_0_BASE, 0, dest[cnt]);
+        		IOWR(AV_FIFO_INT_0_BASE, 0, dest[i]);
 			};
 
         };

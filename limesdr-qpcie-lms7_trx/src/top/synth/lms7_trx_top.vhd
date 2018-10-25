@@ -16,6 +16,7 @@ use ieee.numeric_std.all;
 use work.fpgacfg_pkg.all;
 use work.pllcfg_pkg.all;
 use work.tstcfg_pkg.all;
+use work.txtspcfg_pkg.all;
 use work.rxtspcfg_pkg.all;
 use work.periphcfg_pkg.all;
 use work.tamercfg_pkg.all;
@@ -34,6 +35,8 @@ entity lms7_trx_top is
       g_DEV_FAMILY            : string := "Cyclone V";
       -- LMS7002 related 
       g_LMS_DIQ_WIDTH         : integer := 12;
+      g_EXT_ADC_D_WIDTH       : integer := 14;
+      g_EXT_DAC_D_WIDTH       : integer := 14;
       -- Host related
       g_HOST2FPGA_S0_0_SIZE   : integer := 4096;   -- Stream, Host->FPGA, TX FIFO size in bytes, 
       g_HOST2FPGA_S0_1_SIZE   : integer := 4096;   -- Stream, Host->FPGA, WFM FIFO size in bytes
@@ -55,6 +58,7 @@ entity lms7_trx_top is
       g_FPGACFG_START_ADDR    : integer := 0;
       g_PLLCFG_START_ADDR     : integer := 32;
       g_TSTCFG_START_ADDR     : integer := 96;
+      g_TXTSPCFG_START_ADDR   : integer := 128;
       g_RXTSPCFG_START_ADDR   : integer := 160;
       g_PERIPHCFG_START_ADDR  : integer := 192;
       g_TAMERCFG_START_ADDR   : integer := 224;
@@ -170,6 +174,7 @@ entity lms7_trx_top is
       ADC_CLKOUT        : in     std_logic;
       ADC_DA            : in     std_logic_vector(6 downto 0);
       ADC_DB            : in     std_logic_vector(6 downto 0);
+      FPGA_ADC_RESET    : out    std_logic;
       -- ----------------------------------------------------------------------------
       -- Two 14-bit DAC
          --Clock for DAC #1 and DAC #2
@@ -346,6 +351,10 @@ signal inst0_from_pllcfg         : t_FROM_PLLCFG;
 signal inst0_to_pllcfg           : t_TO_PLLCFG;
 signal inst0_from_tstcfg         : t_FROM_TSTCFG;
 signal inst0_to_tstcfg           : t_TO_TSTCFG;
+signal inst0_from_txtspcfg_0     : t_FROM_TXTSPCFG;
+signal inst0_to_txtspcfg_0       : t_TO_TXTSPCFG;
+signal inst0_from_txtspcfg_1     : t_FROM_TXTSPCFG;
+signal inst0_to_txtspcfg_1       : t_TO_TXTSPCFG;
 signal inst0_from_rxtspcfg       : t_FROM_RXTSPCFG;
 signal inst0_to_rxtspcfg         : t_TO_RXTSPCFG;
 signal inst0_from_periphcfg      : t_FROM_PERIPHCFG;
@@ -363,11 +372,8 @@ signal inst1_lms1_txpll_rcnfg_from_pll : std_logic_vector(63 downto 0);
 signal inst1_lms1_rxpll_c1             : std_logic;
 signal inst1_lms1_rxpll_locked         : std_logic;
 signal inst1_lms1_rxpll_rcnfg_from_pll : std_logic_vector(63 downto 0);
-signal inst1_lms1_smpl_cmp_en           : std_logic;
-signal inst1_lms1_smpl_cmp_cnt          : std_logic_vector(15 downto 0);
-
-
-
+signal inst1_lms1_smpl_cmp_en          : std_logic;
+signal inst1_lms1_smpl_cmp_cnt         : std_logic_vector(15 downto 0);
 
 signal inst1_lms2_txpll_c1             : std_logic;
 signal inst1_lms2_txpll_locked         : std_logic;
@@ -375,8 +381,8 @@ signal inst1_lms2_txpll_rcnfg_from_pll : std_logic_vector(63 downto 0);
 signal inst1_lms2_rxpll_c1             : std_logic;
 signal inst1_lms2_rxpll_locked         : std_logic;
 signal inst1_lms2_rxpll_rcnfg_from_pll : std_logic_vector(63 downto 0);
-signal inst1_lms2_smpl_cmp_en           : std_logic;
-signal inst1_lms2_smpl_cmp_cnt          : std_logic_vector(15 downto 0);
+signal inst1_lms2_smpl_cmp_en          : std_logic;
+signal inst1_lms2_smpl_cmp_cnt         : std_logic_vector(15 downto 0);
 
 signal inst1_pll_0_c0                  : std_logic;
 signal inst1_pll_0_c1                  : std_logic;
@@ -492,10 +498,12 @@ signal inst9_tx_smpl_fifo_wrreq     : std_logic;
 signal inst9_tx_smpl_fifo_data      : std_logic_vector(127 downto 0);
 
 --inst10
-signal inst10_rx_data_valid          : std_logic;
-signal inst10_rx_data                : std_logic_vector(14*4-1 downto 0);
-signal inst10_tx_wrfull              : std_logic;
-signal inst10_tx_wrusedw             : std_logic_vector(8 downto 0); 
+signal inst10_rx_data_valid         : std_logic;
+signal inst10_rx_data               : std_logic_vector(14*4-1 downto 0);
+signal inst10_tx_wrfull             : std_logic;
+signal inst10_tx_wrusedw            : std_logic_vector(8 downto 0); 
+signal inst10_data_ch_a             : std_logic_vector(g_EXT_ADC_D_WIDTH-1 downto 0);
+signal inst10_data_ch_b             : std_logic_vector(g_EXT_ADC_D_WIDTH-1 downto 0);      
 
 --inst11
 signal inst11_tx_pct_loss_flg        : std_logic;
@@ -515,6 +523,13 @@ signal inst11_wfm_phy_clk            : std_logic;
 signal inst11_tx_smpl_fifo_wrreq     : std_logic;
 signal inst11_tx_smpl_fifo_data      : std_logic_vector(127 downto 0);
 
+--inst12 
+signal inst12_tx0_wrfull            : std_logic;
+signal inst12_tx0_wrusedw           : std_logic_vector(8 downto 0);
+signal inst12_tx1_wrfull            : std_logic;
+signal inst12_tx1_wrreq             : std_logic;
+signal inst12_tx1_data              : std_logic_vector(27 downto 0);
+signal inst12_tx_src_sel            : std_logic_vector(1 downto 0);
 
 
 begin
@@ -547,6 +562,7 @@ begin
       FPGACFG_START_ADDR   => g_FPGACFG_START_ADDR,
       PLLCFG_START_ADDR    => g_PLLCFG_START_ADDR,
       TSTCFG_START_ADDR    => g_TSTCFG_START_ADDR,
+      TXTSPCFG_START_ADDR  => g_TXTSPCFG_START_ADDR,
       RXTSPCFG_START_ADDR  => g_RXTSPCFG_START_ADDR,
       PERIPHCFG_START_ADDR => g_PERIPHCFG_START_ADDR,
       TAMERCFG_START_ADDR  => g_TAMERCFG_START_ADDR,
@@ -640,6 +656,10 @@ begin
       from_tstcfg                => inst0_from_tstcfg,
       to_tstcfg                  => inst0_to_tstcfg,
       to_tstcfg_from_rxtx        => inst7_to_tstcfg_from_rxtx,
+      from_txtspcfg_0            => inst0_from_txtspcfg_0,
+      to_txtspcfg_0              => inst0_to_txtspcfg_0, 
+      from_txtspcfg_1            => inst0_from_txtspcfg_1,
+      to_txtspcfg_1              => inst0_to_txtspcfg_1, 
       from_rxtspcfg              => inst0_from_rxtspcfg,
       to_rxtspcfg                => inst0_to_rxtspcfg,      
       from_periphcfg             => inst0_from_periphcfg,
@@ -655,8 +675,8 @@ begin
    inst0_to_fpgacfg_0.BOM_VER   <= BOM_VER; 
    inst0_to_fpgacfg_0.PWR_SRC   <= '0';
                         
-   inst0_spi_0_MISO <=  FPGA_SPI0_MISO_LMS1 OR FPGA_SPI0_MISO_LMS2 OR 
-                        (FPGA_SPI0_MISO_ADC AND NOT inst0_spi_0_SS_n(5));
+   inst0_spi_0_MISO <=  FPGA_SPI0_MISO_ADC when inst0_spi_0_SS_n(5) = '0' else 
+                        (FPGA_SPI0_MISO_LMS1 OR FPGA_SPI0_MISO_LMS2);
    
 -- ----------------------------------------------------------------------------
 -- pll_top instance.
@@ -872,7 +892,7 @@ begin
       F2H_S1_wfull         => inst2_F2H_S1_wfull,
       F2H_S1_wrusedw       => inst2_F2H_S1_wrusedw,
       
-      F2H_S2_wclk          => inst1_pll_0_c0,
+      F2H_S2_wclk          => ADC_CLKOUT,
       F2H_S2_aclrn         => inst11_rx_pct_fifo_aclrn_req,
       F2H_S2_wr            => inst11_rx_pct_fifo_wrreq,
       F2H_S2_wdata         => inst11_rx_pct_fifo_wdata,
@@ -1012,7 +1032,7 @@ begin
       inst0_from_fpgacfg_mod_0.rx_en  <= inst0_from_fpgacfg_0.rx_en AND inst2_F2H_S0_open;
    end process;
    
-   --Module for LMS7002 IC
+--   --Module for LMS7002 IC
    inst6_lms7002_top : entity work.lms7002_top
    generic map(
       g_DEV_FAMILY            => g_DEV_FAMILY,
@@ -1061,57 +1081,57 @@ begin
       rx_smpl_cmp_done     => inst6_rx_smpl_cmp_done,
       rx_smpl_cmp_err      => inst6_rx_smpl_cmp_err   
    );
-   
-   inst7_rxtx_top : entity work.rxtx_top
-   generic map(
-      DEV_FAMILY              => g_DEV_FAMILY,
-      -- TX parameters
-      TX_IQ_WIDTH             => g_LMS_DIQ_WIDTH,
-      TX_N_BUFF               => g_TX_N_BUFF,              -- 2,4 valid values
-      TX_IN_PCT_SIZE          => g_TX_PCT_SIZE,
-      TX_IN_PCT_HDR_SIZE      => g_TX_IN_PCT_HDR_SIZE,
-      TX_IN_PCT_DATA_W        => c_H2F_S0_0_RWIDTH,      -- 
-      TX_IN_PCT_RDUSEDW_W     => c_H2F_S0_0_RDUSEDW_WIDTH,
-      
-      -- RX parameters
-      RX_IQ_WIDTH             => g_LMS_DIQ_WIDTH,
-      RX_INVERT_INPUT_CLOCKS  => "ON",
-      RX_PCT_BUFF_WRUSEDW_W   => c_F2H_S0_WRUSEDW_WIDTH --bus width in bits 
-      
-   )
-   port map(                                             
-      from_fpgacfg            => inst0_from_fpgacfg_mod_0,
-      to_tstcfg_from_rxtx     => inst7_to_tstcfg_from_rxtx,
-      from_tstcfg             => inst0_from_tstcfg,      
-      -- TX module signals
-      tx_clk                  => inst1_lms1_txpll_c1,
-      tx_clk_reset_n          => inst1_lms1_txpll_locked,     
-      tx_pct_loss_flg         => inst7_tx_pct_loss_flg,
-      tx_txant_en             => inst7_tx_txant_en,  
-      --Tx interface data 
-      tx_smpl_fifo_wrreq      => inst7_tx_smpl_fifo_wrreq,
-      tx_smpl_fifo_wrfull     => inst6_tx_wrfull,
-      tx_smpl_fifo_wrusedw    => inst6_tx_wrusedw,
-      tx_smpl_fifo_data       => inst7_tx_smpl_fifo_data,
-      --TX packet FIFO ports
-      tx_in_pct_reset_n_req   => inst7_tx_in_pct_reset_n_req,
-      tx_in_pct_rdreq         => inst7_tx_in_pct_rdreq,
-      tx_in_pct_data          => inst2_H2F_S0_0_rdata,
-      tx_in_pct_rdempty       => inst2_H2F_S0_0_rempty,
-      tx_in_pct_rdusedw       => inst2_H2F_S0_0_rdusedw,     
-      -- RX path
-      rx_clk                  => inst1_lms1_rxpll_c1,
-      rx_clk_reset_n          => inst1_lms1_rxpll_locked,
-      --RX FIFO for IQ samples   
-      rx_smpl_fifo_wrreq      => inst6_rx_data_valid,
-      rx_smpl_fifo_data       => inst6_rx_data,
-      rx_smpl_fifo_wrfull     => open,
-      --RX Packet FIFO ports
-      rx_pct_fifo_aclrn_req   => inst7_rx_pct_fifo_aclrn_req,
-      rx_pct_fifo_wusedw      => inst2_F2H_S0_wrusedw,
-      rx_pct_fifo_wrreq       => inst7_rx_pct_fifo_wrreq,
-      rx_pct_fifo_wdata       => inst7_rx_pct_fifo_wdata  
-   );   
+--   
+--   inst7_rxtx_top : entity work.rxtx_top
+--   generic map(
+--      DEV_FAMILY              => g_DEV_FAMILY,
+--      -- TX parameters
+--      TX_IQ_WIDTH             => g_LMS_DIQ_WIDTH,
+--      TX_N_BUFF               => g_TX_N_BUFF,              -- 2,4 valid values
+--      TX_IN_PCT_SIZE          => g_TX_PCT_SIZE,
+--      TX_IN_PCT_HDR_SIZE      => g_TX_IN_PCT_HDR_SIZE,
+--      TX_IN_PCT_DATA_W        => c_H2F_S0_0_RWIDTH,      -- 
+--      TX_IN_PCT_RDUSEDW_W     => c_H2F_S0_0_RDUSEDW_WIDTH,
+--      
+--      -- RX parameters
+--      RX_IQ_WIDTH             => g_LMS_DIQ_WIDTH,
+--      RX_INVERT_INPUT_CLOCKS  => "ON",
+--      RX_PCT_BUFF_WRUSEDW_W   => c_F2H_S0_WRUSEDW_WIDTH --bus width in bits 
+--      
+--   )
+--   port map(                                             
+--      from_fpgacfg            => inst0_from_fpgacfg_mod_0,
+--      to_tstcfg_from_rxtx     => inst7_to_tstcfg_from_rxtx,
+--      from_tstcfg             => inst0_from_tstcfg,      
+--      -- TX module signals
+--      tx_clk                  => inst1_lms1_txpll_c1,
+--      tx_clk_reset_n          => inst1_lms1_txpll_locked,     
+--      tx_pct_loss_flg         => inst7_tx_pct_loss_flg,
+--      tx_txant_en             => inst7_tx_txant_en,  
+--      --Tx interface data 
+--      tx_smpl_fifo_wrreq      => inst7_tx_smpl_fifo_wrreq,
+--      tx_smpl_fifo_wrfull     => inst6_tx_wrfull,
+--      tx_smpl_fifo_wrusedw    => inst6_tx_wrusedw,
+--      tx_smpl_fifo_data       => inst7_tx_smpl_fifo_data,
+--      --TX packet FIFO ports
+--      tx_in_pct_reset_n_req   => inst7_tx_in_pct_reset_n_req,
+--      tx_in_pct_rdreq         => inst7_tx_in_pct_rdreq,
+--      tx_in_pct_data          => inst2_H2F_S0_0_rdata,
+--      tx_in_pct_rdempty       => inst2_H2F_S0_0_rempty,
+--      tx_in_pct_rdusedw       => inst2_H2F_S0_0_rdusedw,     
+--      -- RX path
+--      rx_clk                  => inst1_lms1_rxpll_c1,
+--      rx_clk_reset_n          => inst1_lms1_rxpll_locked,
+--      --RX FIFO for IQ samples   
+--      rx_smpl_fifo_wrreq      => inst6_rx_data_valid,
+--      rx_smpl_fifo_data       => inst6_rx_data,
+--      rx_smpl_fifo_wrfull     => open,
+--      --RX Packet FIFO ports
+--      rx_pct_fifo_aclrn_req   => inst7_rx_pct_fifo_aclrn_req,
+--      rx_pct_fifo_wusedw      => inst2_F2H_S0_wrusedw,
+--      rx_pct_fifo_wrreq       => inst7_rx_pct_fifo_wrreq,
+--      rx_pct_fifo_wdata       => inst7_rx_pct_fifo_wdata  
+--   );   
 	
 -- ----------------------------------------------------------------------------
 -- rxtx_top instance.
@@ -1124,7 +1144,7 @@ begin
       inst0_from_fpgacfg_mod_1.rx_en  <= inst0_from_fpgacfg_1.rx_en AND inst2_F2H_S1_open;
    end process;
     
-   --Module for LMS7002 IC
+--   --Module for LMS7002 IC
    inst8_lms7002_top : entity work.lms7002_top
    generic map(
       g_DEV_FAMILY            => g_DEV_FAMILY,
@@ -1173,63 +1193,63 @@ begin
       rx_smpl_cmp_done     => inst8_rx_smpl_cmp_done,
       rx_smpl_cmp_err      => inst8_rx_smpl_cmp_err   
    ); 
-   
-   inst9_rxtx_top : entity work.rxtx_top
-   generic map(
-      DEV_FAMILY              => g_DEV_FAMILY,
-      -- TX parameters
-      TX_IQ_WIDTH             => g_LMS_DIQ_WIDTH,
-      TX_N_BUFF               => g_TX_N_BUFF,              -- 2,4 valid values
-      TX_IN_PCT_SIZE          => g_TX_PCT_SIZE,
-      TX_IN_PCT_HDR_SIZE      => g_TX_IN_PCT_HDR_SIZE,
-      TX_IN_PCT_DATA_W        => c_H2F_S1_0_RWIDTH,      -- 
-      TX_IN_PCT_RDUSEDW_W     => c_H2F_S1_0_RDUSEDW_WIDTH,
-      
-      -- RX parameters
-      RX_IQ_WIDTH             => g_LMS_DIQ_WIDTH,
-      RX_INVERT_INPUT_CLOCKS  => "ON",
-      RX_PCT_BUFF_WRUSEDW_W   => c_F2H_S1_WRUSEDW_WIDTH --bus width in bits 
-      
-   )
-   port map(                                             
-      from_fpgacfg            => inst0_from_fpgacfg_mod_1,
-      to_tstcfg_from_rxtx     => inst9_to_tstcfg_from_rxtx,
-      from_tstcfg             => inst0_from_tstcfg,      
-      -- TX module signals
-      tx_clk                  => inst1_lms2_txpll_c1,
-      tx_clk_reset_n          => inst1_lms2_txpll_locked,     
-      tx_pct_loss_flg         => inst9_tx_pct_loss_flg,
-      tx_txant_en             => inst9_tx_txant_en,  
-      --Tx interface data 
-      tx_smpl_fifo_wrreq      => inst9_tx_smpl_fifo_wrreq,
-      tx_smpl_fifo_wrfull     => inst8_tx_wrfull,
-      tx_smpl_fifo_wrusedw    => inst8_tx_wrusedw,
-      tx_smpl_fifo_data       => inst9_tx_smpl_fifo_data,
-      --TX packet FIFO ports
-      tx_in_pct_reset_n_req   => inst9_tx_in_pct_reset_n_req,
-      tx_in_pct_rdreq         => inst9_tx_in_pct_rdreq,
-      tx_in_pct_data          => inst2_H2F_S1_0_rdata,
-      tx_in_pct_rdempty       => inst2_H2F_S1_0_rempty,
-      tx_in_pct_rdusedw       => inst2_H2F_S1_0_rdusedw,     
-      -- RX path
-      rx_clk                  => inst1_lms2_rxpll_c1,
-      rx_clk_reset_n          => inst1_lms2_rxpll_locked,
-      --RX FIFO for IQ samples   
-      rx_smpl_fifo_wrreq      => inst8_rx_data_valid,
-      rx_smpl_fifo_data       => inst8_rx_data,
-      rx_smpl_fifo_wrfull     => open,
-      --RX Packet FIFO ports
-      rx_pct_fifo_aclrn_req   => inst9_rx_pct_fifo_aclrn_req,
-      rx_pct_fifo_wusedw      => inst2_F2H_S1_wrusedw,
-      rx_pct_fifo_wrreq       => inst9_rx_pct_fifo_wrreq,
-      rx_pct_fifo_wdata       => inst9_rx_pct_fifo_wdata  
-   );
+--   
+--   inst9_rxtx_top : entity work.rxtx_top
+--   generic map(
+--      DEV_FAMILY              => g_DEV_FAMILY,
+--      -- TX parameters
+--      TX_IQ_WIDTH             => g_LMS_DIQ_WIDTH,
+--      TX_N_BUFF               => g_TX_N_BUFF,              -- 2,4 valid values
+--      TX_IN_PCT_SIZE          => g_TX_PCT_SIZE,
+--      TX_IN_PCT_HDR_SIZE      => g_TX_IN_PCT_HDR_SIZE,
+--      TX_IN_PCT_DATA_W        => c_H2F_S1_0_RWIDTH,      -- 
+--      TX_IN_PCT_RDUSEDW_W     => c_H2F_S1_0_RDUSEDW_WIDTH,
+--      
+--      -- RX parameters
+--      RX_IQ_WIDTH             => g_LMS_DIQ_WIDTH,
+--      RX_INVERT_INPUT_CLOCKS  => "ON",
+--      RX_PCT_BUFF_WRUSEDW_W   => c_F2H_S1_WRUSEDW_WIDTH --bus width in bits 
+--      
+--   )
+--   port map(                                             
+--      from_fpgacfg            => inst0_from_fpgacfg_mod_1,
+--      to_tstcfg_from_rxtx     => inst9_to_tstcfg_from_rxtx,
+--      from_tstcfg             => inst0_from_tstcfg,      
+--      -- TX module signals
+--      tx_clk                  => inst1_lms2_txpll_c1,
+--      tx_clk_reset_n          => inst1_lms2_txpll_locked,     
+--      tx_pct_loss_flg         => inst9_tx_pct_loss_flg,
+--      tx_txant_en             => inst9_tx_txant_en,  
+--      --Tx interface data 
+--      tx_smpl_fifo_wrreq      => inst9_tx_smpl_fifo_wrreq,
+--      tx_smpl_fifo_wrfull     => inst8_tx_wrfull,
+--      tx_smpl_fifo_wrusedw    => inst8_tx_wrusedw,
+--      tx_smpl_fifo_data       => inst9_tx_smpl_fifo_data,
+--      --TX packet FIFO ports
+--      tx_in_pct_reset_n_req   => inst9_tx_in_pct_reset_n_req,
+--      tx_in_pct_rdreq         => inst9_tx_in_pct_rdreq,
+--      tx_in_pct_data          => inst2_H2F_S1_0_rdata,
+--      tx_in_pct_rdempty       => inst2_H2F_S1_0_rempty,
+--      tx_in_pct_rdusedw       => inst2_H2F_S1_0_rdusedw,     
+--      -- RX path
+--      rx_clk                  => inst1_lms2_rxpll_c1,
+--      rx_clk_reset_n          => inst1_lms2_rxpll_locked,
+--      --RX FIFO for IQ samples   
+--      rx_smpl_fifo_wrreq      => inst8_rx_data_valid,
+--      rx_smpl_fifo_data       => inst8_rx_data,
+--      rx_smpl_fifo_wrfull     => open,
+--      --RX Packet FIFO ports
+--      rx_pct_fifo_aclrn_req   => inst9_rx_pct_fifo_aclrn_req,
+--      rx_pct_fifo_wusedw      => inst2_F2H_S1_wrusedw,
+--      rx_pct_fifo_wrreq       => inst9_rx_pct_fifo_wrreq,
+--      rx_pct_fifo_wdata       => inst9_rx_pct_fifo_wdata  
+--   );
    
 -- ----------------------------------------------------------------------------
 -- External DAC and ADC
 -- ----------------------------------------------------------------------------
    -- Rx interface is enabled only when user_read_32 port is opened from Host. 
-   process(inst0_from_fpgacfg_1, inst2_F2H_S1_open)
+   process(inst0_from_fpgacfg_2, inst2_F2H_S2_open)
    begin 
       inst0_from_fpgacfg_mod_2        <= inst0_from_fpgacfg_2;
       inst0_from_fpgacfg_mod_2.rx_en  <= inst0_from_fpgacfg_2.rx_en AND inst2_F2H_S2_open;
@@ -1244,12 +1264,12 @@ begin
    port map(
       clk               => ADC_CLKOUT,
       reset_n           => inst1_pll_0_locked,
-      en                => inst0_from_fpgacfg_2.rx_en,      
+      en                => inst0_from_fpgacfg_mod_2.rx_en OR inst0_from_fpgacfg_mod_2.dlb_en,      
       ch_a              => ADC_DA,
       ch_b              => ADC_DB,     
       --SDR parallel output data
-      data_ch_a         => open, 
-      data_ch_b         => open,  
+      data_ch_a         => inst10_data_ch_a, 
+      data_ch_b         => inst10_data_ch_b,  
       --Interleaved samples of both channels
       data_ch_ab        => inst10_rx_data,
       data_ch_ab_valid  => inst10_rx_data_valid,
@@ -1258,7 +1278,7 @@ begin
       from_rxtspcfg     => inst0_from_rxtspcfg
    );
    
-   
+   -- RX and TX module
    inst11_rxtx_top : entity work.rxtx_top
    generic map(
       DEV_FAMILY              => g_DEV_FAMILY,
@@ -1287,8 +1307,8 @@ begin
       tx_txant_en             => inst11_tx_txant_en,  
       --Tx interface data 
       tx_smpl_fifo_wrreq      => inst11_tx_smpl_fifo_wrreq,
-      tx_smpl_fifo_wrfull     => inst10_tx_wrfull,
-      tx_smpl_fifo_wrusedw    => inst10_tx_wrusedw,
+      tx_smpl_fifo_wrfull     => inst12_tx0_wrfull,
+      tx_smpl_fifo_wrusedw    => inst12_tx0_wrusedw,
       tx_smpl_fifo_data       => inst11_tx_smpl_fifo_data,
       --TX packet FIFO ports
       tx_in_pct_reset_n_req   => inst11_tx_in_pct_reset_n_req,
@@ -1297,7 +1317,7 @@ begin
       tx_in_pct_rdempty       => inst2_H2F_S2_0_rempty,
       tx_in_pct_rdusedw       => inst2_H2F_S2_0_rdusedw,     
       -- RX path
-      rx_clk                  => inst1_pll_0_c0,
+      rx_clk                  => ADC_CLKOUT,
       rx_clk_reset_n          => inst1_pll_0_locked,
       --RX FIFO for IQ samples   
       rx_smpl_fifo_wrreq      => inst10_rx_data_valid,
@@ -1309,6 +1329,80 @@ begin
       rx_pct_fifo_wrreq       => inst11_rx_pct_fifo_wrreq,
       rx_pct_fifo_wdata       => inst11_rx_pct_fifo_wdata  
    );
+   
+   inst12_tx1_data   <= inst10_data_ch_b & inst10_data_ch_a;
+   inst12_tx1_wrreq  <= (not inst12_tx1_wrfull) AND (inst0_from_fpgacfg_mod_2.dlb_en AND inst1_pll_0_locked);
+   
+   inst12_tx_src_sel <= "00" when inst0_from_fpgacfg_mod_2.rx_en = '1' else 
+                        "01" when inst0_from_fpgacfg_mod_2.dlb_en = '1' else 
+                        "10";
+   
+   -- DAC module
+   inst12_dac5672_top : entity work.dac5672_top
+   generic map(
+      g_DEV_FAMILY            => g_DEV_FAMILY,
+      g_IQ_WIDTH              => g_EXT_DAC_D_WIDTH,
+      g_TX0_FIFO_WRUSEDW      => 9,
+      g_TX0_FIFO_DATAW        => 128,
+      g_TX1_FIFO_WRUSEDW      => 9,
+      g_TX1_FIFO_DATAW        => 2*g_EXT_ADC_D_WIDTH
+   )
+   port map(
+      clk                  => inst1_pll_0_c1,
+      reset_n              => inst1_pll_0_locked,
+      --DAC#1 Outputs
+      DAC1_SLEEP           => DAC1_SLEEP,
+      DAC1_MODE            => DAC1_MODE,
+      DAC1_DA              => DAC1_DA,
+      DAC1_DB              => DAC1_DB,
+      --DAC#2 Outputs
+      DAC2_SLEEP           => DAC2_SLEEP,
+      DAC2_MODE            => DAC2_MODE,
+      DAC2_DA              => DAC2_DA,
+      DAC2_DB              => DAC2_DB,
+      -- Internal TX ports
+      tx_reset_n           => inst1_pll_0_locked,
+      tx_src_sel           => inst12_tx_src_sel,
+      -- tx0 source for DAC
+      tx0_wrclk            => inst1_pll_0_c1,
+      tx0_reset_n          => inst1_pll_0_locked,
+      tx0_wrfull           => inst12_tx0_wrfull,
+      tx0_wrusedw          => inst12_tx0_wrusedw,
+      tx0_wrreq            => inst11_tx_smpl_fifo_wrreq,
+      tx0_data             => inst11_tx_smpl_fifo_data,
+      -- tx1 source for DAC
+      tx1_wrclk            => ADC_CLKOUT,
+      tx1_reset_n          => inst1_pll_0_locked AND inst0_from_fpgacfg_mod_2.dlb_en,   
+      tx1_wrfull           => inst12_tx1_wrfull,
+      tx1_wrusedw          => open,
+      tx1_wrreq            => inst12_tx1_wrreq,
+      tx1_data             => inst12_tx1_data,
+      -- tx2 FIFO source for DAC
+      tx2_dac1_da          => (others=>'0'),
+      tx2_dac1_db          => (others=>'0'),
+      tx2_dac2_da          => (others=>'0'),
+      tx2_dac2_db          => (others=>'0'),
+      -- Configuration data
+      from_fpgacfg         => inst0_from_fpgacfg_2,
+      from_txtspcfg_0      => inst0_from_txtspcfg_0,
+      to_txtspcfg_0        => inst0_to_txtspcfg_0,
+      from_txtspcfg_1      => inst0_from_txtspcfg_1,
+      to_txtspcfg_1        => inst0_to_txtspcfg_1
+   );
+   
+   
+   inst18_IC_74HC595_top: entity work.IC_74HC595_top
+   port map(
+
+      clk      => CLK_LMK_FPGA_IN,
+      reset_n  => reset_n,
+      data     => inst0_from_fpgacfg_0.GPIO,
+      busy     => open,
+      
+      SHCP     => SR_SCLK_LS,    -- shift register clock
+      STCP     => SR_LATCH_LS,   -- storage register clock
+      DS       => SR_DIN_LS      -- serial data
+      );
 
    
 -- ----------------------------------------------------------------------------
@@ -1324,14 +1418,18 @@ begin
 	port map (a_in =>inst0_spi_0_SS_n(2), a_out => FPGA_SPI0_ADF_SS); 
    
    inst1_OPNDRN : OPNDRN
-	port map (a_in =>inst0_spi_0_SS_n(5), a_out => FPGA_SPI0_DAC_SS);
+	port map (a_in =>inst0_spi_0_SS_n(8), a_out => FPGA_SPI0_DAC_SS);
    
    inst2_OPNDRN : OPNDRN
-	port map (a_in => inst0_spi_0_SS_n(8), a_out => FPGA_SPI0_ADC_SS);
+	port map (a_in => inst0_spi_0_SS_n(5), a_out => FPGA_SPI0_ADC_SS);
    
    FPGA_AS_DCLK      <= inst0_spi_2_SCLK;
    FPGA_AS_ASDO      <= inst0_spi_2_MOSI;
    FPGA_AS_NCSO      <= inst0_spi_2_SS_n;
+   
+   inst3_OPNDRN : OPNDRN
+	port map (a_in => inst0_gpo(0), a_out => FPGA_ADC_RESET);
+   
 
 
 end arch;   

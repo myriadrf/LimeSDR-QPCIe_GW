@@ -414,26 +414,32 @@ begin
    
    sync_reg3 : entity work.sync_reg 
    port map(bus_clk, H2F_S1_1_aclrn, '1', H2F_S1_1_sclrn);
+   
+   sync_reg4 : entity work.sync_reg 
+   port map(bus_clk, H2F_S2_0_aclrn, '1', H2F_S2_0_sclrn);
+   
+   sync_reg5 : entity work.sync_reg 
+   port map(bus_clk, H2F_S2_1_aclrn, '1', H2F_S2_1_sclrn);
      
 -- ----------------------------------------------------------------------------
 -- Sync registers
 -- ----------------------------------------------------------------------------   
-   sync_reg4 : entity work.sync_reg 
+   sync_reg6 : entity work.sync_reg 
    port map(bus_clk, reset_n, H2F_S0_sel, H2F_S0_sel_sync);
    
-   sync_reg5 : entity work.sync_reg 
+   sync_reg7 : entity work.sync_reg 
    port map(bus_clk, reset_n, H2F_S1_sel, H2F_S1_sel_sync);
    
-   sync_reg6 : entity work.sync_reg 
+   sync_reg8 : entity work.sync_reg 
    port map(bus_clk, reset_n, H2F_S2_sel, H2F_S2_sel_sync);
      
-   sync_reg7 : entity work.sync_reg 
+   sync_reg9 : entity work.sync_reg 
    port map(bus_clk, '1', S0_rx_en, S0_rx_en_sync);
    
-   sync_reg8 : entity work.sync_reg 
+   sync_reg10 : entity work.sync_reg 
    port map(bus_clk, '1', S1_rx_en, S1_rx_en_sync);
    
-   sync_reg9 : entity work.sync_reg 
+   sync_reg11 : entity work.sync_reg 
    port map(bus_clk, '1', S2_rx_en, S2_rx_en_sync);
    
 -- ----------------------------------------------------------------------------

@@ -93,12 +93,12 @@ OBJ_DIR := ./obj
 
 # This following VERSION comment indicates the version of the tool used to 
 # generate this makefile. A makefile variable is provided for VERSION as well. 
-# ACDS_VERSION: 16.1
-ACDS_VERSION := 16.1
+# ACDS_VERSION: 18.0
+ACDS_VERSION := 18.0
 
 # This following BUILD_NUMBER comment indicates the build number of the tool 
 # used to generate this makefile. 
-# BUILD_NUMBER: 200
+# BUILD_NUMBER: 614
 
 SETTINGS_FILE := settings.bsp
 SOPC_FILE := ../../nios_cpu.sopcinfo
@@ -207,17 +207,6 @@ GENERATED_C_LIB_SRCS += alt_sys_init.c
 # to construct a list of objects. Pattern rules to build each object are then
 # used to build each file.
 #-------------------------------------------------------------------------------
-
-# altera_avalon_jtag_uart_driver sources root 
-altera_avalon_jtag_uart_driver_SRCS_ROOT := drivers
-
-# altera_avalon_jtag_uart_driver sources 
-altera_avalon_jtag_uart_driver_C_LIB_SRCS := \
-	$(altera_avalon_jtag_uart_driver_SRCS_ROOT)/src/altera_avalon_jtag_uart_init.c \
-	$(altera_avalon_jtag_uart_driver_SRCS_ROOT)/src/altera_avalon_jtag_uart_read.c \
-	$(altera_avalon_jtag_uart_driver_SRCS_ROOT)/src/altera_avalon_jtag_uart_write.c \
-	$(altera_avalon_jtag_uart_driver_SRCS_ROOT)/src/altera_avalon_jtag_uart_ioctl.c \
-	$(altera_avalon_jtag_uart_driver_SRCS_ROOT)/src/altera_avalon_jtag_uart_fd.c
 
 # altera_avalon_pio_driver sources root 
 altera_avalon_pio_driver_SRCS_ROOT := drivers
@@ -343,7 +332,6 @@ i2c_opencores_driver_C_LIB_SRCS := \
 
 # Assemble all component C source files 
 COMPONENT_C_LIB_SRCS += \
-	$(altera_avalon_jtag_uart_driver_C_LIB_SRCS) \
 	$(altera_avalon_spi_driver_C_LIB_SRCS) \
 	$(altera_avalon_sysid_qsys_driver_C_LIB_SRCS) \
 	$(altera_nios2_gen2_hal_driver_C_LIB_SRCS) \

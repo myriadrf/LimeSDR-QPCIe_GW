@@ -1,8 +1,8 @@
 -- ----------------------------------------------------------------------------	
--- FILE:	txtspcfg.vhd
+-- FILE:	spitx.vhd
 -- DESCRIPTION:	Serial configuration interface to control TX modules
--- DATE:	June 07, 2007
--- AUTHOR(s):	Lime Microsystems
+-- DATE:	2007.06.07
+-- AUTHOR(s):	
 -- REVISIONS:	
 -- ----------------------------------------------------------------------------	
 
@@ -10,285 +10,234 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use work.mem_package.all;
+use work.txtspcfg_pkg.all;
 
 -- ----------------------------------------------------------------------------
 -- Entity declaration
 -- ----------------------------------------------------------------------------
 entity txtspcfg is
-	port (
-		-- Address and location of this module
-		-- Will be hard wired at the top level
-		maddress: in std_logic_vector(9 downto 0);
-		mimo_en: in std_logic;	-- MIMO enable, from TOP SPI (always 1)
-	
-		-- Serial port IOs
-		sdin: in std_logic; 	-- Data in
-		sclk: in std_logic; 	-- Data clock
-		sen: in std_logic;	-- Enable signal (active low)
-		sdout: out std_logic; 	-- Data out
-	
-		-- Signals coming from the pins or top level serial interface
-		lreset: in std_logic; 	-- Logic reset signal, resets logic cells only  (use only one reset)
-		mreset: in std_logic; 	-- Memory reset signal, resets configuration memory only (use only one reset)
-		--txen: in std_logic;	-- Power down all modules when txen=0 not used
-		
-		oen: out std_logic; --nc
-		
-		-- PLL reconfiguration lines
-		spi_pll_locked			: in std_logic;
-		spi_config_controls	: out std_logic_vector(1 downto 0);
-		spi_config_data 		: out std_logic_vector(143 downto 0);
-		
-		-- Control lines		(spi controlled signals)
-		stream_load		: out std_logic;  --	load data to ram
-		stream_txen		: out std_logic;	-- enable streaming from ram
-		stream_rxen		: out std_logic;	-- enable streaming to fx3
-		stream_rxdsrc	: out std_logic;
-		lms_gpio0		: out std_logic;
-		lms_gpio1		: out std_logic;
-		lms_gpio2		: out std_logic;
-		fx3_reset		: out std_logic;
-		ps_en_0			: out std_logic;
-		ps_en_1			: out std_logic;
-		up_dn_0			: out std_logic;
-		up_dn_1			: out std_logic;
-		phase				: out std_logic_vector(9 downto 0);
-		pll_areset		: out std_logic;
---		en		: out std_logic;
-		stateo: out std_logic_vector(5 downto 0);
-		lte_synch_dis		: out std_logic;	-- 1 - LTE synchronization disabled, 0 - LTE synchronization enabled
-		lte_txpct_loss_clr : out std_logic;  -- 1 - clear txpct_loss flag on LTE packets,
-		lte_mimo_en			: out std_logic;	-- 1 - mimo mode enabled
-		lte_ch_en			: out std_logic_vector (15 downto 0); --LSb first chanell
-		lte_smpl_width		: out std_logic_vector(1 downto 0); -- --"10"-12bit, "01"-14bit, "00"-16bit;
-		lte_lbc_en				: out std_logic; --lte packets loopback enable
-		lte_data_src		: out std_logic;
-		lms_rst			: out std_logic;
-		lms_ss			: out std_logic;
-		xillybus_tst_en	: out std_logic
+   port (
+      -- Address and location of this module
+      -- Will be hard wired at the top level
+      maddress       : in std_logic_vector(9 downto 0);
+      mimo_en        : in std_logic; -- MIMO enable, from TOP SPI
+   
+      -- Serial port IOs
+      sdin           : in std_logic;  -- Data in
+      sclk           : in std_logic;  -- Data clock
+      sen            : in std_logic;   -- Enable signal (active low)
+      sdout          : out std_logic;   -- Data out
+   
+      -- Signals coming from the pins or top level serial interface
+      lreset         : in std_logic;   -- Logic reset signal, resets logic cells only
+      mreset         : in std_logic;   -- Memory reset signal, resets configuration memory only
+     
+      oen            : out std_logic;
+      stateo         : out std_logic_vector(5 downto 0);
+      
+      to_txtspcfg    : in t_TO_TXTSPCFG;
+      from_txtspcfg  : out t_FROM_TXTSPCFG
 
-	);
+   );
 end txtspcfg;
 
 -- ----------------------------------------------------------------------------
 -- Architecture
 -- ----------------------------------------------------------------------------
 architecture txtspcfg_arch of txtspcfg is
-	--constant pll_init : std_logic_vector(143 downto 0) := (4|5|17|18|41|44|50|53|60|62|63|69|77|80|86|89|94|95|97|98|103|104|106|107|113|116|122|125|131|132|140|141 => '1', others => '0');
-	--constant pll_init : std_logic_vector(143 downto 0) := (4|5|17|18|40|43|49|52|57|60|66|69|76|79|85|88|93|94|96|97|102|103|105|106|112|115|121|124|130|131|139|140 => '1', others => '0');
-	--constant pll_init : std_logic_vector(143 downto 0) := (4|5|7|8|17|18|42|44|45|51|60|62|63|69|78|80|81|87|95|96|97|99|104|105|107|114|116|117|123|132|133|141|142 => '1', others => '0');
-	--constant pll_init : std_logic_vector(143 downto 0) := (4|5|17|18|42|44|45|51|60|62|63|69|78|80|81|87|96|98|99|105|114|116|117|123|132|134|135|141 => '1', others => '0');
-	signal inst_reg: std_logic_vector(15 downto 0);	-- Instruction register
-	signal inst_reg_en: std_logic;
-
-	signal din_reg: std_logic_vector(15 downto 0);		-- Data in register
-	signal din_reg_en: std_logic;
-	
-	signal dout_reg: std_logic_vector(15 downto 0);	-- Data out register
-	signal dout_reg_sen, dout_reg_len: std_logic;
-	
-	signal mem: marray32x16;					-- Config memory
-	signal mem_we: std_logic;
-	
-	signal oe: std_logic;				-- Tri state buffers control
-	signal spi_config_data_rev	: std_logic_vector(143 downto 0);
-	
-	-- Components
-	use work.mcfg_components.mcfg32wm_fsm;
-	for all: mcfg32wm_fsm use entity work.mcfg32wm_fsm(mcfg32wm_fsm_arch);
+   signal inst_reg: std_logic_vector(15 downto 0); -- Instruction register
+   signal inst_reg_en: std_logic;
+   
+   signal din_reg: std_logic_vector(15 downto 0);  -- Data in register
+   signal din_reg_en: std_logic;
+   
+   signal dout_reg: std_logic_vector(15 downto 0); -- Data out register
+   signal dout_reg_sen, dout_reg_len: std_logic;
+   
+   signal mem: marray16x16;         -- Config memory
+   signal mem_we: std_logic;
+   
+   signal oe: std_logic;            -- Tri state buffers control 
+   
+   -- Components
+   use work.mcfg_components.mcfg32wm_fsm;
+   for all: mcfg32wm_fsm use entity work.mcfg32wm_fsm(mcfg32wm_fsm_arch);
 
 begin
-	-- ---------------------------------------------------------------------------------------------
-	-- Finite state machines
-	-- ---------------------------------------------------------------------------------------------
-	fsm: mcfg32wm_fsm port map( 
-		address => maddress, mimo_en => mimo_en, inst_reg => inst_reg, sclk => sclk, sen => sen, reset => lreset,
-		inst_reg_en => inst_reg_en, din_reg_en => din_reg_en, dout_reg_sen => dout_reg_sen,
-		dout_reg_len => dout_reg_len, mem_we => mem_we, oe => oe, stateo => stateo);
-		
-	-- ---------------------------------------------------------------------------------------------
-	-- Instruction register
-	-- ---------------------------------------------------------------------------------------------
-	inst_reg_proc: process(sclk, lreset)
-		variable i: integer;
-	begin
-		if lreset = '0' then
-			inst_reg <= (others => '0');
-		elsif sclk'event and sclk = '1' then
-			if inst_reg_en = '1' then
-				for i in 15 downto 1 loop
-					inst_reg(i) <= inst_reg(i-1);
-				end loop;
-				inst_reg(0) <= sdin;
-			end if;
-		end if;
-	end process inst_reg_proc;
+   -- ---------------------------------------------------------------------------------------------
+   -- Finite state machines
+   -- ---------------------------------------------------------------------------------------------
+   fsm: mcfg32wm_fsm port map( 
+      address => maddress, mimo_en => mimo_en, inst_reg => inst_reg, sclk => sclk, sen => sen, reset => lreset,
+      inst_reg_en => inst_reg_en, din_reg_en => din_reg_en, dout_reg_sen => dout_reg_sen,
+      dout_reg_len => dout_reg_len, mem_we => mem_we, oe => oe, stateo => stateo);
+      
+   -- ---------------------------------------------------------------------------------------------
+   -- Instruction register
+   -- ---------------------------------------------------------------------------------------------
+   inst_reg_proc: process(sclk, lreset)
+      variable i: integer;
+   begin
+      if lreset = '0' then
+         inst_reg <= (others => '0');
+      elsif sclk'event and sclk = '1' then
+         if inst_reg_en = '1' then
+            for i in 15 downto 1 loop
+               inst_reg(i) <= inst_reg(i-1);
+            end loop;
+            inst_reg(0) <= sdin;
+         end if;
+      end if;
+   end process inst_reg_proc;
 
-	-- ---------------------------------------------------------------------------------------------
-	-- Data input register
-	-- ---------------------------------------------------------------------------------------------
-	din_reg_proc: process(sclk, lreset)
-		variable i: integer;
-	begin
-		if lreset = '0' then
-			din_reg <= (others => '0');
-		elsif sclk'event and sclk = '1' then
-			if din_reg_en = '1' then
-				for i in 15 downto 1 loop
-					din_reg(i) <= din_reg(i-1);
-				end loop;
-				din_reg(0) <= sdin;
-			end if;
-		end if;
-	end process din_reg_proc;
+   -- ---------------------------------------------------------------------------------------------
+   -- Data input register
+   -- ---------------------------------------------------------------------------------------------
+   din_reg_proc: process(sclk, lreset)
+      variable i: integer;
+   begin
+      if lreset = '0' then
+         din_reg <= (others => '0');
+      elsif sclk'event and sclk = '1' then
+         if din_reg_en = '1' then
+            for i in 15 downto 1 loop
+               din_reg(i) <= din_reg(i-1);
+            end loop;
+            din_reg(0) <= sdin;
+         end if;
+      end if;
+   end process din_reg_proc;
 
-	-- ---------------------------------------------------------------------------------------------
-	-- Data output register
-	-- ---------------------------------------------------------------------------------------------
-	dout_reg_proc: process(sclk, lreset)
-		variable i: integer;
-	begin
-		if lreset = '0' then
-			dout_reg <= (others => '0');
-		elsif sclk'event and sclk = '0' then
-			-- Shift operation
-			if dout_reg_sen = '1' then
-				for i in 15 downto 1 loop
-					dout_reg(i) <= dout_reg(i-1);
-				end loop;
-				dout_reg(0) <= dout_reg(15);
-			-- Load operation
-			elsif dout_reg_len = '1' then
-				case inst_reg(4 downto 0) is	-- mux read-only outputs
-					when "00011" => dout_reg <= mem(3)(15 downto 3) & spi_pll_locked & mem(3)(1 downto 0);
-					when others  => dout_reg <= mem(to_integer(unsigned(inst_reg(4 downto 0))));
-				end case;
-			end if;			      
-		end if;
-	end process dout_reg_proc;
-	
-	-- Tri state buffer to connect multiple serial interfaces in parallel
-	--sdout <= dout_reg(7) when oe = '1' else 'Z';
+   -- ---------------------------------------------------------------------------------------------
+   -- Data output register
+   -- ---------------------------------------------------------------------------------------------
+   dout_reg_proc: process(sclk, lreset)
+      variable i: integer;
+   begin
+      if lreset = '0' then
+         dout_reg <= (others => '0');
+      elsif sclk'event and sclk = '0' then
+         -- Shift operation
+         if dout_reg_sen = '1' then
+            for i in 15 downto 1 loop
+               dout_reg(i) <= dout_reg(i-1);
+            end loop;
+            dout_reg(0) <= dout_reg(15);
+         -- Load operation
+         elsif dout_reg_len = '1' then
+            dout_reg <= mem(to_integer(unsigned(inst_reg(4 downto 0))));
+         end if;
+      end if;
+   end process dout_reg_proc;
+   
+   -- Tri state buffer to connect multiple serial interfaces in parallel
+   --sdout <= dout_reg(7) when oe = '1' else 'Z';
 
---	sdout <= dout_reg(7);
---	oen <= oe;
+-- sdout <= dout_reg(7);
+-- oen <= oe;
 
-	sdout <= dout_reg(15) and oe;
-	oen <= oe;
-	-- ---------------------------------------------------------------------------------------------
-	-- Configuration memory
-	-- --------------------------------------------------------------------------------------------- 
-	ram: process(sclk, mreset) --(remap)
-	begin
-		-- Defaults
-		if mreset = '0' then			
-			mem(0)  	<= "1000000010000011"; --  16 free, UNUSED[15:0],gw_version[4:0] (03 mimo mode)
-			--mem(1)  	<= "0000000000011101"; --  0 free, lte_ch_en[12:0], lte_smpl_width[1:0], lte_mimo_en (!--temporary map--!)
-			mem(1)  	<= "0000000000000011"; --  0 free, lte_ch_en[15:0]
-			mem(2)  	<= "0010010000010100"; --  3 free, UNUSED[15],ps_en_1,up_dn_1,pll_areset, ps_en_0, up_dn_0, phase[9:0]
-			mem(3)  	<= "0000000000000000"; --  14 free, UNUSED[15:3],PLL_LOCKED, RESERVED, PLL_EN_CONFIG
-			mem(4)  	<= "0000000101110000"; --  5 free, CHP_current[10:8],VCO_pScale, LF_Res[6:2],LF_Cap[1:0]
-			--mem(5)  	<= "0000000000001010"; --  10 free, UNUSED[8:0],lte_txpct_loss_clr,lte_synch_dis, ch_sel, stream_rxdsrc, stream_rxen, stream_txen, stream_load  
-			mem(5)  	<= "0000000000001010"; --  11 free, UNUSED[9:0],lte_synch_dis, ch_sel, stream_rxdsrc, stream_rxen, stream_txen, stream_load
-			mem(6)  	<= "0000000000000000"; --  13 free, UNUSED[12:0], lms_gpio2 (0 - out1), lms_gpio1 ,lms_gpio0
-			--mem(7)  	<= "0000000000000000"; --  15 free, UNUSED[14:0], fx3_reset
-			mem(7)  	<= "0000000000001010"; --  11 free, lte_txpct_loss_clr, UNUSED[10:0], lte_smpl_width[1:0], lte_mimo_en, fx3_reset
-			mem(8)  	<= "0000000000000000"; --  0 free, N_high_cnt[15:8],N_low_cnt[7:0]
-			mem(9)	<= "0000000100000001"; --  0 free, M_high_cnt[15:8],M_low_cnt[7:0]
-			mem(10)	<= "0000000100000001"; --  0 free, c0_high_cnt[15:8],c0_low_cnt[7:0]
-			mem(11)	<= "0000000100000001"; --  0 free, c1_high_cnt[15:8],c1_low_cnt[7:0]
-			mem(12)	<= "0000000000000000"; --  0 free, c2_high_cnt[15:8],c2_low_cnt[7:0]
-			mem(13)	<= "0000000000000000"; --  0 free, c3_high_cnt[15:8],c3_low_cnt[7:0]
-			mem(14)	<= "0000000000000000"; --  0 free, c4_high_cnt[15:8],c4_low_cnt[7:0]
-			mem(15)	<= "0001010100000001";-- 2 free, c4_odd_div, c4_bypass, c3_odd_div, c3_bypass, c2_odd_div, c2_bypass, c1_odd_div, c1_bypass, c0_odd_div, c0_bypass, M_odd_div, M_bypass, N_odd_div, N_bypass
-			
-			
-			mem(20)	<= "0000000001111111"; -- FMC, RFDIO, ETC control
-			mem(21)	<= "0000000000000000"; -- RFDIO GPIOs
-			mem(28)	<= "0000000000000000"; -- 14 free, xillybus_tst_en, lte_data_src, lte_lbc_en
-			mem(29)  <= "0000000000001111"; -- 00 frre, Board ID (SoDeRa PCIE)
-			mem(30)  <= "0000000000000001"; -- 00 free, Function (1)
-			mem(31)  <= "0000000000000000"; -- 00 free, GW wersion (0)
-			
-		elsif sclk'event and sclk = '1' then
-				if mem_we = '1' then
-					mem(to_integer(unsigned(inst_reg(4 downto 0)))) <= din_reg(14 downto 0) & sdin;
-				end if;
-				
-				--if dout_reg_len = '0' then
-					--mem(9)  <= bsigi(14 downto 0) & bstate;
-					--mem(10) <= bsigq(7 downto 0) & bsigi(22 downto 15);
-					--mem(11)(14 downto 0) <= bsigq(22 downto 8);
-				--end if;
-				
-		end if;
-	end process ram;
-	
-	-- ---------------------------------------------------------------------------------------------
-	-- Decoding logic
-	-- ---------------------------------------------------------------------------------------------
-	--edit by new map
-	
-	--lte_mimo_en		<= mem(1)(0);
-	lte_mimo_en		<= mem(7)(1);
-	--lte_smpl_width <= mem(1) (2 downto 1);
-	lte_smpl_width <= mem(7) (3 downto 2);
-	--lte_ch_en		<= "000" & mem(1) (15 downto 3);
-	lte_ch_en		<= mem(1) (15 downto 0);
-	
-	stream_load		<= mem(5)(0);
-	stream_txen		<= mem(5)(1);
-	stream_rxen		<= mem(5)(2);
-	stream_rxdsrc	<= mem(5)(3);
-	lte_synch_dis	<= mem(5)(5);
-	--lte_txpct_loss_clr<=mem(5)(6);
-	lte_txpct_loss_clr<=mem(7)(15);
-	lms_gpio0		<= mem(6)(0);
-	lms_gpio1		<= mem(6)(1);
-	lms_gpio2		<= mem(6)(2);
-	--fx3_reset		<= mem(7)(1);
-	fx3_reset		<= mem(7)(0);
-	up_dn_0				<= mem(2)(10);
-	up_dn_1				<= mem(2)(13);
-	ps_en_0				<= mem(2)(11);	
-	ps_en_1				<= mem(2)(14);
-	pll_areset		<= mem(2)(12);
-	phase				<= mem(2)(9 downto 0);
-	lte_lbc_en		<= mem(28) (0);
-	lte_data_src	<= mem(28) (1);
-	xillybus_tst_en<= mem(28) (2);
- 	
-	-- PLL
-	--spi_config_data 	  <= mem(15) & mem(14) & mem(13) & mem(12) & mem(11) & mem(10) & mem(9) & mem(8) & mem(4);
-	spi_config_data_rev 	  <=  "00" & mem(4) (1 downto 0) & mem(4) (6 downto 2)  & mem(4) (7)  & "00000" & mem(4) (10 downto 8) &
-	                     mem(15) (0) & mem(8 ) (15  downto 8) & --N
-                        mem(15) (1) & mem(8 ) (7 downto 0) &
-                        
-                        mem(15) (2) & mem(9 ) (15  downto 8) & --M 
-                        mem(15) (3) & mem(9 ) (7 downto 0) &
-                        
-                        mem(15) (4 ) & mem(10) (15 downto 8) & --c0
-                      	mem(15) (5 ) & mem(10) (7  downto 0) &
-                      	 
-                      	mem(15) (6 ) & mem(11) (15 downto 8) & --c1
-                       	mem(15) (7 ) & mem(11) (7  downto 0) & 
-                        
-                        mem(15) (8 ) & mem(12) (15 downto 8) & --c2
-                        mem(15) (9 ) & mem(12) (7  downto 0) &
-                        
-                        mem(15) (10) & mem(13) (15 downto 8) & --c3
-                        mem(15) (11) &	mem(13) (7  downto 0) &
-  
-                        mem(15) (12) & mem(14) (15 downto 8) & --c4
-                        mem(15) (13) & mem(14) (7  downto 0) ;
-								
-	lms_rst			<= mem(20)(0);
-	lms_ss			<= mem(20)(1);
-								
-for_lop : for i in 0 to 143 generate
-   spi_config_data(i) <= spi_config_data_rev(143-i);  
-end generate;
-																	
-	spi_config_controls(1 downto 0) <= mem(3)(1 downto 0);
+   sdout <= dout_reg(15) and oe;
+   oen <= oe;
 
+   -- ---------------------------------------------------------------------------------------------
+   -- Configuration memory
+   -- --------------------------------------------------------------------------------------------- 
+   ram: process(sclk, mreset)
+   begin
+      -- Defaults
+      if mreset = '0' then
+         mem(0)  <= "0000000010000001"; --  6 free, UNUSED[5:0], TSGFC, TSGFCW[1:0], TSGDCLDQ, TSGDCLDI, TSGSWAPIQ, TSGMODE, INSEL, BSTART, EN
+         mem(1)  <= "0000011111111111"; --  5 free, UNUSED[4:0], gcorrQ[10:0]
+         mem(2)  <= "0000011111111111"; --  5 free, UNUSED[4:0], gcorrI[10:0]
+         mem(3)  <= "0000000000000000"; --  0 free, INSEL, HBI_OVR[2:0], IQcorr[11:0]
+         mem(4)  <= "0000000000000000"; --  0 free, dccorrI[7:0], dccorrQ[7:0]
+         mem(5)  <= "0000000000000000"; --  5 free, UNUSED[4:0], GFIR1_L[2:0] (def. 1) (Length of PHEQ - 1), GFIR1_N[7:0] (def. 1) (PHEQ Clock division ratio. Must be HBI interpolation ratio - 1)
+         mem(6)  <= "0000000000000000"; --  5 free, UNUSED[4:0], GFIR2_L[2:0], GFIR2_N[7:0]
+         mem(7)  <= "0000000000000000"; --  5 free, UNUSED[4:0], GFIR3_L[2:0], GFIR3_N[7:0]
+         mem(8)  <= "0000000000000000"; --  3 free, CMIX_GAIN[1:0], CMIX_SC, CMIX_GAIN[2], UNUSED[2:0], CMIX_BYP, ISINC_BYP, GFIR3_BYP, GFIR2_BYP, GFIR1_BYP, DC_BYP, UNUSED, GC_BYP, PH_BYP
+         mem(9)   <= "0000000000000000"; --  0 free, BSIGI(LSB)[14:0], BSTATE {READ ONLY}
+         mem(10)  <= "0000000000000000"; --  0 free, BSIGQ[7:0](LSB), BSIGI(MSB)[22:15], {READ ONLY}
+         mem(11)  <= "0000000000000000"; --  1 free, BSIGQ[22:8](MSB), {READ ONLY}
+         mem(12)  <= "0000000000000000"; --  0 free, DC_REG[15:0]
+         mem(13)	<= "0000000000000000"; -- 16 free, UNUSED[15:0]
+--       mem(14)  <= "0000000000000000"; -- 16 free, UNUSED[15:0]
+--       mem(15)	<= "0000000000000000"; -- 16 free, UNUSED[15:0] 
+         mem(14)  <= x"0855"; --  0 free, TNCOF MSB --1MHz, When Fclk = 30.72MHz
+         mem(15)  <= x"5555"; --  0 free, TNCOF LSB
+--       mem(14)  <= x"042A"; --  0 free, TNCOF MSB --0.25MHz, When Fclk = 30.72MHz
+--       mem(15)  <= x"AAAB"; --  0 free, TNCOF LSB
+      elsif sclk'event and sclk = '1' then
+            if mem_we = '1' then
+               mem(to_integer(unsigned(inst_reg(4 downto 0)))) <= din_reg(14 downto 0) & sdin;
+            end if;
+            
+            if dout_reg_len = '0' then
+               mem(9)  <= to_txtspcfg.bsigi(14 downto 0) & to_txtspcfg.bstate;
+               mem(10) <= to_txtspcfg.bsigq(7 downto 0) & to_txtspcfg.bsigi(22 downto 15);
+               mem(11)(14 downto 0) <= to_txtspcfg.bsigq(22 downto 8);
+            end if;
+            
+      end if;
+   end process ram;
+   
+   -- ---------------------------------------------------------------------------------------------
+   -- Decoding logic
+   -- ---------------------------------------------------------------------------------------------
+   
+   
+   --0x0
+   from_txtspcfg.tsgfc       <= mem(0)(9);
+   from_txtspcfg.tsgfcw      <= mem(0)(8 downto 7);
+   from_txtspcfg.tsgdcldq    <= mem(0)(6);
+   from_txtspcfg.tsgdcldi    <= mem(0)(5);
+   from_txtspcfg.tsgswapiq   <= mem(0)(4);
+   from_txtspcfg.tsgmode     <= mem(0)(3);
+   from_txtspcfg.insel       <= mem(0)(2);
+   from_txtspcfg.bstart      <= mem(0)(1);
+   from_txtspcfg.en          <= mem(0)(0) and to_txtspcfg.txen;
+   
+   --0x1, 0x2
+   from_txtspcfg.gcorrq      <= mem(1)(10 downto 0);
+   from_txtspcfg.gcorri      <= mem(2)(10 downto 0);
+   
+   --0x3
+   from_txtspcfg.iqcorr      <= mem(3)(11 downto 0);
+   from_txtspcfg.ovr         <= mem(3)(14 downto 12);
+   
+   --0x4
+   from_txtspcfg.dccorri     <= mem(4)(15 downto 8);
+   from_txtspcfg.dccorrq     <= mem(4)(7 downto 0);
+   
+   --0x5
+   from_txtspcfg.gfir1l      <= mem(5)(10 downto 8);
+   from_txtspcfg.gfir1n      <= mem(5)(7 downto 0);
+   
+   --0x6
+   from_txtspcfg.gfir2l      <= mem(6)(10 downto 8);
+   from_txtspcfg.gfir2n      <= mem(6)(7 downto 0);
+   
+   --0x7
+   from_txtspcfg.gfir3l      <= mem(7)(10 downto 8);
+   from_txtspcfg.gfir3n      <= mem(7)(7 downto 0);
+   
+   --0x8
+   from_txtspcfg.ph_byp      <= mem(8)(0);
+   from_txtspcfg.gc_byp      <= mem(8)(1);
+   from_txtspcfg.dc_byp      <= mem(8)(3);
+   from_txtspcfg.gfir1_byp   <= mem(8)(4);
+   from_txtspcfg.gfir2_byp   <= mem(8)(5);
+   from_txtspcfg.gfir3_byp   <= mem(8)(6);
+   from_txtspcfg.isinc_byp   <= mem(8)(7);
+   from_txtspcfg.cmix_byp    <= mem(8)(8);
+   from_txtspcfg.cmix_sc     <= mem(8)(13);
+   from_txtspcfg.cmix_gain   <= mem(8)(12) & mem(8)(15 downto 14);
+   
+   --0x9, 0xA, 0xB
+   -- Read only signatures
+   
+   --0xC
+   from_txtspcfg.dc_reg      <= mem(12);
+   
+   from_txtspcfg.nco_fcv     <= mem(14) & mem(15); 
+   
 end txtspcfg_arch;

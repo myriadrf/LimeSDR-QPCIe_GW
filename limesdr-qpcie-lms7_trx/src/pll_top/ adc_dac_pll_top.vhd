@@ -80,7 +80,7 @@ begin
 ----------------------------------------------------------------------------
    -- Global clock control block
 ----------------------------------------------------------------------------
-   clkctrl_c5_inst0 : clkctrl_c5
+   inst0_clkctrl_c5 : clkctrl_c5
    port map(
       inclk  => pll_inclk,
       ena    => '1',
@@ -90,7 +90,7 @@ begin
 ----------------------------------------------------------------------------
 -- PLL instance
 ---------------------------------------------------------------------------- 
-   fpga_pll_inst1 : fpga_pll
+   inst1_fpga_pll : fpga_pll
 	port map(
 		refclk            => pll_inclk_global,
 		rst               => not pll_areset_n,
@@ -104,7 +104,7 @@ begin
 -- ----------------------------------------------------------------------------
 -- DDR output buffers
 -- ----------------------------------------------------------------------------
-   ALTDDIO_OUT_component_int2 : ALTDDIO_OUT
+   inst2_ALTDDIO_OUT_component : ALTDDIO_OUT
    GENERIC MAP (
       extend_oe_disable       => "OFF",
       intended_device_family  => intended_device_family,
@@ -123,7 +123,7 @@ begin
       dataout        => inst2_dataout
    );
 
-   ALTDDIO_OUT_component_int3 : ALTDDIO_OUT
+   inst3_ALTDDIO_OUT_component : ALTDDIO_OUT
    GENERIC MAP (
       extend_oe_disable       => "OFF",
       intended_device_family  => intended_device_family,

@@ -404,7 +404,7 @@ begin
    
    );   
    
-   adc_dac_pll_top_inst6 : entity work.adc_dac_pll_top
+   inst6_adc_dac_pll_top : entity work.adc_dac_pll_top
    generic map(
       intended_device_family  => INTENDED_DEVICE_FAMILY
    )
@@ -461,7 +461,7 @@ begin
    end process;
      
 
-   pll_ctrl_inst2 : entity work.pll_ctrl 
+   inst7_pll_ctrl : entity work.pll_ctrl 
    generic map(
       n_pll	=> N_PLL
    )
