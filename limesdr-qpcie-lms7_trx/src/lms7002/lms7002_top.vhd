@@ -15,6 +15,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use work.fpgacfg_pkg.all;
 use work.tstcfg_pkg.all;
+use work.memcfg_pkg.all;
 
 -- ----------------------------------------------------------------------------
 -- Entity declaration
@@ -29,9 +30,13 @@ entity lms7002_top is
    );
    port (  
       from_fpgacfg      : in  t_FROM_FPGACFG;
-      from_tstcfg       : in  t_FROM_TSTCFG;      
+      from_tstcfg       : in  t_FROM_TSTCFG;
+      from_memcfg       : in  t_FROM_MEMCFG;
+      -- Momory module reset
+      mem_reset_n       : in  std_logic;
       -- PORT1 interface
       MCLK1             : in  std_logic;  -- TX interface clock
+      MCLK1_2x          : in  std_logic;
       FCLK1             : out std_logic;  -- TX interface feedback clock
       DIQ1              : out std_logic_vector(g_IQ_WIDTH-1 downto 0);
       ENABLE_IQSEL1     : out std_logic;
@@ -66,7 +71,12 @@ entity lms7002_top is
       rx_smpl_cmp_start : in std_logic;
       rx_smpl_cmp_length: in std_logic_vector(15 downto 0);
       rx_smpl_cmp_done  : out std_logic;
-      rx_smpl_cmp_err   : out std_logic
+      rx_smpl_cmp_err   : out std_logic;
+         -- SPI for internal modules
+      sdin              : in std_logic;   -- Data in
+      sclk              : in std_logic;   -- Data clock
+      sen               : in std_logic;   -- Enable signal (active low)
+      sdout             : out std_logic  -- Data out
    );
 end lms7002_top;
 
@@ -136,7 +146,11 @@ inst1_lms7002_tx : entity work.lms7002_tx
       )
    port map(
       clk                  => MCLK1,
+      clk_2x               => MCLK1_2x,
       reset_n              => tx_reset_n,
+      mem_reset_n          => mem_reset_n,
+      from_memcfg          => from_memcfg,
+      
       --Mode settings
       mode                 => from_fpgacfg.mode,-- JESD207: 1; TRXIQ: 0
       trxiqpulse           => from_fpgacfg.trxiq_pulse,-- trxiqpulse on: 1; trxiqpulse off: 0
@@ -162,7 +176,13 @@ inst1_lms7002_tx : entity work.lms7002_tx
       fifo_wrusedw         => tx_wrusedw,
       --TX sample ports (direct access to DDR cells)
       diq_h                => tx_diq_h,
-      diq_l                => tx_diq_l
+      diq_l                => tx_diq_l,
+      sdin                 => sdin,  
+      sclk                 => sclk,
+      sen                  => sen,  
+      sdout                => sdout
+      
+      
    );
       
 -- ----------------------------------------------------------------------------

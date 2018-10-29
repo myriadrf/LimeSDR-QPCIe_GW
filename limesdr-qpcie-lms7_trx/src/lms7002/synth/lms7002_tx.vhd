@@ -15,6 +15,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use work.FIFO_PACK.all;
+use work.memcfg_pkg.all;
 
 -- ----------------------------------------------------------------------------
 -- Entity declaration
@@ -28,7 +29,10 @@ entity lms7002_tx is
       );
    port (
       clk                  : in  std_logic;
+      clk_2x               : in  std_logic;
       reset_n              : in  std_logic;
+      mem_reset_n          : in  std_logic;
+      from_memcfg          : in  t_FROM_MEMCFG;
       --Mode settings
       mode                 : in  std_logic; -- JESD207: 1; TRXIQ: 0
       trxiqpulse           : in  std_logic; -- trxiqpulse on: 1; trxiqpulse off: 0
@@ -54,7 +58,12 @@ entity lms7002_tx is
       fifo_wrusedw         : out std_logic_vector(g_SMPL_FIFO_WRUSEDW-1 downto 0);
       --TX sample ports (direct access to DDR cells)
       diq_h                : in  std_logic_vector(g_IQ_WIDTH downto 0);
-      diq_l                : in  std_logic_vector(g_IQ_WIDTH downto 0)
+      diq_l                : in  std_logic_vector(g_IQ_WIDTH downto 0);
+      -- SPI for internal modules
+      sdin                 : in std_logic;   -- Data in
+      sclk                 : in std_logic;   -- Data clock
+      sen                  : in std_logic;   -- Enable signal (active low)
+      sdout                : out std_logic  -- Data out
       );
 end lms7002_tx;
 
@@ -78,6 +87,16 @@ signal inst1_fifo_q        : std_logic_vector(g_IQ_WIDTH*4-1 downto 0);
 --inst2 
 signal inst2_diq_h         : std_logic_vector(g_IQ_WIDTH downto 0);
 signal inst2_diq_l         : std_logic_vector(g_IQ_WIDTH downto 0);
+
+--inst4
+signal inst4_diq_out       : std_logic_vector(63 downto 0);
+signal inst4_xen           : std_logic;
+
+--inst5
+signal inst5_wrfull        : std_logic;
+signal inst5_q             : std_logic_vector(63 downto 0);
+signal inst5_rdempty       : std_logic;
+signal inst5_rdusedw       : std_logic_vector(c_INST0_RDUSEDW-1 downto 0);
   
 begin
 
@@ -101,20 +120,69 @@ inst0_fifo_inst : entity work.fifo_inst
       wrfull   => fifo_wrfull,
       wrempty  => open,
       wrusedw  => fifo_wrusedw,
-      rdclk    => clk,
-      rdreq    => inst1_fifo_rdreq,
+      rdclk    => clk_2x,
+      rdreq    => inst4_xen AND (NOT inst0_rdempty),
       q        => inst0_q,
       rdempty  => inst0_rdempty,
       rdusedw  => inst0_rdusedw  
    );
+   
+   
+   
+   inst4_cfir_top : entity work.cfir_top
+   port map(
+      clk         => clk_2x,
+      reset_n     => reset_n,
+      mem_reset_n => mem_reset_n,
+      from_memcfg => from_memcfg,
+      
+      sdin        => sdin,    -- Data in
+      sclk        => sclk,    -- Data clock
+      sen         => sen,     -- Enable signal (active low)
+      sdout       => sdout,   -- Data out
+      xen         => inst4_xen,
+      diq_in      => inst0_q,
+      diq_out     => inst4_diq_out
+    );
+    
+   inst5_fifo_inst : entity work.fifo_inst
+   generic map(
+      dev_family     => g_DEV_FAMILY,
+      wrwidth        => 64,
+      wrusedw_witdth => 10, 
+      rdwidth        => 64,
+      rdusedw_width  => 10,
+      show_ahead     => "OFF"
+  ) 
+   port map(
+      reset_n  => reset_n,
+      wrclk    => clk_2x,
+      wrreq    => inst4_xen AND (NOT inst5_wrfull),
+      data     => inst4_diq_out,
+      wrfull   => inst5_wrfull,
+      wrempty  => open,
+      wrusedw  => open,
+      rdclk    => clk,
+      rdreq    => inst1_fifo_rdreq,
+      q        => inst5_q,
+      rdempty  => inst5_rdempty,
+      rdusedw  => inst5_rdusedw  
+   );
+   
+
   
 -- ----------------------------------------------------------------------------
 -- FIFO for storing TX samples
 -- ----------------------------------------------------------------------------  
-   inst1_fifo_q <=   inst0_q(63 downto 64-g_IQ_WIDTH) & 
-                     inst0_q(47 downto 48-g_IQ_WIDTH) &
-                     inst0_q(31 downto 32-g_IQ_WIDTH) & 
-                     inst0_q(15 downto 16-g_IQ_WIDTH);
+--   inst1_fifo_q <=   inst0_q(63 downto 64-g_IQ_WIDTH) & 
+--                     inst0_q(47 downto 48-g_IQ_WIDTH) &
+--                     inst0_q(31 downto 32-g_IQ_WIDTH) & 
+--                     inst0_q(15 downto 16-g_IQ_WIDTH);
+                     
+   inst1_fifo_q <=   inst5_q(63 downto 64-g_IQ_WIDTH) & 
+                     inst5_q(47 downto 48-g_IQ_WIDTH) &
+                     inst5_q(31 downto 32-g_IQ_WIDTH) & 
+                     inst5_q(15 downto 16-g_IQ_WIDTH);
 
    inst1_fifo2diq : entity work.fifo2diq
    generic map( 
@@ -145,7 +213,7 @@ inst0_fifo_inst : entity work.fifo_inst
       DIQ_h                => inst1_DIQ_h, 
       DIQ_l                => inst1_DIQ_l, 
       --fifo ports 
-      fifo_rdempty         => inst0_rdempty, 
+      fifo_rdempty         => inst5_rdempty, 
       fifo_rdreq           => inst1_fifo_rdreq,
       fifo_q               => inst1_fifo_q
    );

@@ -137,7 +137,9 @@ entity nios_cpu_top is
       to_tamercfg          : in     t_TO_TAMERCFG;
       from_tamercfg        : out    t_FROM_TAMERCFG;
       to_gnsscfg           : in     t_TO_GNSSCFG;
-      from_gnsscfg         : out    t_FROM_GNSSCFG
+      from_gnsscfg         : out    t_FROM_GNSSCFG;
+      to_memcfg            : in     t_TO_MEMCFG;
+      from_memcfg          : out    t_FROM_MEMCFG
       
 
    );
@@ -410,7 +412,9 @@ begin
       to_tamercfg          => to_tamercfg,
       from_tamercfg        => from_tamercfg,
       to_gnsscfg           => to_gnsscfg,
-      from_gnsscfg         => from_gnsscfg
+      from_gnsscfg         => from_gnsscfg,
+      to_memcfg            => to_memcfg,
+      from_memcfg          => from_memcfg
    );
    
 -- ----------------------------------------------------------------------------

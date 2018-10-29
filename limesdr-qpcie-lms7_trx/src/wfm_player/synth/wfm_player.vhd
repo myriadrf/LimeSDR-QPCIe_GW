@@ -30,8 +30,8 @@ entity wfm_player is
       avl_rd_latency_words       : integer := 32;
       avl_traffic_gen_buff_size  : integer := 16;
          
-      wfm_infifo_wrusedw_width   : integer := 11;
-      wfm_infifo_wdata_width     : integer := 32;
+      wfm_infifo_rdusedw_width   : integer := 11;
+      wfm_infifo_rdata_width     : integer := 32;
       
       wfm_outfifo_rdusedw_width  : integer := 11;
       wfm_outfifo_rdata_width    : integer := 32
@@ -59,12 +59,10 @@ entity wfm_player is
       avl_rddata_valid           : in std_logic;
       
       --wfm infifo wfm_data -> wfm_infifo -> external memory
-      wfm_infifo_wclk            : in std_logic;
-      wfm_infifo_reset_n         : in std_logic;
-      wfm_infifo_wrreq           : in std_logic;
-      wfm_infifo_wdata           : in std_logic_vector(wfm_infifo_wdata_width-1 downto 0);
-      wfm_infifo_wfull           : out std_logic;
-      wfm_infifo_wrusedw         : out std_logic_vector(wfm_infifo_wrusedw_width-1 downto 0);
+      wfm_infifo_rdata           : in  std_logic_vector(wfm_infifo_rdata_width-1 downto 0);
+      wfm_infifo_rdreq           : out std_logic;
+      wfm_infifo_rdempty         : in  std_logic;
+      wfm_infifo_rdusedw         : in std_logic_vector(wfm_infifo_rdusedw_width-1 downto 0);
       
       --wfm outfifo external memory -> wfm_outfifo -> wfm_data
       wfm_outfifo_rclk           : in std_logic;
@@ -179,29 +177,36 @@ begin
 -- ----------------------------------------------------------------------------   
    --wfm infifo buffer (wfm_data -> wfm_infifo -> external memory)
 -- ----------------------------------------------------------------------------
-   wfm_infifo_inst0  : entity work.fifo_inst
-   generic map(
-      dev_family     => dev_family,
-      wrwidth        => wfm_infifo_wdata_width,
-      wrusedw_witdth => wfm_infifo_wrusedw_width, 
-      rdwidth        => avl_data_width,
-      rdusedw_width  => FIFORD_SIZE(wfm_infifo_wdata_width, avl_data_width, wfm_infifo_wrusedw_width),
-      show_ahead     => "ON"
-   )  
-  port map(
-      reset_n        => wfm_infifo_reset_n,
-      wrclk          => wfm_infifo_wclk,
-      wrreq          => wfm_infifo_wrreq,
-      data           => wfm_infifo_wdata,
-      wrfull         => wfm_infifo_wfull,
-      wrempty        => open,
-      wrusedw        => wfm_infifo_wrusedw,
-      rdclk          => clk,
-      rdreq          => inst2_wdata_req,
-      q              => inst0_q,
-      rdempty        => inst0_rdempty,
-      rdusedw        => inst0_rdusedw   
-   );
+--   wfm_infifo_inst0  : entity work.fifo_inst
+--   generic map(
+--      dev_family     => dev_family,
+--      wrwidth        => wfm_infifo_wdata_width,
+--      wrusedw_witdth => wfm_infifo_wrusedw_width, 
+--      rdwidth        => avl_data_width,
+--      rdusedw_width  => FIFORD_SIZE(wfm_infifo_wdata_width, avl_data_width, wfm_infifo_wrusedw_width),
+--      show_ahead     => "ON"
+--   )  
+--  port map(
+--      reset_n        => wfm_infifo_reset_n,
+--      wrclk          => wfm_infifo_wclk,
+--      wrreq          => wfm_infifo_wrreq,
+--      data           => wfm_infifo_wdata,
+--      wrfull         => wfm_infifo_wfull,
+--      wrempty        => open,
+--      wrusedw        => wfm_infifo_wrusedw,
+--      rdclk          => clk,
+--      rdreq          => inst2_wdata_req,
+--      q              => inst0_q,
+--      rdempty        => inst0_rdempty,
+--      rdusedw        => inst0_rdusedw   
+--   );
+
+--inst0_q           <= wfm_infifo_rdata;
+--inst0_rdempty     <= wfm_infifo_rdempty;
+--inst0_rdusedw     <= wfm_infifo_rdusedw;
+wfm_infifo_rdreq  <= inst2_wdata_req;
+
+
    
 -- ----------------------------------------------------------------------------   
    --wfm outfifo buffer (external memory -> wfm_outfifo -> wfm_data)
@@ -261,7 +266,7 @@ begin
       do_read              => inst2_do_read,
       write_addr           => inst2_write_addr,
       write_burstcount     => inst2_write_burstcount,
-      wdata                => inst0_q,
+      wdata                => wfm_infifo_rdata,
       be                   => inst2_be,
       read_addr            => inst2_read_addr,
       read_burstcount      => inst2_read_burstcount,
@@ -313,7 +318,7 @@ begin
       burst_cnt_max <= (others=>'0');
    elsif (clk'event AND clk='1') then 
       --by dropping LSb it is determined maximum burst transactions
-      burst_cnt_max <= '0' & inst0_rdusedw(FIFORD_SIZE(wfm_infifo_wdata_width, 
+      burst_cnt_max <= '0' & wfm_infifo_rdusedw(FIFORD_SIZE(wfm_infifo_wdata_width, 
                                                          avl_data_width, 
                                                          wfm_infifo_wrusedw_width)-1 downto 1);
    end if;
@@ -338,7 +343,7 @@ begin
 end process;
 
 --A write request can be issued only when avalon_traffic_gen module is ready
-process(current_state, inst2_ready, inst0_rdempty)
+process(current_state, inst2_ready, wfm_infifo_rdempty)
 begin
    if (current_state = do_write OR current_state = do_burst_write )AND inst2_ready = '1' then 
       inst2_do_write <= '1';
@@ -475,14 +480,14 @@ end process;
 -- ----------------------------------------------------------------------------
 --state machine combo
 -- ----------------------------------------------------------------------------
-fsm : process(current_state,wfm_load, wfm_play_stop, inst0_rdempty, inst2_ready, 
+fsm : process(current_state,wfm_load, wfm_play_stop, wfm_infifo_rdempty, inst2_ready, 
                inst1_wrusedw, burst_cnt_max, burst_wr_cnt, do_write_idle_cnt) begin
    next_state <= current_state;
    case current_state is
    
       --idle state
       when idle =>               
-         if wfm_load = '1' OR inst0_rdempty = '0' then
+         if wfm_load = '1' OR wfm_infifo_rdempty = '0' then
             next_state <= check_wfm_infifo;             
          elsif wfm_play_stop = '1' then
             next_state <= check_wfm_outfifo;
@@ -492,7 +497,7 @@ fsm : process(current_state,wfm_load, wfm_play_stop, inst0_rdempty, inst2_ready,
          
       --check if we have data for burst write or single write operation   
       when check_wfm_infifo =>    
-         if inst0_rdempty = '0' AND inst2_ready = '1' then
+         if wfm_infifo_rdempty = '0' AND inst2_ready = '1' then
             if unsigned(burst_cnt_max) > 0 then
                next_state <= do_burst_write;
             else 

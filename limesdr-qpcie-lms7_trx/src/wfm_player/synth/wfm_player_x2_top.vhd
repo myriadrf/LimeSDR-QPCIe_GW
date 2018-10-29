@@ -48,14 +48,14 @@ entity wfm_player_x2_top is
       avl_1_traffic_gen_buff_size   : integer := 16;
       
       -- wfm 0 player parameters
-      wfm_0_infifo_wrusedw_width    : integer := 11;
-      wfm_0_infifo_wdata_width      : integer := 32;      
+      wfm_0_infifo_rdusedw_width    : integer := 11;
+      wfm_0_infifo_rdata_width      : integer := 32;      
       wfm_0_outfifo_rdusedw_width   : integer := 11;
       wfm_0_outfifo_rdata_width     : integer := 32;
       
       -- wfm 1 player parameters
-      wfm_1_infifo_wrusedw_width    : integer := 11;
-      wfm_1_infifo_wdata_width      : integer := 32;      
+      wfm_1_infifo_rdusedw_width    : integer := 11;
+      wfm_1_infifo_rdata_width      : integer := 32;      
       wfm_1_outfifo_rdusedw_width   : integer := 11;
       wfm_1_outfifo_rdata_width     : integer := 32;
       
@@ -71,12 +71,10 @@ entity wfm_player_x2_top is
       ----------------WFM port 0------------------
       from_fpgacfg_0          : in     t_FROM_FPGACFG;
       --infifo 
-      wfm_0_infifo_wclk       : in     std_logic;
-      wfm_0_infifo_reset_n    : in     std_logic;
-      wfm_0_infifo_wrreq      : in     std_logic := '0';
-      wfm_0_infifo_wdata      : in     std_logic_vector(wfm_0_infifo_wdata_width-1 downto 0);
-      wfm_0_infifo_wfull      : out    std_logic;
-      wfm_0_infifo_wrusedw    : out    std_logic_vector(wfm_0_infifo_wrusedw_width-1 downto 0);
+      wfm_0_infifo_rdreq      : out    std_logic := '0';
+      wfm_0_infifo_rdata      : in     std_logic_vector(wfm_0_infifo_rdata_width-1 downto 0);
+      wfm_0_infifo_rdempty    : in     std_logic;
+      wfm_0_infifo_rdusedw    : in     std_logic_vector(wfm_0_infifo_rdusedw_width-1 downto 0);
       --outfifo   
       wfm_0_outfifo_rclk      : in     std_logic;
       wfm_0_outfifo_reset_n   : in     std_logic;
@@ -89,12 +87,10 @@ entity wfm_player_x2_top is
       ----------------WFM port 1------------------
       from_fpgacfg_1          : in     t_FROM_FPGACFG;
       --infifo 
-      wfm_1_infifo_wclk       : in     std_logic;
-      wfm_1_infifo_reset_n    : in     std_logic;
-      wfm_1_infifo_wrreq      : in     std_logic := '0';
-      wfm_1_infifo_wdata      : in     std_logic_vector(wfm_1_infifo_wdata_width-1 downto 0);
-      wfm_1_infifo_wfull      : out    std_logic;
-      wfm_1_infifo_wrusedw    : out    std_logic_vector(wfm_1_infifo_wrusedw_width-1 downto 0);
+      wfm_1_infifo_rdreq      : out    std_logic := '0';
+      wfm_1_infifo_rdata      : in     std_logic_vector(wfm_1_infifo_rdata_width-1 downto 0);
+      wfm_1_infifo_rdempty    : in     std_logic;
+      wfm_1_infifo_rdusedw    : in     std_logic_vector(wfm_1_infifo_rdusedw_width-1 downto 0);
       --outfifo   
       wfm_1_outfifo_rclk      : in     std_logic;
       wfm_1_outfifo_reset_n   : in     std_logic;
@@ -310,15 +306,37 @@ component ddr3_av_2x32 is
 end component;
 begin
 
+wfm_0_load           <= from_fpgacfg_0.wfm_load;
+wfm_0_play_stop      <= from_fpgacfg_0.wfm_play;
+wfm_0_sample_width   <= "10";
+wfm_0_fr_start       <= '0';
+wfm_0_ch_en          <= "01";
+wfm_0_mimo_en        <= '1';
+wfm_0_intrlv_dis     <= '0';
+
+wfm_1_load           <= from_fpgacfg_1.wfm_load;
+wfm_1_play_stop      <= from_fpgacfg_1.wfm_play;
+wfm_1_sample_width   <= "10";
+wfm_1_fr_start       <= '0';
+wfm_1_ch_en          <= "01";
+wfm_1_mimo_en        <= '1';
+wfm_1_intrlv_dis     <= '0';
+
 
 --to force player to stop reading samples when loading 
+--wfm_0_play_stop_int <= '1' when (   wfm_0_play_stop = '1'      AND 
+--                                    wfm_0_load = '0'           AND 
+--                                    wfm_0_infifo_wrreq = '0')        else '0';
+--                                    
+--wfm_1_play_stop_int <= '1' when (   wfm_1_play_stop = '1'      AND 
+--                                    wfm_1_load = '0'           AND 
+--                                    wfm_1_infifo_wrreq = '0')        else '0';
+                                    
 wfm_0_play_stop_int <= '1' when (   wfm_0_play_stop = '1'      AND 
-                                    wfm_0_load = '0'           AND 
-                                    wfm_0_infifo_wrreq = '0')        else '0';
+                                    wfm_0_load = '0')        else '0';
                                     
 wfm_1_play_stop_int <= '1' when (   wfm_1_play_stop = '1'      AND 
-                                    wfm_1_load = '0'           AND 
-                                    wfm_1_infifo_wrreq = '0')        else '0';
+                                    wfm_1_load = '0')        else '0';                                    
       
 -- ----------------------------------------------------------------------------
 -- Signals synchronised to inst2_afi_half_clk
@@ -403,8 +421,8 @@ inst1_wfm_infifo_reset_n <= not wfm_1_load_wfm_1_infifo_wclk_rising;
       avl_rd_latency_words       => avl_0_rd_latency_words,
       avl_traffic_gen_buff_size  => avl_0_traffic_gen_buff_size,
 
-      wfm_infifo_wrusedw_width   => wfm_0_infifo_wrusedw_width,
-      wfm_infifo_wdata_width     => wfm_0_infifo_wdata_width,
+      wfm_infifo_rdusedw_width   => wfm_0_infifo_rdusedw_width,
+      wfm_infifo_rdata_width     => wfm_0_infifo_rdata_width,
 
       wfm_outfifo_rdusedw_width  => wfm_0_outfifo_rdusedw_width,
       wfm_outfifo_rdata_width    => wfm_0_outfifo_rdata_width
@@ -432,12 +450,10 @@ inst1_wfm_infifo_reset_n <= not wfm_1_load_wfm_1_infifo_wclk_rising;
       avl_rddata_valid           => inst2_avl_rdata_valid_0,
       
       --wfm infifo wfm_data -> wfm_infifo -> external memory
-      wfm_infifo_wclk            => wfm_0_infifo_wclk,
-      wfm_infifo_reset_n         => inst0_wfm_infifo_reset_n,
-      wfm_infifo_wrreq           => wfm_0_infifo_wrreq,
-      wfm_infifo_wdata           => wfm_0_infifo_wdata,
-      wfm_infifo_wfull           => wfm_0_infifo_wfull,
-      wfm_infifo_wrusedw         => wfm_0_infifo_wrusedw,
+      wfm_infifo_rdreq           => wfm_0_infifo_rdreq,
+      wfm_infifo_rdata           => wfm_0_infifo_rdata,
+      wfm_infifo_rdempty         => wfm_0_infifo_rdempty,
+      wfm_infifo_rdusedw         => wfm_0_infifo_rdusedw,
       
       --wfm outfifo external memory -> wfm_outfifo -> wfm_data
       wfm_outfifo_rclk           => wfm_0_outfifo_rclk,
@@ -462,8 +478,8 @@ inst1_wfm_infifo_reset_n <= not wfm_1_load_wfm_1_infifo_wclk_rising;
       avl_rd_latency_words       => avl_1_rd_latency_words,
       avl_traffic_gen_buff_size  => avl_1_traffic_gen_buff_size,
 
-      wfm_infifo_wrusedw_width   => wfm_1_infifo_wrusedw_width,
-      wfm_infifo_wdata_width     => wfm_1_infifo_wdata_width,
+      wfm_infifo_rdusedw_width   => wfm_1_infifo_rdusedw_width,
+      wfm_infifo_rdata_width     => wfm_1_infifo_rdata_width,
 
       wfm_outfifo_rdusedw_width  => wfm_1_outfifo_rdusedw_width,
       wfm_outfifo_rdata_width    => wfm_1_outfifo_rdata_width
@@ -491,12 +507,10 @@ inst1_wfm_infifo_reset_n <= not wfm_1_load_wfm_1_infifo_wclk_rising;
       avl_rddata_valid           => inst2_avl_rdata_valid_1,
       
       --wfm infifo wfm_data -> wfm_infifo -> external memory
-      wfm_infifo_wclk            => wfm_1_infifo_wclk,
-      wfm_infifo_reset_n         => inst1_wfm_infifo_reset_n,
-      wfm_infifo_wrreq           => wfm_1_infifo_wrreq,
-      wfm_infifo_wdata           => wfm_1_infifo_wdata,
-      wfm_infifo_wfull           => wfm_1_infifo_wfull,
-      wfm_infifo_wrusedw         => wfm_1_infifo_wrusedw,
+      wfm_infifo_rdreq           => wfm_1_infifo_rdreq,
+      wfm_infifo_rdata           => wfm_1_infifo_rdata,
+      wfm_infifo_rdempty         => wfm_1_infifo_rdempty,
+      wfm_infifo_wrusedw         => wfm_1_infifo_rdusedw,
       
       --wfm outfifo external memory -> wfm_outfifo -> wfm_data
       wfm_outfifo_rclk           => wfm_1_outfifo_rclk,

@@ -21,6 +21,7 @@ use work.rxtspcfg_pkg.all;
 use work.periphcfg_pkg.all;
 use work.tamercfg_pkg.all;
 use work.gnsscfg_pkg.all;
+use work.memcfg_pkg.all;
 use work.FIFO_PACK.all;
 
 library altera; 
@@ -363,10 +364,15 @@ signal inst0_from_tamercfg       : t_FROM_TAMERCFG;
 signal inst0_to_tamercfg         : t_TO_TAMERCFG;
 signal inst0_from_gnsscfg        : t_FROM_GNSSCFG;
 signal inst0_to_gnsscfg          : t_TO_GNSSCFG;
+signal inst0_to_memcfg           : t_TO_MEMCFG;
+signal inst0_from_memcfg         : t_FROM_MEMCFG;
+
+
 
 
 --inst1 (pll_top instance)
 signal inst1_lms1_txpll_c1             : std_logic;
+signal inst1_lms1_txpll_c2             : std_logic;
 signal inst1_lms1_txpll_locked         : std_logic;
 signal inst1_lms1_txpll_rcnfg_from_pll : std_logic_vector(63 downto 0);
 signal inst1_lms1_rxpll_c1             : std_logic;
@@ -376,6 +382,7 @@ signal inst1_lms1_smpl_cmp_en          : std_logic;
 signal inst1_lms1_smpl_cmp_cnt         : std_logic_vector(15 downto 0);
 
 signal inst1_lms2_txpll_c1             : std_logic;
+signal inst1_lms2_txpll_c2             : std_logic;
 signal inst1_lms2_txpll_locked         : std_logic;
 signal inst1_lms2_txpll_rcnfg_from_pll : std_logic_vector(63 downto 0);
 signal inst1_lms2_rxpll_c1             : std_logic;
@@ -453,6 +460,7 @@ signal inst6_tx_wrfull              : std_logic;
 signal inst6_tx_wrusedw             : std_logic_vector(8 downto 0); 
 signal inst6_rx_smpl_cmp_done       : std_logic;
 signal inst6_rx_smpl_cmp_err        : std_logic; 
+signal inst6_sdout                  : std_logic;
 
 --inst7
 constant c_WFM_INFIFO_SIZE          : integer := FIFO_WORDS_TO_Nbits(g_WFM_INFIFO_SIZE/(c_S0_DATA_WIDTH/8),true);
@@ -477,7 +485,8 @@ signal inst8_rx_data                : std_logic_vector(g_LMS_DIQ_WIDTH*4-1 downt
 signal inst8_tx_wrfull              : std_logic;
 signal inst8_tx_wrusedw             : std_logic_vector(8 downto 0); 
 signal inst8_rx_smpl_cmp_done       : std_logic;
-signal inst8_rx_smpl_cmp_err        : std_logic; 
+signal inst8_rx_smpl_cmp_err        : std_logic;
+signal inst8_sdout                  : std_logic; 
 
 --inst9
 signal inst9_tx_pct_loss_flg        : std_logic;
@@ -583,7 +592,7 @@ begin
       exfifo_of_wrfull           => inst2_F2H_C0_wfull,
       exfifo_of_rst              => inst0_exfifo_of_rst, 
       -- SPI 0 
-      spi_0_MISO                 => inst0_spi_0_MISO,
+      spi_0_MISO                 => inst0_spi_0_MISO OR inst6_sdout,
       spi_0_MOSI                 => inst0_spi_0_MOSI,
       spi_0_SCLK                 => inst0_spi_0_SCLK,
       spi_0_SS_n                 => inst0_spi_0_SS_n,
@@ -669,7 +678,10 @@ begin
       from_tamercfg              => inst0_from_tamercfg,
       to_tamercfg                => inst0_to_tamercfg,
       from_gnsscfg               => inst0_from_gnsscfg,
-      to_gnsscfg                 => inst0_to_gnsscfg
+      to_gnsscfg                 => inst0_to_gnsscfg,
+      to_memcfg                  => inst0_to_memcfg,
+      from_memcfg                => inst0_from_memcfg
+      
       
    );
    
@@ -712,6 +724,7 @@ begin
       lms1_txpll_drct_clk_en     => inst0_from_fpgacfg_0.drct_clk_en(0) & inst0_from_fpgacfg_0.drct_clk_en(0),
       lms1_txpll_c0              => LMS1_FCLK1,
       lms1_txpll_c1              => inst1_lms1_txpll_c1,
+      lms1_txpll_c2              => inst1_lms1_txpll_c2,
       lms1_txpll_locked          => inst1_lms1_txpll_locked,
       -- LMS#1 RX PLL ports
       lms1_rxpll_inclk           => LMS1_MCLK2,
@@ -740,6 +753,7 @@ begin
       lms2_txpll_drct_clk_en     => inst0_from_fpgacfg_0.drct_clk_en(2) & inst0_from_fpgacfg_0.drct_clk_en(2),
       lms2_txpll_c0              => LMS2_FCLK1,
       lms2_txpll_c1              => inst1_lms2_txpll_c1,
+      lms2_txpll_c2              => inst1_lms2_txpll_c2,
       lms2_txpll_locked          => inst1_lms2_txpll_locked,
       -- LMS#2 RX PLL  0 ports
       lms2_rxpll_inclk           => LMS2_MCLK2,
@@ -1046,8 +1060,12 @@ begin
    port map(  
       from_fpgacfg         => inst0_from_fpgacfg_mod_0,
       from_tstcfg          => inst0_from_tstcfg,
+      from_memcfg          => inst0_from_memcfg,
+      -- Momory module reset
+      mem_reset_n          => reset_n,
       -- PORT1 interface
       MCLK1                => inst1_lms1_txpll_c1,
+      MCLK1_2x             => inst1_lms1_txpll_c2,
       FCLK1                => open, 
       DIQ1                 => LMS1_DIQ1_D,
       ENABLE_IQSEL1        => LMS1_ENABLE_IQSEL1,
@@ -1081,7 +1099,12 @@ begin
       rx_smpl_cmp_start    => inst1_lms1_smpl_cmp_en,
       rx_smpl_cmp_length   => inst1_lms1_smpl_cmp_cnt,
       rx_smpl_cmp_done     => inst6_rx_smpl_cmp_done,
-      rx_smpl_cmp_err      => inst6_rx_smpl_cmp_err   
+      rx_smpl_cmp_err      => inst6_rx_smpl_cmp_err,
+            -- SPI for internal modules
+      sdin                 => inst0_spi_0_MOSI,  -- Data in
+      sclk                 => inst0_spi_0_SCLK,  -- Data clock
+      sen                  => inst0_spi_0_SS_n(6),  -- Enable signal (active low)
+      sdout                => inst6_sdout  -- Data out   
    );
    
    inst7_rxtx_top : entity work.rxtx_top
@@ -1158,8 +1181,12 @@ begin
    port map(  
       from_fpgacfg         => inst0_from_fpgacfg_mod_1,
       from_tstcfg          => inst0_from_tstcfg,
+      from_memcfg          => inst0_from_memcfg,
+      -- Momory module reset
+      mem_reset_n          => reset_n,
       -- PORT1 interface
       MCLK1                => inst1_lms2_txpll_c1,
+      MCLK1_2x             => inst1_lms2_txpll_c2,
       FCLK1                => open, 
       DIQ1                 => LMS2_DIQ1_D,
       ENABLE_IQSEL1        => LMS2_ENABLE_IQSEL1,
@@ -1193,7 +1220,13 @@ begin
       rx_smpl_cmp_start    => inst1_lms2_smpl_cmp_en,
       rx_smpl_cmp_length   => inst1_lms2_smpl_cmp_cnt,
       rx_smpl_cmp_done     => inst8_rx_smpl_cmp_done,
-      rx_smpl_cmp_err      => inst8_rx_smpl_cmp_err   
+      rx_smpl_cmp_err      => inst8_rx_smpl_cmp_err,
+                  -- SPI for internal modules
+      sdin                 => inst0_spi_0_MOSI,  -- Data in
+      sclk                 => inst0_spi_0_SCLK,  -- Data clock
+      sen                  => inst0_spi_0_SS_n(6),  -- Enable signal (active low)
+      sdout                => inst8_sdout  -- Data out 
+   
    ); 
    
    inst9_rxtx_top : entity work.rxtx_top
