@@ -1496,372 +1496,6 @@ set_location_assignment FRACTIONALPLL_X0_Y32_N0 -to "pll_top:inst1_pll_top|rx_pl
 set_location_assignment FRACTIONALPLL_X0_Y15_N0 -to "pll_top:inst1_pll_top|tx_pll_top_cyc5:inst2_tx_pll_top_cyc5|tx_pll:tx_pll_inst1|tx_pll_0002:tx_pll_inst|altera_pll:altera_pll_i|altera_cyclonev_pll:cyclonev_pll|altera_cyclonev_pll_base:fpll_0|fpll" -comment LMS2_TX_PLL
 set_location_assignment FRACTIONALPLL_X89_Y1_N0 -to "pll_top:inst1_pll_top|rx_pll_top_cyc5:inst1_rx_pll_top_cyc5|rx_pll:rx_pll_inst1|rx_pll_0002:rx_pll_inst|altera_pll:altera_pll_i|altera_cyclonev_pll:cyclonev_pll|altera_cyclonev_pll_base:fpll_0|fpll" -comment LMS1_RX_PLL
 set_global_assignment -name OPTIMIZE_HOLD_TIMING "ALL PATHS"
-set_global_assignment -name SLD_NODE_CREATOR_ID 110 -section_id auto_signaltap_2
-set_global_assignment -name SLD_NODE_ENTITY_NAME sld_signaltap -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_clk -to "adc_top:inst10_adc_top|clk" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[0] -to "adc_top:inst10_adc_top|data_ch_a[0]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[1] -to "adc_top:inst10_adc_top|data_ch_a[10]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[2] -to "adc_top:inst10_adc_top|data_ch_a[11]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[3] -to "adc_top:inst10_adc_top|data_ch_a[12]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[4] -to "adc_top:inst10_adc_top|data_ch_a[13]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[5] -to "adc_top:inst10_adc_top|data_ch_a[1]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[6] -to "adc_top:inst10_adc_top|data_ch_a[2]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[7] -to "adc_top:inst10_adc_top|data_ch_a[3]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[8] -to "adc_top:inst10_adc_top|data_ch_a[4]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[9] -to "adc_top:inst10_adc_top|data_ch_a[5]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[10] -to "adc_top:inst10_adc_top|data_ch_a[6]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[11] -to "adc_top:inst10_adc_top|data_ch_a[7]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[12] -to "adc_top:inst10_adc_top|data_ch_a[8]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[13] -to "adc_top:inst10_adc_top|data_ch_a[9]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[14] -to "adc_top:inst10_adc_top|data_ch_ab[0]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[15] -to "adc_top:inst10_adc_top|data_ch_ab[10]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[16] -to "adc_top:inst10_adc_top|data_ch_ab[11]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[17] -to "adc_top:inst10_adc_top|data_ch_ab[12]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[18] -to "adc_top:inst10_adc_top|data_ch_ab[13]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[19] -to "adc_top:inst10_adc_top|data_ch_ab[14]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[20] -to "adc_top:inst10_adc_top|data_ch_ab[15]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[21] -to "adc_top:inst10_adc_top|data_ch_ab[16]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[22] -to "adc_top:inst10_adc_top|data_ch_ab[17]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[23] -to "adc_top:inst10_adc_top|data_ch_ab[18]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[24] -to "adc_top:inst10_adc_top|data_ch_ab[19]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[25] -to "adc_top:inst10_adc_top|data_ch_ab[1]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[26] -to "adc_top:inst10_adc_top|data_ch_ab[20]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[27] -to "adc_top:inst10_adc_top|data_ch_ab[21]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[28] -to "adc_top:inst10_adc_top|data_ch_ab[22]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[29] -to "adc_top:inst10_adc_top|data_ch_ab[23]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[30] -to "adc_top:inst10_adc_top|data_ch_ab[24]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[31] -to "adc_top:inst10_adc_top|data_ch_ab[25]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[32] -to "adc_top:inst10_adc_top|data_ch_ab[26]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[33] -to "adc_top:inst10_adc_top|data_ch_ab[27]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[34] -to "adc_top:inst10_adc_top|data_ch_ab[28]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[35] -to "adc_top:inst10_adc_top|data_ch_ab[29]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[36] -to "adc_top:inst10_adc_top|data_ch_ab[2]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[37] -to "adc_top:inst10_adc_top|data_ch_ab[30]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[38] -to "adc_top:inst10_adc_top|data_ch_ab[31]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[39] -to "adc_top:inst10_adc_top|data_ch_ab[32]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[40] -to "adc_top:inst10_adc_top|data_ch_ab[33]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[41] -to "adc_top:inst10_adc_top|data_ch_ab[34]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[42] -to "adc_top:inst10_adc_top|data_ch_ab[35]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[43] -to "adc_top:inst10_adc_top|data_ch_ab[36]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[44] -to "adc_top:inst10_adc_top|data_ch_ab[37]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[45] -to "adc_top:inst10_adc_top|data_ch_ab[38]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[46] -to "adc_top:inst10_adc_top|data_ch_ab[39]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[47] -to "adc_top:inst10_adc_top|data_ch_ab[3]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[48] -to "adc_top:inst10_adc_top|data_ch_ab[40]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[49] -to "adc_top:inst10_adc_top|data_ch_ab[41]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[50] -to "adc_top:inst10_adc_top|data_ch_ab[42]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[51] -to "adc_top:inst10_adc_top|data_ch_ab[43]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[52] -to "adc_top:inst10_adc_top|data_ch_ab[44]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[53] -to "adc_top:inst10_adc_top|data_ch_ab[45]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[54] -to "adc_top:inst10_adc_top|data_ch_ab[46]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[55] -to "adc_top:inst10_adc_top|data_ch_ab[47]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[56] -to "adc_top:inst10_adc_top|data_ch_ab[48]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[57] -to "adc_top:inst10_adc_top|data_ch_ab[49]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[58] -to "adc_top:inst10_adc_top|data_ch_ab[4]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[59] -to "adc_top:inst10_adc_top|data_ch_ab[50]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[60] -to "adc_top:inst10_adc_top|data_ch_ab[51]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[61] -to "adc_top:inst10_adc_top|data_ch_ab[52]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[62] -to "adc_top:inst10_adc_top|data_ch_ab[53]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[63] -to "adc_top:inst10_adc_top|data_ch_ab[54]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[64] -to "adc_top:inst10_adc_top|data_ch_ab[55]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[65] -to "adc_top:inst10_adc_top|data_ch_ab[5]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[66] -to "adc_top:inst10_adc_top|data_ch_ab[6]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[67] -to "adc_top:inst10_adc_top|data_ch_ab[7]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[68] -to "adc_top:inst10_adc_top|data_ch_ab[8]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[69] -to "adc_top:inst10_adc_top|data_ch_ab[9]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[70] -to "adc_top:inst10_adc_top|data_ch_ab_valid" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[71] -to "adc_top:inst10_adc_top|data_ch_b[0]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[72] -to "adc_top:inst10_adc_top|data_ch_b[10]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[73] -to "adc_top:inst10_adc_top|data_ch_b[11]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[74] -to "adc_top:inst10_adc_top|data_ch_b[12]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[75] -to "adc_top:inst10_adc_top|data_ch_b[13]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[76] -to "adc_top:inst10_adc_top|data_ch_b[1]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[77] -to "adc_top:inst10_adc_top|data_ch_b[2]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[78] -to "adc_top:inst10_adc_top|data_ch_b[3]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[79] -to "adc_top:inst10_adc_top|data_ch_b[4]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[80] -to "adc_top:inst10_adc_top|data_ch_b[5]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[81] -to "adc_top:inst10_adc_top|data_ch_b[6]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[82] -to "adc_top:inst10_adc_top|data_ch_b[7]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[83] -to "adc_top:inst10_adc_top|data_ch_b[8]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[84] -to "adc_top:inst10_adc_top|data_ch_b[9]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[85] -to "adc_top:inst10_adc_top|en" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[86] -to "adc_top:inst10_adc_top|reset_n" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[0] -to "adc_top:inst10_adc_top|data_ch_a[0]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[1] -to "adc_top:inst10_adc_top|data_ch_a[10]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[2] -to "adc_top:inst10_adc_top|data_ch_a[11]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[3] -to "adc_top:inst10_adc_top|data_ch_a[12]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[4] -to "adc_top:inst10_adc_top|data_ch_a[13]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[5] -to "adc_top:inst10_adc_top|data_ch_a[1]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[6] -to "adc_top:inst10_adc_top|data_ch_a[2]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[7] -to "adc_top:inst10_adc_top|data_ch_a[3]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[8] -to "adc_top:inst10_adc_top|data_ch_a[4]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[9] -to "adc_top:inst10_adc_top|data_ch_a[5]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[10] -to "adc_top:inst10_adc_top|data_ch_a[6]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[11] -to "adc_top:inst10_adc_top|data_ch_a[7]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[12] -to "adc_top:inst10_adc_top|data_ch_a[8]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[13] -to "adc_top:inst10_adc_top|data_ch_a[9]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[14] -to "adc_top:inst10_adc_top|data_ch_ab[0]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[15] -to "adc_top:inst10_adc_top|data_ch_ab[10]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[16] -to "adc_top:inst10_adc_top|data_ch_ab[11]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[17] -to "adc_top:inst10_adc_top|data_ch_ab[12]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[18] -to "adc_top:inst10_adc_top|data_ch_ab[13]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[19] -to "adc_top:inst10_adc_top|data_ch_ab[14]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[20] -to "adc_top:inst10_adc_top|data_ch_ab[15]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[21] -to "adc_top:inst10_adc_top|data_ch_ab[16]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[22] -to "adc_top:inst10_adc_top|data_ch_ab[17]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[23] -to "adc_top:inst10_adc_top|data_ch_ab[18]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[24] -to "adc_top:inst10_adc_top|data_ch_ab[19]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[25] -to "adc_top:inst10_adc_top|data_ch_ab[1]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[26] -to "adc_top:inst10_adc_top|data_ch_ab[20]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[27] -to "adc_top:inst10_adc_top|data_ch_ab[21]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[28] -to "adc_top:inst10_adc_top|data_ch_ab[22]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[29] -to "adc_top:inst10_adc_top|data_ch_ab[23]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[30] -to "adc_top:inst10_adc_top|data_ch_ab[24]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[31] -to "adc_top:inst10_adc_top|data_ch_ab[25]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[32] -to "adc_top:inst10_adc_top|data_ch_ab[26]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[33] -to "adc_top:inst10_adc_top|data_ch_ab[27]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[34] -to "adc_top:inst10_adc_top|data_ch_ab[28]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[35] -to "adc_top:inst10_adc_top|data_ch_ab[29]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[36] -to "adc_top:inst10_adc_top|data_ch_ab[2]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[37] -to "adc_top:inst10_adc_top|data_ch_ab[30]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[38] -to "adc_top:inst10_adc_top|data_ch_ab[31]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[39] -to "adc_top:inst10_adc_top|data_ch_ab[32]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[40] -to "adc_top:inst10_adc_top|data_ch_ab[33]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[41] -to "adc_top:inst10_adc_top|data_ch_ab[34]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[42] -to "adc_top:inst10_adc_top|data_ch_ab[35]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[43] -to "adc_top:inst10_adc_top|data_ch_ab[36]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[44] -to "adc_top:inst10_adc_top|data_ch_ab[37]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[45] -to "adc_top:inst10_adc_top|data_ch_ab[38]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[46] -to "adc_top:inst10_adc_top|data_ch_ab[39]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[47] -to "adc_top:inst10_adc_top|data_ch_ab[3]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[48] -to "adc_top:inst10_adc_top|data_ch_ab[40]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[49] -to "adc_top:inst10_adc_top|data_ch_ab[41]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[50] -to "adc_top:inst10_adc_top|data_ch_ab[42]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[51] -to "adc_top:inst10_adc_top|data_ch_ab[43]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[52] -to "adc_top:inst10_adc_top|data_ch_ab[44]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[53] -to "adc_top:inst10_adc_top|data_ch_ab[45]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[54] -to "adc_top:inst10_adc_top|data_ch_ab[46]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[55] -to "adc_top:inst10_adc_top|data_ch_ab[47]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[56] -to "adc_top:inst10_adc_top|data_ch_ab[48]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[57] -to "adc_top:inst10_adc_top|data_ch_ab[49]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[58] -to "adc_top:inst10_adc_top|data_ch_ab[4]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[59] -to "adc_top:inst10_adc_top|data_ch_ab[50]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[60] -to "adc_top:inst10_adc_top|data_ch_ab[51]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[61] -to "adc_top:inst10_adc_top|data_ch_ab[52]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[62] -to "adc_top:inst10_adc_top|data_ch_ab[53]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[63] -to "adc_top:inst10_adc_top|data_ch_ab[54]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[64] -to "adc_top:inst10_adc_top|data_ch_ab[55]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[65] -to "adc_top:inst10_adc_top|data_ch_ab[5]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[66] -to "adc_top:inst10_adc_top|data_ch_ab[6]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[67] -to "adc_top:inst10_adc_top|data_ch_ab[7]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[68] -to "adc_top:inst10_adc_top|data_ch_ab[8]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[69] -to "adc_top:inst10_adc_top|data_ch_ab[9]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[70] -to "adc_top:inst10_adc_top|data_ch_ab_valid" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[71] -to "adc_top:inst10_adc_top|data_ch_b[0]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[72] -to "adc_top:inst10_adc_top|data_ch_b[10]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[73] -to "adc_top:inst10_adc_top|data_ch_b[11]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[74] -to "adc_top:inst10_adc_top|data_ch_b[12]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[75] -to "adc_top:inst10_adc_top|data_ch_b[13]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[76] -to "adc_top:inst10_adc_top|data_ch_b[1]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[77] -to "adc_top:inst10_adc_top|data_ch_b[2]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[78] -to "adc_top:inst10_adc_top|data_ch_b[3]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[79] -to "adc_top:inst10_adc_top|data_ch_b[4]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[80] -to "adc_top:inst10_adc_top|data_ch_b[5]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[81] -to "adc_top:inst10_adc_top|data_ch_b[6]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[82] -to "adc_top:inst10_adc_top|data_ch_b[7]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[83] -to "adc_top:inst10_adc_top|data_ch_b[8]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[84] -to "adc_top:inst10_adc_top|data_ch_b[9]" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[85] -to "adc_top:inst10_adc_top|en" -section_id auto_signaltap_2
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[86] -to "adc_top:inst10_adc_top|reset_n" -section_id auto_signaltap_2
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_RAM_BLOCK_TYPE=AUTO" -section_id auto_signaltap_2
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_DATA_BITS=87" -section_id auto_signaltap_2
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_BITS=87" -section_id auto_signaltap_2
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STORAGE_QUALIFIER_BITS=87" -section_id auto_signaltap_2
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_INFO=805334530" -section_id auto_signaltap_2
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_POWER_UP_TRIGGER=0" -section_id auto_signaltap_2
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK=000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" -section_id auto_signaltap_2
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK_LENGTH=282" -section_id auto_signaltap_2
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STORAGE_QUALIFIER_INVERSION_MASK_LENGTH=0" -section_id auto_signaltap_2
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SEGMENT_SIZE=128" -section_id auto_signaltap_2
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ATTRIBUTE_MEM_MODE=OFF" -section_id auto_signaltap_2
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STATE_FLOW_USE_GENERATED=0" -section_id auto_signaltap_2
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STATE_BITS=11" -section_id auto_signaltap_2
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_BUFFER_FULL_STOP=1" -section_id auto_signaltap_2
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_CURRENT_RESOURCE_WIDTH=1" -section_id auto_signaltap_2
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INCREMENTAL_ROUTING=1" -section_id auto_signaltap_2
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[0] -to auto_signaltap_2|gnd -section_id auto_signaltap_2
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[1] -to auto_signaltap_2|vcc -section_id auto_signaltap_2
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[2] -to auto_signaltap_2|gnd -section_id auto_signaltap_2
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[3] -to auto_signaltap_2|vcc -section_id auto_signaltap_2
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[4] -to auto_signaltap_2|vcc -section_id auto_signaltap_2
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[5] -to auto_signaltap_2|vcc -section_id auto_signaltap_2
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[6] -to auto_signaltap_2|gnd -section_id auto_signaltap_2
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[7] -to auto_signaltap_2|vcc -section_id auto_signaltap_2
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[8] -to auto_signaltap_2|gnd -section_id auto_signaltap_2
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[9] -to auto_signaltap_2|gnd -section_id auto_signaltap_2
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[10] -to auto_signaltap_2|gnd -section_id auto_signaltap_2
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[11] -to auto_signaltap_2|gnd -section_id auto_signaltap_2
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[12] -to auto_signaltap_2|gnd -section_id auto_signaltap_2
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[13] -to auto_signaltap_2|gnd -section_id auto_signaltap_2
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[14] -to auto_signaltap_2|gnd -section_id auto_signaltap_2
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[15] -to auto_signaltap_2|vcc -section_id auto_signaltap_2
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[16] -to auto_signaltap_2|vcc -section_id auto_signaltap_2
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[17] -to auto_signaltap_2|vcc -section_id auto_signaltap_2
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[18] -to auto_signaltap_2|vcc -section_id auto_signaltap_2
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[19] -to auto_signaltap_2|vcc -section_id auto_signaltap_2
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[20] -to auto_signaltap_2|vcc -section_id auto_signaltap_2
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[21] -to auto_signaltap_2|gnd -section_id auto_signaltap_2
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[22] -to auto_signaltap_2|gnd -section_id auto_signaltap_2
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[23] -to auto_signaltap_2|gnd -section_id auto_signaltap_2
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[24] -to auto_signaltap_2|gnd -section_id auto_signaltap_2
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[25] -to auto_signaltap_2|vcc -section_id auto_signaltap_2
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[26] -to auto_signaltap_2|vcc -section_id auto_signaltap_2
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[27] -to auto_signaltap_2|gnd -section_id auto_signaltap_2
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[28] -to auto_signaltap_2|gnd -section_id auto_signaltap_2
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[29] -to auto_signaltap_2|vcc -section_id auto_signaltap_2
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[30] -to auto_signaltap_2|gnd -section_id auto_signaltap_2
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[31] -to auto_signaltap_2|vcc -section_id auto_signaltap_2
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_LEVEL=1" -section_id auto_signaltap_2
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SAMPLE_DEPTH=128" -section_id auto_signaltap_2
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_IN_ENABLED=0" -section_id auto_signaltap_2
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_PIPELINE=0" -section_id auto_signaltap_2
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_RAM_PIPELINE=0" -section_id auto_signaltap_2
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_COUNTER_PIPELINE=0" -section_id auto_signaltap_2
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ADVANCED_TRIGGER_ENTITY=basic,1," -section_id auto_signaltap_2
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_LEVEL_PIPELINE=1" -section_id auto_signaltap_2
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ENABLE_ADVANCED_TRIGGER=0" -section_id auto_signaltap_2
-set_global_assignment -name SLD_NODE_CREATOR_ID 110 -section_id auto_signaltap_3
-set_global_assignment -name SLD_NODE_ENTITY_NAME sld_signaltap -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_clk -to "nios_cpu_top:inst0_nios_cpu|clk" -section_id auto_signaltap_3
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_RAM_BLOCK_TYPE=AUTO" -section_id auto_signaltap_3
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_INFO=805334531" -section_id auto_signaltap_3
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_POWER_UP_TRIGGER=0" -section_id auto_signaltap_3
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STORAGE_QUALIFIER_INVERSION_MASK_LENGTH=0" -section_id auto_signaltap_3
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ATTRIBUTE_MEM_MODE=OFF" -section_id auto_signaltap_3
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STATE_FLOW_USE_GENERATED=0" -section_id auto_signaltap_3
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STATE_BITS=11" -section_id auto_signaltap_3
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_BUFFER_FULL_STOP=1" -section_id auto_signaltap_3
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_CURRENT_RESOURCE_WIDTH=1" -section_id auto_signaltap_3
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INCREMENTAL_ROUTING=1" -section_id auto_signaltap_3
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[0] -to auto_signaltap_3|vcc -section_id auto_signaltap_3
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[3] -to auto_signaltap_3|vcc -section_id auto_signaltap_3
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[8] -to auto_signaltap_3|vcc -section_id auto_signaltap_3
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[12] -to auto_signaltap_3|vcc -section_id auto_signaltap_3
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[17] -to auto_signaltap_3|vcc -section_id auto_signaltap_3
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[20] -to auto_signaltap_3|gnd -section_id auto_signaltap_3
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[23] -to auto_signaltap_3|gnd -section_id auto_signaltap_3
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[27] -to auto_signaltap_3|vcc -section_id auto_signaltap_3
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[28] -to auto_signaltap_3|gnd -section_id auto_signaltap_3
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[30] -to auto_signaltap_3|gnd -section_id auto_signaltap_3
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_LEVEL=1" -section_id auto_signaltap_3
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_IN_ENABLED=0" -section_id auto_signaltap_3
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_PIPELINE=0" -section_id auto_signaltap_3
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_RAM_PIPELINE=0" -section_id auto_signaltap_3
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_COUNTER_PIPELINE=0" -section_id auto_signaltap_3
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ADVANCED_TRIGGER_ENTITY=basic,1," -section_id auto_signaltap_3
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_LEVEL_PIPELINE=1" -section_id auto_signaltap_3
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ENABLE_ADVANCED_TRIGGER=0" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[0] -to FPGA_ADC_RESET -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[1] -to FPGA_SPI0_ADC_SS -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[2] -to FPGA_SPI0_MISO_ADC -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[3] -to FPGA_SPI0_MOSI -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[4] -to FPGA_SPI0_SCLK -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[0] -to FPGA_ADC_RESET -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[1] -to FPGA_SPI0_ADC_SS -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[2] -to FPGA_SPI0_MISO_ADC -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[3] -to FPGA_SPI0_MOSI -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[4] -to FPGA_SPI0_SCLK -section_id auto_signaltap_3
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[9] -to auto_signaltap_3|gnd -section_id auto_signaltap_3
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[11] -to auto_signaltap_3|gnd -section_id auto_signaltap_3
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[18] -to auto_signaltap_3|gnd -section_id auto_signaltap_3
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[25] -to auto_signaltap_3|gnd -section_id auto_signaltap_3
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SEGMENT_SIZE=4096" -section_id auto_signaltap_3
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[2] -to auto_signaltap_3|vcc -section_id auto_signaltap_3
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[15] -to auto_signaltap_3|gnd -section_id auto_signaltap_3
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[16] -to auto_signaltap_3|gnd -section_id auto_signaltap_3
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[31] -to auto_signaltap_3|gnd -section_id auto_signaltap_3
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SAMPLE_DEPTH=4096" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[5] -to "nios_cpu_top:inst0_nios_cpu|nios_cpu:inst0_nios_cpu|dac_spi1_MISO" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[6] -to "nios_cpu_top:inst0_nios_cpu|nios_cpu:inst0_nios_cpu|dac_spi1_MOSI" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[7] -to "nios_cpu_top:inst0_nios_cpu|nios_cpu:inst0_nios_cpu|dac_spi1_SCLK" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[8] -to "nios_cpu_top:inst0_nios_cpu|nios_cpu:inst0_nios_cpu|dac_spi1_SS_n" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[9] -to "nios_cpu_top:inst0_nios_cpu|nios_cpu:inst0_nios_cpu|fpga_spi0_MISO" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[10] -to "nios_cpu_top:inst0_nios_cpu|nios_cpu:inst0_nios_cpu|fpga_spi0_MOSI" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[11] -to "nios_cpu_top:inst0_nios_cpu|nios_cpu:inst0_nios_cpu|fpga_spi0_SCLK" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[12] -to "nios_cpu_top:inst0_nios_cpu|nios_cpu:inst0_nios_cpu|fpga_spi0_SS_n[0]" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[13] -to "nios_cpu_top:inst0_nios_cpu|nios_cpu:inst0_nios_cpu|fpga_spi0_SS_n[1]" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[14] -to "nios_cpu_top:inst0_nios_cpu|nios_cpu:inst0_nios_cpu|fpga_spi0_SS_n[2]" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[15] -to "nios_cpu_top:inst0_nios_cpu|nios_cpu:inst0_nios_cpu|fpga_spi0_SS_n[3]" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[16] -to "nios_cpu_top:inst0_nios_cpu|nios_cpu:inst0_nios_cpu|fpga_spi0_SS_n[4]" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[17] -to "nios_cpu_top:inst0_nios_cpu|nios_cpu:inst0_nios_cpu|fpga_spi0_SS_n[5]" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[18] -to "nios_cpu_top:inst0_nios_cpu|nios_cpu:inst0_nios_cpu|fpga_spi0_SS_n[6]" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[19] -to "nios_cpu_top:inst0_nios_cpu|nios_cpu:inst0_nios_cpu|fpga_spi0_SS_n[7]" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[20] -to "nios_cpu_top:inst0_nios_cpu|nios_cpu:inst0_nios_cpu|spi_2_MISO" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[21] -to "nios_cpu_top:inst0_nios_cpu|nios_cpu:inst0_nios_cpu|spi_2_MOSI" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[22] -to "nios_cpu_top:inst0_nios_cpu|nios_cpu:inst0_nios_cpu|spi_2_SCLK" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[23] -to "nios_cpu_top:inst0_nios_cpu|nios_cpu:inst0_nios_cpu|spi_2_SS_n" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[24] -to "nios_cpu_top:inst0_nios_cpu|spi_0_MISO" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[25] -to "nios_cpu_top:inst0_nios_cpu|spi_0_MOSI" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[26] -to "nios_cpu_top:inst0_nios_cpu|spi_0_SCLK" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[27] -to "nios_cpu_top:inst0_nios_cpu|spi_0_SS_n[0]" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[28] -to "nios_cpu_top:inst0_nios_cpu|spi_0_SS_n[1]" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[29] -to "nios_cpu_top:inst0_nios_cpu|spi_0_SS_n[2]" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[30] -to "nios_cpu_top:inst0_nios_cpu|spi_0_SS_n[3]" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[31] -to "nios_cpu_top:inst0_nios_cpu|spi_0_SS_n[4]" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[32] -to "nios_cpu_top:inst0_nios_cpu|spi_0_SS_n[5]" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[33] -to "nios_cpu_top:inst0_nios_cpu|spi_0_SS_n[6]" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[34] -to "nios_cpu_top:inst0_nios_cpu|spi_0_SS_n[7]" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[35] -to "nios_cpu_top:inst0_nios_cpu|spi_0_SS_n[8]" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[5] -to "nios_cpu_top:inst0_nios_cpu|nios_cpu:inst0_nios_cpu|dac_spi1_MISO" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[6] -to "nios_cpu_top:inst0_nios_cpu|nios_cpu:inst0_nios_cpu|dac_spi1_MOSI" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[7] -to "nios_cpu_top:inst0_nios_cpu|nios_cpu:inst0_nios_cpu|dac_spi1_SCLK" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[8] -to "nios_cpu_top:inst0_nios_cpu|nios_cpu:inst0_nios_cpu|dac_spi1_SS_n" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[9] -to "nios_cpu_top:inst0_nios_cpu|nios_cpu:inst0_nios_cpu|fpga_spi0_MISO" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[10] -to "nios_cpu_top:inst0_nios_cpu|nios_cpu:inst0_nios_cpu|fpga_spi0_MOSI" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[11] -to "nios_cpu_top:inst0_nios_cpu|nios_cpu:inst0_nios_cpu|fpga_spi0_SCLK" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[12] -to "nios_cpu_top:inst0_nios_cpu|nios_cpu:inst0_nios_cpu|fpga_spi0_SS_n[0]" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[13] -to "nios_cpu_top:inst0_nios_cpu|nios_cpu:inst0_nios_cpu|fpga_spi0_SS_n[1]" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[14] -to "nios_cpu_top:inst0_nios_cpu|nios_cpu:inst0_nios_cpu|fpga_spi0_SS_n[2]" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[15] -to "nios_cpu_top:inst0_nios_cpu|nios_cpu:inst0_nios_cpu|fpga_spi0_SS_n[3]" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[16] -to "nios_cpu_top:inst0_nios_cpu|nios_cpu:inst0_nios_cpu|fpga_spi0_SS_n[4]" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[17] -to "nios_cpu_top:inst0_nios_cpu|nios_cpu:inst0_nios_cpu|fpga_spi0_SS_n[5]" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[18] -to "nios_cpu_top:inst0_nios_cpu|nios_cpu:inst0_nios_cpu|fpga_spi0_SS_n[6]" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[19] -to "nios_cpu_top:inst0_nios_cpu|nios_cpu:inst0_nios_cpu|fpga_spi0_SS_n[7]" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[20] -to "nios_cpu_top:inst0_nios_cpu|nios_cpu:inst0_nios_cpu|spi_2_MISO" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[21] -to "nios_cpu_top:inst0_nios_cpu|nios_cpu:inst0_nios_cpu|spi_2_MOSI" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[22] -to "nios_cpu_top:inst0_nios_cpu|nios_cpu:inst0_nios_cpu|spi_2_SCLK" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[23] -to "nios_cpu_top:inst0_nios_cpu|nios_cpu:inst0_nios_cpu|spi_2_SS_n" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[24] -to "nios_cpu_top:inst0_nios_cpu|spi_0_MISO" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[25] -to "nios_cpu_top:inst0_nios_cpu|spi_0_MOSI" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[26] -to "nios_cpu_top:inst0_nios_cpu|spi_0_SCLK" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[27] -to "nios_cpu_top:inst0_nios_cpu|spi_0_SS_n[0]" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[28] -to "nios_cpu_top:inst0_nios_cpu|spi_0_SS_n[1]" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[29] -to "nios_cpu_top:inst0_nios_cpu|spi_0_SS_n[2]" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[30] -to "nios_cpu_top:inst0_nios_cpu|spi_0_SS_n[3]" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[31] -to "nios_cpu_top:inst0_nios_cpu|spi_0_SS_n[4]" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[32] -to "nios_cpu_top:inst0_nios_cpu|spi_0_SS_n[5]" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[33] -to "nios_cpu_top:inst0_nios_cpu|spi_0_SS_n[6]" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[34] -to "nios_cpu_top:inst0_nios_cpu|spi_0_SS_n[7]" -section_id auto_signaltap_3
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[35] -to "nios_cpu_top:inst0_nios_cpu|spi_0_SS_n[8]" -section_id auto_signaltap_3
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_DATA_BITS=36" -section_id auto_signaltap_3
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_BITS=36" -section_id auto_signaltap_3
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STORAGE_QUALIFIER_BITS=36" -section_id auto_signaltap_3
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK=00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" -section_id auto_signaltap_3
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK_LENGTH=134" -section_id auto_signaltap_3
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[1] -to auto_signaltap_3|vcc -section_id auto_signaltap_3
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[4] -to auto_signaltap_3|vcc -section_id auto_signaltap_3
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[5] -to auto_signaltap_3|gnd -section_id auto_signaltap_3
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[6] -to auto_signaltap_3|vcc -section_id auto_signaltap_3
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[7] -to auto_signaltap_3|gnd -section_id auto_signaltap_3
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[10] -to auto_signaltap_3|gnd -section_id auto_signaltap_3
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[13] -to auto_signaltap_3|gnd -section_id auto_signaltap_3
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[14] -to auto_signaltap_3|gnd -section_id auto_signaltap_3
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[19] -to auto_signaltap_3|vcc -section_id auto_signaltap_3
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[21] -to auto_signaltap_3|vcc -section_id auto_signaltap_3
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[22] -to auto_signaltap_3|gnd -section_id auto_signaltap_3
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[24] -to auto_signaltap_3|vcc -section_id auto_signaltap_3
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[26] -to auto_signaltap_3|vcc -section_id auto_signaltap_3
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[29] -to auto_signaltap_3|vcc -section_id auto_signaltap_3
 set_instance_assignment -name FAST_INPUT_REGISTER ON -to ADC_DA[1]
 set_instance_assignment -name FAST_INPUT_REGISTER ON -to ADC_DA[2]
 set_instance_assignment -name FAST_INPUT_REGISTER ON -to ADC_DA[3]
@@ -1876,6 +1510,56 @@ set_instance_assignment -name FAST_INPUT_REGISTER ON -to ADC_DB[4]
 set_instance_assignment -name FAST_INPUT_REGISTER ON -to ADC_DB[5]
 set_instance_assignment -name FAST_INPUT_REGISTER ON -to ADC_DB[6]
 set_instance_assignment -name FAST_INPUT_REGISTER ON -to ADC_DB[0]
+set_global_assignment -name VHDL_FILE src/invsinc/tt.vhd
+set_global_assignment -name VHDL_FILE src/invsinc/ta26.vhd
+set_global_assignment -name VHDL_FILE src/invsinc/iqmux18_x2.vhd
+set_global_assignment -name VHDL_FILE src/invsinc/iqmux14_x2.vhd
+set_global_assignment -name VHDL_FILE src/invsinc/invsinc26.vhd
+set_global_assignment -name VHDL_FILE src/invsinc/csdm26x4.vhd
+set_global_assignment -name VHDL_FILE src/invsinc/bcla2.vhd
+set_global_assignment -name VHDL_FILE src/adpd/regis.vhd
+set_global_assignment -name VHDL_FILE src/adpd/QADPD.vhd
+set_global_assignment -name VHDL_FILE src/adpd/Multiplier2.vhd
+set_global_assignment -name VHDL_FILE src/adpd/joinchannels.vhd
+set_global_assignment -name VHDL_FILE src/adpd/iqim_gain_corr.vhd
+set_global_assignment -name VHDL_FILE src/adpd/clk_div2.vhd
+set_global_assignment -name VHDL_FILE src/adpd/bypass.vhd
+set_global_assignment -name VHDL_FILE src/adpd/adder.vhd
+set_global_assignment -name VHDL_FILE src/cfr/cfr_top.vhd
+set_global_assignment -name VHDL_FILE src/invsinc/bcla8.vhd
+set_global_assignment -name VHDL_FILE src/hb/hb2o.vhd
+set_global_assignment -name VHDL_FILE src/hb/hb2e.vhd
+set_global_assignment -name VHDL_FILE src/hb/hb2.vhd
+set_global_assignment -name VHDL_FILE src/hb/hb1prim.vhd
+set_global_assignment -name VHDL_FILE src/hb/hb1o.vhd
+set_global_assignment -name VHDL_FILE src/hb/hb1e.vhd
+set_global_assignment -name VHDL_FILE src/hb/hb1d.vhd
+set_global_assignment -name VHDL_FILE src/hb/hb1.vhd
+set_global_assignment -name VHDL_FILE src/hb/csec.vhd
+set_global_assignment -name VHDL_FILE src/hb/clkdiv.vhd
+set_global_assignment -name VHDL_FILE src/hb/add26.vhd
+set_global_assignment -name VHDL_FILE src/cfr/tff1.vhd
+set_global_assignment -name VHDL_FILE src/cfr/sqroot.vhd
+set_global_assignment -name VHDL_FILE src/cfr/rowfirstt12.vhd
+set_global_assignment -name VHDL_FILE src/cfr/row16.vhd
+set_global_assignment -name VHDL_FILE src/cfr/row14.vhd
+set_global_assignment -name VHDL_FILE src/cfr/pproduct16.vhd
+set_global_assignment -name VHDL_FILE src/cfr/pproduct14.vhd
+set_global_assignment -name VHDL_FILE src/cfr/pproduct12.vhd
+set_global_assignment -name VHDL_FILE src/cfr/pproduct10.vhd
+set_global_assignment -name VHDL_FILE src/cfr/phequsce.vhd
+set_global_assignment -name VHDL_FILE src/cfr/phequfehf_bj2.vhd
+set_global_assignment -name VHDL_FILE src/cfr/phequfehf.vhd
+set_global_assignment -name VHDL_FILE src/cfr/mcfg64wm_fsm.vhd
+set_global_assignment -name VHDL_FILE src/cfr/gfirhf16mod.vhd
+set_global_assignment -name VHDL_FILE src/cfr/fircms.vhd
+set_global_assignment -name VHDL_FILE src/cfr/dmem8x25.vhd
+set_global_assignment -name VHDL_FILE src/cfr/dmem4x25.vhd
+set_global_assignment -name VHDL_FILE src/cfr/division.vhd
+set_global_assignment -name VHDL_FILE src/cfr/counter8.vhd
+set_global_assignment -name VHDL_FILE src/cfr/cfir.vhd
+set_global_assignment -name VHDL_FILE src/cfr/ba16x16x26mac.vhd
+set_global_assignment -name VHDL_FILE src/cfr/accu10x26mac.vhd
 set_global_assignment -name VHDL_FILE src/dac5672/dac5672_top.vhd
 set_global_assignment -name VHDL_FILE src/spi/txtspcfg_pkg.vhd
 set_global_assignment -name VHDL_FILE src/lms7002/synth/lms7002_tx.vhd
@@ -1953,7 +1637,6 @@ set_global_assignment -name SDC_FILE src/wfm_player/wfm_player_x2_top.sdc
 set_global_assignment -name SYSTEMVERILOG_FILE src/avalon_traffic_gen/synth/avalon_traffic_gen.sv
 set_global_assignment -name SYSTEMVERILOG_FILE src/avalon_traffic_gen/synth/av_trf_gen_scfifo_wrapper.sv
 set_global_assignment -name SYSTEMVERILOG_FILE src/avalon_traffic_gen/synth/av_trf_gen_drv_def.sv
-set_global_assignment -name VHDL_FILE src/wfm_player/synth/wfm_player.vhd
 set_global_assignment -name VHDL_FILE src/wfm_ram_buffer/synth/stream_switch.vhd
 set_global_assignment -name VHDL_FILE src/general/reset_n_synch.vhd
 set_global_assignment -name VHDL_FILE src/wfm_ram_buffer/synth/wfm_wcmd_fsm.vhd
@@ -2149,5 +1832,583 @@ set_global_assignment -name VHDL_FILE src/spi/pllcfg_pkg.vhd
 set_global_assignment -name VHDL_FILE src/spi/gnsscfg_pkg.vhd
 set_global_assignment -name VHDL_FILE src/spi/tamercfg_pkg.vhd
 set_global_assignment -name VHDL_FILE src/spi/rxtspcfg_pkg.vhd
+set_global_assignment -name SLD_NODE_CREATOR_ID 110 -section_id auto_signaltap_4
+set_global_assignment -name SLD_NODE_ENTITY_NAME sld_signaltap -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_clk -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|clk" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[0] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|bypass" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[1] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|half_order[0]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[2] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|half_order[1]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[3] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|half_order[2]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[4] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|half_order[3]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[5] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|half_order[4]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[6] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|half_order[5]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[7] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|half_order[6]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[8] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|half_order[7]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[9] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|l[0]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[10] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|l[1]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[11] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|l[2]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[12] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|n[0]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[13] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|n[1]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[14] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|n[2]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[15] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|n[3]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[16] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|n[4]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[17] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|n[5]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[18] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|n[6]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[19] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|n[7]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[20] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|reset" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[21] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|sleep" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[22] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|speedup" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[23] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|threshold[0]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[24] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|threshold[10]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[25] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|threshold[11]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[26] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|threshold[12]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[27] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|threshold[13]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[28] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|threshold[14]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[29] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|threshold[15]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[30] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|threshold[1]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[31] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|threshold[2]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[32] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|threshold[3]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[33] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|threshold[4]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[34] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|threshold[5]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[35] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|threshold[6]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[36] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|threshold[7]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[37] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|threshold[8]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[38] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|threshold[9]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[39] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xen" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[40] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xi[0]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[41] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xi[10]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[42] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xi[11]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[43] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xi[12]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[44] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xi[13]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[45] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xi[14]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[46] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xi[15]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[47] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xi[1]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[48] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xi[2]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[49] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xi[3]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[50] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xi[4]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[51] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xi[5]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[52] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xi[6]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[53] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xi[7]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[54] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xi[8]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[55] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xi[9]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[56] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xq[0]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[57] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xq[10]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[58] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xq[11]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[59] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xq[12]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[60] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xq[13]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[61] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xq[14]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[62] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xq[15]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[63] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xq[1]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[64] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xq[2]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[65] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xq[3]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[66] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xq[4]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[67] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xq[5]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[68] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xq[6]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[69] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xq[7]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[70] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xq[8]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[71] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xq[9]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[72] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yi[0]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[73] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yi[10]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[74] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yi[11]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[75] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yi[12]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[76] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yi[13]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[77] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yi[14]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[78] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yi[15]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[79] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yi[1]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[80] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yi[2]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[81] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yi[3]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[82] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yi[4]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[83] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yi[5]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[84] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yi[6]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[85] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yi[7]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[86] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yi[8]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[87] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yi[9]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[88] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yq[0]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[89] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yq[10]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[90] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yq[11]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[91] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yq[12]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[92] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yq[13]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[93] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yq[14]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[94] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yq[15]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[95] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yq[1]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[96] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yq[2]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[97] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yq[3]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[98] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yq[4]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[99] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yq[5]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[100] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yq[6]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[101] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yq[7]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[102] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yq[8]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[103] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yq[9]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[0] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|bypass" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[1] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|half_order[0]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[2] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|half_order[1]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[3] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|half_order[2]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[4] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|half_order[3]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[5] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|half_order[4]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[6] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|half_order[5]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[7] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|half_order[6]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[8] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|half_order[7]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[9] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|l[0]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[10] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|l[1]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[11] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|l[2]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[12] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|n[0]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[13] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|n[1]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[14] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|n[2]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[15] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|n[3]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[16] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|n[4]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[17] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|n[5]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[18] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|n[6]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[19] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|n[7]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[20] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|reset" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[21] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|sleep" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[22] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|speedup" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[23] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|threshold[0]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[24] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|threshold[10]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[25] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|threshold[11]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[26] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|threshold[12]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[27] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|threshold[13]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[28] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|threshold[14]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[29] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|threshold[15]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[30] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|threshold[1]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[31] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|threshold[2]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[32] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|threshold[3]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[33] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|threshold[4]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[34] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|threshold[5]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[35] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|threshold[6]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[36] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|threshold[7]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[37] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|threshold[8]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[38] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|threshold[9]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[39] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xen" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[40] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xi[0]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[41] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xi[10]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[42] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xi[11]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[43] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xi[12]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[44] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xi[13]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[45] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xi[14]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[46] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xi[15]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[47] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xi[1]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[48] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xi[2]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[49] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xi[3]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[50] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xi[4]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[51] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xi[5]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[52] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xi[6]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[53] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xi[7]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[54] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xi[8]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[55] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xi[9]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[56] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xq[0]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[57] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xq[10]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[58] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xq[11]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[59] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xq[12]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[60] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xq[13]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[61] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xq[14]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[62] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xq[15]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[63] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xq[1]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[64] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xq[2]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[65] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xq[3]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[66] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xq[4]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[67] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xq[5]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[68] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xq[6]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[69] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xq[7]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[70] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xq[8]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[71] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|xq[9]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[72] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yi[0]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[73] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yi[10]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[74] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yi[11]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[75] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yi[12]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[76] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yi[13]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[77] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yi[14]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[78] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yi[15]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[79] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yi[1]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[80] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yi[2]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[81] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yi[3]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[82] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yi[4]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[83] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yi[5]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[84] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yi[6]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[85] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yi[7]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[86] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yi[8]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[87] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yi[9]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[88] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yq[0]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[89] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yq[10]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[90] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yq[11]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[91] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yq[12]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[92] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yq[13]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[93] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yq[14]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[94] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yq[15]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[95] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yq[1]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[96] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yq[2]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[97] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yq[3]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[98] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yq[4]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[99] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yq[5]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[100] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yq[6]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[101] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yq[7]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[102] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yq[8]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[103] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|cfir_top:inst4_cfir_top|cfir_bj:inst1_cfir_bj|yq[9]" -section_id auto_signaltap_4
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_RAM_BLOCK_TYPE=AUTO" -section_id auto_signaltap_4
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_INFO=805334532" -section_id auto_signaltap_4
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_POWER_UP_TRIGGER=0" -section_id auto_signaltap_4
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STORAGE_QUALIFIER_INVERSION_MASK_LENGTH=0" -section_id auto_signaltap_4
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SEGMENT_SIZE=128" -section_id auto_signaltap_4
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ATTRIBUTE_MEM_MODE=OFF" -section_id auto_signaltap_4
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STATE_FLOW_USE_GENERATED=0" -section_id auto_signaltap_4
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STATE_BITS=11" -section_id auto_signaltap_4
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_BUFFER_FULL_STOP=1" -section_id auto_signaltap_4
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_CURRENT_RESOURCE_WIDTH=1" -section_id auto_signaltap_4
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INCREMENTAL_ROUTING=1" -section_id auto_signaltap_4
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[4] -to auto_signaltap_4|gnd -section_id auto_signaltap_4
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[8] -to auto_signaltap_4|gnd -section_id auto_signaltap_4
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[12] -to auto_signaltap_4|gnd -section_id auto_signaltap_4
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[13] -to auto_signaltap_4|gnd -section_id auto_signaltap_4
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[14] -to auto_signaltap_4|vcc -section_id auto_signaltap_4
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[15] -to auto_signaltap_4|vcc -section_id auto_signaltap_4
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[17] -to auto_signaltap_4|gnd -section_id auto_signaltap_4
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[19] -to auto_signaltap_4|gnd -section_id auto_signaltap_4
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[21] -to auto_signaltap_4|gnd -section_id auto_signaltap_4
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[22] -to auto_signaltap_4|gnd -section_id auto_signaltap_4
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[26] -to auto_signaltap_4|vcc -section_id auto_signaltap_4
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[27] -to auto_signaltap_4|vcc -section_id auto_signaltap_4
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[29] -to auto_signaltap_4|vcc -section_id auto_signaltap_4
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[31] -to auto_signaltap_4|vcc -section_id auto_signaltap_4
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_LEVEL=1" -section_id auto_signaltap_4
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SAMPLE_DEPTH=128" -section_id auto_signaltap_4
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_IN_ENABLED=0" -section_id auto_signaltap_4
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_PIPELINE=0" -section_id auto_signaltap_4
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_RAM_PIPELINE=0" -section_id auto_signaltap_4
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_COUNTER_PIPELINE=0" -section_id auto_signaltap_4
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ADVANCED_TRIGGER_ENTITY=basic,1," -section_id auto_signaltap_4
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_LEVEL_PIPELINE=1" -section_id auto_signaltap_4
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ENABLE_ADVANCED_TRIGGER=0" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[104] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[0]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[105] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[10]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[106] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[11]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[107] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[12]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[108] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[13]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[109] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[14]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[110] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[15]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[111] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[16]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[112] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[17]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[113] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[18]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[114] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[19]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[115] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[1]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[116] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[20]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[117] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[21]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[118] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[22]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[119] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[23]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[120] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[24]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[121] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[25]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[122] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[26]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[123] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[27]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[124] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[28]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[125] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[29]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[126] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[2]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[127] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[30]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[128] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[31]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[129] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[32]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[130] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[33]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[131] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[34]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[132] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[35]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[133] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[36]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[134] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[37]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[135] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[38]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[136] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[39]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[137] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[3]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[138] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[40]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[139] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[41]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[140] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[42]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[141] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[43]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[142] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[44]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[143] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[45]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[144] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[46]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[145] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[47]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[146] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[48]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[147] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[49]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[148] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[4]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[149] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[50]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[150] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[51]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[151] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[52]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[152] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[53]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[153] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[54]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[154] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[55]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[155] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[56]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[156] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[57]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[157] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[58]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[158] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[59]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[159] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[5]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[160] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[60]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[161] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[61]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[162] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[62]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[163] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[63]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[164] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[6]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[165] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[7]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[166] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[8]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[167] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[9]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[168] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|rdempty" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[169] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|rdreq" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[170] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|rdusedw[0]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[171] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|rdusedw[1]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[172] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|rdusedw[2]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[173] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|rdusedw[3]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[174] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|rdusedw[4]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[175] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|rdusedw[5]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[176] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|rdusedw[6]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[177] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|rdusedw[7]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[178] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|rdusedw[8]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[179] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|rdusedw[9]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[180] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|reset_n" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[181] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[0]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[182] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[10]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[183] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[11]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[184] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[12]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[185] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[13]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[186] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[14]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[187] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[15]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[188] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[16]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[189] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[17]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[190] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[18]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[191] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[19]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[192] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[1]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[193] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[20]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[194] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[21]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[195] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[22]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[196] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[23]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[197] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[24]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[198] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[25]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[199] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[26]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[200] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[27]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[201] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[28]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[202] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[29]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[203] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[2]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[204] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[30]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[205] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[31]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[206] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[32]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[207] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[33]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[208] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[34]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[209] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[35]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[210] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[36]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[211] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[37]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[212] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[38]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[213] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[39]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[214] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[3]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[215] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[40]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[216] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[41]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[217] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[42]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[218] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[43]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[219] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[44]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[220] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[45]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[221] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[46]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[222] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[47]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[223] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[48]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[224] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[49]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[225] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[4]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[226] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[50]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[227] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[51]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[228] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[52]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[229] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[53]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[230] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[54]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[231] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[55]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[232] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[56]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[233] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[57]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[234] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[58]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[235] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[59]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[236] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[5]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[237] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[60]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[238] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[61]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[239] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[62]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[240] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[63]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[241] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[6]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[242] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[7]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[243] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[8]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[244] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[9]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[245] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|reset_n" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[246] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|wrempty" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[247] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|wrfull" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[248] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|wrreq" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[249] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|wrusedw[0]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[250] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|wrusedw[1]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[251] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|wrusedw[2]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[252] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|wrusedw[3]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[253] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|wrusedw[4]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[254] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|wrusedw[5]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[255] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|wrusedw[6]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[256] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|wrusedw[7]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[257] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|wrusedw[8]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[258] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|wrusedw[9]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[104] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[0]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[105] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[10]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[106] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[11]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[107] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[12]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[108] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[13]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[109] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[14]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[110] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[15]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[111] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[16]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[112] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[17]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[113] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[18]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[114] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[19]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[115] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[1]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[116] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[20]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[117] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[21]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[118] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[22]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[119] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[23]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[120] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[24]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[121] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[25]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[122] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[26]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[123] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[27]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[124] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[28]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[125] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[29]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[126] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[2]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[127] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[30]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[128] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[31]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[129] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[32]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[130] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[33]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[131] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[34]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[132] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[35]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[133] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[36]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[134] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[37]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[135] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[38]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[136] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[39]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[137] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[3]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[138] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[40]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[139] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[41]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[140] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[42]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[141] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[43]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[142] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[44]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[143] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[45]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[144] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[46]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[145] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[47]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[146] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[48]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[147] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[49]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[148] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[4]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[149] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[50]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[150] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[51]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[151] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[52]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[152] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[53]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[153] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[54]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[154] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[55]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[155] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[56]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[156] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[57]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[157] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[58]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[158] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[59]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[159] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[5]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[160] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[60]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[161] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[61]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[162] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[62]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[163] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[63]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[164] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[6]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[165] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[7]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[166] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[8]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[167] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|q[9]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[168] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|rdempty" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[169] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|rdreq" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[170] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|rdusedw[0]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[171] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|rdusedw[1]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[172] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|rdusedw[2]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[173] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|rdusedw[3]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[174] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|rdusedw[4]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[175] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|rdusedw[5]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[176] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|rdusedw[6]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[177] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|rdusedw[7]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[178] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|rdusedw[8]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[179] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|rdusedw[9]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[180] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst0_fifo_inst|reset_n" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[181] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[0]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[182] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[10]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[183] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[11]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[184] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[12]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[185] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[13]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[186] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[14]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[187] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[15]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[188] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[16]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[189] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[17]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[190] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[18]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[191] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[19]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[192] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[1]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[193] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[20]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[194] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[21]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[195] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[22]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[196] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[23]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[197] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[24]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[198] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[25]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[199] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[26]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[200] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[27]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[201] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[28]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[202] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[29]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[203] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[2]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[204] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[30]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[205] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[31]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[206] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[32]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[207] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[33]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[208] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[34]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[209] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[35]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[210] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[36]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[211] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[37]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[212] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[38]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[213] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[39]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[214] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[3]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[215] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[40]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[216] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[41]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[217] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[42]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[218] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[43]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[219] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[44]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[220] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[45]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[221] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[46]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[222] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[47]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[223] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[48]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[224] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[49]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[225] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[4]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[226] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[50]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[227] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[51]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[228] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[52]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[229] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[53]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[230] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[54]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[231] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[55]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[232] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[56]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[233] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[57]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[234] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[58]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[235] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[59]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[236] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[5]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[237] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[60]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[238] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[61]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[239] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[62]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[240] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[63]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[241] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[6]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[242] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[7]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[243] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[8]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[244] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|data[9]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[245] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|reset_n" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[246] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|wrempty" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[247] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|wrfull" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[248] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|wrreq" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[249] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|wrusedw[0]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[250] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|wrusedw[1]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[251] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|wrusedw[2]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[252] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|wrusedw[3]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[253] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|wrusedw[4]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[254] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|wrusedw[5]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[255] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|wrusedw[6]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[256] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|wrusedw[7]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[257] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|wrusedw[8]" -section_id auto_signaltap_4
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[258] -to "lms7002_top:inst6_lms7002_top|lms7002_tx:inst1_lms7002_tx|fifo_inst:inst5_fifo_inst|wrusedw[9]" -section_id auto_signaltap_4
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_DATA_BITS=259" -section_id auto_signaltap_4
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_BITS=259" -section_id auto_signaltap_4
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STORAGE_QUALIFIER_BITS=259" -section_id auto_signaltap_4
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK=000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" -section_id auto_signaltap_4
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK_LENGTH=798" -section_id auto_signaltap_4
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[0] -to auto_signaltap_4|vcc -section_id auto_signaltap_4
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[1] -to auto_signaltap_4|vcc -section_id auto_signaltap_4
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[2] -to auto_signaltap_4|vcc -section_id auto_signaltap_4
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[3] -to auto_signaltap_4|vcc -section_id auto_signaltap_4
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[5] -to auto_signaltap_4|gnd -section_id auto_signaltap_4
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[6] -to auto_signaltap_4|gnd -section_id auto_signaltap_4
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[7] -to auto_signaltap_4|gnd -section_id auto_signaltap_4
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[9] -to auto_signaltap_4|gnd -section_id auto_signaltap_4
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[10] -to auto_signaltap_4|gnd -section_id auto_signaltap_4
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[11] -to auto_signaltap_4|vcc -section_id auto_signaltap_4
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[16] -to auto_signaltap_4|vcc -section_id auto_signaltap_4
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[18] -to auto_signaltap_4|gnd -section_id auto_signaltap_4
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[20] -to auto_signaltap_4|vcc -section_id auto_signaltap_4
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[23] -to auto_signaltap_4|vcc -section_id auto_signaltap_4
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[24] -to auto_signaltap_4|gnd -section_id auto_signaltap_4
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[25] -to auto_signaltap_4|gnd -section_id auto_signaltap_4
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[28] -to auto_signaltap_4|gnd -section_id auto_signaltap_4
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[30] -to auto_signaltap_4|gnd -section_id auto_signaltap_4
 set_global_assignment -name SLD_FILE db/debug_auto_stripped.stp
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
