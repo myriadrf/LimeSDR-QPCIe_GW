@@ -1,0 +1,242 @@
+-- ----------------------------------------------------------------------------
+-- FILE:          cfir_top.vhd
+-- DESCRIPTION:   Top file for cfr modules
+-- DATE:          10:55 AM Friday, October 26, 2018
+-- AUTHOR(s):     Lime Microsystems
+-- REVISIONS:
+-- ----------------------------------------------------------------------------
+
+-- ----------------------------------------------------------------------------
+--NOTES:
+-- ----------------------------------------------------------------------------
+-- altera vhdl_input_version vhdl_2008
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+use work.memcfg_pkg.all;
+
+-- ----------------------------------------------------------------------------
+-- Entity declaration
+-- ----------------------------------------------------------------------------
+entity cfir_top is
+   port (
+      clk         : in std_logic;
+      reset_n     : in std_logic;
+      mem_reset_n : in std_logic;
+      from_memcfg : in t_FROM_MEMCFG;
+      
+      sdin        : in std_logic;   -- Data in
+      sclk        : in std_logic;   -- Data clock
+      sen         : in std_logic;   -- Enable signal (active low)
+      sdout       : out std_logic;  -- Data out
+      xen         : out std_logic;
+      diq_in      : in std_logic_vector(63 downto 0);
+      diq_out     : out std_logic_vector(63 downto 0)
+   );
+end cfir_top;
+
+-- ----------------------------------------------------------------------------
+-- Architecture
+-- ----------------------------------------------------------------------------
+architecture arch of cfir_top is
+--declare signals,  components here
+
+signal ai_in                  : std_logic_vector(15 downto 0);
+signal aq_in                  : std_logic_vector(15 downto 0);
+signal bi_in                  : std_logic_vector(15 downto 0);
+signal bq_in                  : std_logic_vector(15 downto 0);
+
+
+--inst0
+signal inst0_sdout            : std_logic;
+signal inst0_cfr0_bypass      : std_logic;
+signal inst0_cfr1_bypass      : std_logic;
+signal inst0_cfr0_sleep       : std_logic;
+signal inst0_cfr1_sleep       : std_logic;
+signal inst0_cfr0_half_order  : std_logic_vector(7 downto 0);
+signal inst0_cfr1_half_order  : std_logic_vector(7 downto 0);
+signal inst0_cfr0_threshold   : std_logic_vector(15 downto 0);
+signal inst0_cfr1_threshold   : std_logic_vector(15 downto 0);
+signal inst0_temp             : std_logic_vector(7 downto 0);
+
+--inst1
+signal inst1_sdout            : std_logic;
+signal inst1_yi               : std_logic_vector(15 downto 0);
+signal inst1_yq               : std_logic_vector(15 downto 0);
+signal inst1_xen              : std_logic;
+
+--inst4
+signal inst2_sdout            : std_logic;
+signal inst2_yi               : std_logic_vector(15 downto 0);
+signal inst2_yq               : std_logic_vector(15 downto 0);
+signal inst2_xen              : std_logic;
+
+
+
+
+begin
+   
+   ai_in <= diq_in(16*1-1 downto 16*0);
+   aq_in <= diq_in(16*2-1 downto 16*1);
+   bi_in <= diq_in(16*3-1 downto 16*2);
+   bq_in <= diq_in(16*4-1 downto 16*3);
+   
+-- ----------------------------------------------------------------------------
+-- SPI memory
+-- ----------------------------------------------------------------------------   
+   inst0_adpdcfg : entity work.adpdcfg
+   port map(
+      -- Address and location of this module
+      -- Will be hard wired at the top level
+      maddress       => "0000000010",
+      mimo_en        => '1',
+   
+      -- Serial port IOs
+      sdin           => sdin,          -- Data in
+      sclk           => sclk,          -- Data clock
+      sen            => sen,           -- Enable signal (active low)
+      sdout          => inst0_sdout,   -- Data out
+   
+      lreset         => mem_reset_n,   -- Logic reset signal, resets logic cells only  (use only one reset)
+      mreset         => mem_reset_n,   -- Memory reset signal, resets configuration memory only (use only one reset)
+      
+      oen            => open,
+      stateo         => open,          
+      
+      --ADPD
+      ADPD_BUFF_SIZE    => open, 
+      ADPD_CONT_CAP_EN  => open, 
+      ADPD_CAP_EN       => open, 
+      
+      adpd_config0      => open, 
+      adpd_config1      => open, 
+      adpd_data         => open, 
+      
+      cfr0_bypass       => inst0_cfr0_bypass,
+      cfr1_bypass       => inst0_cfr1_bypass,
+      cfr0_sleep        => inst0_cfr0_sleep,
+      cfr1_sleep        => inst0_cfr1_sleep,
+      cfr0_half_order   => inst0_cfr0_half_order,
+      cfr1_half_order   => inst0_cfr1_half_order,
+      cfr0_threshold    => inst0_cfr0_threshold,
+      cfr1_threshold    => inst0_cfr1_threshold,
+   
+      hb0_bypass        => open,
+      hb1_bypass        => open,
+      isinc0_bypass     => open,
+      isinc1_bypass     => open,
+      
+      select_DACs       => open,
+      select_chA        => open,
+      
+      space_cnt_rst     => open,
+      space_address_msb => open,
+      
+      gain_cfr_A        => open,
+      gain_cfr_B        => open,
+      gain_cfr0_bypass  => open,
+      gain_cfr1_bypass  => open,
+      
+      temp              => inst0_temp,
+      hb2_bypass        => open,
+      delay3            => open
+   );
+   
+-- ----------------------------------------------------------------------------
+-- CH A
+-- ----------------------------------------------------------------------------
+inst1_cfir_bj : entity work.cfir_bj
+   generic map(
+      nd => 20
+      )
+   port map(
+      -- Clock related inputs
+      sleep       => inst0_cfr0_sleep, -- Sleep signal
+      clk         => clk,     -- Clock
+      reset       => reset_n, -- Reset
+      bypass      => inst0_cfr0_bypass, --  Bypass
+   
+      -- Data input signals
+      xi          => ai_in,
+      xq          => aq_in,
+   
+      -- Filter configuration
+      half_order  => '0' & inst0_cfr0_half_order(7 downto 1),
+      threshold   => inst0_cfr0_threshold,
+   
+      n           => "00000011", -- Clock division ratio = n+1
+      l           => "111", -- Number of taps is 5*(l+1)
+      
+      -- Coeffitient memory interface
+      maddressf0  => "000000111",
+      maddressf1  => "000001000",
+   
+      mimo_en     => '1',
+      sdin        => sdin, -- Data in
+      sclk        => sclk, -- Data clock
+      sen         => sen OR (not from_memcfg.mac(0)),  -- Enable signal (active low)
+      sdout       => inst1_sdout, -- Data out
+      oen         => open, 
+      
+      -- Filter output signals
+      yi          => inst1_yi,
+      yq          => inst1_yq,
+      xen         => inst1_xen,
+      speedup     => inst0_temp(0)
+   );
+
+-- ----------------------------------------------------------------------------
+-- CH B
+-- ----------------------------------------------------------------------------
+inst2_cfir_bj : entity work.cfir_bj
+   generic map(
+      nd => 20
+      )
+   port map(
+      -- Clock related inputs
+      sleep       => inst0_cfr1_sleep, -- Sleep signal
+      clk         => clk,     -- Clock
+      reset       => reset_n, -- Reset
+      bypass      => inst0_cfr1_bypass, --  Bypass
+   
+      -- Data input signals
+      xi          => bi_in,
+      xq          => bq_in,
+   
+      -- Filter configuration
+      half_order  => '0' & inst0_cfr1_half_order(7 downto 1),
+      threshold   => inst0_cfr1_threshold,
+   
+      n           => "00000011", -- Clock division ratio = n+1
+      l           => "111", -- Number of taps is 5*(l+1)
+      
+      -- Coeffitient memory interface
+      maddressf0  => "000000111",
+      maddressf1  => "000001000",
+   
+      mimo_en     => '1',
+      sdin        => sdin, -- Data in
+      sclk        => sclk, -- Data clock
+      sen         => sen OR (not from_memcfg.mac(1)),  -- Enable signal (active low)
+      sdout       => inst2_sdout, -- Data out
+      oen         => open, 
+      
+      -- Filter output signals
+      yi          => inst2_yi,
+      yq          => inst2_yq,
+      xen         => inst2_xen,
+      speedup     => inst0_temp(0)
+   );  
+   
+-- ----------------------------------------------------------------------------
+-- Output ports
+-- ----------------------------------------------------------------------------
+sdout       <= inst0_sdout OR inst1_sdout OR inst2_sdout;
+xen         <= inst1_xen;
+
+diq_out     <= inst2_yq & inst2_yi & inst1_yq & inst1_yi;
+
+  
+end arch;   
+
+
