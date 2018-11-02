@@ -90,7 +90,8 @@ signal inst2_diq_l         : std_logic_vector(g_IQ_WIDTH downto 0);
 
 --inst4
 signal inst4_diq_out       : std_logic_vector(63 downto 0);
-signal inst4_xen           : std_logic;
+signal inst4_data_req      : std_logic;
+signal inst4_data_valid    : std_logic;
 
 --inst5
 signal inst5_wrfull        : std_logic;
@@ -121,7 +122,7 @@ inst0_fifo_inst : entity work.fifo_inst
       wrempty  => open,
       wrusedw  => fifo_wrusedw,
       rdclk    => clk_2x,
-      rdreq    => inst4_xen AND (NOT inst0_rdempty),
+      rdreq    => inst4_data_req AND (NOT inst0_rdempty),
       q        => inst0_q,
       rdempty  => inst0_rdempty,
       rdusedw  => inst0_rdusedw  
@@ -140,7 +141,8 @@ inst0_fifo_inst : entity work.fifo_inst
       sclk        => sclk,    -- Data clock
       sen         => sen,     -- Enable signal (active low)
       sdout       => sdout,   -- Data out
-      xen         => inst4_xen,
+      data_req    => inst4_data_req,
+      data_valid  => inst4_data_valid,
       diq_in      => inst0_q,
       diq_out     => inst4_diq_out
     );
@@ -157,7 +159,7 @@ inst0_fifo_inst : entity work.fifo_inst
    port map(
       reset_n  => reset_n,
       wrclk    => clk_2x,
-      wrreq    => inst4_xen AND (NOT inst5_wrfull),
+      wrreq    => inst4_data_valid AND (NOT inst5_wrfull),
       data     => inst4_diq_out,
       wrfull   => inst5_wrfull,
       wrempty  => open,

@@ -27,6 +27,7 @@ set_clock_groups -asynchronous \
     -group {LMS1_TXPLL_VCOPH} \
     -group {LMS1_TXPLL_C0} \
     -group {LMS1_TXPLL_C1 LMS1_FCLK1_PLL} \
+    -group {LMS1_TXPLL_C2} \
     -group {LMS1_MCLK2} \
     -group {LMS1_RXPLL_VCOPH} \
     -group {LMS1_RXPLL_C0} \
@@ -35,6 +36,7 @@ set_clock_groups -asynchronous \
     -group {LMS2_MCLK1_GLOBAL} \
     -group {LMS2_TXPLL_C0} \
     -group {LMS2_TXPLL_C1 LMS2_FCLK1_PLL} \
+    -group {LMS2_TXPLL_C2} \
     -group {LMS2_MCLK2} \
     -group {LMS2_RXPLL_VCOPH} \
     -group {LMS2_RXPLL_C0} \

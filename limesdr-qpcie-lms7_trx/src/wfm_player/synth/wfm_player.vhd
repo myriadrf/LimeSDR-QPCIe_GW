@@ -84,9 +84,9 @@ architecture arch of wfm_player is
 signal wfm_load_rising        : std_logic;
 --inst0 signals   
 signal inst0_rdempty          : std_logic;
-signal inst0_rdusedw          : std_logic_vector(FIFORD_SIZE(wfm_infifo_wdata_width, 
-                                                         avl_data_width, 
-                                                         wfm_infifo_wrusedw_width)-1 downto 0);
+--signal inst0_rdusedw          : std_logic_vector(FIFORD_SIZE(wfm_infifo_wdata_width, 
+--                                                         avl_data_width, 
+--                                                         wfm_infifo_wrusedw_width)-1 downto 0);
 signal inst0_q                : std_logic_vector(avl_data_width-1 downto 0);
    
 --inst1
@@ -124,13 +124,13 @@ constant wfm_outfifo_wrwords_size   : integer := 2**(FIFOWR_SIZE(128,
                                                       
 constant wfm_outfifo_wrwords_limit  : integer := wfm_outfifo_wrwords_size - avl_rd_latency_words - avl_traffic_gen_buff_size;
                                                          
-signal burst_cnt_max                : std_logic_vector(FIFORD_SIZE(wfm_infifo_wdata_width, 
+signal burst_cnt_max                : std_logic_vector(FIFORD_SIZE(wfm_infifo_rdata_width, 
                                                          avl_data_width, 
-                                                         wfm_infifo_wrusedw_width)-1 downto 0);
+                                                         wfm_infifo_rdusedw_width)-1 downto 0);
                                                          
-signal burst_wr_cnt                 : unsigned(FIFORD_SIZE(wfm_infifo_wdata_width, 
+signal burst_wr_cnt                 : unsigned(FIFORD_SIZE(wfm_infifo_rdata_width, 
                                                          avl_data_width, 
-                                                         wfm_infifo_wrusedw_width)-1 downto 0);
+                                                         wfm_infifo_rdusedw_width)-1 downto 0);
                                                          
 signal do_write_idle_cnt            : unsigned(7 downto 0);
 
@@ -318,9 +318,9 @@ begin
       burst_cnt_max <= (others=>'0');
    elsif (clk'event AND clk='1') then 
       --by dropping LSb it is determined maximum burst transactions
-      burst_cnt_max <= '0' & wfm_infifo_rdusedw(FIFORD_SIZE(wfm_infifo_wdata_width, 
+      burst_cnt_max <= '0' & wfm_infifo_rdusedw(FIFORD_SIZE(wfm_infifo_rdata_width, 
                                                          avl_data_width, 
-                                                         wfm_infifo_wrusedw_width)-1 downto 1);
+                                                         wfm_infifo_rdusedw_width)-1 downto 1);
    end if;
 end process;
 

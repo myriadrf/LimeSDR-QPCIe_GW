@@ -67,7 +67,7 @@ lappend arg_list "--component-param=USE_DQS_TRACKING=false"
 lappend arg_list "--component-param=USE_SHADOW_REGS=false"
 lappend arg_list "--component-param=HCX_COMPAT_MODE=false"
 lappend arg_list "--component-param=NUM_WRITE_FR_CYCLE_SHIFTS=0"
-lappend arg_list "--component-param=SEQUENCER_VERSION=16.1"
+lappend arg_list "--component-param=SEQUENCER_VERSION=18.0"
 lappend arg_list "--component-param=ENABLE_NON_DESTRUCTIVE_CALIB=false"
 lappend arg_list "--component-param=ENABLE_NON_DES_CAL=false"
 lappend arg_list "--component-param=ENABLE_NON_DES_CAL_TEST=false"
@@ -102,5 +102,5 @@ lappend arg_list "--system-info=DEVICE_FAMILY=CYCLONEV"
 lappend arg_list "--report-file=sopcinfo:ddr3_av_2x32_s0.sopcinfo"
 lappend arg_list "--report-file=txt:ddr3_av_2x32_s0_seq_ipd_report.txt"
 lappend arg_list "--file-set=QUARTUS_SYNTH"
-catch { eval [concat [list exec "C:/intelfpga_lite/16.1/quartus//sopc_builder/bin/ip-generate" --component-name=qsys_sequencer_110] $arg_list] } temp
+catch { eval [concat [list exec "C:/intelfpga_lite/18.0/quartus//sopc_builder/bin/ip-generate" --component-name=qsys_sequencer_110] $arg_list] } temp
 puts $temp

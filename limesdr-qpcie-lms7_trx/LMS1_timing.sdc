@@ -20,8 +20,8 @@ set_time_format -unit ns -decimal_places 3
 # ----------------------------------------------------------------------------
 #LMS7002
 	#LMS_MCLK2 period
-set LMS1_MCLK1_period  		6.25
-set LMS1_MCLK2_period		6.25
+set LMS1_MCLK1_period  		8.00
+set LMS1_MCLK2_period		8.00
 
 set LMS1_MCLK1_period_5MHz 200.00
 set LMS1_MCLK2_period_5MHz 200.00
@@ -88,6 +88,11 @@ create_generated_clock 	-name LMS1_TXPLL_C1 \
 								-source  [get_pins -compatibility_mode *pll_top|inst0_tx*|*vcoph[0]*]\
 								-divide_by 2 -multiply_by 1 -phase 90 \
 								[get_pins -compatibility_mode *pll_top|inst0_tx*|*[1]*divclk*]
+                        
+create_generated_clock 	-name LMS1_TXPLL_C2 \
+								-source  [get_pins -compatibility_mode *pll_top|inst0_tx*|*vcoph[0]*]\
+								-divide_by 1 -multiply_by 1 -phase 0 \
+								[get_pins -compatibility_mode *pll_top|inst0_tx*|*[1]*divclk*]                        
 
 #LMS1_FCLK1 clock output pin 
 create_generated_clock 	-name LMS1_FCLK1_PLL \

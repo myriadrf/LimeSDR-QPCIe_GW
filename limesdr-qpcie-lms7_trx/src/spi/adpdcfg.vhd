@@ -58,7 +58,8 @@ entity adpdcfg is
 		gain_cfr0_bypass, gain_cfr1_bypass: out std_logic;
 		
 		temp: out std_logic_vector(7 downto 0);
-		hb2_bypass, delay3: out std_logic
+		hb2_bypass, delay3: out std_logic;
+      gfir0_byp, gfir1_byp: out std_logic
 
 	);
 end adpdcfg;
@@ -258,6 +259,8 @@ begin
 		gain_cfr_B<= mem(12) (15 downto 0);
 		
 		temp<= mem(13)(7 downto 0);
+      gfir0_byp <= mem(14)(0);
+      gfir1_byp <= mem(14)(1);
 		
 
 end adpdcfg_arch;

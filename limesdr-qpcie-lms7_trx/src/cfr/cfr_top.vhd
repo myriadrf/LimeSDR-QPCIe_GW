@@ -29,7 +29,8 @@ entity cfir_top is
       sclk        : in std_logic;   -- Data clock
       sen         : in std_logic;   -- Enable signal (active low)
       sdout       : out std_logic;  -- Data out
-      xen         : out std_logic;
+      data_req    : out std_logic;
+      data_valid  : out std_logic;
       diq_in      : in std_logic_vector(63 downto 0);
       diq_out     : out std_logic_vector(63 downto 0)
    );
@@ -58,6 +59,8 @@ signal inst0_cfr1_half_order  : std_logic_vector(7 downto 0);
 signal inst0_cfr0_threshold   : std_logic_vector(15 downto 0);
 signal inst0_cfr1_threshold   : std_logic_vector(15 downto 0);
 signal inst0_temp             : std_logic_vector(7 downto 0);
+signal inst0_gfir0_byp        : std_logic;
+signal inst0_gfir1_byp        : std_logic;
 
 --inst1
 signal inst1_sdout            : std_logic;
@@ -65,12 +68,33 @@ signal inst1_yi               : std_logic_vector(15 downto 0);
 signal inst1_yq               : std_logic_vector(15 downto 0);
 signal inst1_xen              : std_logic;
 
---inst4
+--inst2
 signal inst2_sdout            : std_logic;
 signal inst2_yi               : std_logic_vector(15 downto 0);
 signal inst2_yq               : std_logic_vector(15 downto 0);
 signal inst2_xen              : std_logic;
 
+--inst3
+signal inst3_yi               : std_logic_vector(24 downto 0);
+signal inst3_yq               : std_logic_vector(24 downto 0);
+signal inst3_xen              : std_logic;
+signal inst3_sdout            : std_logic;
+
+--inst4
+signal inst4_yi               : std_logic_vector(24 downto 0);
+signal inst4_yq               : std_logic_vector(24 downto 0);
+signal inst4_xen              : std_logic;
+signal inst4_sdout            : std_logic;
+
+--inst5
+signal inst5_q                : std_logic_vector(31 downto 0);
+signal inst5_rdempty          : std_logic;
+signal inst5_wrfull           : std_logic;
+
+--inst6
+signal inst6_q                : std_logic_vector(31 downto 0);
+signal inst6_rdempty          : std_logic;
+signal inst6_wrfull           : std_logic;
 
 
 
@@ -139,11 +163,65 @@ begin
       
       temp              => inst0_temp,
       hb2_bypass        => open,
-      delay3            => open
+      delay3            => open,
+      gfir0_byp         => inst0_gfir0_byp,
+      gfir1_byp         => inst0_gfir1_byp
+      
    );
    
+ 
 -- ----------------------------------------------------------------------------
--- CH A
+-- CH A filter
+-- ----------------------------------------------------------------------------   
+   inst3_gfirhf16mod_bj : entity work.gfirhf16mod_bj 
+   port map (  -- RED_FILTRA/2 CLK PERIOD DELAY
+      sleep       => inst0_cfr0_sleep,
+      clk         => clk,
+      reset       => reset_n,
+      bypass      => inst0_gfir0_byp,
+      xi          => ai_in,
+      xq          => aq_in,
+      n           => "00000011",
+      l           => "111",
+      maddressf0  => "000001001", -- donji red
+      maddressf1  => "000001010", -- feedback
+      mimo_en     => '1',
+      sdin        => sdin,
+      sclk        => sclk,
+      sen         => sen OR (not from_memcfg.mac(0)),
+      sdout       => inst3_sdout,
+      oen         => open,
+      yi          => inst3_yi,
+      yq          => inst3_yq,
+      xen         => inst3_xen
+      );
+      
+      
+   inst5_fifo_inst : entity work.fifo_inst
+   generic map(
+      dev_family     => "Cyclone V",
+      wrwidth        => 32,
+      wrusedw_witdth => 9, 
+      rdwidth        => 32,
+      rdusedw_width  => 9,
+      show_ahead     => "OFF"
+  ) 
+   port map(
+      reset_n  => reset_n,
+      wrclk    => clk,
+      wrreq    => inst3_xen AND (NOT inst5_wrfull),
+      data     => inst3_yq(24 downto 9) & inst3_yi(24 downto 9),
+      wrfull   => inst5_wrfull,
+      wrempty  => open,
+      wrusedw  => open,
+      rdclk    => clk,
+      rdreq    => inst1_xen AND (NOT inst5_rdempty),
+      q        => inst5_q,
+      rdempty  => inst5_rdempty,
+      rdusedw  => open  
+   );
+-- ----------------------------------------------------------------------------
+-- CH A CFR
 -- ----------------------------------------------------------------------------
 inst1_cfir_bj : entity work.cfir_bj
    generic map(
@@ -157,9 +235,10 @@ inst1_cfir_bj : entity work.cfir_bj
       bypass      => inst0_cfr0_bypass, --  Bypass
    
       -- Data input signals
-      xi          => ai_in,
-      xq          => aq_in,
-   
+      -- xi          => inst5_q(15 downto 0),
+      -- xq          => inst5_q(31 downto 16),
+      xi          => inst3_yi(24 downto 9),
+      xq          => inst3_yq(24 downto 9),
       -- Filter configuration
       half_order  => '0' & inst0_cfr0_half_order(7 downto 1),
       threshold   => inst0_cfr0_threshold,
@@ -184,9 +263,57 @@ inst1_cfir_bj : entity work.cfir_bj
       xen         => inst1_xen,
       speedup     => inst0_temp(0)
    );
-
 -- ----------------------------------------------------------------------------
--- CH B
+-- CH B filter
+-- ---------------------------------------------------------------------------- 
+   inst4_gfirhf16mod_bj : entity work.gfirhf16mod_bj 
+   port map (  -- RED_FILTRA/2 CLK PERIOD DELAY
+      sleep       => inst0_cfr1_sleep,
+      clk         => clk,
+      reset       => reset_n,
+      bypass      => inst0_gfir1_byp,
+      xi          => bi_in,
+      xq          => bq_in,
+      n           => "00000011",
+      l           => "111",
+      maddressf0  => "000001001", -- donji red
+      maddressf1  => "000001010", -- feedback
+      mimo_en     => '1',
+      sdin        => sdin,
+      sclk        => sclk,
+      sen         => sen OR (not from_memcfg.mac(1)),
+      sdout       => inst4_sdout,
+      oen         => open,
+      yi          => inst4_yi,
+      yq          => inst4_yq,
+      xen         => inst4_xen
+      );
+      
+   inst6_fifo_inst : entity work.fifo_inst
+   generic map(
+      dev_family     => "Cyclone V",
+      wrwidth        => 32,
+      wrusedw_witdth => 9, 
+      rdwidth        => 32,
+      rdusedw_width  => 9,
+      show_ahead     => "OFF"
+  ) 
+   port map(
+      reset_n  => reset_n,
+      wrclk    => clk,
+      wrreq    => inst4_xen AND (NOT inst6_wrfull),
+      data     => inst4_yq(24 downto 9) & inst4_yi(24 downto 9),
+      wrfull   => inst6_wrfull,
+      wrempty  => open,
+      wrusedw  => open,
+      rdclk    => clk,
+      rdreq    => inst2_xen AND (NOT inst6_rdempty),
+      q        => inst6_q,
+      rdempty  => inst6_rdempty,
+      rdusedw  => open  
+   );   
+-- ----------------------------------------------------------------------------
+-- CH B CFR
 -- ----------------------------------------------------------------------------
 inst2_cfir_bj : entity work.cfir_bj
    generic map(
@@ -200,8 +327,10 @@ inst2_cfir_bj : entity work.cfir_bj
       bypass      => inst0_cfr1_bypass, --  Bypass
    
       -- Data input signals
-      xi          => bi_in,
-      xq          => bq_in,
+--      xi          => inst6_q(15 downto 0),
+--      xq          => inst6_q(31 downto 16),
+      xi          => inst4_yi(24 downto 9),
+      xq          => inst4_yq(24 downto 9),
    
       -- Filter configuration
       half_order  => '0' & inst0_cfr1_half_order(7 downto 1),
@@ -231,8 +360,9 @@ inst2_cfir_bj : entity work.cfir_bj
 -- ----------------------------------------------------------------------------
 -- Output ports
 -- ----------------------------------------------------------------------------
-sdout       <= inst0_sdout OR inst1_sdout OR inst2_sdout;
-xen         <= inst1_xen;
+sdout       <= inst0_sdout OR inst1_sdout OR inst2_sdout OR inst3_sdout OR inst4_sdout;
+data_req    <= inst1_xen;
+data_valid  <= inst1_xen;
 
 diq_out     <= inst2_yq & inst2_yi & inst1_yq & inst1_yi;
 
