@@ -58,6 +58,12 @@ signal inst0_cfr0_half_order  : std_logic_vector(7 downto 0);
 signal inst0_cfr1_half_order  : std_logic_vector(7 downto 0);
 signal inst0_cfr0_threshold   : std_logic_vector(15 downto 0);
 signal inst0_cfr1_threshold   : std_logic_vector(15 downto 0);
+signal inst0_gain_cfr_A       : std_logic_vector(15 downto 0);
+signal inst0_gain_cfr_B       : std_logic_vector(15 downto 0);
+signal inst0_gain_cfr0_bypass : std_logic;
+signal inst0_gain_cfr1_bypass : std_logic;
+
+
 signal inst0_temp             : std_logic_vector(7 downto 0);
 signal inst0_gfir0_byp        : std_logic;
 signal inst0_gfir1_byp        : std_logic;
@@ -67,6 +73,8 @@ signal inst1_sdout            : std_logic;
 signal inst1_yi               : std_logic_vector(15 downto 0);
 signal inst1_yq               : std_logic_vector(15 downto 0);
 signal inst1_xen              : std_logic;
+signal inst1_xen_reg0         : std_logic;
+signal inst1_xen_reg1         : std_logic;
 
 --inst2
 signal inst2_sdout            : std_logic;
@@ -96,6 +104,13 @@ signal inst6_q                : std_logic_vector(31 downto 0);
 signal inst6_rdempty          : std_logic;
 signal inst6_wrfull           : std_logic;
 
+--inst7
+signal inst7_ypi_o            : std_logic_vector(15 downto 0);
+signal inst7_ypq_o            : std_logic_vector(15 downto 0);
+
+--inst8
+signal inst8_ypi_o            : std_logic_vector(15 downto 0);
+signal inst8_ypq_o            : std_logic_vector(15 downto 0);
 
 
 begin
@@ -156,10 +171,10 @@ begin
       space_cnt_rst     => open,
       space_address_msb => open,
       
-      gain_cfr_A        => open,
-      gain_cfr_B        => open,
-      gain_cfr0_bypass  => open,
-      gain_cfr1_bypass  => open,
+      gain_cfr_A        => inst0_gain_cfr_A,
+      gain_cfr_B        => inst0_gain_cfr_B,
+      gain_cfr0_bypass  => inst0_gain_cfr0_bypass,
+      gain_cfr1_bypass  => inst0_gain_cfr1_bypass,
       
       temp              => inst0_temp,
       hb2_bypass        => open,
@@ -263,6 +278,39 @@ inst1_cfir_bj : entity work.cfir_bj
       xen         => inst1_xen,
       speedup     => inst0_temp(0)
    );
+   
+-- ----------------------------------------------------------------------------
+-- CH A Gain 
+-- ----------------------------------------------------------------------------   
+   inst7_iqim_gain_corr : entity work.iqim_gain_corr
+   port map (
+      clk      => clk,
+      reset_n  => reset_n,
+      en       => inst1_xen,
+      bypass   => inst0_gain_cfr0_bypass,
+
+      ypi      => inst1_yi,
+      ypq      => inst1_yq,
+
+      gain_ch  => inst0_gain_cfr_A,
+
+      ypi_o    => inst7_ypi_o,
+      ypq_o    => inst7_ypq_o 
+   );  
+   
+   -- delayed version of inst1_xen
+   proc_xen_reg : process(clk, reset_n)
+   begin
+      if reset_n = '0' then 
+         inst1_xen_reg0 <= '0';
+         inst1_xen_reg1 <= '0';
+      elsif (clk'event AND clk='1') then 
+         inst1_xen_reg0 <= inst1_xen;
+         inst1_xen_reg1 <= inst1_xen_reg0;
+      end if;
+   end process;
+
+   
 -- ----------------------------------------------------------------------------
 -- CH B filter
 -- ---------------------------------------------------------------------------- 
@@ -358,13 +406,32 @@ inst2_cfir_bj : entity work.cfir_bj
    );  
    
 -- ----------------------------------------------------------------------------
+-- CH B Gain 
+-- ----------------------------------------------------------------------------   
+   inst8_iqim_gain_corr : entity work.iqim_gain_corr
+   port map (
+      clk      => clk,
+      reset_n  => reset_n,
+      en       => inst2_xen,
+      bypass   => inst0_gain_cfr1_bypass,
+
+      ypi      => inst2_yi,
+      ypq      => inst2_yq,
+
+      gain_ch  => inst0_gain_cfr_B,
+
+      ypi_o    => inst8_ypi_o,
+      ypq_o    => inst8_ypq_o  
+);    
+-- ----------------------------------------------------------------------------
 -- Output ports
 -- ----------------------------------------------------------------------------
 sdout       <= inst0_sdout OR inst1_sdout OR inst2_sdout OR inst3_sdout OR inst4_sdout;
 data_req    <= inst1_xen;
-data_valid  <= inst1_xen;
+-- data_valid is delayed version of inst1_xen, because gain adds one 2 cycle delay for data
+data_valid  <= inst1_xen_reg1;
 
-diq_out     <= inst2_yq & inst2_yi & inst1_yq & inst1_yi;
+diq_out     <= inst8_ypq_o & inst8_ypi_o & inst7_ypq_o & inst7_ypi_o;
 
   
 end arch;   
