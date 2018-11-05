@@ -22,11 +22,13 @@ use work.memcfg_pkg.all;
 -- ----------------------------------------------------------------------------
 entity lms7002_top is
    generic(
-      g_DEV_FAMILY            : string := "Cyclone IV E";
-      g_IQ_WIDTH              : integer := 12;
-      g_INV_INPUT_CLK         : string := "ON";
-      g_TX_SMPL_FIFO_WRUSEDW  : integer := 9;
-      g_TX_SMPL_FIFO_DATAW    : integer := 128
+      g_DEV_FAMILY               : string := "Cyclone IV E";
+      g_IQ_WIDTH                 : integer := 12;
+      g_INV_INPUT_CLK            : string := "ON";
+      g_TX_SMPL_FIFO_0_WRUSEDW   : integer := 9;
+      g_TX_SMPL_FIFO_0_DATAW     : integer := 128;
+      g_TX_SMPL_FIFO_1_WRUSEDW   : integer := 9;
+      g_TX_SMPL_FIFO_1_DATAW     : integer := 128
    );
    port (  
       from_fpgacfg      : in  t_FROM_FPGACFG;
@@ -54,13 +56,18 @@ entity lms7002_top is
       CORE_LDO_EN       : out std_logic;
       -- Internal TX ports
       tx_reset_n        : in  std_logic;
-      tx_src_sel        : in  std_logic_vector(1 downto 0);
-      tx_diq_h          : in  std_logic_vector(g_IQ_WIDTH downto 0);
-      tx_diq_l          : in  std_logic_vector(g_IQ_WIDTH downto 0);
-      tx_wrfull         : out std_logic;
-      tx_wrusedw        : out std_logic_vector(g_TX_SMPL_FIFO_WRUSEDW-1 downto 0);
-      tx_wrreq          : in  std_logic;
-      tx_data           : in  std_logic_vector(g_TX_SMPL_FIFO_DATAW-1 downto 0);
+      tx_fifo_0_wrclk   : in  std_logic;
+      tx_fifo_0_reset_n : in  std_logic;
+      tx_fifo_0_wrreq   : in  std_logic;
+      tx_fifo_0_data    : in  std_logic_vector(g_TX_SMPL_FIFO_0_DATAW-1 downto 0);
+      tx_fifo_0_wrfull  : out std_logic;
+      tx_fifo_0_wrusedw : out std_logic_vector(g_TX_SMPL_FIFO_0_WRUSEDW-1 downto 0);
+      tx_fifo_1_wrclk   : in  std_logic;
+      tx_fifo_1_reset_n : in  std_logic;
+      tx_fifo_1_wrreq   : in  std_logic;
+      tx_fifo_1_data    : in  std_logic_vector(g_TX_SMPL_FIFO_1_DATAW-1 downto 0);
+      tx_fifo_1_wrfull  : out std_logic;
+      tx_fifo_1_wrusedw : out std_logic_vector(g_TX_SMPL_FIFO_1_WRUSEDW-1 downto 0);
       -- Internal RX ports
       rx_reset_n        : in  std_logic;
       rx_diq_h          : out std_logic_vector(g_IQ_WIDTH downto 0);
@@ -91,6 +98,13 @@ signal inst2_diq_l : std_logic_vector (g_IQ_WIDTH downto 0);
 signal rx_smpl_cmp_start_sync : std_logic;
 --inst0
 signal inst0_reset_n : std_logic;
+
+signal int_mode         : std_logic;    
+signal int_trxiqpulse   : std_logic;   
+signal int_ddr_en       : std_logic;
+signal int_mimo_en      : std_logic;
+signal int_ch_en        : std_logic_vector(1 downto 0);
+signal int_fidm         : std_logic;
   
 begin
 
@@ -99,7 +113,7 @@ begin
    
    sync_reg1 : entity work.sync_reg 
    port map(MCLK2, '1', rx_smpl_cmp_start, rx_smpl_cmp_start_sync);
-
+  
 -- ----------------------------------------------------------------------------
 -- RX interface
 -- ----------------------------------------------------------------------------
@@ -136,13 +150,24 @@ inst0_diq2fifo : entity work.diq2fifo
    
 -- ----------------------------------------------------------------------------
 -- TX interface
--- ---------------------------------------------------------------------------- 
+-- ----------------------------------------------------------------------------
+   -- Internal DIQ mode settings for TX interface
+   -- (Workaround for WFM player)
+   int_mode       <= from_fpgacfg.mode                when from_fpgacfg.wfm_play = '0' else '0';
+   int_trxiqpulse <= from_fpgacfg.trxiq_pulse         when from_fpgacfg.wfm_play = '0' else '0';
+   int_ddr_en     <= from_fpgacfg.ddr_en              when from_fpgacfg.wfm_play = '0' else '1';
+   int_mimo_en    <= from_fpgacfg.mimo_int_en         when from_fpgacfg.wfm_play = '0' else '1';
+   int_ch_en      <= from_fpgacfg.ch_en(1 downto 0)   when from_fpgacfg.wfm_play = '0' else "11";
+
+
 inst1_lms7002_tx : entity work.lms7002_tx
    generic map( 
-      g_DEV_FAMILY         => g_DEV_FAMILY,
-      g_IQ_WIDTH           => g_IQ_WIDTH,
-      g_SMPL_FIFO_WRUSEDW  => g_TX_SMPL_FIFO_WRUSEDW,
-      g_SMPL_FIFO_DATAW    => g_TX_SMPL_FIFO_DATAW
+      g_DEV_FAMILY            => g_DEV_FAMILY,
+      g_IQ_WIDTH              => g_IQ_WIDTH,
+      g_SMPL_FIFO_0_WRUSEDW   => g_TX_SMPL_FIFO_0_WRUSEDW,
+      g_SMPL_FIFO_0_DATAW     => g_TX_SMPL_FIFO_0_DATAW,
+      g_SMPL_FIFO_1_WRUSEDW   => g_TX_SMPL_FIFO_1_WRUSEDW,
+      g_SMPL_FIFO_1_DATAW     => g_TX_SMPL_FIFO_1_DATAW
       )
    port map(
       clk                  => MCLK1,
@@ -152,11 +177,11 @@ inst1_lms7002_tx : entity work.lms7002_tx
       from_memcfg          => from_memcfg,
       
       --Mode settings
-      mode                 => from_fpgacfg.mode,-- JESD207: 1; TRXIQ: 0
-      trxiqpulse           => from_fpgacfg.trxiq_pulse,-- trxiqpulse on: 1; trxiqpulse off: 0
-      ddr_en               => from_fpgacfg.ddr_en,-- DDR: 1; SDR: 0
-      mimo_en              => from_fpgacfg.mimo_int_en,-- SISO: 1; MIMO: 0
-      ch_en                => from_fpgacfg.ch_en(1 downto 0), --"01" - Ch. A, "10" - Ch. B, "11" - Ch. A and Ch. B. 
+      mode                 => int_mode,      -- JESD207: 1; TRXIQ: 0
+      trxiqpulse           => int_trxiqpulse,-- trxiqpulse on: 1; trxiqpulse off: 0
+      ddr_en               => int_ddr_en,    -- DDR: 1; SDR: 0
+      mimo_en              => int_mimo_en,   -- SISO: 0; MIMO: 1
+      ch_en                => int_ch_en,     --"01" - Ch. A, "10" - Ch. B, "11" - Ch. A and Ch. B. 
       fidm                 => '0', -- Frame start at fsync = 0, when 0. Frame start at fsync = 1, when 1.
       --TX testing
       test_ptrn_en         => from_fpgacfg.tx_ptrn_en,
@@ -170,13 +195,19 @@ inst1_lms7002_tx : entity work.lms7002_tx
       -- Source select
       tx_src_sel           => from_fpgacfg.wfm_play,  -- 0 - FIFO, 1 - diq_h/diq_l
       --TX sample FIFO ports 
-      fifo_wrreq           => tx_wrreq,
-      fifo_data            => tx_data,
-      fifo_wrfull          => tx_wrfull,
-      fifo_wrusedw         => tx_wrusedw,
+      fifo_0_wrclk         => tx_fifo_0_wrclk,
+      fifo_0_reset_n       => tx_fifo_0_reset_n,
+      fifo_0_wrreq         => tx_fifo_0_wrreq,
+      fifo_0_data          => tx_fifo_0_data,
+      fifo_0_wrfull        => tx_fifo_0_wrfull,
+      fifo_0_wrusedw       => tx_fifo_0_wrusedw,
+      fifo_1_wrclk         => tx_fifo_1_wrclk,
+      fifo_1_reset_n       => tx_fifo_1_reset_n,
+      fifo_1_wrreq         => tx_fifo_1_wrreq,
+      fifo_1_data          => tx_fifo_1_data,
+      fifo_1_wrfull        => tx_fifo_1_wrfull,
+      fifo_1_wrusedw       => tx_fifo_1_wrusedw,
       --TX sample ports (direct access to DDR cells)
-      diq_h                => tx_diq_h,
-      diq_l                => tx_diq_l,
       sdin                 => sdin,  
       sclk                 => sclk,
       sen                  => sen,  

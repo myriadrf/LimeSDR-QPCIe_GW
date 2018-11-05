@@ -456,8 +456,10 @@ signal inst5_busy : std_logic;
 --inst6
 signal inst6_rx_data_valid          : std_logic;
 signal inst6_rx_data                : std_logic_vector(g_LMS_DIQ_WIDTH*4-1 downto 0);
-signal inst6_tx_wrfull              : std_logic;
-signal inst6_tx_wrusedw             : std_logic_vector(8 downto 0); 
+signal inst6_tx_fifo_0_wrfull       : std_logic;
+signal inst6_tx_fifo_0_wrusedw      : std_logic_vector(8 downto 0);
+signal inst6_tx_fifo_1_wrfull       : std_logic;
+signal inst6_tx_fifo_1_wrusedw      : std_logic_vector(8 downto 0); 
 signal inst6_rx_smpl_cmp_done       : std_logic;
 signal inst6_rx_smpl_cmp_err        : std_logic; 
 signal inst6_sdout                  : std_logic;
@@ -545,6 +547,11 @@ signal inst19_wfm_0_infifo_rdreq       : std_logic;
 signal inst19_wfm_1_infifo_rdreq       : std_logic;
 signal inst19_wfm_0_Aiq_h              : std_logic_vector(12 downto 0);
 signal inst19_wfm_0_Aiq_l              : std_logic_vector(12 downto 0);
+signal inst19_wfm_0_outfifo_reset_n    : std_logic;
+signal inst19_wfm_0_outfifo_wrreq      : std_logic;
+signal inst19_wfm_0_outfifo_data       : std_logic_vector(127 downto 0);
+
+
 
 
 begin
@@ -1058,8 +1065,10 @@ begin
       g_DEV_FAMILY            => g_DEV_FAMILY,
       g_IQ_WIDTH              => g_LMS_DIQ_WIDTH,
       g_INV_INPUT_CLK         => "ON",
-      g_TX_SMPL_FIFO_WRUSEDW  => 9,
-      g_TX_SMPL_FIFO_DATAW    => 128
+      g_TX_SMPL_FIFO_0_WRUSEDW  => 9,
+      g_TX_SMPL_FIFO_0_DATAW    => 128,
+      g_TX_SMPL_FIFO_1_WRUSEDW  => 9,
+      g_TX_SMPL_FIFO_1_DATAW    => 128
    ) 
    port map(  
       from_fpgacfg         => inst0_from_fpgacfg_mod_0,
@@ -1087,13 +1096,18 @@ begin
       CORE_LDO_EN          => LMS1_CORE_LDO_EN,
       -- Internal TX ports
       tx_reset_n           => inst1_lms1_txpll_locked,
-      tx_src_sel           => (others => '0'),
-      tx_diq_h             => inst19_wfm_0_Aiq_h,
-      tx_diq_l             => inst19_wfm_0_Aiq_l,
-      tx_wrfull            => inst6_tx_wrfull,
-      tx_wrusedw           => inst6_tx_wrusedw,
-      tx_wrreq             => inst7_tx_smpl_fifo_wrreq,
-      tx_data              => inst7_tx_smpl_fifo_data,
+      tx_fifo_0_wrclk      => inst1_lms1_txpll_c1,
+      tx_fifo_0_reset_n    => inst1_lms1_txpll_locked,
+      tx_fifo_0_wrreq      => inst7_tx_smpl_fifo_wrreq,
+      tx_fifo_0_data       => inst7_tx_smpl_fifo_data,
+      tx_fifo_0_wrfull     => inst6_tx_fifo_0_wrfull,
+      tx_fifo_0_wrusedw    => inst6_tx_fifo_0_wrusedw,
+      tx_fifo_1_wrclk      => inst19_phy_clk,
+      tx_fifo_1_reset_n    => inst19_wfm_0_outfifo_reset_n,
+      tx_fifo_1_wrreq      => inst19_wfm_0_outfifo_wrreq,
+      tx_fifo_1_data       => inst19_wfm_0_outfifo_data,
+      tx_fifo_1_wrfull     => inst6_tx_fifo_1_wrfull,
+      tx_fifo_1_wrusedw    => inst6_tx_fifo_1_wrusedw,
       -- Internal RX ports
       rx_reset_n           => inst1_lms1_rxpll_locked,
       rx_diq_h             => open, 
@@ -1139,8 +1153,8 @@ begin
       tx_txant_en             => inst7_tx_txant_en,  
       --Tx interface data 
       tx_smpl_fifo_wrreq      => inst7_tx_smpl_fifo_wrreq,
-      tx_smpl_fifo_wrfull     => inst6_tx_wrfull,
-      tx_smpl_fifo_wrusedw    => inst6_tx_wrusedw,
+      tx_smpl_fifo_wrfull     => inst6_tx_fifo_0_wrfull,
+      tx_smpl_fifo_wrusedw    => inst6_tx_fifo_0_wrusedw,
       tx_smpl_fifo_data       => inst7_tx_smpl_fifo_data,
       --TX packet FIFO ports
       tx_in_pct_reset_n_req   => inst7_tx_in_pct_reset_n_req,
@@ -1476,14 +1490,12 @@ begin
       -- wfm 0 player parameters
       wfm_0_infifo_rdusedw_width    => c_H2F_S0_1_RDUSEDW_WIDTH,
       wfm_0_infifo_rdata_width      => c_H2F_S0_1_RWIDTH,      
-      wfm_0_outfifo_rdusedw_width   => 10,
-      wfm_0_outfifo_rdata_width     => 64,
+      wfm_0_outfifo_wrusedw_width   => 9,
       
       -- wfm 1 player parameters
       wfm_1_infifo_rdusedw_width    => 11,
       wfm_1_infifo_rdata_width      => 64,      
-      wfm_1_outfifo_rdusedw_width   => 10,
-      wfm_1_outfifo_rdata_width     => 64,
+      wfm_1_outfifo_wrusedw_width   => 10,
       
       wfm_0_iq_width                => 12,
       wfm_1_iq_width                => 14
@@ -1501,11 +1513,10 @@ begin
       wfm_0_infifo_rdempty    => inst2_H2F_S0_1_rempty,
       wfm_0_infifo_rdusedw    => inst2_H2F_S0_1_rdusedw,
       --outfifo   
-      wfm_0_outfifo_rclk      => inst1_lms1_txpll_c1,
-      wfm_0_Aiq_h             => inst19_wfm_0_Aiq_h,
-      wfm_0_Aiq_l             => inst19_wfm_0_Aiq_l,
-      wfm_0_Biq_h             => open,
-      wfm_0_Biq_l             => open,
+      wfm_0_outfifo_reset_n   => inst19_wfm_0_outfifo_reset_n,
+      wfm_0_outfifo_wrreq     => inst19_wfm_0_outfifo_wrreq,
+      wfm_0_outfifo_data      => inst19_wfm_0_outfifo_data,
+      wfm_0_outfifo_wrusedw   => inst6_tx_fifo_1_wrusedw,
       
       ----------------WFM port 1------------------
       from_fpgacfg_1          => inst0_from_fpgacfg_2,
@@ -1515,11 +1526,10 @@ begin
       wfm_1_infifo_rdempty    => '1',
       wfm_1_infifo_rdusedw    => (others=>'0'),
       --outfifo   
-      wfm_1_outfifo_rclk      => inst1_pll_0_c1,
-      wfm_1_Aiq_h             => open, 
-      wfm_1_Aiq_l             => open, 
-      wfm_1_Biq_h             => open, 
-      wfm_1_Biq_l             => open, 
+      wfm_1_outfifo_reset_n   => open,
+      wfm_1_outfifo_wrreq     => open,
+      wfm_1_outfifo_data      => open,
+      wfm_1_outfifo_wrusedw   => (others=>'0'),
 
       ---------------------External memory signals
       mem_a                   => DDR3_BOT_A,       -- memory.mem_a
