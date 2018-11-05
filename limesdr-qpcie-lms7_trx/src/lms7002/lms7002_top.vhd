@@ -95,16 +95,23 @@ architecture arch of lms7002_top is
 signal inst2_diq_h : std_logic_vector (g_IQ_WIDTH downto 0); 
 signal inst2_diq_l : std_logic_vector (g_IQ_WIDTH downto 0); 
 
-signal rx_smpl_cmp_start_sync : std_logic;
+signal rx_smpl_cmp_start_sync    : std_logic;
 --inst0
-signal inst0_reset_n : std_logic;
+signal inst0_reset_n             : std_logic;
 
-signal int_mode         : std_logic;    
-signal int_trxiqpulse   : std_logic;   
-signal int_ddr_en       : std_logic;
-signal int_mimo_en      : std_logic;
-signal int_ch_en        : std_logic_vector(1 downto 0);
-signal int_fidm         : std_logic;
+--inst1
+signal inst1_fifo_0_reset_n      : std_logic;
+signal inst1_fifo_1_reset_n      : std_logic;
+signal inst1_clk_2x_reset_n      : std_logic;
+
+signal int_mode                  : std_logic;    
+signal int_trxiqpulse            : std_logic;   
+signal int_ddr_en                : std_logic;
+signal int_mimo_en               : std_logic;
+signal int_ch_en                 : std_logic_vector(1 downto 0);
+signal int_fidm                  : std_logic;
+
+
   
 begin
 
@@ -113,7 +120,18 @@ begin
    
    sync_reg1 : entity work.sync_reg 
    port map(MCLK2, '1', rx_smpl_cmp_start, rx_smpl_cmp_start_sync);
-  
+   
+   sync_reg2 : entity work.sync_reg 
+   port map(tx_fifo_0_wrclk, tx_fifo_0_reset_n, '1', inst1_fifo_0_reset_n);
+   
+   sync_reg3 : entity work.sync_reg 
+   port map(tx_fifo_1_wrclk, tx_fifo_1_reset_n, '1', inst1_fifo_1_reset_n);
+   
+   -- clk_2x is held in reset only when both fifos are in reset
+   sync_reg4 : entity work.sync_reg 
+   port map(MCLK1_2x, (inst1_fifo_0_reset_n OR inst1_fifo_1_reset_n), '1', inst1_clk_2x_reset_n);
+   
+    
 -- ----------------------------------------------------------------------------
 -- RX interface
 -- ----------------------------------------------------------------------------
@@ -171,8 +189,9 @@ inst1_lms7002_tx : entity work.lms7002_tx
       )
    port map(
       clk                  => MCLK1,
-      clk_2x               => MCLK1_2x,
       reset_n              => tx_reset_n,
+      clk_2x               => MCLK1_2x,
+      clk_2x_reset_n       => inst1_clk_2x_reset_n,
       mem_reset_n          => mem_reset_n,
       from_memcfg          => from_memcfg,
       
@@ -196,13 +215,13 @@ inst1_lms7002_tx : entity work.lms7002_tx
       tx_src_sel           => from_fpgacfg.wfm_play,  -- 0 - FIFO, 1 - diq_h/diq_l
       --TX sample FIFO ports 
       fifo_0_wrclk         => tx_fifo_0_wrclk,
-      fifo_0_reset_n       => tx_fifo_0_reset_n,
+      fifo_0_reset_n       => inst1_fifo_0_reset_n,
       fifo_0_wrreq         => tx_fifo_0_wrreq,
       fifo_0_data          => tx_fifo_0_data,
       fifo_0_wrfull        => tx_fifo_0_wrfull,
       fifo_0_wrusedw       => tx_fifo_0_wrusedw,
       fifo_1_wrclk         => tx_fifo_1_wrclk,
-      fifo_1_reset_n       => tx_fifo_1_reset_n,
+      fifo_1_reset_n       => inst1_fifo_1_reset_n,
       fifo_1_wrreq         => tx_fifo_1_wrreq,
       fifo_1_data          => tx_fifo_1_data,
       fifo_1_wrfull        => tx_fifo_1_wrfull,

@@ -31,8 +31,9 @@ entity lms7002_tx is
       );
    port (
       clk                  : in  std_logic;
-      clk_2x               : in  std_logic;
       reset_n              : in  std_logic;
+      clk_2x               : in  std_logic;
+      clk_2x_reset_n       : in  std_logic;      
       mem_reset_n          : in  std_logic;
       from_memcfg          : in  t_FROM_MEMCFG;
       --Mode settings
@@ -186,7 +187,7 @@ begin
    inst2_cfir_top : entity work.cfir_top
    port map(
       clk         => clk_2x,
-      reset_n     => reset_n,
+      reset_n     => clk_2x_reset_n,
       mem_reset_n => mem_reset_n,
       from_memcfg => from_memcfg,
       
@@ -213,7 +214,7 @@ begin
       show_ahead     => "OFF"
   ) 
    port map(
-      reset_n  => reset_n,
+      reset_n  => clk_2x_reset_n,
       wrclk    => clk_2x,
       wrreq    => inst2_data_valid AND (NOT inst3_wrfull),
       data     => inst2_diq_out,

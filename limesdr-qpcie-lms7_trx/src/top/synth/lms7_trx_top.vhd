@@ -1097,7 +1097,7 @@ begin
       -- Internal TX ports
       tx_reset_n           => inst1_lms1_txpll_locked,
       tx_fifo_0_wrclk      => inst1_lms1_txpll_c1,
-      tx_fifo_0_reset_n    => inst1_lms1_txpll_locked,
+      tx_fifo_0_reset_n    => inst0_from_fpgacfg_mod_0.rx_en,
       tx_fifo_0_wrreq      => inst7_tx_smpl_fifo_wrreq,
       tx_fifo_0_data       => inst7_tx_smpl_fifo_data,
       tx_fifo_0_wrfull     => inst6_tx_fifo_0_wrfull,
