@@ -30,24 +30,23 @@ entity wfm_player is
       avl_rd_latency_words       : integer := 32;
       avl_traffic_gen_buff_size  : integer := 16;
          
-      wfm_infifo_wrusedw_width   : integer := 11;
-      wfm_infifo_wdata_width     : integer := 32;
+      wfm_infifo_rdusedw_width   : integer := 11;
+      wfm_infifo_rdata_width     : integer := 32;
       
-      wfm_outfifo_rdusedw_width  : integer := 11;
-      wfm_outfifo_rdata_width    : integer := 32
+      wfm_outfifo_wrusedw_width  : integer := 9
    );
    port (
 
-      clk                        : in std_logic;
-      reset_n                    : in std_logic;
+      clk                        : in  std_logic;
+      reset_n                    : in  std_logic;
      
       --wfm player control signals
-      wfm_load                   : in std_logic;
-      wfm_play_stop              : in std_logic;
-      wfm_sample_width           : in std_logic_vector(1 downto 0); --"10"-12bit, "01"-14bit, "00"-16bit;
+      wfm_load                   : in  std_logic;
+      wfm_play_stop              : in  std_logic;
+      wfm_sample_width           : in  std_logic_vector(1 downto 0); --"10"-12bit, "01"-14bit, "00"-16bit;
       
       --Avalon interface to external memory
-      avl_ready                  : in std_logic;
+      avl_ready                  : in  std_logic;
       avl_write_req              : out std_logic;
       avl_read_req               : out std_logic;
       avl_burstbegin             : out std_logic;
@@ -55,24 +54,20 @@ entity wfm_player is
       avl_size                   : out std_logic_vector(avl_burst_count_width-1 downto 0);
       avl_wdata                  : out std_logic_vector(avl_data_width-1 downto 0);
       avl_be                     : out std_logic_vector(avl_be_width-1 downto 0);
-      avl_rddata                 : in std_logic_vector(avl_data_width-1 downto 0);
-      avl_rddata_valid           : in std_logic;
+      avl_rddata                 : in  std_logic_vector(avl_data_width-1 downto 0);
+      avl_rddata_valid           : in  std_logic;
       
       --wfm infifo wfm_data -> wfm_infifo -> external memory
-      wfm_infifo_wclk            : in std_logic;
-      wfm_infifo_reset_n         : in std_logic;
-      wfm_infifo_wrreq           : in std_logic;
-      wfm_infifo_wdata           : in std_logic_vector(wfm_infifo_wdata_width-1 downto 0);
-      wfm_infifo_wfull           : out std_logic;
-      wfm_infifo_wrusedw         : out std_logic_vector(wfm_infifo_wrusedw_width-1 downto 0);
+      wfm_infifo_rdata           : in  std_logic_vector(wfm_infifo_rdata_width-1 downto 0);
+      wfm_infifo_rdreq           : out std_logic;
+      wfm_infifo_rdempty         : in  std_logic;
+      wfm_infifo_rdusedw         : in  std_logic_vector(wfm_infifo_rdusedw_width-1 downto 0);
       
       --wfm outfifo external memory -> wfm_outfifo -> wfm_data
-      wfm_outfifo_rclk           : in std_logic;
-      wfm_outfifo_reset_n        : in std_logic;
-      wfm_outfifo_rdreq          : in std_logic;
-      wfm_outfifo_q              : out std_logic_vector(wfm_outfifo_rdata_width-1 downto 0);
-      wfm_outfifo_rdempty        : out std_logic;
-      wfm_outfifo_rdusedw        : out std_logic_vector(wfm_outfifo_rdusedw_width-1 downto 0)
+      wfm_outfifo_reset_n        : out std_logic;
+      wfm_outfifo_wrreq          : out std_logic;
+      wfm_outfifo_data           : out std_logic_vector(127 downto 0);
+      wfm_outfifo_wrusedw        : in  std_logic_vector(wfm_outfifo_wrusedw_width-1 downto 0)
       
       );
 end wfm_player;
@@ -86,18 +81,8 @@ architecture arch of wfm_player is
 signal wfm_load_rising        : std_logic;
 --inst0 signals   
 signal inst0_rdempty          : std_logic;
-signal inst0_rdusedw          : std_logic_vector(FIFORD_SIZE(wfm_infifo_wdata_width, 
-                                                         avl_data_width, 
-                                                         wfm_infifo_wrusedw_width)-1 downto 0);
 signal inst0_q                : std_logic_vector(avl_data_width-1 downto 0);
-   
---inst1
-signal inst1_wrfull           : std_logic;
-signal inst1_wrempty          : std_logic;
-signal inst1_wrusedw          : std_logic_vector(FIFOWR_SIZE (128, 
-                                                      wfm_outfifo_rdata_width, 
-                                                      wfm_outfifo_rdusedw_width)-1 downto 0);
-                                                      
+                                                       
 --inst2                                                      
 signal inst2_do_write         : std_logic;
 signal inst2_do_read          : std_logic;                                            
@@ -119,20 +104,19 @@ signal inst3_data_out         : std_logic_vector(127 downto 0);
 
 type state_type is (idle, check_wfm_infifo, do_write, do_burst_write, do_write_idle, check_wfm_outfifo, do_read);
 signal current_state, next_state : state_type;
-
-constant wfm_outfifo_wrwords_size   : integer := 2**(FIFOWR_SIZE(128, 
-                                                      wfm_outfifo_rdata_width, 
-                                                      wfm_outfifo_rdusedw_width)-1)-1;
+                                                      
+constant wfm_outfifo_wrwords_size   : integer := 2**(wfm_outfifo_wrusedw_width-1)-1;                                                      
+                                                      
                                                       
 constant wfm_outfifo_wrwords_limit  : integer := wfm_outfifo_wrwords_size - avl_rd_latency_words - avl_traffic_gen_buff_size;
                                                          
-signal burst_cnt_max                : std_logic_vector(FIFORD_SIZE(wfm_infifo_wdata_width, 
+signal burst_cnt_max                : std_logic_vector(FIFORD_SIZE(wfm_infifo_rdata_width, 
                                                          avl_data_width, 
-                                                         wfm_infifo_wrusedw_width)-1 downto 0);
+                                                         wfm_infifo_rdusedw_width)-1 downto 0);
                                                          
-signal burst_wr_cnt                 : unsigned(FIFORD_SIZE(wfm_infifo_wdata_width, 
+signal burst_wr_cnt                 : unsigned(FIFORD_SIZE(wfm_infifo_rdata_width, 
                                                          avl_data_width, 
-                                                         wfm_infifo_wrusedw_width)-1 downto 0);
+                                                         wfm_infifo_rdusedw_width)-1 downto 0);
                                                          
 signal do_write_idle_cnt            : unsigned(7 downto 0);
 
@@ -179,59 +163,7 @@ begin
 -- ----------------------------------------------------------------------------   
    --wfm infifo buffer (wfm_data -> wfm_infifo -> external memory)
 -- ----------------------------------------------------------------------------
-   wfm_infifo_inst0  : entity work.fifo_inst
-   generic map(
-      dev_family     => dev_family,
-      wrwidth        => wfm_infifo_wdata_width,
-      wrusedw_witdth => wfm_infifo_wrusedw_width, 
-      rdwidth        => avl_data_width,
-      rdusedw_width  => FIFORD_SIZE(wfm_infifo_wdata_width, avl_data_width, wfm_infifo_wrusedw_width),
-      show_ahead     => "ON"
-   )  
-  port map(
-      reset_n        => wfm_infifo_reset_n,
-      wrclk          => wfm_infifo_wclk,
-      wrreq          => wfm_infifo_wrreq,
-      data           => wfm_infifo_wdata,
-      wrfull         => wfm_infifo_wfull,
-      wrempty        => open,
-      wrusedw        => wfm_infifo_wrusedw,
-      rdclk          => clk,
-      rdreq          => inst2_wdata_req,
-      q              => inst0_q,
-      rdempty        => inst0_rdempty,
-      rdusedw        => inst0_rdusedw   
-   );
-   
--- ----------------------------------------------------------------------------   
-   --wfm outfifo buffer (external memory -> wfm_outfifo -> wfm_data)
--- ----------------------------------------------------------------------------
-   wfm_outfifo_inst1  : entity work.fifo_inst
-   generic map(
-      dev_family     => dev_family,
---      wrwidth        => avl_data_width,
---      wrusedw_witdth => FIFOWR_SIZE (avl_data_width, wfm_outfifo_rdata_width, wfm_outfifo_rdusedw_width),
-      wrwidth        => 128,
-      wrusedw_witdth => FIFOWR_SIZE(128, wfm_outfifo_rdata_width, wfm_outfifo_rdusedw_width), 
-      rdwidth        => wfm_outfifo_rdata_width,
-      rdusedw_width  => wfm_outfifo_rdusedw_width,
-      show_ahead     => "OFF"
-   )  
-  port map(
-      reset_n        => wfm_outfifo_reset_n,
-      wrclk          => clk,
-      wrreq          => inst3_data_out_valid,
-      data           => inst3_data_out,
-      wrfull         => inst1_wrfull,
-      wrempty        => inst1_wrempty,
-      wrusedw        => inst1_wrusedw,
-      rdclk          => wfm_outfifo_rclk,
-      rdreq          => wfm_outfifo_rdreq,
-      q              => wfm_outfifo_q,
-      rdempty        => wfm_outfifo_rdempty,
-      rdusedw        => wfm_outfifo_rdusedw   
-   );
-   
+   wfm_infifo_rdreq  <= inst2_wdata_req;
 
 -- ----------------------------------------------------------------------------
    --converts commands to Avalon interface signals
@@ -261,7 +193,7 @@ begin
       do_read              => inst2_do_read,
       write_addr           => inst2_write_addr,
       write_burstcount     => inst2_write_burstcount,
-      wdata                => inst0_q,
+      wdata                => wfm_infifo_rdata,
       be                   => inst2_be,
       read_addr            => inst2_read_addr,
       read_burstcount      => inst2_read_burstcount,
@@ -285,7 +217,7 @@ bit_unpack_64_inst3 : entity work.bit_unpack_64
   port map (
         --input ports 
         clk             => clk,
-        reset_n         => wfm_outfifo_reset_n,
+        reset_n         => wfm_play_stop,
         data_in         => avl_rddata,
         data_in_valid   => avl_rddata_valid,
         sample_width    => wfm_sample_width,
@@ -313,9 +245,9 @@ begin
       burst_cnt_max <= (others=>'0');
    elsif (clk'event AND clk='1') then 
       --by dropping LSb it is determined maximum burst transactions
-      burst_cnt_max <= '0' & inst0_rdusedw(FIFORD_SIZE(wfm_infifo_wdata_width, 
+      burst_cnt_max <= '0' & wfm_infifo_rdusedw(FIFORD_SIZE(wfm_infifo_rdata_width, 
                                                          avl_data_width, 
-                                                         wfm_infifo_wrusedw_width)-1 downto 1);
+                                                         wfm_infifo_rdusedw_width)-1 downto 1);
    end if;
 end process;
 
@@ -338,7 +270,7 @@ begin
 end process;
 
 --A write request can be issued only when avalon_traffic_gen module is ready
-process(current_state, inst2_ready, inst0_rdempty)
+process(current_state, inst2_ready, wfm_infifo_rdempty)
 begin
    if (current_state = do_write OR current_state = do_burst_write )AND inst2_ready = '1' then 
       inst2_do_write <= '1';
@@ -475,14 +407,14 @@ end process;
 -- ----------------------------------------------------------------------------
 --state machine combo
 -- ----------------------------------------------------------------------------
-fsm : process(current_state,wfm_load, wfm_play_stop, inst0_rdempty, inst2_ready, 
-               inst1_wrusedw, burst_cnt_max, burst_wr_cnt, do_write_idle_cnt) begin
+fsm : process(current_state,wfm_load, wfm_play_stop, wfm_infifo_rdempty, inst2_ready, 
+               wfm_outfifo_wrusedw, burst_cnt_max, burst_wr_cnt, do_write_idle_cnt) begin
    next_state <= current_state;
    case current_state is
    
       --idle state
       when idle =>               
-         if wfm_load = '1' OR inst0_rdempty = '0' then
+         if wfm_load = '1' OR wfm_infifo_rdempty = '0' then
             next_state <= check_wfm_infifo;             
          elsif wfm_play_stop = '1' then
             next_state <= check_wfm_outfifo;
@@ -492,7 +424,7 @@ fsm : process(current_state,wfm_load, wfm_play_stop, inst0_rdempty, inst2_ready,
          
       --check if we have data for burst write or single write operation   
       when check_wfm_infifo =>    
-         if inst0_rdempty = '0' AND inst2_ready = '1' then
+         if wfm_infifo_rdempty = '0' AND inst2_ready = '1' then
             if unsigned(burst_cnt_max) > 0 then
                next_state <= do_burst_write;
             else 
@@ -529,7 +461,7 @@ fsm : process(current_state,wfm_load, wfm_play_stop, inst0_rdempty, inst2_ready,
       
       --check that there is enough space to read from memory to FIFO
       when check_wfm_outfifo =>   
-         if unsigned(inst1_wrusedw) < wfm_outfifo_wrwords_limit AND inst2_ready = '1' then 
+         if unsigned(wfm_outfifo_wrusedw) < wfm_outfifo_wrwords_limit AND inst2_ready = '1' then 
             next_state <= do_read;
          else
             next_state <= idle;
@@ -540,7 +472,7 @@ fsm : process(current_state,wfm_load, wfm_play_stop, inst0_rdempty, inst2_ready,
          if wfm_load = '1' OR wfm_play_stop = '0' then 
             next_state <= idle;
          else 
-            if unsigned(inst1_wrusedw) < wfm_outfifo_wrwords_limit AND inst2_ready = '1' then 
+            if unsigned(wfm_outfifo_wrusedw) < wfm_outfifo_wrwords_limit AND inst2_ready = '1' then 
                next_state <= do_read;
             else 
                next_state <= check_wfm_outfifo;
@@ -552,6 +484,13 @@ fsm : process(current_state,wfm_load, wfm_play_stop, inst0_rdempty, inst2_ready,
          
    end case;
 end process;
+
+-- ----------------------------------------------------------------------------
+-- Output ports
+-- ----------------------------------------------------------------------------
+wfm_outfifo_reset_n <= wfm_play_stop;
+wfm_outfifo_wrreq   <= inst3_data_out_valid;
+wfm_outfifo_data    <= inst3_data_out;
   
 end arch;   
 

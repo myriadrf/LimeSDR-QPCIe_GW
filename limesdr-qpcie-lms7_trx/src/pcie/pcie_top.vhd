@@ -248,6 +248,7 @@ architecture arch of pcie_top is
    signal inst1_user_w_stream0_write_32_full    :  std_logic;
    signal inst1_user_w_stream0_write_32_data    :  std_logic_vector(31 DOWNTO 0);
    signal inst1_user_w_stream0_write_32_open    :  std_logic;
+   signal inst1_user_w_stream0_write_32_open_r  :  std_logic;
    signal inst1_user_r_stream1_read_32_rden     :  std_logic;
    signal inst1_user_r_stream1_read_32_empty    :  std_logic;
    signal inst1_user_r_stream1_read_32_data     :  std_logic_vector(31 DOWNTO 0);
@@ -535,6 +536,17 @@ begin
    );
    
    
+   -- internal Xillybus registers
+   proc_xillybus_regs : process(bus_clk, reset_n)
+   begin
+      if reset_n = '0' then 
+         inst1_user_w_stream0_write_32_open_r <= '0';
+      elsif (bus_clk'event AND bus_clk='1') then 
+         inst1_user_w_stream0_write_32_open_r <= inst1_user_w_stream0_write_32_open;
+      end if;
+   end process;
+   
+   
    pcie_bus_clk<=bus_clk;
 	
 	inst1_user_w_stream0_write_32_full <= inst2_wrfull when H2F_S0_sel_sync = '0' else inst4_wrfull;
@@ -599,7 +611,20 @@ begin
    );
    
    --For Stream endpoint, Host->FPGA
-   inst3_reset_n  <= inst1_user_w_stream0_write_32_open OR H2F_S0_1_sclrn;  
+   proc_inst3_reset : process(bus_clk, reset_n)
+   begin
+      if reset_n = '0' then 
+         inst3_reset_n <= '0';
+      elsif (bus_clk'event AND bus_clk='1') then 
+         if inst1_user_w_stream0_write_32_open_r = '0' AND 
+            inst1_user_w_stream0_write_32_open = '1' then 
+            inst3_reset_n <= '0';
+         else
+            inst3_reset_n <= '1';
+         end if;
+      end if;
+   end process;
+    
    inst3_pct_wr   <= inst1_user_w_stream0_write_32_wren when H2F_S0_sel_sync = '1' else '0'; 
    
    -- This module takes only IQ data from packet, and discards packet header

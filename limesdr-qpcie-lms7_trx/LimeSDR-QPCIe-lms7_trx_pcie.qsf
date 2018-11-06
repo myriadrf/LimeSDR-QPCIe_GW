@@ -425,7 +425,7 @@ set_location_assignment PIN_Y20 -to DDR3_BOT_DQS_P[2]
 set_location_assignment PIN_AA20 -to DDR3_BOT_DQS_N[2]
 set_location_assignment PIN_AJ27 -to DDR3_BOT_DM[3]
 set_location_assignment PIN_AJ23 -to DDR3_BOT_DM[2]
-set_global_assignment -name TIMEQUEST_MULTICORNER_ANALYSIS ON
+set_global_assignment -name TIMING_ANALYZER_MULTICORNER_ANALYSIS ON
 set_global_assignment -name NUM_PARALLEL_PROCESSORS ALL
 set_location_assignment PIN_V30 -to FPGA_SPI0_MISO_LMS2
 set_location_assignment PIN_R30 -to FPGA_SPI0_MISO_LMS1

@@ -48,16 +48,14 @@ entity wfm_player_x2_top is
       avl_1_traffic_gen_buff_size   : integer := 16;
       
       -- wfm 0 player parameters
-      wfm_0_infifo_wrusedw_width    : integer := 11;
-      wfm_0_infifo_wdata_width      : integer := 32;      
-      wfm_0_outfifo_rdusedw_width   : integer := 11;
-      wfm_0_outfifo_rdata_width     : integer := 32;
+      wfm_0_infifo_rdusedw_width    : integer := 11;
+      wfm_0_infifo_rdata_width      : integer := 64;      
+      wfm_0_outfifo_wrusedw_width   : integer := 9;
       
       -- wfm 1 player parameters
-      wfm_1_infifo_wrusedw_width    : integer := 11;
-      wfm_1_infifo_wdata_width      : integer := 32;      
-      wfm_1_outfifo_rdusedw_width   : integer := 11;
-      wfm_1_outfifo_rdata_width     : integer := 32;
+      wfm_1_infifo_rdusedw_width    : integer := 11;
+      wfm_1_infifo_rdata_width      : integer := 64;      
+      wfm_1_outfifo_wrusedw_width   : integer := 9;
       
       wfm_0_iq_width                : integer := 16;
       wfm_1_iq_width                : integer := 16
@@ -71,38 +69,28 @@ entity wfm_player_x2_top is
       ----------------WFM port 0------------------
       from_fpgacfg_0          : in     t_FROM_FPGACFG;
       --infifo 
-      wfm_0_infifo_wclk       : in     std_logic;
-      wfm_0_infifo_reset_n    : in     std_logic;
-      wfm_0_infifo_wrreq      : in     std_logic := '0';
-      wfm_0_infifo_wdata      : in     std_logic_vector(wfm_0_infifo_wdata_width-1 downto 0);
-      wfm_0_infifo_wfull      : out    std_logic;
-      wfm_0_infifo_wrusedw    : out    std_logic_vector(wfm_0_infifo_wrusedw_width-1 downto 0);
+      wfm_0_infifo_rdreq      : out    std_logic := '0';
+      wfm_0_infifo_rdata      : in     std_logic_vector(wfm_0_infifo_rdata_width-1 downto 0);
+      wfm_0_infifo_rdempty    : in     std_logic;
+      wfm_0_infifo_rdusedw    : in     std_logic_vector(wfm_0_infifo_rdusedw_width-1 downto 0);
       --outfifo   
-      wfm_0_outfifo_rclk      : in     std_logic;
-      wfm_0_outfifo_reset_n   : in     std_logic;
-      wfm_0_xen               : in     std_logic := '1'; -- wfm 0 data read enable
-      wfm_0_Aiq_h             : out    std_logic_vector(wfm_0_iq_width downto 0);
-      wfm_0_Aiq_l             : out    std_logic_vector(wfm_0_iq_width downto 0);
-      wfm_0_Biq_h             : out    std_logic_vector(wfm_0_iq_width downto 0);
-      wfm_0_Biq_l             : out    std_logic_vector(wfm_0_iq_width downto 0);
+      wfm_0_outfifo_reset_n   : out    std_logic;
+      wfm_0_outfifo_wrreq     : out    std_logic;
+      wfm_0_outfifo_data      : out    std_logic_vector(127 downto 0);
+      wfm_0_outfifo_wrusedw   : in     std_logic_vector(wfm_0_outfifo_wrusedw_width-1 downto 0);
       
       ----------------WFM port 1------------------
       from_fpgacfg_1          : in     t_FROM_FPGACFG;
       --infifo 
-      wfm_1_infifo_wclk       : in     std_logic;
-      wfm_1_infifo_reset_n    : in     std_logic;
-      wfm_1_infifo_wrreq      : in     std_logic := '0';
-      wfm_1_infifo_wdata      : in     std_logic_vector(wfm_1_infifo_wdata_width-1 downto 0);
-      wfm_1_infifo_wfull      : out    std_logic;
-      wfm_1_infifo_wrusedw    : out    std_logic_vector(wfm_1_infifo_wrusedw_width-1 downto 0);
+      wfm_1_infifo_rdreq      : out    std_logic := '0';
+      wfm_1_infifo_rdata      : in     std_logic_vector(wfm_1_infifo_rdata_width-1 downto 0);
+      wfm_1_infifo_rdempty    : in     std_logic;
+      wfm_1_infifo_rdusedw    : in     std_logic_vector(wfm_1_infifo_rdusedw_width-1 downto 0);
       --outfifo   
-      wfm_1_outfifo_rclk      : in     std_logic;
-      wfm_1_outfifo_reset_n   : in     std_logic;
-      wfm_1_xen               : in     std_logic := '1'; -- wfm 0 data read enable
-      wfm_1_Aiq_h             : out    std_logic_vector(wfm_1_iq_width downto 0);
-      wfm_1_Aiq_l             : out    std_logic_vector(wfm_1_iq_width downto 0);
-      wfm_1_Biq_h             : out    std_logic_vector(wfm_1_iq_width downto 0);
-      wfm_1_Biq_l             : out    std_logic_vector(wfm_1_iq_width downto 0);
+      wfm_1_outfifo_reset_n   : out    std_logic;
+      wfm_1_outfifo_wrreq     : out    std_logic;
+      wfm_1_outfifo_data      : out    std_logic_vector(127 downto 0);
+      wfm_1_outfifo_wrusedw   : in     std_logic_vector(wfm_1_outfifo_wrusedw_width-1 downto 0);
 
       ---------------------External memory signals
       mem_a                   : out    std_logic_vector(mem_addr_width-1 downto 0);      --             memory.mem_a
@@ -156,9 +144,6 @@ signal inst0_avl_size                  : std_logic_vector(avl_0_burst_count_widt
 signal inst0_avl_wdata                 : std_logic_vector(avl_0_data_width-1 downto 0);
 signal inst0_avl_be                    : std_logic_vector(avl_0_be_width-1 downto 0);
 signal inst0_wfm_infifo_reset_n        : std_logic;
-signal inst0_wfm_outfifo_q             : std_logic_vector(wfm_0_outfifo_rdata_width-1 downto 0);
-signal inst0_wfm_outfifo_rdempty       : std_logic;
-signal inst0_wfm_outfifo_rdusedw       : std_logic_vector(wfm_0_outfifo_rdusedw_width-1 downto 0);
 
 --inst1
 signal inst1_reset_n                   : std_logic;
@@ -170,10 +155,6 @@ signal inst1_avl_addr                  : std_logic_vector(avl_1_addr_width-1 dow
 signal inst1_avl_size                  : std_logic_vector(avl_1_burst_count_width-1 downto 0);
 signal inst1_avl_wdata                 : std_logic_vector(avl_1_data_width-1 downto 0);
 signal inst1_avl_be                    : std_logic_vector(avl_1_be_width-1 downto 0);
-signal inst1_wfm_outfifo_q             : std_logic_vector(wfm_1_outfifo_rdata_width-1 downto 0);
-signal inst1_wfm_outfifo_rdempty       : std_logic;
-signal inst1_wfm_outfifo_rdreq         : std_logic;
-signal inst1_wfm_outfifo_rdusedw       : std_logic_vector(wfm_1_outfifo_rdusedw_width-1 downto 0);
 
 --inst2
 --Avalon port 0
@@ -310,15 +291,30 @@ component ddr3_av_2x32 is
 end component;
 begin
 
+wfm_0_load           <= from_fpgacfg_0.wfm_load;
+wfm_0_play_stop      <= from_fpgacfg_0.wfm_play;
+wfm_0_sample_width   <= "10";
+wfm_0_fr_start       <= '0';
+wfm_0_ch_en          <= "01";
+wfm_0_mimo_en        <= '1';
+wfm_0_intrlv_dis     <= '0';
+
+wfm_1_load           <= from_fpgacfg_1.wfm_load;
+wfm_1_play_stop      <= from_fpgacfg_1.wfm_play;
+wfm_1_sample_width   <= "10";
+wfm_1_fr_start       <= '0';
+wfm_1_ch_en          <= "01";
+wfm_1_mimo_en        <= '1';
+wfm_1_intrlv_dis     <= '0';
+
 
 --to force player to stop reading samples when loading 
+                                   
 wfm_0_play_stop_int <= '1' when (   wfm_0_play_stop = '1'      AND 
-                                    wfm_0_load = '0'           AND 
-                                    wfm_0_infifo_wrreq = '0')        else '0';
+                                    wfm_0_load = '0')        else '0';
                                     
 wfm_1_play_stop_int <= '1' when (   wfm_1_play_stop = '1'      AND 
-                                    wfm_1_load = '0'           AND 
-                                    wfm_1_infifo_wrreq = '0')        else '0';
+                                    wfm_1_load = '0')        else '0';                                    
       
 -- ----------------------------------------------------------------------------
 -- Signals synchronised to inst2_afi_half_clk
@@ -355,42 +351,8 @@ edge_pulse1 : entity work.edge_pulse(arch_rising)
       pulse_out   => wfm_1_load_inst2_afi_half_clk_rising
    );
    
-inst1_reset_n              <= not wfm_1_load_inst2_afi_half_clk_rising;
-
-
--- ----------------------------------------------------------------------------
--- Signals synchronised to wfm_0_infifo_wclk
--- ----------------------------------------------------------------------------
-sync_reg4 : entity work.sync_reg 
-port map(wfm_0_infifo_wclk, '1', wfm_0_load, wfm_0_load_wfm_0_infifo_wclk);
-
-edge_pulse2 : entity work.edge_pulse(arch_rising)
-   port map(
-      clk         => wfm_0_infifo_wclk,
-      reset_n     => '1',
-      sig_in      => wfm_0_load_wfm_0_infifo_wclk,
-      pulse_out   => wfm_0_load_wfm_0_infifo_wclk_rising
-   );
-   
-inst0_wfm_infifo_reset_n   <= not wfm_0_load_wfm_0_infifo_wclk_rising;
-
--- ----------------------------------------------------------------------------
--- Signals synchronised to wfm_0_infifo_wclk
--- ----------------------------------------------------------------------------
-sync_reg5 : entity work.sync_reg 
-port map(wfm_1_infifo_wclk, '1', wfm_1_load, wfm_1_load_wfm_1_infifo_wclk);
-
-edge_pulse3 : entity work.edge_pulse(arch_rising)
-   port map(
-      clk         => wfm_1_infifo_wclk,
-      reset_n     => '1',
-      sig_in      => wfm_1_load_wfm_1_infifo_wclk,
-      pulse_out   => wfm_1_load_wfm_1_infifo_wclk_rising
-   );
-
-inst1_wfm_infifo_reset_n <= not wfm_1_load_wfm_1_infifo_wclk_rising;
-
-   
+   inst1_reset_n              <= not wfm_1_load_inst2_afi_half_clk_rising;
+  
   wfm_player_inst0 : entity work.wfm_player
    generic map(
       dev_family                 => dev_family,
@@ -403,11 +365,10 @@ inst1_wfm_infifo_reset_n <= not wfm_1_load_wfm_1_infifo_wclk_rising;
       avl_rd_latency_words       => avl_0_rd_latency_words,
       avl_traffic_gen_buff_size  => avl_0_traffic_gen_buff_size,
 
-      wfm_infifo_wrusedw_width   => wfm_0_infifo_wrusedw_width,
-      wfm_infifo_wdata_width     => wfm_0_infifo_wdata_width,
+      wfm_infifo_rdusedw_width   => wfm_0_infifo_rdusedw_width,
+      wfm_infifo_rdata_width     => wfm_0_infifo_rdata_width,
 
-      wfm_outfifo_rdusedw_width  => wfm_0_outfifo_rdusedw_width,
-      wfm_outfifo_rdata_width    => wfm_0_outfifo_rdata_width
+      wfm_outfifo_wrusedw_width  => wfm_0_outfifo_wrusedw_width
    )
    port map(
 
@@ -432,21 +393,16 @@ inst1_wfm_infifo_reset_n <= not wfm_1_load_wfm_1_infifo_wclk_rising;
       avl_rddata_valid           => inst2_avl_rdata_valid_0,
       
       --wfm infifo wfm_data -> wfm_infifo -> external memory
-      wfm_infifo_wclk            => wfm_0_infifo_wclk,
-      wfm_infifo_reset_n         => inst0_wfm_infifo_reset_n,
-      wfm_infifo_wrreq           => wfm_0_infifo_wrreq,
-      wfm_infifo_wdata           => wfm_0_infifo_wdata,
-      wfm_infifo_wfull           => wfm_0_infifo_wfull,
-      wfm_infifo_wrusedw         => wfm_0_infifo_wrusedw,
+      wfm_infifo_rdreq           => wfm_0_infifo_rdreq,
+      wfm_infifo_rdata           => wfm_0_infifo_rdata,
+      wfm_infifo_rdempty         => wfm_0_infifo_rdempty,
+      wfm_infifo_rdusedw         => wfm_0_infifo_rdusedw,
       
       --wfm outfifo external memory -> wfm_outfifo -> wfm_data
-      wfm_outfifo_rclk           => wfm_0_outfifo_rclk,
-      wfm_outfifo_reset_n        => wfm_0_play_stop_inst2_afi_half_clk,
-      wfm_outfifo_rdreq          => inst3_fifo_rdreq,
-      wfm_outfifo_q              => inst0_wfm_outfifo_q,
-      wfm_outfifo_rdempty        => inst0_wfm_outfifo_rdempty,
-      wfm_outfifo_rdusedw        => inst0_wfm_outfifo_rdusedw
-      
+      wfm_outfifo_reset_n        => wfm_0_outfifo_reset_n,
+      wfm_outfifo_wrreq          => wfm_0_outfifo_wrreq,
+      wfm_outfifo_data           => wfm_0_outfifo_data,   
+      wfm_outfifo_wrusedw        => wfm_0_outfifo_wrusedw
       );
       
       
@@ -462,11 +418,10 @@ inst1_wfm_infifo_reset_n <= not wfm_1_load_wfm_1_infifo_wclk_rising;
       avl_rd_latency_words       => avl_1_rd_latency_words,
       avl_traffic_gen_buff_size  => avl_1_traffic_gen_buff_size,
 
-      wfm_infifo_wrusedw_width   => wfm_1_infifo_wrusedw_width,
-      wfm_infifo_wdata_width     => wfm_1_infifo_wdata_width,
+      wfm_infifo_rdusedw_width   => wfm_1_infifo_rdusedw_width,
+      wfm_infifo_rdata_width     => wfm_1_infifo_rdata_width,
 
-      wfm_outfifo_rdusedw_width  => wfm_1_outfifo_rdusedw_width,
-      wfm_outfifo_rdata_width    => wfm_1_outfifo_rdata_width
+      wfm_outfifo_wrusedw_width  => wfm_1_outfifo_wrusedw_width
    )
    port map(
 
@@ -491,21 +446,16 @@ inst1_wfm_infifo_reset_n <= not wfm_1_load_wfm_1_infifo_wclk_rising;
       avl_rddata_valid           => inst2_avl_rdata_valid_1,
       
       --wfm infifo wfm_data -> wfm_infifo -> external memory
-      wfm_infifo_wclk            => wfm_1_infifo_wclk,
-      wfm_infifo_reset_n         => inst1_wfm_infifo_reset_n,
-      wfm_infifo_wrreq           => wfm_1_infifo_wrreq,
-      wfm_infifo_wdata           => wfm_1_infifo_wdata,
-      wfm_infifo_wfull           => wfm_1_infifo_wfull,
-      wfm_infifo_wrusedw         => wfm_1_infifo_wrusedw,
+      wfm_infifo_rdreq           => wfm_1_infifo_rdreq,
+      wfm_infifo_rdata           => wfm_1_infifo_rdata,
+      wfm_infifo_rdempty         => wfm_1_infifo_rdempty,
+      wfm_infifo_rdusedw         => wfm_1_infifo_rdusedw,
       
       --wfm outfifo external memory -> wfm_outfifo -> wfm_data
-      wfm_outfifo_rclk           => wfm_1_outfifo_rclk,
-      wfm_outfifo_reset_n        => wfm_1_play_stop_inst2_afi_half_clk,
-      wfm_outfifo_rdreq          => inst4_fifo_rdreq,
-      wfm_outfifo_q              => inst1_wfm_outfifo_q,
-      wfm_outfifo_rdempty        => inst1_wfm_outfifo_rdempty,
-      wfm_outfifo_rdusedw        => inst1_wfm_outfifo_rdusedw
-      
+      wfm_outfifo_reset_n        => wfm_1_outfifo_reset_n,
+      wfm_outfifo_wrreq          => wfm_1_outfifo_wrreq,
+      wfm_outfifo_data           => wfm_1_outfifo_data,   
+      wfm_outfifo_wrusedw        => wfm_1_outfifo_wrusedw     
       );
       
    inst2_soft_reset_n <= reset_n;
@@ -606,78 +556,8 @@ ext_mem_inst2 : ddr3_av_2x32
    inst2_mp_rfifo_reset_n_1_reset_n    <= inst2_local_cal_success;
    inst2_mp_wfifo_reset_n_1_reset_n    <= inst2_local_cal_success;
    
-   
-   
---fifo2diq_inst3 : entity work.fifo2diq
---   generic map( 
---      dev_family           => dev_family,
---      iq_width             => wfm_0_iq_width
---      )
---   port map(
---      clk                  => wfm_0_outfifo_rclk,
---      reset_n              => wfm_0_play_stop_inst2_afi_half_clk,
---      en                   => '1',
---      --Mode settings
---      mode                 => '0', -- JESD207: 1; TRXIQ: 0
---      trxiqpulse           => '0', -- trxiqpulse on: 1; trxiqpulse off: 0
---      ddr_en               => '1', -- DDR: 1; SDR: 0
---      mimo_en              => '1', -- SISO: 1; MIMO: 0
---      ch_en                => "11", --"11" - Ch. A, "10" - Ch. B, "11" - Ch. A and Ch. B. 
---      fidm                 => wfm_0_fr_start, -- External Frame ID mode. Frame start at fsync = 0, when 0. Frame start at fsync = 1, when 1.
---      par_mode_en          => '0', -- 1 - parallel data mode enabled, 0 - disabled
---      --Tx interface data 
---      DIQ                  => open,
---      fsync                => open,
---      DIQA_h               => wfm_0_Aiq_h,
---      DIQA_l               => wfm_0_Aiq_l,
---      DIQB_h               => wfm_0_Biq_h,
---      DIQB_l               => wfm_0_Biq_l,
---      --fifo ports 
---      fifo_rdempty         => inst0_wfm_outfifo_rdempty,
---      fifo_rdreq           => inst3_fifo_rdreq,
---      fifo_q               => inst3_fifo_q
---      );
-      
-      inst3_fifo_q <=   inst0_wfm_outfifo_q(63 downto 64-wfm_0_iq_width) & 
-                        inst0_wfm_outfifo_q(47 downto 48-wfm_0_iq_width) &
-                        inst0_wfm_outfifo_q(31 downto 32-wfm_0_iq_width) &
-                        inst0_wfm_outfifo_q(15 downto 16-wfm_0_iq_width);
-      
-      
---fifo2diq_inst4 : entity work.fifo2diq
---   generic map( 
---      dev_family           => dev_family,
---      iq_width             => wfm_1_iq_width
---      )
---   port map(
---      clk                  => wfm_1_outfifo_rclk,
---      reset_n              => wfm_1_play_stop_inst2_afi_half_clk,
---      en                   => '1',
---      --Mode settings
---      mode                 => '0', -- JESD207: 1; TRXIQ: 0
---      trxiqpulse           => '0', -- trxiqpulse on: 1; trxiqpulse off: 0
---      ddr_en               => '1', -- DDR: 1; SDR: 0
---      mimo_en              => '1', -- SISO: 1; MIMO: 0
---      ch_en                => "11", --"11" - Ch. A, "10" - Ch. B, "11" - Ch. A and Ch. B. 
---      fidm                 => wfm_1_fr_start, -- External Frame ID mode. Frame start at fsync = 0, when 0. Frame start at fsync = 1, when 1.
---      par_mode_en          => '1', -- 1 - parallel data mode enabled, 0 - disabled
---      --Tx interface data 
---      DIQ                  => open,
---      fsync                => open,
---      DIQA_h               => wfm_1_Aiq_h,
---      DIQA_l               => wfm_1_Aiq_l,
---      DIQB_h               => wfm_1_Biq_h,
---      DIQB_l               => wfm_1_Biq_l,
---      --fifo ports 
---      fifo_rdempty         => inst1_wfm_outfifo_rdempty,
---      fifo_rdreq           => inst4_fifo_rdreq,
---      fifo_q               => inst4_fifo_q
---      );
-
-inst4_fifo_q <=   inst1_wfm_outfifo_q(63 downto 64-wfm_1_iq_width) & 
-                  inst1_wfm_outfifo_q(47 downto 48-wfm_1_iq_width) &
-                  inst1_wfm_outfifo_q(31 downto 32-wfm_1_iq_width) &
-                  inst1_wfm_outfifo_q(15 downto 16-wfm_1_iq_width);      
+             
+   phy_clk <= inst2_afi_half_clk;
   
 end arch;   
 

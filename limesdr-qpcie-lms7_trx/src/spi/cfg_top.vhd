@@ -75,7 +75,9 @@ entity cfg_top is
       to_tamercfg          : in  t_TO_TAMERCFG;
       from_tamercfg        : out t_FROM_TAMERCFG;
       to_gnsscfg           : in  t_TO_GNSSCFG;
-      from_gnsscfg         : out t_FROM_GNSSCFG
+      from_gnsscfg         : out t_FROM_GNSSCFG;
+      to_memcfg            : in  t_TO_MEMCFG;
+      from_memcfg          : out t_FROM_MEMCFG
    );
 end cfg_top;
 
@@ -427,6 +429,10 @@ begin
    sdout <= inst0_0_sdout OR inst0_1_sdout OR inst0_2_sdout OR inst1_sdoutA OR 
             inst3_sdout OR inst4_0_sdout OR inst4_1_sdout OR inst5_sdout OR 
             inst6_sdout OR inst7_sdout OR inst8_sdout OR inst255_sdout;
+            
+            
+      inst255_to_memcfg <= to_memcfg;
+      from_memcfg       <= inst255_from_memcfg;
   
 end arch;   
 

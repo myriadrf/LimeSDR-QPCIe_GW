@@ -47,6 +47,7 @@ entity pll_top is
       lms1_txpll_drct_clk_en        : in  std_logic_vector(1 downto 0);
       lms1_txpll_c0                 : out std_logic;
       lms1_txpll_c1                 : out std_logic;
+      lms1_txpll_c2                 : out std_logic;
       lms1_txpll_locked             : out std_logic;
       -- LMS#1 RX PLL ports
       lms1_rxpll_inclk              : in  std_logic;
@@ -74,6 +75,7 @@ entity pll_top is
       lms2_txpll_drct_clk_en        : in  std_logic_vector(1 downto 0);
       lms2_txpll_c0                 : out std_logic;
       lms2_txpll_c1                 : out std_logic;
+      lms2_txpll_c2                 : out std_logic;
       lms2_txpll_locked             : out std_logic;
       -- LMS#2 RX PLL  0 ports
       lms2_rxpll_inclk              : in  std_logic;
@@ -217,6 +219,7 @@ begin
    inv_c0                     => '0',
    c0                         => lms1_txpll_c0, --muxed clock output
    c1                         => lms1_txpll_c1, --muxed clock output
+   c2                         => lms1_txpll_c2,
    pll_locked                 => inst0_pll_locked,
    --Bypass control
    clk_ena                    => lms1_txpll_clk_ena,       --clock output enable
@@ -320,6 +323,7 @@ begin
    inv_c0                     => '0',
    c0                         => lms2_txpll_c0, --muxed clock output
    c1                         => lms2_txpll_c1, --muxed clock output
+   c2                         => lms2_txpll_c2,
    pll_locked                 => inst2_pll_locked,
    --Bypass control
    clk_ena                    => lms2_txpll_clk_ena,       --clock output enable

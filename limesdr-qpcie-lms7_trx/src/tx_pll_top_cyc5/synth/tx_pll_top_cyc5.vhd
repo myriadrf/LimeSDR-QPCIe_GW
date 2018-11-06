@@ -34,6 +34,7 @@ entity tx_pll_top_cyc5 is
    inv_c0                     : in std_logic;
    c0                         : out std_logic; --muxed clock output
    c1                         : out std_logic; --muxed clock output
+   c2                         : out std_logic;
    pll_locked                 : out std_logic;
    --Bypass control
    clk_ena                    : in std_logic_vector(1 downto 0); --clock output enable
@@ -103,6 +104,7 @@ signal inst0_pll_inclk_global    : std_logic;
 signal inst1_rst                 : std_logic;
 signal inst1_outclk_0            : std_logic;
 signal inst1_outclk_1            : std_logic;
+signal inst1_outclk_2            : std_logic;
 signal inst1_locked              : std_logic;
 signal inst1_locked_scanclk      : std_logic;
 signal inst1_phase_done          : std_logic;
@@ -146,6 +148,7 @@ COMPONENT tx_pll is
       rst               : in  std_logic                     := '0';             --             reset.reset
       outclk_0          : out std_logic;                                        --           outclk0.clk
       outclk_1          : out std_logic;                                        --           outclk1.clk
+      outclk_2          : out std_logic;
       locked            : out std_logic;                                        --            locked.export
       reconfig_to_pll   : in  std_logic_vector(63 downto 0) := (others => '0'); --   reconfig_to_pll.reconfig_to_pll
       reconfig_from_pll : out std_logic_vector(63 downto 0)                     -- reconfig_from_pll.reconfig_from_pll
@@ -238,6 +241,7 @@ tx_pll_inst1 : tx_pll
       rst               => inst1_rst,
       outclk_0          => inst1_outclk_0,
       outclk_1          => inst1_outclk_1,
+      outclk_2          => inst1_outclk_2,
       locked            => inst1_locked,
       reconfig_to_pll   => inst1_rcnfg_to_pll,
       reconfig_from_pll => inst1_rcnfg_from_pll
@@ -407,6 +411,7 @@ c1_global <= c1_mux;
 -- ----------------------------------------------------------------------------
 c0             <= inst2_dataout(0);
 c1             <= c1_global;
+c2             <= inst1_outclk_2;
 pll_locked     <= locked_mux;
 
 dynps_busy     <= inst5_ps_busy;
