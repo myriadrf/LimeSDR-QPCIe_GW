@@ -71,7 +71,7 @@ entity lms7002_tx is
       sdin                 : in std_logic;   -- Data in
       sclk                 : in std_logic;   -- Data clock
       sen                  : in std_logic;   -- Enable signal (active low)
-      sdout                : out std_logic  -- Data out
+      sdout                : out std_logic := '0'  -- Data out
       );
 end lms7002_tx;
 
@@ -94,6 +94,9 @@ signal inst1_rdreq         : std_logic;
 signal inst1_rdempty       : std_logic;
 signal inst1_rdusedw       : std_logic_vector(c_INST1_RDUSEDW-1 downto 0);
 
+--FIFO MUX
+signal inst0_inst1_q_mux   : std_logic_vector(63 downto 0);
+
 --inst2
 signal inst2_diq_in        : std_logic_vector(63 downto 0);
 signal inst2_diq_out       : std_logic_vector(63 downto 0);
@@ -111,6 +114,7 @@ signal inst4_fifo_rdreq    : std_logic;
 signal inst4_DIQ_h         : std_logic_vector(g_IQ_WIDTH downto 0);
 signal inst4_DIQ_l         : std_logic_vector(g_IQ_WIDTH downto 0);
 signal inst4_fifo_q        : std_logic_vector(g_IQ_WIDTH*4-1 downto 0);
+signal inst4_rdempty       : std_logic;
 
 --inst5 
 signal inst5_diq_h         : std_logic_vector(g_IQ_WIDTH downto 0);
@@ -143,14 +147,14 @@ begin
       wrfull   => fifo_0_wrfull,
       wrempty  => open,
       wrusedw  => fifo_0_wrusedw,
-      rdclk    => clk_2x,
+      rdclk    => clk,
       rdreq    => inst0_rdreq,
       q        => inst0_q,
       rdempty  => inst0_rdempty,
       rdusedw  => inst0_rdusedw  
    );
    
-   inst0_rdreq <= inst2_data_req AND (NOT inst0_rdempty) AND (NOT tx_src_sel);
+   inst0_rdreq <= inst4_fifo_rdreq AND (NOT tx_src_sel);
    
 -- FIFO_1
    inst1_fifo_inst : entity work.fifo_inst
@@ -170,71 +174,29 @@ begin
       wrfull   => fifo_1_wrfull,
       wrempty  => open,
       wrusedw  => fifo_1_wrusedw,
-      rdclk    => clk_2x,
+      rdclk    => clk,
       rdreq    => inst1_rdreq,
       q        => inst1_q,
       rdempty  => inst1_rdempty,
       rdusedw  => inst1_rdusedw  
    );   
    
-   inst1_rdreq <= inst2_data_req AND (NOT inst1_rdempty) AND tx_src_sel;
+   inst1_rdreq <= inst4_fifo_rdreq AND tx_src_sel;
    
 -- ----------------------------------------------------------------------------
--- Sample Filters
+-- FIFO MUX
 -- ----------------------------------------------------------------------------
-   inst2_diq_in <= inst0_q when tx_src_sel = '0' else inst1_q;
-   
-   inst2_cfir_top : entity work.cfir_top
-   port map(
-      clk         => clk_2x,
-      reset_n     => clk_2x_reset_n,
-      mem_reset_n => mem_reset_n,
-      from_memcfg => from_memcfg,
-      
-      sdin        => sdin,    -- Data in
-      sclk        => sclk,    -- Data clock
-      sen         => sen,     -- Enable signal (active low)
-      sdout       => sdout,   -- Data out
-      data_req    => inst2_data_req,
-      data_valid  => inst2_data_valid,
-      diq_in      => inst2_diq_in,
-      diq_out     => inst2_diq_out
-    );
-    
--- ----------------------------------------------------------------------------
--- FIFO for storing TX samples
--- ----------------------------------------------------------------------------    
-   inst3_fifo_inst : entity work.fifo_inst
-   generic map(
-      dev_family     => g_DEV_FAMILY,
-      wrwidth        => 64,
-      wrusedw_witdth => 10, 
-      rdwidth        => 64,
-      rdusedw_width  => 10,
-      show_ahead     => "OFF"
-  ) 
-   port map(
-      reset_n  => clk_2x_reset_n,
-      wrclk    => clk_2x,
-      wrreq    => inst2_data_valid AND (NOT inst3_wrfull),
-      data     => inst2_diq_out,
-      wrfull   => inst3_wrfull,
-      wrempty  => open,
-      wrusedw  => open,
-      rdclk    => clk,
-      rdreq    => inst4_fifo_rdreq,
-      q        => inst3_q,
-      rdempty  => inst3_rdempty,
-      rdusedw  => inst3_rdusedw  
-   );
-   
+   inst0_inst1_q_mux <= inst0_q when tx_src_sel = '0' else inst1_q;
+       
 -- ----------------------------------------------------------------------------
 -- FIFO2DIQ module
--- ----------------------------------------------------------------------------                      
-   inst4_fifo_q <=   inst3_q(63 downto 64-g_IQ_WIDTH) & 
-                     inst3_q(47 downto 48-g_IQ_WIDTH) &
-                     inst3_q(31 downto 32-g_IQ_WIDTH) & 
-                     inst3_q(15 downto 16-g_IQ_WIDTH);
+-- ----------------------------------------------------------------------------
+   inst4_rdempty<=   inst0_rdempty when tx_src_sel = '0' else inst1_rdempty;
+   
+   inst4_fifo_q <=   inst0_inst1_q_mux(63 downto 64-g_IQ_WIDTH) & 
+                     inst0_inst1_q_mux(47 downto 48-g_IQ_WIDTH) &
+                     inst0_inst1_q_mux(31 downto 32-g_IQ_WIDTH) & 
+                     inst0_inst1_q_mux(15 downto 16-g_IQ_WIDTH);
 
    inst4_fifo2diq : entity work.fifo2diq
    generic map( 
@@ -265,7 +227,7 @@ begin
       DIQ_h                => inst4_DIQ_h, 
       DIQ_l                => inst4_DIQ_l, 
       --fifo ports 
-      fifo_rdempty         => inst3_rdempty, 
+      fifo_rdempty         => inst4_rdempty, 
       fifo_rdreq           => inst4_fifo_rdreq,
       fifo_q               => inst4_fifo_q
    );
