@@ -171,12 +171,17 @@ inst0_diq2fifo : entity work.diq2fifo
 -- ----------------------------------------------------------------------------
    -- Internal DIQ mode settings for TX interface
    -- (Workaround for WFM player)
-   int_mode       <= from_fpgacfg.mode                when from_fpgacfg.wfm_play = '0' else '0';
-   int_trxiqpulse <= from_fpgacfg.trxiq_pulse         when from_fpgacfg.wfm_play = '0' else '0';
-   int_ddr_en     <= from_fpgacfg.ddr_en              when from_fpgacfg.wfm_play = '0' else '1';
-   int_mimo_en    <= from_fpgacfg.mimo_int_en         when from_fpgacfg.wfm_play = '0' else '1';
-   int_ch_en      <= from_fpgacfg.ch_en(1 downto 0)   when from_fpgacfg.wfm_play = '0' else "11";
+--   int_mode       <= from_fpgacfg.mode                when from_fpgacfg.wfm_play = '0' else '0';
+--   int_trxiqpulse <= from_fpgacfg.trxiq_pulse         when from_fpgacfg.wfm_play = '0' else '0';
+--   int_ddr_en     <= from_fpgacfg.ddr_en              when from_fpgacfg.wfm_play = '0' else '1';
+--   int_mimo_en    <= from_fpgacfg.mimo_int_en         when from_fpgacfg.wfm_play = '0' else '1';
+--   int_ch_en      <= from_fpgacfg.ch_en(1 downto 0)   when from_fpgacfg.wfm_play = '0' else "11";
 
+   int_mode       <= from_fpgacfg.mode             ;
+   int_trxiqpulse <= from_fpgacfg.trxiq_pulse      ;
+   int_ddr_en     <= from_fpgacfg.ddr_en           ;
+   int_mimo_en    <= from_fpgacfg.mimo_int_en      ;
+   int_ch_en      <= from_fpgacfg.ch_en(1 downto 0);
 
 inst1_lms7002_tx : entity work.lms7002_tx
    generic map( 

@@ -293,7 +293,7 @@ begin
 
 wfm_0_load           <= from_fpgacfg_0.wfm_load;
 wfm_0_play_stop      <= from_fpgacfg_0.wfm_play;
-wfm_0_sample_width   <= "10";
+wfm_0_sample_width   <= from_fpgacfg_0.smpl_width;
 wfm_0_fr_start       <= '0';
 wfm_0_ch_en          <= "01";
 wfm_0_mimo_en        <= '1';
@@ -301,7 +301,7 @@ wfm_0_intrlv_dis     <= '0';
 
 wfm_1_load           <= from_fpgacfg_1.wfm_load;
 wfm_1_play_stop      <= from_fpgacfg_1.wfm_play;
-wfm_1_sample_width   <= "10";
+wfm_1_sample_width   <= from_fpgacfg_1.smpl_width;
 wfm_1_fr_start       <= '0';
 wfm_1_ch_en          <= "01";
 wfm_1_mimo_en        <= '1';
