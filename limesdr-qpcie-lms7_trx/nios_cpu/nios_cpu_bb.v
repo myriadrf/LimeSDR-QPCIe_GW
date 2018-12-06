@@ -60,11 +60,11 @@ module nios_cpu (
 	pllcfg_stat_export,
 	scl_export,
 	sda_export,
-	vctcxo_tamer_0_ctrl_export,
 	spi_2_MISO,
 	spi_2_MOSI,
 	spi_2_SCLK,
-	spi_2_SS_n);	
+	spi_2_SS_n,
+	vctcxo_tamer_0_ctrl_export);	
 
 	output	[7:0]	avmm_m0_address;
 	output		avmm_m0_read;
@@ -126,9 +126,9 @@ module nios_cpu (
 	output	[9:0]	pllcfg_stat_export;
 	inout		scl_export;
 	inout		sda_export;
-	input	[3:0]	vctcxo_tamer_0_ctrl_export;
 	input		spi_2_MISO;
 	output		spi_2_MOSI;
 	output		spi_2_SCLK;
 	output		spi_2_SS_n;
+	input	[3:0]	vctcxo_tamer_0_ctrl_export;
 endmodule

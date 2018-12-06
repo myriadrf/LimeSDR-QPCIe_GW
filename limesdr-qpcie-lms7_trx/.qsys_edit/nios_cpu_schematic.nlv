@@ -1,5 +1,6 @@
 # # File gsaved with Nlview version 6.3.8  2013-12-19 bk=1.2992 VDI=34 GEI=35
 # 
+preplace inst nios_cpu.spi_2 -pg 1 -lvl 4 -y 110
 preplace inst nios_cpu.pll_reconfig_4 -pg 1 -lvl 3 -y 2170
 preplace inst nios_cpu.PLLCFG_SPI -pg 1 -lvl 3 -y 1130
 preplace inst nios_cpu -pg 1 -lvl 1 -y 40 -regy -20
@@ -8,8 +9,8 @@ preplace inst nios_cpu.gpi_0 -pg 1 -lvl 3 -y 830
 preplace inst nios_cpu.PLLCFG_Command -pg 1 -lvl 3 -y 1030
 preplace inst nios_cpu.i2c_opencores_0 -pg 1 -lvl 3 -y 1470
 preplace inst nios_cpu.PLLCFG_Status -pg 1 -lvl 3 -y 2290
-preplace inst nios_cpu.Avalon_MM_external_0 -pg 1 -lvl 4 -y 60
-preplace inst nios_cpu.vctcxo_tamer_0_ctrl -pg 1 -lvl 4 -y 210
+preplace inst nios_cpu.Avalon_MM_external_0 -pg 1 -lvl 4 -y 30
+preplace inst nios_cpu.vctcxo_tamer_0_ctrl -pg 1 -lvl 4 -y 230
 preplace inst nios_cpu.Av_FIFO_Int_0 -pg 1 -lvl 3 -y 390
 preplace inst nios_cpu.sysid_qsys_0 -pg 1 -lvl 3 -y 1610
 preplace inst nios_cpu.nios2_cpu -pg 1 -lvl 1 -y 260
@@ -28,45 +29,46 @@ preplace inst nios_cpu.pll_reconfig_2 -pg 1 -lvl 3 -y 1930
 preplace inst nios_cpu.pll_reconfig_3 -pg 1 -lvl 3 -y 2050
 preplace inst nios_cpu.nios2_cpu.reset_bridge -pg 1
 preplace inst nios_cpu.nios2_cpu.clock_bridge -pg 1
-preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)i2c_opencores_0.export_sda,(SLAVE)nios_cpu.sda) 1 0 3 NJ 1560 NJ 1560 NJ
+preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)nios_cpu.spi_2,(SLAVE)spi_2.external) 1 0 4 NJ 140 NJ 140 NJ 140 NJ
+preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)nios_cpu.pll_rst,(SLAVE)PLL_RST.external_connection) 1 0 3 NJ 2780 NJ 2780 NJ
 preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)nios_cpu.pll_recfg_from_pll_5,(SLAVE)pll_reconfig_5.reconfig_from_pll) 1 0 3 NJ 2920 NJ 2920 NJ
-preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)pll_reconfig_2.reconfig_from_pll,(SLAVE)nios_cpu.pll_recfg_from_pll_2) 1 0 3 NJ 2000 NJ 2000 NJ
 preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)Av_FIFO_Int_0.cnd_fifo_rst,(SLAVE)nios_cpu.exfifo_rst) 1 0 3 NJ 440 NJ 440 NJ
-preplace netloc EXPORT<net_container>nios_cpu</net_container>(MASTER)nios_cpu.avmm_m0_clk,(MASTER)Avalon_MM_external_0.clock_source) 1 4 1 NJ
-preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)nios_cpu.pllcfg_cmd,(SLAVE)PLLCFG_Command.external_connection) 1 0 3 NJ 1060 NJ 1060 NJ
-preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)pll_reconfig_2.reconfig_to_pll,(SLAVE)nios_cpu.pll_recfg_to_pll_2) 1 0 3 NJ 2020 NJ 2020 NJ
+preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)nios_cpu.avmm_s0,(SLAVE)avmm_ext_master_0.avs_s0) 1 0 3 NJ 60 NJ 60 NJ
+preplace netloc EXPORT<net_container>nios_cpu</net_container>(MASTER)Avalon_MM_external_0.clock_source,(MASTER)nios_cpu.avmm_m0_clk) 1 4 1 NJ
+preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)gpio_0.external_connection,(SLAVE)nios_cpu.gpio0) 1 0 3 NJ 960 NJ 960 NJ
+preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)nios_cpu.pll_recfg_to_pll_5,(SLAVE)pll_reconfig_5.reconfig_to_pll) 1 0 3 NJ 2940 NJ 2940 NJ
+preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)pll_reconfig_1.reconfig_to_pll,(SLAVE)nios_cpu.pll_recfg_to_pll_1) 1 0 3 NJ 1900 NJ 1900 NJ
 preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)pll_reconfig_0.reconfig_to_pll,(SLAVE)nios_cpu.pll_recfg_to_pll_0) 1 0 3 NJ 1780 NJ 1780 NJ
-preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)nios_cpu.gpio0,(SLAVE)gpio_0.external_connection) 1 0 3 NJ 960 NJ 960 NJ
-preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)nios_cpu.exfifo_if_d,(SLAVE)Av_FIFO_Int_0.cnd_if_d) 1 0 3 NJ 460 NJ 460 NJ
-preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)pll_reconfig_0.reconfig_from_pll,(SLAVE)nios_cpu.pll_recfg_from_pll_0) 1 0 3 NJ 1760 NJ 1760 NJ
+preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)nios_cpu.pll_recfg_to_pll_2,(SLAVE)pll_reconfig_2.reconfig_to_pll) 1 0 3 NJ 2020 NJ 2020 NJ
+preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)pll_reconfig_4.reconfig_from_pll,(SLAVE)nios_cpu.pll_recfg_from_pll_4) 1 0 3 NJ 2240 NJ 2240 NJ
 preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)nios_cpu.exfifo_of_d,(SLAVE)Av_FIFO_Int_0.cnd_of_d) 1 0 3 NJ 520 NJ 520 NJ
-preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)nios_cpu.pll_recfg_to_pll_1,(SLAVE)pll_reconfig_1.reconfig_to_pll) 1 0 3 NJ 1900 NJ 1900 NJ
-preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)avmm_ext_master_1.avs_s0,(SLAVE)nios_cpu.avmm_s1) 1 0 3 NJ 140 NJ 160 NJ
-preplace netloc EXPORT<net_container>nios_cpu</net_container>(MASTER)nios_cpu.avmm_m0,(MASTER)Avalon_MM_external_0.avm_m0) 1 4 1 NJ
-preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)gpi_0.external_connection,(SLAVE)nios_cpu.gpi0) 1 0 3 NJ 860 NJ 860 NJ
-preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)nios_cpu.exfifo_of_wrfull,(SLAVE)Av_FIFO_Int_0.cnd_of_wrfull) 1 0 3 NJ 560 NJ 560 NJ
-preplace netloc INTERCONNECT<net_container>nios_cpu</net_container>(MASTER)nios2_cpu.data_master,(SLAVE)PLLCFG_Status.s1,(SLAVE)vctcxo_tamer_0_ctrl.s1,(SLAVE)fpga_spi0.spi_control_port,(SLAVE)pll_reconfig_1.mgmt_avalon_slave,(SLAVE)pll_reconfig_5.mgmt_avalon_slave,(SLAVE)pll_reconfig_2.mgmt_avalon_slave,(SLAVE)oc_mem.s1,(SLAVE)pll_reconfig_0.mgmt_avalon_slave,(SLAVE)dac_spi1.spi_control_port,(SLAVE)PLLCFG_Command.s1,(SLAVE)PLLCFG_SPI.spi_control_port,(SLAVE)sysid_qsys_0.control_slave,(MASTER)avmm_ext_master_0.avm_m0,(SLAVE)nios2_cpu.debug_mem_slave,(SLAVE)gpi_0.s1,(SLAVE)PLL_RST.s1,(SLAVE)gpio_0.s1,(MASTER)nios2_cpu.instruction_master,(SLAVE)Av_FIFO_Int_0.avalon_slave_0,(SLAVE)pll_reconfig_3.mgmt_avalon_slave,(SLAVE)Avalon_MM_external_0.avs_s0,(SLAVE)i2c_opencores_0.avalon_slave_0,(SLAVE)pll_reconfig_4.mgmt_avalon_slave,(MASTER)avmm_ext_master_1.avm_m0) 1 0 4 190 400 570 290 950 280 1270
-preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)nios_cpu.vctcxo_tamer_0_ctrl,(SLAVE)vctcxo_tamer_0_ctrl.external_connection) 1 0 4 NJ 40 NJ 40 NJ 40 NJ
+preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)nios_cpu.pll_recfg_from_pll_0,(SLAVE)pll_reconfig_0.reconfig_from_pll) 1 0 3 NJ 1760 NJ 1760 NJ
+preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)nios_cpu.gpi0,(SLAVE)gpi_0.external_connection) 1 0 3 NJ 860 NJ 860 NJ
+preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)nios_cpu.clk,(SLAVE)clk_0.clk_in) 1 0 2 NJ 200 NJ
+preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)nios_cpu.vctcxo_tamer_0_ctrl,(SLAVE)vctcxo_tamer_0_ctrl.external_connection) 1 0 4 NJ 180 NJ 180 NJ 260 NJ
+preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)PLLCFG_SPI.external,(SLAVE)nios_cpu.pllcfg_spi) 1 0 3 NJ 1160 NJ 1160 NJ
 preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)pll_reconfig_3.reconfig_from_pll,(SLAVE)nios_cpu.pll_recfg_from_pll_3) 1 0 3 NJ 2120 NJ 2120 NJ
 preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)pll_reconfig_1.reconfig_from_pll,(SLAVE)nios_cpu.pll_recfg_from_pll_1) 1 0 3 NJ 1880 NJ 1880 NJ
-preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)avmm_ext_master_0.avs_s0,(SLAVE)nios_cpu.avmm_s0) 1 0 3 NJ 60 NJ 60 NJ
+preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)nios_cpu.exfifo_of_wr,(SLAVE)Av_FIFO_Int_0.cnd_of_wr) 1 0 3 NJ 540 NJ 540 NJ
 preplace netloc EXPORT<net_container>nios_cpu</net_container>(MASTER)Avalon_MM_external_0.reset_source,(MASTER)nios_cpu.avmm_m0_reset) 1 4 1 NJ
-preplace netloc FAN_OUT<net_container>nios_cpu</net_container>(MASTER)nios2_cpu.irq,(SLAVE)PLLCFG_SPI.irq,(SLAVE)i2c_opencores_0.interrupt_sender,(SLAVE)fpga_spi0.irq,(SLAVE)dac_spi1.irq) 1 1 2 NJ 350 930
-preplace netloc FAN_OUT<net_container>nios_cpu</net_container>(SLAVE)pll_reconfig_1.mgmt_clk,(SLAVE)Av_FIFO_Int_0.clock,(SLAVE)oc_mem.clk1,(SLAVE)pll_reconfig_2.mgmt_clk,(SLAVE)pll_reconfig_5.mgmt_clk,(SLAVE)PLL_RST.clk,(SLAVE)PLLCFG_SPI.clk,(MASTER)clk_0.clk,(SLAVE)PLLCFG_Status.clk,(SLAVE)vctcxo_tamer_0_ctrl.clk,(SLAVE)i2c_opencores_0.clock,(SLAVE)avmm_ext_master_1.clock,(SLAVE)gpio_0.clk,(SLAVE)avmm_ext_master_0.clock,(SLAVE)nios2_cpu.clk,(SLAVE)fpga_spi0.clk,(SLAVE)PLLCFG_Command.clk,(SLAVE)pll_reconfig_3.mgmt_clk,(SLAVE)sysid_qsys_0.clk,(SLAVE)pll_reconfig_4.mgmt_clk,(SLAVE)gpi_0.clk,(SLAVE)dac_spi1.clk,(SLAVE)Avalon_MM_external_0.clock,(SLAVE)pll_reconfig_0.mgmt_clk) 1 0 4 170 2800 NJ 2800 890 240 1290
-preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)nios_cpu.pll_recfg_to_pll_4,(SLAVE)pll_reconfig_4.reconfig_to_pll) 1 0 3 NJ 2260 NJ 2260 NJ
-preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)PLL_RST.external_connection,(SLAVE)nios_cpu.pll_rst) 1 0 3 NJ 2780 NJ 2780 NJ
-preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)Av_FIFO_Int_0.cnd_of_wr,(SLAVE)nios_cpu.exfifo_of_wr) 1 0 3 NJ 540 NJ 540 NJ
+preplace netloc FAN_OUT<net_container>nios_cpu</net_container>(SLAVE)spi_2.clk,(SLAVE)dac_spi1.clk,(SLAVE)pll_reconfig_4.mgmt_clk,(SLAVE)pll_reconfig_1.mgmt_clk,(SLAVE)i2c_opencores_0.clock,(SLAVE)pll_reconfig_2.mgmt_clk,(SLAVE)nios2_cpu.clk,(SLAVE)PLLCFG_Status.clk,(MASTER)clk_0.clk,(SLAVE)avmm_ext_master_0.clock,(SLAVE)gpi_0.clk,(SLAVE)vctcxo_tamer_0_ctrl.clk,(SLAVE)PLLCFG_Command.clk,(SLAVE)gpio_0.clk,(SLAVE)pll_reconfig_3.mgmt_clk,(SLAVE)avmm_ext_master_1.clock,(SLAVE)pll_reconfig_0.mgmt_clk,(SLAVE)PLLCFG_SPI.clk,(SLAVE)Avalon_MM_external_0.clock,(SLAVE)Av_FIFO_Int_0.clock,(SLAVE)fpga_spi0.clk,(SLAVE)sysid_qsys_0.clk,(SLAVE)oc_mem.clk1,(SLAVE)pll_reconfig_5.mgmt_clk,(SLAVE)PLL_RST.clk) 1 0 4 170 220 NJ 260 890 280 1250
+preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)nios_cpu.pll_recfg_from_pll_2,(SLAVE)pll_reconfig_2.reconfig_from_pll) 1 0 3 NJ 2000 NJ 2000 NJ
+preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)Av_FIFO_Int_0.cnd_of_wrfull,(SLAVE)nios_cpu.exfifo_of_wrfull) 1 0 3 NJ 560 NJ 560 NJ
+preplace netloc EXPORT<net_container>nios_cpu</net_container>(MASTER)Avalon_MM_external_0.avm_m0,(MASTER)nios_cpu.avmm_m0) 1 4 1 NJ
+preplace netloc INTERCONNECT<net_container>nios_cpu</net_container>(SLAVE)pll_reconfig_5.mgmt_avalon_slave,(MASTER)nios2_cpu.data_master,(SLAVE)PLLCFG_Status.s1,(SLAVE)PLLCFG_SPI.spi_control_port,(MASTER)avmm_ext_master_0.avm_m0,(SLAVE)pll_reconfig_1.mgmt_avalon_slave,(SLAVE)vctcxo_tamer_0_ctrl.s1,(SLAVE)spi_2.spi_control_port,(SLAVE)i2c_opencores_0.avalon_slave_0,(SLAVE)Avalon_MM_external_0.avs_s0,(SLAVE)gpio_0.s1,(SLAVE)oc_mem.s1,(SLAVE)gpi_0.s1,(SLAVE)pll_reconfig_0.mgmt_avalon_slave,(SLAVE)pll_reconfig_3.mgmt_avalon_slave,(SLAVE)dac_spi1.spi_control_port,(SLAVE)pll_reconfig_4.mgmt_avalon_slave,(MASTER)avmm_ext_master_1.avm_m0,(MASTER)nios2_cpu.instruction_master,(SLAVE)PLLCFG_Command.s1,(SLAVE)pll_reconfig_2.mgmt_avalon_slave,(SLAVE)PLL_RST.s1,(SLAVE)sysid_qsys_0.control_slave,(SLAVE)Av_FIFO_Int_0.avalon_slave_0,(SLAVE)nios2_cpu.debug_mem_slave,(SLAVE)fpga_spi0.spi_control_port) 1 0 4 170 400 590 310 870 320 1270
 preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)nios_cpu.exfifo_if_rdempty,(SLAVE)Av_FIFO_Int_0.cnd_if_rdempty) 1 0 3 NJ 500 NJ 500 NJ
-preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)clk_0.clk_in,(SLAVE)nios_cpu.clk) 1 0 2 NJ 120 NJ
-preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)i2c_opencores_0.export_scl,(SLAVE)nios_cpu.scl) 1 0 3 NJ 1540 NJ 1540 NJ
-preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)nios_cpu.pllcfg_spi,(SLAVE)PLLCFG_SPI.external) 1 0 3 NJ 1160 NJ 1160 NJ
-preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)pll_reconfig_5.reconfig_to_pll,(SLAVE)nios_cpu.pll_recfg_to_pll_5) 1 0 3 NJ 2940 NJ 2940 NJ
-preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)nios_cpu.dac_spi1,(SLAVE)dac_spi1.external) 1 0 3 NJ 740 NJ 740 NJ
+preplace netloc FAN_OUT<net_container>nios_cpu</net_container>(SLAVE)dac_spi1.irq,(SLAVE)spi_2.irq,(SLAVE)i2c_opencores_0.interrupt_sender,(MASTER)nios2_cpu.irq,(SLAVE)PLLCFG_SPI.irq,(SLAVE)fpga_spi0.irq) 1 1 3 NJ 350 930 350 1310
+preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)Av_FIFO_Int_0.cnd_if_rd,(SLAVE)nios_cpu.exfifo_if_rd) 1 0 3 NJ 480 NJ 480 NJ
+preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)nios_cpu.avmm_s1,(SLAVE)avmm_ext_master_1.avs_s0) 1 0 3 NJ 160 NJ 160 NJ
+preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)nios_cpu.scl,(SLAVE)i2c_opencores_0.export_scl) 1 0 3 NJ 1540 NJ 1540 NJ
 preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)nios_cpu.pll_recfg_to_pll_3,(SLAVE)pll_reconfig_3.reconfig_to_pll) 1 0 3 NJ 2140 NJ 2140 NJ
-preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)nios_cpu.pll_recfg_from_pll_4,(SLAVE)pll_reconfig_4.reconfig_from_pll) 1 0 3 NJ 2240 NJ 2240 NJ
-preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)nios_cpu.fpga_spi0,(SLAVE)fpga_spi0.external) 1 0 3 NJ 1280 NJ 1280 NJ
+preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)dac_spi1.external,(SLAVE)nios_cpu.dac_spi1) 1 0 3 NJ 740 NJ 740 NJ
+preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)nios_cpu.sda,(SLAVE)i2c_opencores_0.export_sda) 1 0 3 NJ 1560 NJ 1560 NJ
+preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)Av_FIFO_Int_0.cnd_if_d,(SLAVE)nios_cpu.exfifo_if_d) 1 0 3 NJ 460 NJ 460 NJ
+preplace netloc INTERCONNECT<net_container>nios_cpu</net_container>(SLAVE)PLL_RST.reset,(SLAVE)nios2_cpu.reset,(SLAVE)pll_reconfig_2.mgmt_reset,(SLAVE)vctcxo_tamer_0_ctrl.reset,(MASTER)nios2_cpu.debug_reset_request,(SLAVE)Avalon_MM_external_0.reset,(SLAVE)i2c_opencores_0.clock_reset,(SLAVE)pll_reconfig_0.mgmt_reset,(SLAVE)pll_reconfig_3.mgmt_reset,(SLAVE)PLLCFG_Status.reset,(SLAVE)pll_reconfig_1.mgmt_reset,(SLAVE)fpga_spi0.reset,(SLAVE)gpio_0.reset,(SLAVE)gpi_0.reset,(SLAVE)oc_mem.reset1,(SLAVE)pll_reconfig_4.mgmt_reset,(SLAVE)PLLCFG_Command.reset,(SLAVE)PLLCFG_SPI.reset,(SLAVE)sysid_qsys_0.reset,(SLAVE)dac_spi1.reset,(SLAVE)avmm_ext_master_1.reset,(SLAVE)avmm_ext_master_0.reset,(SLAVE)pll_reconfig_5.mgmt_reset,(SLAVE)Av_FIFO_Int_0.reset,(SLAVE)clk_0.clk_in_reset,(SLAVE)spi_2.reset,(MASTER)clk_0.clk_reset) 1 0 4 190 420 570 330 910 300 1290
 preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)PLLCFG_Status.external_connection,(SLAVE)nios_cpu.pllcfg_stat) 1 0 3 NJ 2320 NJ 2320 NJ
-preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)nios_cpu.exfifo_if_rd,(SLAVE)Av_FIFO_Int_0.cnd_if_rd) 1 0 3 NJ 480 NJ 480 NJ
-preplace netloc INTERCONNECT<net_container>nios_cpu</net_container>(SLAVE)avmm_ext_master_0.reset,(SLAVE)Avalon_MM_external_0.reset,(SLAVE)gpi_0.reset,(MASTER)clk_0.clk_reset,(SLAVE)pll_reconfig_5.mgmt_reset,(SLAVE)pll_reconfig_3.mgmt_reset,(SLAVE)pll_reconfig_1.mgmt_reset,(SLAVE)avmm_ext_master_1.reset,(SLAVE)PLLCFG_Status.reset,(SLAVE)PLLCFG_SPI.reset,(SLAVE)PLL_RST.reset,(SLAVE)clk_0.clk_in_reset,(SLAVE)Av_FIFO_Int_0.reset,(MASTER)nios2_cpu.debug_reset_request,(SLAVE)sysid_qsys_0.reset,(SLAVE)pll_reconfig_2.mgmt_reset,(SLAVE)PLLCFG_Command.reset,(SLAVE)oc_mem.reset1,(SLAVE)i2c_opencores_0.clock_reset,(SLAVE)pll_reconfig_0.mgmt_reset,(SLAVE)vctcxo_tamer_0_ctrl.reset,(SLAVE)fpga_spi0.reset,(SLAVE)dac_spi1.reset,(SLAVE)nios2_cpu.reset,(SLAVE)gpio_0.reset,(SLAVE)pll_reconfig_4.mgmt_reset) 1 0 4 210 420 590 310 910 260 1330
-levelinfo -pg 1 0 140 1640
-levelinfo -hier nios_cpu 150 330 720 1120 1370 1530
+preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)PLLCFG_Command.external_connection,(SLAVE)nios_cpu.pllcfg_cmd) 1 0 3 NJ 1060 NJ 1060 NJ
+preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)pll_reconfig_4.reconfig_to_pll,(SLAVE)nios_cpu.pll_recfg_to_pll_4) 1 0 3 NJ 2260 NJ 2260 NJ
+preplace netloc EXPORT<net_container>nios_cpu</net_container>(SLAVE)fpga_spi0.external,(SLAVE)nios_cpu.fpga_spi0) 1 0 3 NJ 1280 NJ 1280 NJ
+levelinfo -pg 1 0 140 1620
+levelinfo -hier nios_cpu 150 310 700 1100 1350 1510

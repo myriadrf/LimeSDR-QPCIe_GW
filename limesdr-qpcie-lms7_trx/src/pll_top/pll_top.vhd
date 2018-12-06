@@ -128,6 +128,11 @@ end pll_top;
 -- ----------------------------------------------------------------------------
 architecture arch of pll_top is
 --declare signals,  components here
+   signal lms1_txpll_inclk_g           : std_logic;
+   signal lms1_rxpll_inclk_g           : std_logic;
+   signal lms2_txpll_inclk_g           : std_logic;
+   signal lms2_rxpll_inclk_g           : std_logic;
+
    --inst0
    signal inst0_pll_locked             : std_logic;
    signal inst0_smpl_cmp_en            : std_logic;
@@ -197,8 +202,54 @@ architecture arch of pll_top is
    signal pllcfg_busy                  : std_logic;
    signal pllcfg_done                  : std_logic;
    
-  
+ 
+COMPONENT clkctrl_c5 is
+   port (
+      inclk  : in  std_logic := '0'; --  altclkctrl_input.inclk
+      ena    : in  std_logic := '0'; --                  .ena
+      outclk : out std_logic         -- altclkctrl_output.outclk
+   );
+end COMPONENT;
+ 
 begin
+
+----------------------------------------------------------------------------
+-- Global clock control blocks
+----------------------------------------------------------------------------
+   -- LMS1 TX PLL 
+   clkctrl_c5_inst0 : clkctrl_c5
+   port map(
+      inclk  => lms1_txpll_inclk,
+      ena    => '1',
+      outclk => lms1_txpll_inclk_g
+   );
+   
+   -- LMS1 RX PLL 
+   clkctrl_c5_inst1 : clkctrl_c5
+   port map(
+      inclk  => lms1_rxpll_inclk,
+      ena    => '1',
+      outclk => lms1_rxpll_inclk_g
+   );
+   
+   
+   -- LMS2 TX PLL 
+   clkctrl_c5_inst2 : clkctrl_c5
+   port map(
+      inclk  => lms2_txpll_inclk,
+      ena    => '1',
+      outclk => lms2_txpll_inclk_g
+   );
+   
+   -- LMS2 RX PLL 
+--   clkctrl_c5_inst3 : clkctrl_c5
+--   port map(
+--      inclk  => lms2_rxpll_inclk,
+--      ena    => '1',
+--      outclk => lms2_rxpll_inclk_g
+--   );
+   
+   lms2_rxpll_inclk_g <= lms2_rxpll_inclk;
 
 -- ----------------------------------------------------------------------------
 -- TX PLL instance for LMS#1
@@ -213,7 +264,7 @@ begin
    port map(
    free_running_clk           => lms1_txpll_reconfig_clk,
    --PLL input    
-   pll_inclk                  => lms1_txpll_inclk,
+   pll_inclk                  => lms1_txpll_inclk_g,
    pll_areset                 => not lms1_txpll_logic_reset_n,
    pll_logic_reset_n          => '1',
    inv_c0                     => '0',
@@ -265,7 +316,7 @@ begin
    port map(
    free_running_clk           => lms1_rxpll_reconfig_clk,
    --PLL input
-   pll_inclk                  => lms1_rxpll_inclk,
+   pll_inclk                  => lms1_rxpll_inclk_g,
    pll_areset                 => not lms1_rxpll_logic_reset_n,
    pll_logic_reset_n          => '1',
    inv_c0                     => '0',
@@ -317,7 +368,7 @@ begin
    port map(
    free_running_clk           => lms2_txpll_reconfig_clk,
    --PLL input    
-   pll_inclk                  => lms2_txpll_inclk,
+   pll_inclk                  => lms2_txpll_inclk_g,
    pll_areset                 => not lms2_txpll_logic_reset_n,
    pll_logic_reset_n          => '1',
    inv_c0                     => '0',
@@ -369,7 +420,7 @@ begin
    port map(
    free_running_clk           => lms2_rxpll_reconfig_clk,
    --PLL input
-   pll_inclk                  => lms2_rxpll_inclk,
+   pll_inclk                  => lms2_rxpll_inclk_g,
    pll_areset                 => not lms2_rxpll_logic_reset_n,
    pll_logic_reset_n          => '1',
    inv_c0                     => '0',

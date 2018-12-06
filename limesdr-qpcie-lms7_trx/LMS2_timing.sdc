@@ -39,6 +39,12 @@ set LMS7_IN_MAX_DELAY [expr $LMS7_Tco_max]
 set LMS7_IN_MIN_DELAY [expr $LMS7_Tco_min]
 
 # ----------------------------------------------------------------------------
+# Path to instances
+# ----------------------------------------------------------------------------
+set LMS2_TX_PLL   inst1_pll_top|inst2_tx_pll_top_cyc5
+set LMS2_RX_PLL   inst1_pll_top|inst3_rx_pll_top_cyc5
+
+# ----------------------------------------------------------------------------
 #Base clocks
 # ----------------------------------------------------------------------------
 
@@ -64,37 +70,36 @@ create_clock -name LMS2_MCLK2_VIRT			-period $MCLK2_period
 #Generated clocks
 # ----------------------------------------------------------------------------
 #LMS2 TXPLL
-create_generated_clock 	-name LMS2_MCLK1_GLOBAL \
-								-master [get_clocks LMS2_MCLK1] \
-                        -source [get_pins -compatibility_mode *pll_top*|inst2*|clkctrl*|inclk*] \
-                        [get_pins -compatibility_mode *pll_top*|inst2*|clkctrl*|outclk*]
+#create_generated_clock 	-name LMS2_MCLK1_GLOBAL \
+#								-master [get_clocks LMS2_MCLK1] \
+#                        -source [get_pins -compatibility_mode *pll_top*|inst2*|clkctrl*|inclk*] \
+#                        [get_pins -compatibility_mode *pll_top*|inst2*|clkctrl*|outclk*]
                         
                         
 create_generated_clock 	-name LMS2_TXPLL_VCOPH \
-								-master [get_clocks LMS2_MCLK1_GLOBAL] \
-								-source  [get_pins -compatibility_mode *pll_top*|inst2*|*refclkin*]\
+								-source  [get_pins -compatibility_mode $LMS2_TX_PLL|*refclkin]\
 								-divide_by 1 -multiply_by 2 \
-								[get_pins -compatibility_mode *pll_top*|inst2*|*vcoph[0]*]
+								[get_pins -compatibility_mode $LMS2_TX_PLL|*vcoph[0]*]
 
 create_generated_clock 	-name LMS2_TXPLL_C0 \
-								-source  [get_pins -compatibility_mode *pll_top*|inst2*|*vcoph[0]*]\
+								-source  [get_pins -compatibility_mode $LMS2_TX_PLL|*vcoph[0]*]\
 								-divide_by 2 -multiply_by 1 \
-								[get_pins -compatibility_mode *pll_top*|inst2*|*[0]*divclk*]
+								[get_pins -compatibility_mode $LMS2_TX_PLL|*[0]*divclk*]
 
 create_generated_clock 	-name LMS2_TXPLL_C1 \
-								-source  [get_pins -compatibility_mode *pll_top*|inst2*|*vcoph[0]*]\
+								-source  [get_pins -compatibility_mode $LMS2_TX_PLL|*vcoph[0]*]\
 								-divide_by 2 -multiply_by 1 -phase 90 \
-								[get_pins -compatibility_mode *pll_top*|inst2*|*[1]*divclk*]
+								[get_pins -compatibility_mode $LMS2_TX_PLL|*[1]*divclk*]
                         
 create_generated_clock 	-name LMS2_TXPLL_C2 \
-								-source  [get_pins -compatibility_mode *pll_top|inst2*|*vcoph[0]*]\
+								-source  [get_pins -compatibility_mode $LMS2_TX_PLL|*vcoph[0]*]\
 								-divide_by 1 -multiply_by 1 -phase 0 \
-								[get_pins -compatibility_mode *pll_top|inst2*|*[2]*divclk*]                         
+								[get_pins -compatibility_mode $LMS2_TX_PLL|*[2]*divclk*]                         
 
 #LMS2_FCLK1 clock output pin 
 create_generated_clock 	-name LMS2_FCLK1_PLL \
 								-master [get_clocks LMS2_TXPLL_C0] \
-								-source [get_pins -compatibility_mode *pll_top*|inst2*|ALTDDIO*|dataout] \
+								-source [get_pins -compatibility_mode $LMS2_TX_PLL|ALTDDIO*|dataout] \
 								[get_ports LMS2_FCLK1]
 								
 #create_generated_clock 	-name LMS2_FCLK1_DRCT \
@@ -116,24 +121,24 @@ create_generated_clock 	-name LMS2_FCLK1_PLL \
                         
 create_generated_clock 	-name LMS2_RXPLL_VCOPH \
 								-master [get_clocks LMS2_MCLK2] \
-								-source  [get_pins -compatibility_mode *pll_top*|inst3*|*refclkin*]\
+								-source  [get_pins -compatibility_mode $LMS2_RX_PLL|*refclkin*]\
 								-divide_by 1 -multiply_by 2 \
-								[get_pins -compatibility_mode *pll_top*|inst3*|*vcoph[0]*]
+								[get_pins -compatibility_mode $LMS2_RX_PLL|*vcoph[0]*]
 
 create_generated_clock 	-name LMS2_RXPLL_C0 \
-								-source  [get_pins -compatibility_mode *pll_top*|inst3*|*vcoph[0]*]\
+								-source  [get_pins -compatibility_mode $LMS2_RX_PLL|*vcoph[0]*]\
 								-divide_by 2 -multiply_by 1 \
-								[get_pins -compatibility_mode *pll_top*|inst3*|*[0]*divclk*]
+								[get_pins -compatibility_mode $LMS2_RX_PLL|*[0]*divclk*]
 
 create_generated_clock 	-name LMS2_RXPLL_C1 \
-								-source  [get_pins -compatibility_mode *pll_top*|inst3*|*vcoph[0]*]\
+								-source  [get_pins -compatibility_mode $LMS2_RX_PLL|*vcoph[0]*]\
 								-divide_by 2 -multiply_by 1 -phase 90 \
-								[get_pins -compatibility_mode *pll_top*|inst3*|*[1]*divclk*]
+								[get_pins -compatibility_mode $LMS2_RX_PLL|*[1]*divclk*]
 
 #LMS2_FCLK2 clock output pin 
 create_generated_clock 	-name LMS2_FCLK2_PLL \
 								-master [get_clocks LMS2_RXPLL_C0] \
-								-source [get_pins -compatibility_mode *pll_top*|inst3*|ALTDDIO*|dataout] \
+								-source [get_pins -compatibility_mode $LMS2_RX_PLL|ALTDDIO*|dataout] \
 								[get_ports LMS2_FCLK2]
 								
 #create_generated_clock 	-name LMS2_FCLK2_DRCT \

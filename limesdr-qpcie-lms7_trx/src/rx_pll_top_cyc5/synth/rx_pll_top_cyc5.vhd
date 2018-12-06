@@ -216,14 +216,14 @@ process(free_running_clk, pll_logic_reset_n)
 ----------------------------------------------------------------------------
    -- Global clock control block
 ----------------------------------------------------------------------------
-   clkctrl_c5_inst0 : clkctrl_c5
-   port map(
-      inclk  => pll_inclk,
-      ena    => '1',
-      outclk => pll_inclk_global
-   );
-   
---pll_inclk_global <= pll_inclk;
+--   clkctrl_c5_inst0 : clkctrl_c5
+--   port map(
+--      inclk  => pll_inclk,
+--      ena    => '1',
+--      outclk => pll_inclk_global
+--   );
+--   
+ pll_inclk_global <= pll_inclk;
  
 ----------------------------------------------------------------------------
 -- PLL instance

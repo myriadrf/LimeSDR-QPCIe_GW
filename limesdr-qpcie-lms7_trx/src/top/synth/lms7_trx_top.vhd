@@ -544,6 +544,7 @@ signal inst12_tx1_wrfull               : std_logic;
 signal inst12_tx1_wrreq                : std_logic;
 signal inst12_tx1_data                 : std_logic_vector(27 downto 0);
 signal inst12_tx_src_sel               : std_logic_vector(1 downto 0);
+signal inst12_tx2_wrusedw              : std_logic_vector(8 downto 0);
 
 --inst19
 signal inst19_phy_clk                  : std_logic;
@@ -554,6 +555,10 @@ signal inst19_wfm_0_Aiq_l              : std_logic_vector(12 downto 0);
 signal inst19_wfm_0_outfifo_reset_n    : std_logic;
 signal inst19_wfm_0_outfifo_wrreq      : std_logic;
 signal inst19_wfm_0_outfifo_data       : std_logic_vector(127 downto 0);
+signal inst19_wfm_1_outfifo_reset_n    : std_logic;
+signal inst19_wfm_1_outfifo_wrreq      : std_logic;
+signal inst19_wfm_1_outfifo_data       : std_logic_vector(127 downto 0);
+
 
 --inst20
 signal inst20_phy_clk                  : std_logic;
@@ -911,9 +916,9 @@ begin
       H2F_S2_0_rempty      => inst2_H2F_S2_0_rempty,
       H2F_S2_0_rdusedw     => inst2_H2F_S2_0_rdusedw,
      
-      H2F_S2_1_rdclk       => inst1_pll_0_c1,
+      H2F_S2_1_rdclk       => inst19_phy_clk,
       H2F_S2_1_aclrn       => inst0_from_fpgacfg_2.wfm_load,
-      H2F_S2_1_rd          => inst11_wfm_in_pct_rdreq,
+      H2F_S2_1_rd          => inst19_wfm_1_infifo_rdreq,
       H2F_S2_1_rdata       => inst2_H2F_S2_1_rdata,
       H2F_S2_1_rempty      => inst2_H2F_S2_1_rempty,
       H2F_S2_1_rdusedw     => inst2_H2F_S2_1_rdusedw,       
@@ -1352,63 +1357,63 @@ begin
    );
    
    -- RX and TX module
---   inst11_rxtx_top : entity work.rxtx_top
---   generic map(
---      DEV_FAMILY              => g_DEV_FAMILY,
---      -- TX parameters
---      TX_IQ_WIDTH             => 14,
---      TX_N_BUFF               => g_TX_N_BUFF,              -- 2,4 valid values
---      TX_IN_PCT_SIZE          => g_TX_PCT_SIZE,
---      TX_IN_PCT_HDR_SIZE      => g_TX_IN_PCT_HDR_SIZE,
---      TX_IN_PCT_DATA_W        => c_H2F_S2_0_RWIDTH,      -- 
---      TX_IN_PCT_RDUSEDW_W     => c_H2F_S2_0_RDUSEDW_WIDTH,
---      
---      -- RX parameters
---      RX_IQ_WIDTH             => 14,
---      RX_INVERT_INPUT_CLOCKS  => "ON",
---      RX_PCT_BUFF_WRUSEDW_W   => c_F2H_S2_WRUSEDW_WIDTH --bus width in bits 
---      
---   )
---   port map(                                             
---      from_fpgacfg            => inst0_from_fpgacfg_mod_2,
---      to_tstcfg_from_rxtx     => inst11_to_tstcfg_from_rxtx,
---      from_tstcfg             => inst0_from_tstcfg,      
---      -- TX module signals
---      tx_clk                  => inst1_pll_0_c1,
---      tx_clk_reset_n          => inst1_pll_0_locked,     
---      tx_pct_loss_flg         => inst11_tx_pct_loss_flg,
---      tx_txant_en             => inst11_tx_txant_en,  
---      --Tx interface data 
---      tx_smpl_fifo_wrreq      => inst11_tx_smpl_fifo_wrreq,
---      tx_smpl_fifo_wrfull     => inst12_tx0_wrfull,
---      tx_smpl_fifo_wrusedw    => inst12_tx0_wrusedw,
---      tx_smpl_fifo_data       => inst11_tx_smpl_fifo_data,
---      --TX packet FIFO ports
---      tx_in_pct_reset_n_req   => inst11_tx_in_pct_reset_n_req,
---      tx_in_pct_rdreq         => inst11_tx_in_pct_rdreq,
---      tx_in_pct_data          => inst2_H2F_S2_0_rdata,
---      tx_in_pct_rdempty       => inst2_H2F_S2_0_rempty,
---      tx_in_pct_rdusedw       => inst2_H2F_S2_0_rdusedw,     
---      -- RX path
---      rx_clk                  => ADC_CLKOUT,
---      rx_clk_reset_n          => inst1_pll_0_locked,
---      --RX FIFO for IQ samples   
---      rx_smpl_fifo_wrreq      => inst10_rx_data_valid,
---      rx_smpl_fifo_data       => inst10_rx_data,
---      rx_smpl_fifo_wrfull     => open,
---      --RX Packet FIFO ports
---      rx_pct_fifo_aclrn_req   => inst11_rx_pct_fifo_aclrn_req,
---      rx_pct_fifo_wusedw      => inst2_F2H_S2_wrusedw,
---      rx_pct_fifo_wrreq       => inst11_rx_pct_fifo_wrreq,
---      rx_pct_fifo_wdata       => inst11_rx_pct_fifo_wdata  
---   );
+   inst11_rxtx_top : entity work.rxtx_top
+   generic map(
+      DEV_FAMILY              => g_DEV_FAMILY,
+      -- TX parameters
+      TX_IQ_WIDTH             => 14,
+      TX_N_BUFF               => g_TX_N_BUFF,              -- 2,4 valid values
+      TX_IN_PCT_SIZE          => g_TX_PCT_SIZE,
+      TX_IN_PCT_HDR_SIZE      => g_TX_IN_PCT_HDR_SIZE,
+      TX_IN_PCT_DATA_W        => c_H2F_S2_0_RWIDTH,      -- 
+      TX_IN_PCT_RDUSEDW_W     => c_H2F_S2_0_RDUSEDW_WIDTH,
+      
+      -- RX parameters
+      RX_IQ_WIDTH             => 14,
+      RX_INVERT_INPUT_CLOCKS  => "ON",
+      RX_PCT_BUFF_WRUSEDW_W   => c_F2H_S2_WRUSEDW_WIDTH --bus width in bits 
+      
+   )
+   port map(                                             
+      from_fpgacfg            => inst0_from_fpgacfg_mod_2,
+      to_tstcfg_from_rxtx     => inst11_to_tstcfg_from_rxtx,
+      from_tstcfg             => inst0_from_tstcfg,      
+      -- TX module signals
+      tx_clk                  => inst1_pll_0_c1,
+      tx_clk_reset_n          => inst1_pll_0_locked,     
+      tx_pct_loss_flg         => inst11_tx_pct_loss_flg,
+      tx_txant_en             => inst11_tx_txant_en,  
+      --Tx interface data 
+      tx_smpl_fifo_wrreq      => inst11_tx_smpl_fifo_wrreq,
+      tx_smpl_fifo_wrfull     => inst12_tx0_wrfull,
+      tx_smpl_fifo_wrusedw    => inst12_tx0_wrusedw,
+      tx_smpl_fifo_data       => inst11_tx_smpl_fifo_data,
+      --TX packet FIFO ports
+      tx_in_pct_reset_n_req   => inst11_tx_in_pct_reset_n_req,
+      tx_in_pct_rdreq         => inst11_tx_in_pct_rdreq,
+      tx_in_pct_data          => inst2_H2F_S2_0_rdata,
+      tx_in_pct_rdempty       => inst2_H2F_S2_0_rempty,
+      tx_in_pct_rdusedw       => inst2_H2F_S2_0_rdusedw,     
+      -- RX path
+      rx_clk                  => ADC_CLKOUT,
+      rx_clk_reset_n          => inst1_pll_0_locked,
+      --RX FIFO for IQ samples   
+      rx_smpl_fifo_wrreq      => inst10_rx_data_valid,
+      rx_smpl_fifo_data       => inst10_rx_data,
+      rx_smpl_fifo_wrfull     => open,
+      --RX Packet FIFO ports
+      rx_pct_fifo_aclrn_req   => inst11_rx_pct_fifo_aclrn_req,
+      rx_pct_fifo_wusedw      => inst2_F2H_S2_wrusedw,
+      rx_pct_fifo_wrreq       => inst11_rx_pct_fifo_wrreq,
+      rx_pct_fifo_wdata       => inst11_rx_pct_fifo_wdata  
+   );
    
    inst12_tx1_data   <= inst10_data_ch_b & inst10_data_ch_a;
    inst12_tx1_wrreq  <= (not inst12_tx1_wrfull) AND (inst0_from_fpgacfg_mod_2.dlb_en AND inst1_pll_0_locked);
    
-   inst12_tx_src_sel <= "00" when inst0_from_fpgacfg_mod_2.rx_en = '1' else 
+   inst12_tx_src_sel <= "10" when inst0_from_fpgacfg_mod_2.wfm_play = '1' else 
                         "01" when inst0_from_fpgacfg_mod_2.dlb_en = '1' else 
-                        "10";
+                        "00";
    
    -- DAC module
    inst12_dac5672_top : entity work.dac5672_top
@@ -1418,7 +1423,9 @@ begin
       g_TX0_FIFO_WRUSEDW      => 9,
       g_TX0_FIFO_DATAW        => 128,
       g_TX1_FIFO_WRUSEDW      => 9,
-      g_TX1_FIFO_DATAW        => 2*g_EXT_ADC_D_WIDTH
+      g_TX1_FIFO_DATAW        => 2*g_EXT_ADC_D_WIDTH,
+      g_TX2_FIFO_WRUSEDW      => 9,
+      g_TX2_FIFO_DATAW        => 128
    )
    port map(
       clk                  => inst1_pll_0_c1,
@@ -1450,6 +1457,13 @@ begin
       tx1_wrusedw          => open,
       tx1_wrreq            => inst12_tx1_wrreq,
       tx1_data             => inst12_tx1_data,
+      -- tx2 source for DAC
+      tx2_wrclk            => inst19_phy_clk,
+      tx2_reset_n          => inst19_wfm_1_outfifo_reset_n,   
+      tx2_wrfull           => open,
+      tx2_wrusedw          => inst12_tx2_wrusedw,
+      tx2_wrreq            => inst19_wfm_1_outfifo_wrreq,
+      tx2_data             => inst19_wfm_1_outfifo_data,
       -- tx2 FIFO source for DAC
       tx2_dac1_da          => (others=>'0'),
       tx2_dac1_db          => (others=>'0'),
@@ -1513,9 +1527,9 @@ begin
       wfm_0_outfifo_wrusedw_width   => 9,
       
       -- wfm 1 player parameters
-      wfm_1_infifo_rdusedw_width    => 11,
-      wfm_1_infifo_rdata_width      => 64,      
-      wfm_1_outfifo_wrusedw_width   => 10,
+      wfm_1_infifo_rdusedw_width    => c_H2F_S2_1_RDUSEDW_WIDTH,
+      wfm_1_infifo_rdata_width      => c_H2F_S2_1_RWIDTH,      
+      wfm_1_outfifo_wrusedw_width   => 9,
       
       wfm_0_iq_width                => 12,
       wfm_1_iq_width                => 14
@@ -1542,14 +1556,14 @@ begin
       from_fpgacfg_1          => inst0_from_fpgacfg_2,
       --infifo 
       wfm_1_infifo_rdreq      => inst19_wfm_1_infifo_rdreq,
-      wfm_1_infifo_rdata      => (others=>'0'),
-      wfm_1_infifo_rdempty    => '1',
-      wfm_1_infifo_rdusedw    => (others=>'0'),
+      wfm_1_infifo_rdata      => inst2_H2F_S2_1_rdata,
+      wfm_1_infifo_rdempty    => inst2_H2F_S2_1_rempty,
+      wfm_1_infifo_rdusedw    => inst2_H2F_S2_1_rdusedw,
       --outfifo   
-      wfm_1_outfifo_reset_n   => open,
-      wfm_1_outfifo_wrreq     => open,
-      wfm_1_outfifo_data      => open,
-      wfm_1_outfifo_wrusedw   => (others=>'0'),
+      wfm_1_outfifo_reset_n   => inst19_wfm_1_outfifo_reset_n,
+      wfm_1_outfifo_wrreq     => inst19_wfm_1_outfifo_wrreq,
+      wfm_1_outfifo_data      => inst19_wfm_1_outfifo_data,
+      wfm_1_outfifo_wrusedw   => inst12_tx2_wrusedw,
 
       ---------------------External memory signals
       mem_a                   => DDR3_BOT_A,       -- memory.mem_a

@@ -31,7 +31,10 @@ entity dac5672_top is
       g_TX0_FIFO_WRUSEDW      : integer := 9;
       g_TX0_FIFO_DATAW        : integer := 128;
       g_TX1_FIFO_WRUSEDW      : integer := 9;
-      g_TX1_FIFO_DATAW        : integer := 128
+      g_TX1_FIFO_DATAW        : integer := 128;
+      g_TX2_FIFO_WRUSEDW      : integer := 9;
+      g_TX2_FIFO_DATAW        : integer := 128
+      
    );
    port (
       clk               : in  std_logic;
@@ -63,6 +66,13 @@ entity dac5672_top is
       tx1_wrusedw       : out std_logic_vector(g_TX1_FIFO_WRUSEDW-1 downto 0);
       tx1_wrreq         : in  std_logic;
       tx1_data          : in  std_logic_vector(g_TX1_FIFO_DATAW-1 downto 0);
+      -- tx2  FIFO source for DAC
+      tx2_wrclk         : in  std_logic;
+      tx2_reset_n       : in  std_logic;
+      tx2_wrfull        : out std_logic;
+      tx2_wrusedw       : out std_logic_vector(g_TX2_FIFO_WRUSEDW-1 downto 0);
+      tx2_wrreq         : in  std_logic;
+      tx2_data          : in  std_logic_vector(g_TX2_FIFO_DATAW-1 downto 0);      
       -- tx2 source for DAC
       tx2_dac1_da       : in  std_logic_vector(g_IQ_WIDTH-1 downto 0);
       tx2_dac1_db       : in  std_logic_vector(g_IQ_WIDTH-1 downto 0);
@@ -118,12 +128,26 @@ signal inst1_q                   : std_logic_vector(c_INST1_RDWIDTH-1 downto 0);
 signal inst1_rdempty             : std_logic;
 signal inst1_rdreq               : std_logic;
 
+
+--inst2
+constant c_INST2_WRUSEDW_WITDTH  : integer := g_TX2_FIFO_WRUSEDW;
+constant c_INST2_RDWIDTH         : integer := 64;    
+constant c_INST2_RDUSEDW_WIDTH   : integer := FIFORD_SIZE(g_TX2_FIFO_DATAW, 
+                                                            c_INST2_RDWIDTH,
+                                                            c_INST2_WRUSEDW_WITDTH);
+signal inst2_wrfull              : std_logic;
+signal inst2_wrusedw             : std_logic_vector(c_INST2_WRUSEDW_WITDTH-1 downto 0);
+signal inst2_q                   : std_logic_vector(c_INST2_RDWIDTH-1 downto 0);
+signal inst2_rdempty             : std_logic;
+signal inst2_rdreq               : std_logic;
+                                                            
 --inst3
 signal inst3_DIQ0                : std_logic_vector(g_IQ_WIDTH downto 0);
 signal inst3_DIQ1                : std_logic_vector(g_IQ_WIDTH downto 0);
 signal inst3_DIQ2                : std_logic_vector(g_IQ_WIDTH downto 0);
 signal inst3_DIQ3                : std_logic_vector(g_IQ_WIDTH downto 0);
 signal inst3_fifo_rdreq          : std_logic;
+signal inst3_fifo_rdempty        : std_logic;
 signal inst3_fifo_q_valid        : std_logic;
 signal inst3_fifo_q              : std_logic_vector(4*g_IQ_WIDTH-1 downto 0);
 
@@ -187,11 +211,15 @@ begin
       wrempty     => open,
       wrusedw     => tx0_wrusedw,
       rdclk       => clk,
-      rdreq       => inst3_fifo_rdreq,
+      rdreq       => inst0_rdreq,
       q           => inst0_q,
       rdempty     => inst0_rdempty,
       rdusedw     => open   
    );
+   
+   inst0_rdreq <= inst3_fifo_rdreq when tx_src_sel_sync = "00" else '0';
+   
+   
 -- TX1 FIFO
    inst1_fifo_inst : entity work.fifo_inst
    generic map(
@@ -222,6 +250,33 @@ begin
    tx1_dac1_db    <= inst1_q(g_IQ_WIDTH-1 downto 0);
    tx1_dac2_da    <= (others=>'0');
    tx1_dac2_db    <= (others=>'0');
+
+-- TX 2 FIFO
+   inst2_fifo_inst : entity work.fifo_inst
+   generic map(
+      dev_family        => g_DEV_FAMILY,
+      wrwidth           => g_TX2_FIFO_DATAW,
+      wrusedw_witdth    => c_INST2_WRUSEDW_WITDTH,
+      rdwidth           => c_INST2_RDWIDTH,
+      rdusedw_width     => c_INST2_RDUSEDW_WIDTH,
+      show_ahead        => "OFF"
+   )
+  port map(
+      reset_n     => tx2_reset_n,
+      wrclk       => tx2_wrclk,
+      wrreq       => tx2_wrreq,
+      data        => tx2_data,
+      wrfull      => tx2_wrfull,
+      wrempty     => open,
+      wrusedw     => tx2_wrusedw,
+      rdclk       => clk,
+      rdreq       => inst2_rdreq,
+      q           => inst2_q,
+      rdempty     => inst2_rdempty,
+      rdusedw     => open   
+   );  
+   
+   inst2_rdreq <= inst3_fifo_rdreq when tx_src_sel_sync = "10" else '0';
    
 -- ----------------------------------------------------------------------------
 -- Sample forming module
@@ -230,7 +285,11 @@ begin
 inst3_fifo_q <=   inst0_q(63 downto 64-g_IQ_WIDTH) & 
                   inst0_q(47 downto 48-g_IQ_WIDTH) &
                   inst0_q(31 downto 32-g_IQ_WIDTH) & 
-                  inst0_q(15 downto 16-g_IQ_WIDTH); 
+                  inst0_q(15 downto 16-g_IQ_WIDTH) when tx_src_sel_sync = "00" else 
+                  inst2_q(63 downto 64-g_IQ_WIDTH) & 
+                  inst2_q(47 downto 48-g_IQ_WIDTH) &
+                  inst2_q(31 downto 32-g_IQ_WIDTH) & 
+                  inst2_q(15 downto 16-g_IQ_WIDTH); 
                   
    process(clk, reset_n)
    begin
@@ -249,18 +308,21 @@ inst3_txiq_par : entity work.txiq_par
 	port map (
       clk            => clk,
       reset_n        => tx_reset_n,
-      en             => from_fpgacfg.rx_en,
+      en             => from_fpgacfg.rx_en OR from_fpgacfg.wfm_play,
 		ch_en			   => from_fpgacfg.ch_en(1 downto 0), 
 		fidm			   => '0',
       DIQ0		 	   => inst3_DIQ0,
 		DIQ1           => inst3_DIQ1,
       DIQ2		 	   => inst3_DIQ2,
 		DIQ3           => inst3_DIQ3,
-      fifo_rdempty   => inst0_rdempty,
+      fifo_rdempty   => inst3_fifo_rdempty,
       fifo_rdreq     => inst3_fifo_rdreq,
       fifo_q_valid   => inst3_fifo_q_valid,
       fifo_q         => inst3_fifo_q
    );
+   
+   inst3_fifo_rdempty <=   inst0_rdempty when tx_src_sel_sync = "00" else 
+                           inst2_rdempty;
    
 -- ----------------------------------------------------------------------------
 -- Internal MUX0
@@ -278,7 +340,7 @@ inst3_txiq_par : entity work.txiq_par
             mux0_dac1_db <= tx1_dac1_db;
             mux0_dac2_da <= tx1_dac2_da;
             mux0_dac2_db <= tx1_dac2_db;
-         elsif tx_src_sel_sync = "10" then
+         elsif tx_src_sel_sync = "11" then
             mux0_dac1_da <= tx2_dac1_da;
             mux0_dac1_db <= tx2_dac1_db;
             mux0_dac2_da <= tx2_dac2_da;
@@ -303,7 +365,7 @@ inst3_txiq_par : entity work.txiq_par
          mux1_dac2_da <= (others=>'0');
          mux1_dac2_db <= (others=>'0');
       elsif (clk'event AND clk='1') then 
-         if tx_src_sel_sync = "00" then 
+         if tx_src_sel_sync = "00" OR tx_src_sel_sync = "10" then 
             mux1_dac1_da <= inst3_DIQ0(g_IQ_WIDTH-1 downto 0);
             mux1_dac1_db <= inst3_DIQ1(g_IQ_WIDTH-1 downto 0);
             mux1_dac2_da <= inst3_DIQ2(g_IQ_WIDTH-1 downto 0);
