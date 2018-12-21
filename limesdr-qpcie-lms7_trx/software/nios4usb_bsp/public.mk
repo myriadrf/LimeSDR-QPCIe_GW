@@ -77,12 +77,12 @@ ALT_CPPFLAGS += -pipe
 
 # This following VERSION comment indicates the version of the tool used to 
 # generate this makefile. A makefile variable is provided for VERSION as well. 
-# ACDS_VERSION: 16.1
-ACDS_VERSION := 16.1
+# ACDS_VERSION: 18.0
+ACDS_VERSION := 18.0
 
 # This following BUILD_NUMBER comment indicates the build number of the tool 
 # used to generate this makefile. 
-# BUILD_NUMBER: 200
+# BUILD_NUMBER: 614
 
 # Qsys--generated SOPCINFO file. Required for resolving node instance ID's with 
 # design component names. 
@@ -152,21 +152,14 @@ SOPC_SYSID_FLAG += --id=10
 ELF_PATCH_FLAG  += --id 10
 
 # The SOPC System ID Base Address 
-# setting SOPC_SYSID_BASE_ADDRESS is 0x7f0
-SOPC_SYSID_FLAG += --sidp=0x7f0
-ELF_PATCH_FLAG  += --sidp 0x7f0
+# setting SOPC_SYSID_BASE_ADDRESS is 0x1810
+SOPC_SYSID_FLAG += --sidp=0x1810
+ELF_PATCH_FLAG  += --sidp 0x1810
 
 # The SOPC Timestamp 
-# setting SOPC_TIMESTAMP is 1521118972
-SOPC_SYSID_FLAG += --timestamp=1521118972
-ELF_PATCH_FLAG  += --timestamp 1521118972
-
-# Enable JTAG UART driver to recover when host is inactive causing buffer to 
-# full without returning error. Printf will not fail with this recovery. none 
-# setting altera_avalon_jtag_uart_driver.enable_jtag_uart_ignore_fifo_full_error is false
-
-# Small-footprint (polled mode) driver none 
-# setting altera_avalon_jtag_uart_driver.enable_small_driver is false
+# setting SOPC_TIMESTAMP is 1536833288
+SOPC_SYSID_FLAG += --timestamp=1536833288
+ELF_PATCH_FLAG  += --timestamp 1536833288
 
 # Build a custom version of newlib with the specified space-separated compiler 
 # flags. The custom newlib build will be placed in the <bsp root>/newlib 
@@ -348,18 +341,18 @@ ALT_CFLAGS += -mgpopt=global
 
 # Slave descriptor of STDERR character-mode device. This setting is used by the 
 # ALT_STDERR family of defines in system.h. none 
-# setting hal.stderr is jtag_uart_0
-ELF_PATCH_FLAG  += --stderr_dev jtag_uart_0
+# setting hal.stderr is none
+ELF_PATCH_FLAG  += --stderr_dev none
 
 # Slave descriptor of STDIN character-mode device. This setting is used by the 
 # ALT_STDIN family of defines in system.h. none 
-# setting hal.stdin is jtag_uart_0
-ELF_PATCH_FLAG  += --stdin_dev jtag_uart_0
+# setting hal.stdin is none
+ELF_PATCH_FLAG  += --stdin_dev none
 
 # Slave descriptor of STDOUT character-mode device. This setting is used by the 
 # ALT_STDOUT family of defines in system.h. none 
-# setting hal.stdout is jtag_uart_0
-ELF_PATCH_FLAG  += --stdout_dev jtag_uart_0
+# setting hal.stdout is none
+ELF_PATCH_FLAG  += --stdout_dev none
 
 
 #------------------------------------------------------------------------------

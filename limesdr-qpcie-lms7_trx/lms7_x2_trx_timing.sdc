@@ -97,11 +97,11 @@ create_generated_clock 	-name FPGA_PLL_C1 \
 #Clock outputs generated with FPGA PLL
 	#For ADC
 create_generated_clock 	-name ADC_CLK \
-								-source [get_pins {inst13|ALTDDIO_OUT_component|auto_generated|ddio_outa[0]|dataout}] [get_ports ADC_CLK]
+								-source [get_pins -compatibility_mode *adc_dac_pll*|inst2*|dataout] [get_ports ADC_CLK]
 	#For DAC
 create_generated_clock 	-name DAC_CLK_WRT \
 								-invert \
-								-source [get_pins {inst33|ALTDDIO_OUT_component|auto_generated|ddio_outa[0]|dataout}] [get_ports DAC_CLK_WRT]
+								-source [get_pins -compatibility_mode *adc_dac_pll*|inst2*|dataout] [get_ports DAC_CLK_WRT]
 
 
 #NIOS II generated clocks 

@@ -3,13 +3,14 @@
 -- DESCRIPTION:	Serial configuration interface to control TX modules
 -- DATE:	June 07, 2007
 -- AUTHOR(s):	Lime Microsystems
--- REVISIONS:	
+-- REVISIONS:  Borisav Jovanovic change: 01.08.2017	
 -- ----------------------------------------------------------------------------	
 
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use work.mem_package.all;
+
 
 -- ----------------------------------------------------------------------------
 -- Entity declaration
@@ -26,8 +27,7 @@ entity adpdcfg is
 		sclk	: in std_logic; 	-- Data clock
 		sen	: in std_logic;	-- Enable signal (active low)
 		sdout	: out std_logic; 	-- Data out
-	
-		-- Signals coming from the pins or top level serial interface
+
 		lreset	: in std_logic; 	-- Logic reset signal, resets logic cells only  (use only one reset)
 		mreset	: in std_logic; 	-- Memory reset signal, resets configuration memory only (use only one reset)
 		
@@ -39,12 +39,27 @@ entity adpdcfg is
 		ADPD_BUFF_SIZE 	: out std_logic_vector(15 downto 0);
 		ADPD_CONT_CAP_EN	: out std_logic;
 		ADPD_CAP_EN			: out std_logic;
-		ADPD_CONFIG			: out std_logic_vector(15 downto 0);
-		xen_n					: out std_logic_vector(15 downto 0)
+		
+		adpd_config0, adpd_config1, adpd_data: out std_logic_vector(15 downto 0);
+		
+		cfr0_bypass, cfr1_bypass, cfr0_sleep, cfr1_sleep: out std_logic;
+		cfr0_half_order, cfr1_half_order: out std_logic_vector(7 downto 0);
+		cfr0_threshold, cfr1_threshold: out std_logic_vector(15 downto 0);
+	
+		hb0_bypass, hb1_bypass, isinc0_bypass, isinc1_bypass: out std_logic;
 		
 		
+		select_DACs, select_chA: out std_logic;
+      
+		space_cnt_rst: out std_logic;
+		space_address_msb: out std_logic_vector(9 downto 0);
 		
-
+		gain_cfr_A, gain_cfr_B: out std_logic_vector(15 downto 0);
+		gain_cfr0_bypass, gain_cfr1_bypass: out std_logic;
+		
+		temp: out std_logic_vector(7 downto 0);
+		hb2_bypass, delay3: out std_logic;
+      gfir0_byp, gfir1_byp: out std_logic
 
 	);
 end adpdcfg;
@@ -161,19 +176,18 @@ begin
 		if mreset = '0' then	
 			--Read only registers
 			mem(0)	<= "0100000000000000"; -- 00 free, ADPD_BUFF_SIZE
-			mem(1)	<= "0000000000000000"; -- 14 free, ADPD_CONT_CAP_EN, ADPD_CAP_EN
-			--FREE for use 
-			mem(2)	<= "0000000000000000"; -- 16 free, 
-			mem(3)	<= "0000000000000001"; -- 16 free, 
-			mem(4)	<= "0000000000000000"; -- 16 free,
-			mem(5)	<= "0000000000000000"; -- 16 free, 
-			mem(6)	<= "0000000000000000"; -- 16 free,
-			mem(7)	<= "0000000000000000"; -- 16 free, 
-			mem(8)	<= "0000000000000000"; -- 16 free, 
+			mem(1)	<= "0000000011000000"; -- 14 free, ADPD_CONT_CAP_EN, ADPD_CAP_EN
+			mem(2)	<= "0000000000000000"; -- adpd_config0(15:0) 
+			mem(3)	<= "0000000000000000"; -- adpd_config1(15:0)
+			mem(4)	<= "0000000000000000"; -- adpd_data(15:0)
+			mem(5)	<= "0000010000100111"; -- 16 free,  --cfr0_order =39, gain_cfr0_bypass
+			mem(6)	<= "1111111111111111"; -- 16 free,  -- 1.0
+			mem(7)	<= "0000010000100111"; -- 16 free,  --cfr1_order =39, gain_cfr1_bypass 
+			mem(8)	<= "1111111111111111"; -- 16 free,  -- 1.0
 			mem(9)	<= "0000000000000000"; -- 16 free,			
 			mem(10)	<= "0000000000000000"; -- 16 free, 
-			mem(11)	<= "0000000000000000"; -- 16 free, 
-			mem(12)	<= "0000000000000000"; -- 16 free, 
+			mem(11)	<= "0010000000000000"; -- 16 free, -- gain_crf_A [-4..4]
+			mem(12)	<= "0010000000000000"; -- 16 free, -- gain_crf_B 
 			mem(13)	<= "0000000000000000"; -- 16 free, 
 			mem(14)	<= "0000000000000000"; -- 16 free, 
 			mem(15)	<= "0000000000000000"; -- 16 free, 
@@ -200,12 +214,53 @@ begin
 	-- ---------------------------------------------------------------------------------------------
 	-- Decoding logic
 	-- ---------------------------------------------------------------------------------------------
-		ADPD_BUFF_SIZE 	<=mem(0);
+		ADPD_BUFF_SIZE 	<=mem(0);  -- not important
+		
+		
 		ADPD_CAP_EN			<=mem(1)(0);
 		ADPD_CONT_CAP_EN	<=mem(1)(1);
-		ADPD_CONFIG			<=mem(2);
-		xen_n					<=mem(3);
+		
+	-- HB1
+	   hb0_bypass  <= mem(15)(2);
+		select_DACs<= mem(15)(6);
+		
+	-- HB2		
+		hb1_bypass  <= mem(15)(3);
+		select_chA<= mem(15)(7);
 
-
+   -- HBP
+	   hb2_bypass  <= mem(15)(8);	
+	   delay3<= mem(15)(9);	
+	---	
+		isinc0_bypass  <= mem(15)(4);
+		isinc1_bypass  <= mem(15)(5);
+		
+		
+		adpd_config0		<= mem(2)(15 downto 0); 
+		adpd_config1		<= mem(3)(15 downto 0); 
+	   adpd_data		   <= mem(4)(15 downto 0);
+		
+		cfr0_half_order <= mem(5)(7 downto 0);
+		cfr0_sleep   <= mem(5)(8);
+	   cfr0_bypass  <= mem(5)(9);		
+		gain_cfr0_bypass<= mem(5)(10);		
+		cfr0_threshold <= mem(6)(15 downto 0);
+		
+		cfr1_half_order <= mem(7)(7 downto 0);
+		cfr1_sleep   <= mem(7)(8);
+	   cfr1_bypass  <= mem(7)(9);
+	   gain_cfr1_bypass<= mem(7)(10);
+		
+		cfr1_threshold <= mem(8)(15 downto 0);		
+		space_cnt_rst<= mem(9)(0);		
+		space_address_msb(9 downto 0)<= mem(10)(9 downto 0);
+		
+		gain_cfr_A<= mem(11) (15 downto 0);
+		gain_cfr_B<= mem(12) (15 downto 0);
+		
+		temp<= mem(13)(7 downto 0);
+      gfir0_byp <= mem(14)(0);
+      gfir1_byp <= mem(14)(1);
+		
 
 end adpdcfg_arch;

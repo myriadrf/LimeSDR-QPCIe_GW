@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_cpu' in SOPC Builder design 'nios_cpu'
  * SOPC Builder design path: ../../nios_cpu.sopcinfo
  *
- * Generated: Thu Mar 15 15:35:30 EET 2018
+ * Generated: Thu Sep 13 14:01:24 EEST 2018
  */
 
 /*
@@ -61,7 +61,7 @@
  */
 
 #define ALT_MODULE_CLASS_Av_FIFO_Int_0 Av_FIFO_Int
-#define AV_FIFO_INT_0_BASE 0x7e0
+#define AV_FIFO_INT_0_BASE 0x1800
 #define AV_FIFO_INT_0_IRQ -1
 #define AV_FIFO_INT_0_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define AV_FIFO_INT_0_NAME "/dev/Av_FIFO_Int_0"
@@ -161,7 +161,6 @@
  *
  */
 
-#define __ALTERA_AVALON_JTAG_UART
 #define __ALTERA_AVALON_ONCHIP_MEMORY2
 #define __ALTERA_AVALON_PIO
 #define __ALTERA_AVALON_SPI
@@ -179,7 +178,7 @@
  */
 
 #define ALT_MODULE_CLASS_PLLCFG_Command altera_avalon_pio
-#define PLLCFG_COMMAND_BASE 0x7b0
+#define PLLCFG_COMMAND_BASE 0x7d0
 #define PLLCFG_COMMAND_BIT_CLEARING_EDGE_REGISTER 0
 #define PLLCFG_COMMAND_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define PLLCFG_COMMAND_CAPTURE 0
@@ -206,7 +205,7 @@
  */
 
 #define ALT_MODULE_CLASS_PLLCFG_SPI altera_avalon_spi
-#define PLLCFG_SPI_BASE 0x720
+#define PLLCFG_SPI_BASE 0x740
 #define PLLCFG_SPI_CLOCKMULT 1
 #define PLLCFG_SPI_CLOCKPHASE 0
 #define PLLCFG_SPI_CLOCKPOLARITY 0
@@ -237,7 +236,7 @@
  */
 
 #define ALT_MODULE_CLASS_PLLCFG_Status altera_avalon_pio
-#define PLLCFG_STATUS_BASE 0x7a0
+#define PLLCFG_STATUS_BASE 0x7c0
 #define PLLCFG_STATUS_BIT_CLEARING_EDGE_REGISTER 0
 #define PLLCFG_STATUS_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define PLLCFG_STATUS_CAPTURE 0
@@ -264,7 +263,7 @@
  */
 
 #define ALT_MODULE_CLASS_PLL_RST altera_avalon_pio
-#define PLL_RST_BASE 0x790
+#define PLL_RST_BASE 0x7b0
 #define PLL_RST_BIT_CLEARING_EDGE_REGISTER 0
 #define PLL_RST_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define PLL_RST_CAPTURE 0
@@ -300,24 +299,18 @@
 #define ALT_NUM_EXTERNAL_INTERRUPT_CONTROLLERS 0
 #define ALT_NUM_INTERNAL_INTERRUPT_CONTROLLERS 1
 #define ALT_NUM_INTERRUPT_CONTROLLERS 1
-#define ALT_STDERR "/dev/jtag_uart_0"
-#define ALT_STDERR_BASE 0x7f8
-#define ALT_STDERR_DEV jtag_uart_0
-#define ALT_STDERR_IS_JTAG_UART
-#define ALT_STDERR_PRESENT
-#define ALT_STDERR_TYPE "altera_avalon_jtag_uart"
-#define ALT_STDIN "/dev/jtag_uart_0"
-#define ALT_STDIN_BASE 0x7f8
-#define ALT_STDIN_DEV jtag_uart_0
-#define ALT_STDIN_IS_JTAG_UART
-#define ALT_STDIN_PRESENT
-#define ALT_STDIN_TYPE "altera_avalon_jtag_uart"
-#define ALT_STDOUT "/dev/jtag_uart_0"
-#define ALT_STDOUT_BASE 0x7f8
-#define ALT_STDOUT_DEV jtag_uart_0
-#define ALT_STDOUT_IS_JTAG_UART
-#define ALT_STDOUT_PRESENT
-#define ALT_STDOUT_TYPE "altera_avalon_jtag_uart"
+#define ALT_STDERR "/dev/null"
+#define ALT_STDERR_BASE 0x0
+#define ALT_STDERR_DEV null
+#define ALT_STDERR_TYPE ""
+#define ALT_STDIN "/dev/null"
+#define ALT_STDIN_BASE 0x0
+#define ALT_STDIN_DEV null
+#define ALT_STDIN_TYPE ""
+#define ALT_STDOUT "/dev/null"
+#define ALT_STDOUT_BASE 0x0
+#define ALT_STDOUT_DEV null
+#define ALT_STDOUT_TYPE ""
 #define ALT_SYSTEM_NAME "nios_cpu"
 
 
@@ -327,7 +320,7 @@
  */
 
 #define ALT_MODULE_CLASS_dac_spi1 altera_avalon_spi
-#define DAC_SPI1_BASE 0x700
+#define DAC_SPI1_BASE 0x720
 #define DAC_SPI1_CLOCKMULT 1
 #define DAC_SPI1_CLOCKPHASE 1
 #define DAC_SPI1_CLOCKPOLARITY 0
@@ -358,7 +351,7 @@
  */
 
 #define ALT_MODULE_CLASS_fpga_spi0 altera_avalon_spi
-#define FPGA_SPI0_BASE 0x740
+#define FPGA_SPI0_BASE 0x760
 #define FPGA_SPI0_CLOCKMULT 1
 #define FPGA_SPI0_CLOCKPHASE 0
 #define FPGA_SPI0_CLOCKPOLARITY 0
@@ -389,7 +382,7 @@
  */
 
 #define ALT_MODULE_CLASS_gpi_0 altera_avalon_pio
-#define GPI_0_BASE 0x7c0
+#define GPI_0_BASE 0x7e0
 #define GPI_0_BIT_CLEARING_EDGE_REGISTER 0
 #define GPI_0_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define GPI_0_CAPTURE 0
@@ -416,7 +409,7 @@
  */
 
 #define ALT_MODULE_CLASS_gpio_0 altera_avalon_pio
-#define GPIO_0_BASE 0x7d0
+#define GPIO_0_BASE 0x7f0
 #define GPIO_0_BIT_CLEARING_EDGE_REGISTER 0
 #define GPIO_0_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define GPIO_0_CAPTURE 0
@@ -454,30 +447,12 @@
  */
 
 #define ALT_MODULE_CLASS_i2c_opencores_0 i2c_opencores
-#define I2C_OPENCORES_0_BASE 0x760
+#define I2C_OPENCORES_0_BASE 0x780
 #define I2C_OPENCORES_0_IRQ 0
 #define I2C_OPENCORES_0_IRQ_INTERRUPT_CONTROLLER_ID 0
 #define I2C_OPENCORES_0_NAME "/dev/i2c_opencores_0"
 #define I2C_OPENCORES_0_SPAN 32
 #define I2C_OPENCORES_0_TYPE "i2c_opencores"
-
-
-/*
- * jtag_uart_0 configuration
- *
- */
-
-#define ALT_MODULE_CLASS_jtag_uart_0 altera_avalon_jtag_uart
-#define JTAG_UART_0_BASE 0x7f8
-#define JTAG_UART_0_IRQ 1
-#define JTAG_UART_0_IRQ_INTERRUPT_CONTROLLER_ID 0
-#define JTAG_UART_0_NAME "/dev/jtag_uart_0"
-#define JTAG_UART_0_READ_DEPTH 64
-#define JTAG_UART_0_READ_THRESHOLD 8
-#define JTAG_UART_0_SPAN 8
-#define JTAG_UART_0_TYPE "altera_avalon_jtag_uart"
-#define JTAG_UART_0_WRITE_DEPTH 64
-#define JTAG_UART_0_WRITE_THRESHOLD 8
 
 
 /*
@@ -594,18 +569,49 @@
 
 
 /*
+ * spi_2 configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_spi_2 altera_avalon_spi
+#define SPI_2_BASE 0x700
+#define SPI_2_CLOCKMULT 1
+#define SPI_2_CLOCKPHASE 0
+#define SPI_2_CLOCKPOLARITY 1
+#define SPI_2_CLOCKUNITS "Hz"
+#define SPI_2_DATABITS 8
+#define SPI_2_DATAWIDTH 16
+#define SPI_2_DELAYMULT "1.0E-9"
+#define SPI_2_DELAYUNITS "ns"
+#define SPI_2_EXTRADELAY 0
+#define SPI_2_INSERT_SYNC 0
+#define SPI_2_IRQ 1
+#define SPI_2_IRQ_INTERRUPT_CONTROLLER_ID 0
+#define SPI_2_ISMASTER 1
+#define SPI_2_LSBFIRST 0
+#define SPI_2_NAME "/dev/spi_2"
+#define SPI_2_NUMSLAVES 1
+#define SPI_2_PREFIX "spi_"
+#define SPI_2_SPAN 32
+#define SPI_2_SYNC_REG_DEPTH 2
+#define SPI_2_TARGETCLOCK 5000000u
+#define SPI_2_TARGETSSDELAY "0.0"
+#define SPI_2_TYPE "altera_avalon_spi"
+
+
+/*
  * sysid_qsys_0 configuration
  *
  */
 
 #define ALT_MODULE_CLASS_sysid_qsys_0 altera_avalon_sysid_qsys
-#define SYSID_QSYS_0_BASE 0x7f0
+#define SYSID_QSYS_0_BASE 0x1810
 #define SYSID_QSYS_0_ID 10
 #define SYSID_QSYS_0_IRQ -1
 #define SYSID_QSYS_0_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define SYSID_QSYS_0_NAME "/dev/sysid_qsys_0"
 #define SYSID_QSYS_0_SPAN 8
-#define SYSID_QSYS_0_TIMESTAMP 1521118972
+#define SYSID_QSYS_0_TIMESTAMP 1536833288
 #define SYSID_QSYS_0_TYPE "altera_avalon_sysid_qsys"
 
 
@@ -615,7 +621,7 @@
  */
 
 #define ALT_MODULE_CLASS_vctcxo_tamer_0_ctrl altera_avalon_pio
-#define VCTCXO_TAMER_0_CTRL_BASE 0x780
+#define VCTCXO_TAMER_0_CTRL_BASE 0x7a0
 #define VCTCXO_TAMER_0_CTRL_BIT_CLEARING_EDGE_REGISTER 0
 #define VCTCXO_TAMER_0_CTRL_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define VCTCXO_TAMER_0_CTRL_CAPTURE 0

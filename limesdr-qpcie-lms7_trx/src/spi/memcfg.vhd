@@ -10,7 +10,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use work.mem_package.all;
-use work.revisions.all;
+use work.memcfg_pkg.all;
 
 -- ----------------------------------------------------------------------------
 -- Entity declaration
@@ -35,9 +35,8 @@ entity memcfg is
 		oen            : out std_logic; --nc
 		stateo         : out std_logic_vector(5 downto 0);
 		
-		mac			   : out std_logic_vector(15 downto 0)
-		
-
+      to_memcfg      : in  t_TO_MEMCFG;
+      from_memcfg    : out t_FROM_MEMCFG
 
 	);
 end memcfg;
@@ -199,7 +198,7 @@ begin
 	-- ---------------------------------------------------------------------------------------------
 	-- Decoding logic
 	-- ---------------------------------------------------------------------------------------------
-		mac <= mem(31) (15 downto 0);
+   from_memcfg.mac <= mem(31) (15 downto 0);
 
 
 end memcfg_arch;

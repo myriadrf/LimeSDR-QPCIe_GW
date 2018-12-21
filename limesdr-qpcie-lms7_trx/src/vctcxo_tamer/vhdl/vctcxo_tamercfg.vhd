@@ -13,6 +13,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use work.mem_package.all;
+use work.tamercfg_pkg.all;
 
 -- ----------------------------------------------------------------------------
 -- Entity declaration
@@ -37,16 +38,9 @@ entity vctcxo_tamercfg is
       oen               : out std_logic; --nc
       stateo            : out std_logic_vector(5 downto 0);
       
-      en                : out std_logic;
-      accuracy          : in  std_logic_vector(3 downto 0);
-      state             : in  std_logic_vector(3 downto 0);
-      dac_tuned_val     : in  std_logic_vector(15 downto 0);
-      pps_1s_err_tol    : out std_logic_vector(31 downto 0);
-      pps_10s_err_tol   : out std_logic_vector(31 downto 0);
-      pps_100s_err_tol  : out std_logic_vector(31 downto 0);
-      pps_1s_err        : in  std_logic_vector(31 downto 0);
-      pps_10s_err       : in  std_logic_vector(31 downto 0);
-      pps_100s_err      : in  std_logic_vector(31 downto 0)
+      to_tamercfg       : in t_TO_TAMERCFG;
+      from_tamercfg     : out t_FROM_TAMERCFG
+     
       
    );
 end vctcxo_tamercfg;
@@ -141,21 +135,21 @@ begin
          elsif dout_reg_len = '1' then
             case inst_reg(4 downto 0) is -- mux read-only outputs
                -- inst_reg=1
-               when "00001" => dout_reg <= "00000000" & accuracy & state;
+               when "00001" => dout_reg <= "00000000" & to_tamercfg.accuracy & to_tamercfg.state;
                -- inst_reg=2
-               when "00010" => dout_reg <= dac_tuned_val;
+               when "00010" => dout_reg <= to_tamercfg.dac_tuned_val;
                -- inst_reg=9;
-               when "01001" => dout_reg <= pps_1s_err(15 downto 0);
+               when "01001" => dout_reg <= to_tamercfg.pps_1s_err(15 downto 0);
                -- inst_reg=10;
-               when "01010" => dout_reg <= pps_1s_err(31 downto 16);
+               when "01010" => dout_reg <= to_tamercfg.pps_1s_err(31 downto 16);
                -- inst_reg=11;
-               when "01011" => dout_reg <= pps_10s_err(15 downto 0);
+               when "01011" => dout_reg <= to_tamercfg.pps_10s_err(15 downto 0);
                -- inst_reg=12;
-               when "01100" => dout_reg <= pps_10s_err(31 downto 16);
+               when "01100" => dout_reg <= to_tamercfg.pps_10s_err(31 downto 16);
                -- inst_reg=13;
-               when "01101" => dout_reg <= pps_100s_err(15 downto 0);
+               when "01101" => dout_reg <= to_tamercfg.pps_100s_err(15 downto 0);
                -- inst_reg=14;
-               when "01110" => dout_reg <= pps_100s_err(31 downto 16);
+               when "01110" => dout_reg <= to_tamercfg.pps_100s_err(31 downto 16);
                when others  => dout_reg <= mem(to_integer(unsigned(inst_reg(4 downto 0))));
             end case;
          end if;        
@@ -225,10 +219,10 @@ begin
    -- ---------------------------------------------------------------------------------------------
    -- Decoding logic
    -- ---------------------------------------------------------------------------------------------
-      en                   <= mem( 0) (0);
-      pps_1s_err_tol       <= mem( 4) (15 downto 0) & mem( 3) (15 downto 0);
-      pps_10s_err_tol      <= mem( 6) (15 downto 0) & mem( 5) (15 downto 0);    
-      pps_100s_err_tol     <= mem( 8) (15 downto 0) & mem( 7) (15 downto 0);
+   from_tamercfg.en                   <= mem( 0) (0);
+   from_tamercfg.pps_1s_err_tol       <= mem( 4) (15 downto 0) & mem( 3) (15 downto 0);
+   from_tamercfg.pps_10s_err_tol      <= mem( 6) (15 downto 0) & mem( 5) (15 downto 0);    
+   from_tamercfg.pps_100s_err_tol     <= mem( 8) (15 downto 0) & mem( 7) (15 downto 0);
 
       
       

@@ -42,7 +42,7 @@ set_global_assignment -name DEVICE 5CGXFC7D7F31C8
 set_global_assignment -name TOP_LEVEL_ENTITY lms7_x2_trx_top
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 16.1.1
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "15:52:32  MAY 10, 2017"
-set_global_assignment -name LAST_QUARTUS_VERSION "16.1.1 Lite Edition"
+set_global_assignment -name LAST_QUARTUS_VERSION "18.0.0 Lite Edition"
 set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
 set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
 set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
@@ -425,7 +425,7 @@ set_location_assignment PIN_Y20 -to DDR3_BOT_DQS_P[2]
 set_location_assignment PIN_AA20 -to DDR3_BOT_DQS_N[2]
 set_location_assignment PIN_AJ27 -to DDR3_BOT_DM[3]
 set_location_assignment PIN_AJ23 -to DDR3_BOT_DM[2]
-set_global_assignment -name TIMEQUEST_MULTICORNER_ANALYSIS ON
+set_global_assignment -name TIMING_ANALYZER_MULTICORNER_ANALYSIS ON
 set_global_assignment -name NUM_PARALLEL_PROCESSORS ALL
 set_location_assignment PIN_V30 -to FPGA_SPI0_MISO_LMS2
 set_location_assignment PIN_R30 -to FPGA_SPI0_MISO_LMS1

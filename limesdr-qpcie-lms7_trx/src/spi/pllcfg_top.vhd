@@ -12,45 +12,40 @@ use ieee.numeric_std.all;
 -- ----------------------------------------------------------------------------
 -- Entity declaration
 -- ----------------------------------------------------------------------------
-entity pllcfg_top is 
-	generic (n_pll	: integer := 4
+entity pllcfg_top is
+	generic (n_pll	: integer :=2
 	);
   port (
-			--input ports
-      maddress          : in std_logic_vector(9 downto 0); 
-		sdinA			      : in std_logic; 	-- Data in
-		sclkA			      : in std_logic; 	-- Data clock
-		senA			      : in std_logic;	-- Enable signal (active low)
-		sdoutA		      : out std_logic; 	-- Data out
-		oenA			      : out std_logic;  -- NC		
+			--input ports 
+		sdinA			: in std_logic; 	-- Data in
+		sclkA			: in std_logic; 	-- Data clock
+		senA			: in std_logic;	-- Enable signal (active low)
+		sdoutA		: out std_logic; 	-- Data out
+		oenA			: out std_logic;  -- NC		
 			-- Serial port B IOs
-		sdinB			      : in std_logic; 	-- Data in
-		sclkB			      : in std_logic; 	-- Data clock
-		senB			      : in std_logic;	-- Enable signal (active low)
-		sdoutB		      : out std_logic; 	-- Data out
-		oenB			      : out std_logic;  -- NC		
+		sdinB			: in std_logic; 	-- Data in
+		sclkB			: in std_logic; 	-- Data clock
+		senB			: in std_logic;	-- Enable signal (active low)
+		sdoutB		: out std_logic; 	-- Data out
+		oenB			: out std_logic;  -- NC		
 			-- Signals coming from the pins or top level serial interface
-		lreset		      : in std_logic; 	-- Logic reset signal, resets logic cells only  (use only one reset)
-		mreset		      : in std_logic; 	-- Memory reset signal, resets configuration memory only (use only one reset)
+		lreset		: in std_logic; 	-- Logic reset signal, resets logic cells only  (use only one reset)
+		mreset		: in std_logic; 	-- Memory reset signal, resets configuration memory only (use only one reset)
 			-- Status Inputs
-		pllcfg_busy	      : in std_logic;
-		pllcfg_done	      : in std_logic;
-      pllcfg_err        : in std_logic_vector(7 downto 0);
+		pllcfg_busy	: in std_logic_vector(n_pll-1 downto 0);
+		pllcfg_done	: in std_logic_vector(n_pll-1 downto 0);	
 			-- PLL Lock flags
-		pll_lock          : in std_logic_vector(n_pll-1 downto 0);	
+		pll_lock		: in std_logic_vector(n_pll-1 downto 0);	
 			-- PLL Configuratioin Related
-      phcfg_mode        : out std_logic;
-      phcfg_tst         : out std_logic;
-      phcfg_start_b     : out std_logic;
-		phcfg_start       : out std_logic_vector(n_pll-1 downto 0); --
-      pllcfg_start_b    : out std_logic;
-		pllcfg_start      : out std_logic_vector(n_pll-1 downto 0); --
-      pllrst_start_b    : out std_logic;
-		pllrst_start      : out std_logic_vector(n_pll-1 downto 0); --
-		phcfg_updn	      : out std_logic; --
-		cnt_ind		      : out std_logic_vector(4 downto 0); --
-		cnt_phase	      : out std_logic_vector(15 downto 0); --
---		pllcfg_data	      : out std_logic_vector(143 downto 0);
+      phcfg_mode  : out std_logic;
+      phcfg_tst   : out std_logic;
+		phcfg_start	: out std_logic_vector(n_pll-1 downto 0); --
+		pllcfg_start: out std_logic_vector(n_pll-1 downto 0); --
+		pllrst_start: out std_logic_vector(n_pll-1 downto 0); --
+		phcfg_updn	: out std_logic; --
+		cnt_ind		: out std_logic_vector(4 downto 0); --
+		cnt_phase	: out std_logic_vector(15 downto 0); --
+		pllcfg_data	: out std_logic_vector(143 downto 0);
       auto_phcfg_done   : in std_logic_vector(n_pll-1 downto 0);
       auto_phcfg_err    : in std_logic_vector(n_pll-1 downto 0);
       auto_phcfg_smpls  : out std_logic_vector(15 downto 0);
@@ -131,16 +126,15 @@ signal pllcfg_start_bit	: std_logic;
 signal pllrst_start_bit	: std_logic;
 
 signal pllcfg_data_rev	: std_logic_vector(143 downto 0);
-signal phcfg_mode_int   : std_logic;
 
   
 begin
 
---pllcfg_busy_vect(n_pll-1 downto 0)<=pllcfg_busy;
---pllcfg_busy_vect(15 downto n_pll)<=(others=>'0');
+pllcfg_busy_vect(n_pll-1 downto 0)<=pllcfg_busy;
+pllcfg_busy_vect(15 downto n_pll)<=(others=>'0');
 
---pllcfg_done_vect(n_pll-1 downto 0)<=pllcfg_done;
---pllcfg_done_vect(15 downto n_pll)<=(others=>'0');
+pllcfg_done_vect(n_pll-1 downto 0)<=pllcfg_done;
+pllcfg_done_vect(15 downto n_pll)<=(others=>'0');
 
 auto_phcfg_done_vect(n_pll-1 downto 0)<=auto_phcfg_done;
 auto_phcfg_done_vect(15 downto n_pll)<=(others=>'0');
@@ -151,10 +145,10 @@ auto_phcfg_err_vect(15 downto n_pll)<=(others=>'0');
 pll_lock_vect(n_pll-1 downto 0)<=pll_lock;
 pll_lock_vect(15 downto n_pll)<=(others=>'0');
 
---process(pll_ind, pllcfg_busy_vect, pllcfg_done_vect) begin
---	pllcfg_busy_bit<=pllcfg_busy_vect(to_integer(unsigned(pll_ind)));
---	pllcfg_done_bit<=pllcfg_done_vect(to_integer(unsigned(pll_ind)));
---end process;
+process(pll_ind, pllcfg_busy_vect, pllcfg_done_vect) begin
+	pllcfg_busy_bit<=pllcfg_busy_vect(to_integer(unsigned(pll_ind)));
+	pllcfg_done_bit<=pllcfg_done_vect(to_integer(unsigned(pll_ind)));
+end process;
 
 process(pll_ind, auto_phcfg_done_vect, auto_phcfg_err_vect) begin
 	auto_phcfg_done_bit  <=auto_phcfg_done_vect(to_integer(unsigned(pll_ind)));
@@ -162,13 +156,9 @@ process(pll_ind, auto_phcfg_done_vect, auto_phcfg_err_vect) begin
 end process;
 
 
-process(pll_ind, phcfg_start_bit, phcfg_mode_int) begin
-   if phcfg_mode_int = '1' then 
-      phcfg_start_vect<=(others=>'0');
-      phcfg_start_vect(to_integer(unsigned(pll_ind)))<=phcfg_start_bit;
-   else 
-      phcfg_start_vect<=(others=>'0');
-   end if;
+process(pll_ind, phcfg_start_bit) begin
+	phcfg_start_vect<=(others=>'0');
+	phcfg_start_vect(to_integer(unsigned(pll_ind)))<=phcfg_start_bit;
 end process;
 
 process(pll_ind, pllcfg_start_bit) begin
@@ -192,7 +182,7 @@ pllrst_start <= pllrst_start_vect(n_pll-1 downto 0);
 
 pllcfg_inst	: entity work.pllcfg
 port map (
-		maddress			=> maddress,
+		maddress			=> "0000000001",
 		mimo_en			=> '1',
 		sdinA				=> sdinA,
 		sclkA				=> sclkA,
@@ -206,10 +196,9 @@ port map (
 		oenB				=> oenB,
 		lreset			=> lreset,
 		mreset			=> mreset,
-		pllcfg_busy 	=> pllcfg_busy,
-		pllcfg_done 	=> pllcfg_done,
+		pllcfg_busy 	=> pllcfg_busy_bit,
+		pllcfg_done 	=> pllcfg_done_bit,
       phcfg_done     => auto_phcfg_done_bit,
-      pllcfg_err     => pllcfg_err,
       phcfg_error    => auto_phcfg_err_bit,
 		pll_lock			=> pll_lock_vect,
 		phcfg_start 	=> phcfg_start_bit,
@@ -218,28 +207,28 @@ port map (
 		phcfg_updn 		=> phcfg_updn,
 		cnt_ind			=> cnt_ind,
 		pll_ind			=> pll_ind,
-      phcfg_mode     => phcfg_mode_int,
+      phcfg_mode     => phcfg_mode,
       phcfg_tst      => phcfg_tst, 
 		cnt_phase 		=> cnt_phase,		
 --		pllcfg_bs		=> open, 
---		chp_curr			=> chp_curr, 
---		pllcfg_vcodiv	=> pllcfg_vcodiv,
---		pllcfg_lf_res	=> pllcfg_lf_res,
---		pllcfg_lf_cap	=> pllcfg_lf_cap,	
---		m_odddiv			=> m_odddiv,
---		m_byp				=> m_byp,
---		n_odddiv			=> n_odddiv,
---		n_byp				=> n_byp,
---		c0_odddiv		=> c0_odddiv,
---		c0_byp			=> c0_byp,
---		c1_odddiv		=> c1_odddiv,
---		c1_byp			=> c1_byp,
---		c2_odddiv		=> c2_odddiv,
---		c2_byp			=> c2_byp,
---		c3_odddiv		=> c3_odddiv,
---		c3_byp			=> c3_byp,
---		c4_odddiv		=> c4_odddiv,
---		c4_byp			=> c4_byp,
+		chp_curr			=> chp_curr, 
+		pllcfg_vcodiv	=> pllcfg_vcodiv,
+		pllcfg_lf_res	=> pllcfg_lf_res,
+		pllcfg_lf_cap	=> pllcfg_lf_cap,	
+		m_odddiv			=> m_odddiv,
+		m_byp				=> m_byp,
+		n_odddiv			=> n_odddiv,
+		n_byp				=> n_byp,
+		c0_odddiv		=> c0_odddiv,
+		c0_byp			=> c0_byp,
+		c1_odddiv		=> c1_odddiv,
+		c1_byp			=> c1_byp,
+		c2_odddiv		=> c2_odddiv,
+		c2_byp			=> c2_byp,
+		c3_odddiv		=> c3_odddiv,
+		c3_byp			=> c3_byp,
+		c4_odddiv		=> c4_odddiv,
+		c4_byp			=> c4_byp,
 --		c5_odddiv		=> c5_odddiv,
 --		c5_byp			=> c5_byp,
 --		c6_odddiv		=> c6_odddiv,
@@ -250,14 +239,14 @@ port map (
 --		c8_byp			=> c8_byp,
 --		c9_odddiv		=> c9_odddiv,
 --		c9_byp			=> c9_byp,	
---		n_cnt				=> n_cnt,
---		m_cnt				=> m_cnt,
+		n_cnt				=> n_cnt,
+		m_cnt				=> m_cnt,
 --		m_frac			=> m_frac,
---		c0_cnt			=> c0_cnt,
---		c1_cnt			=> c1_cnt,
---		c2_cnt			=> c2_cnt,
---		c3_cnt			=> c3_cnt,
---		c4_cnt			=> c4_cnt,
+		c0_cnt			=> c0_cnt,
+		c1_cnt			=> c1_cnt,
+		c2_cnt			=> c2_cnt,
+		c3_cnt			=> c3_cnt,
+		c4_cnt			=> c4_cnt,
 --		c5_cnt			=> c5_cnt, 
 --		c6_cnt			=> c6_cnt, 
 --		c7_cnt			=> c7_cnt,
@@ -268,39 +257,32 @@ port map (
 );
 
 
---pllcfg_data_rev<=		  "00" & pllcfg_lf_cap & pllcfg_lf_res  & pllcfg_vcodiv  & "00000" & chp_curr &
---	                     n_byp 		& n_cnt (15  downto 8) & --N
---                        n_odddiv 	& n_cnt (7 downto 0) &
---                        
---                        m_byp 		& m_cnt (15  downto 8) & --M 
---                        m_odddiv 	& m_cnt (7 downto 0) &
---                        
---                        c0_byp 		& c0_cnt (15 downto 8) & --c0
---                      	c0_odddiv 	& c0_cnt (7  downto 0) &
---                      	 
---                      	c1_byp 		& c1_cnt (15 downto 8) & --c1
---                       	c1_odddiv 	& c1_cnt (7  downto 0) & 
---                        
---                        c2_byp 		& c2_cnt (15 downto 8) & --c2
---                        c2_odddiv 	& c2_cnt (7  downto 0) &
---                        
---                        c3_byp 		& c3_cnt (15 downto 8) & --c3
---                        c3_odddiv 	& c3_cnt (7  downto 0) &
---  
---                        c4_byp 		& c4_cnt (15 downto 8) & --c4
---                        c4_odddiv 	& c4_cnt (7  downto 0) ;
---								
---								
---for_lop : for i in 0 to 143 generate
---   pllcfg_data(i) <= pllcfg_data_rev(143-i);  
---end generate;		
-
-phcfg_start_b  <= '1' when phcfg_mode_int = '0' AND phcfg_start_bit = '1' else '0';
-pllcfg_start_b <= pllcfg_start_bit;    
-pllrst_start_b <= pllrst_start_bit;
-
-phcfg_mode     <= phcfg_mode_int;  
-
+pllcfg_data_rev<=		  "00" & pllcfg_lf_cap & pllcfg_lf_res  & pllcfg_vcodiv  & "00000" & chp_curr &
+	                     n_byp 		& n_cnt (15  downto 8) & --N
+                        n_odddiv 	& n_cnt (7 downto 0) &
+                        
+                        m_byp 		& m_cnt (15  downto 8) & --M 
+                        m_odddiv 	& m_cnt (7 downto 0) &
+                        
+                        c0_byp 		& c0_cnt (15 downto 8) & --c0
+                      	c0_odddiv 	& c0_cnt (7  downto 0) &
+                      	 
+                      	c1_byp 		& c1_cnt (15 downto 8) & --c1
+                       	c1_odddiv 	& c1_cnt (7  downto 0) & 
+                        
+                        c2_byp 		& c2_cnt (15 downto 8) & --c2
+                        c2_odddiv 	& c2_cnt (7  downto 0) &
+                        
+                        c3_byp 		& c3_cnt (15 downto 8) & --c3
+                        c3_odddiv 	& c3_cnt (7  downto 0) &
+  
+                        c4_byp 		& c4_cnt (15 downto 8) & --c4
+                        c4_odddiv 	& c4_cnt (7  downto 0) ;
+								
+								
+for_lop : for i in 0 to 143 generate
+   pllcfg_data(i) <= pllcfg_data_rev(143-i);  
+end generate;								
   
 end arch;
 
