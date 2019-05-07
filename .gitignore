@@ -48,6 +48,7 @@ alt_sld_fab_wrapper_hw.tcl
 *.csv
 *.rpt
 *.txt
+!Changelog.txt
 *.qws
 *.qarlog
 *.qar
