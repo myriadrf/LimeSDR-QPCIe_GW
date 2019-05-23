@@ -464,6 +464,7 @@ signal inst6_tx_fifo_1_wrusedw      : std_logic_vector(8 downto 0);
 signal inst6_rx_smpl_cmp_done       : std_logic;
 signal inst6_rx_smpl_cmp_err        : std_logic; 
 signal inst6_sdout                  : std_logic;
+signal inst6_tx_ant_en              : std_logic; 
 
 --inst7
 constant c_WFM_INFIFO_SIZE          : integer := FIFO_WORDS_TO_Nbits(g_WFM_INFIFO_SIZE/(c_S0_DATA_WIDTH/8),true);
@@ -492,6 +493,7 @@ signal inst8_tx_fifo_1_wrusedw      : std_logic_vector(8 downto 0);
 signal inst8_rx_smpl_cmp_done       : std_logic;
 signal inst8_rx_smpl_cmp_err        : std_logic;
 signal inst8_sdout                  : std_logic; 
+signal inst8_tx_ant_en              : std_logic; 
 
 --inst9
 signal inst9_tx_pct_loss_flg        : std_logic;
@@ -1126,6 +1128,7 @@ begin
       tx_fifo_1_data       => inst19_wfm_0_outfifo_data,
       tx_fifo_1_wrfull     => inst6_tx_fifo_1_wrfull,
       tx_fifo_1_wrusedw    => inst6_tx_fifo_1_wrusedw,
+      tx_ant_en            => inst6_tx_ant_en, 
       -- Internal RX ports
       rx_reset_n           => inst1_lms1_rxpll_locked,
       rx_diq_h             => open, 
@@ -1254,6 +1257,7 @@ begin
       tx_fifo_1_data       => inst20_wfm_0_outfifo_data,
       tx_fifo_1_wrfull     => inst8_tx_fifo_1_wrfull,
       tx_fifo_1_wrusedw    => inst8_tx_fifo_1_wrusedw,
+      tx_ant_en            => inst8_tx_ant_en, 
       -- Internal RX ports
       rx_reset_n           => inst1_lms2_rxpll_locked,
       rx_diq_h             => open, 
@@ -1704,6 +1708,17 @@ begin
    
    inst3_OPNDRN : OPNDRN
 	port map (a_in => inst0_gpo(0), a_out => FPGA_ADC_RESET);
+   
+   -- TRX1_TDD_SW (High = TX enbled, Low = RX Enabled)
+   PMOD_A_PIN1 <= inst6_tx_ant_en when inst0_from_periphcfg.PERIPH_OUTPUT_OVRD_0(4)='0' else inst0_from_periphcfg.PERIPH_OUTPUT_VAL_0(4);         
+   -- TRX2_TDD_SW (High = TX enbled, Low = RX Enabled)
+   PMOD_A_PIN2 <= inst6_tx_ant_en when inst0_from_periphcfg.PERIPH_OUTPUT_OVRD_0(5)='0' else inst0_from_periphcfg.PERIPH_OUTPUT_VAL_0(5);         
+
+   -- TRX1_TDD_SW (High = TX enbled, Low = RX Enabled)
+   PMOD_A_PIN3 <= inst8_tx_ant_en when inst0_from_periphcfg.PERIPH_OUTPUT_OVRD_0(4)='0' else inst0_from_periphcfg.PERIPH_OUTPUT_VAL_0(4);         
+   -- TRX2_TDD_SW (High = TX enbled, Low = RX Enabled)
+   PMOD_A_PIN4 <= inst8_tx_ant_en when inst0_from_periphcfg.PERIPH_OUTPUT_OVRD_0(5)='0' else inst0_from_periphcfg.PERIPH_OUTPUT_VAL_0(5);         
+
    
 
 

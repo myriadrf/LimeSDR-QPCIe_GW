@@ -61,12 +61,14 @@ package fpgacfg_pkg is
       LMS1_TXNRX2       : std_logic;
       LMS1_TXEN         : std_logic;
       LMS1_RXEN         : std_logic;
+      LMS_TXRXEN_MUX_SEL: std_logic;
       LMS2_RESET        : std_logic;
       LMS2_CORE_LDO_EN  : std_logic;
       LMS2_TXNRX1       : std_logic;
       LMS2_TXNRX2       : std_logic;
       LMS2_TXEN         : std_logic;
       LMS2_RXEN         : std_logic;
+      LMS_TXRXEN_INV    : std_logic;
       GPIO              : std_logic_vector(15 downto 0);
       FPGA_LED1_CTRL    : std_logic_vector(2 downto 0);
       FPGA_LED2_CTRL    : std_logic_vector(2 downto 0);

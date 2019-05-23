@@ -34,7 +34,8 @@ entity fifo2diq is
       --txant
       txant_cyc_before_en  : in std_logic_vector(15 downto 0); -- valid in external pulse sync mode only
       txant_cyc_after_en   : in std_logic_vector(15 downto 0); -- valid in external pulse sync mode only 
-      txant_en             : out std_logic;                 
+      txant_en             : out std_logic;
+      txant_en_nd          : out std_logic;
       --Tx interface data 
       DIQ                  : out std_logic_vector(iq_width-1 downto 0);
       fsync                : out std_logic;
@@ -63,9 +64,14 @@ signal inst3_txiq_en       : std_logic;
 signal inst3_pct_sync_size : std_logic_vector(15 downto 0);
 signal inst3_txant_en      : std_logic;
 
+--inst4
+signal inst4_q             : std_logic;
+
 signal int_mode            : std_logic_vector(1 downto 0);
 
 signal txant_en_mux        : std_logic;
+
+
   
 begin
    
@@ -147,14 +153,26 @@ txiq_ctrl_inst3 : entity work.txiq_ctrl
       txant_cyc_after_en   => txant_cyc_after_en,
       txant_en             => inst3_txant_en
         );
-        
+ 
+edge_delay_inst4 : entity work.edge_delay
+   port map(
+      clk      => clk,
+      reset_n  => reset_n,
+      -- Parameters
+      rise_dly => txant_cyc_before_en,
+      fall_dly => txant_cyc_after_en,
+      d        => inst1_txant_en,
+      q        => inst4_q
+   );
+  
+  
 process(clk, reset_n)
 begin
    if reset_n = '0' then 
       txant_en_mux <= '0';
    elsif (clk'event AND clk='1') then 
       if  pct_sync_mode = '0' then 
-         txant_en_mux <= inst1_txant_en;
+         txant_en_mux <= inst4_q;
       else 
          txant_en_mux <= inst3_txant_en; 
       end if;
@@ -164,6 +182,7 @@ end process;
 
 
 txant_en    <= txant_en_mux;
+txant_en_nd <= inst1_txant_en;
 fifo_rdreq  <= inst1_fifo_rdreq;
 DIQ_h       <= inst0_DIQ_h;
 DIQ_l       <= inst0_DIQ_l;

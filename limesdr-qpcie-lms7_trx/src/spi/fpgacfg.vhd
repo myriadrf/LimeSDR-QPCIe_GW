@@ -279,7 +279,7 @@ begin
       from_fpgacfg.LMS1_TXNRX2         <= mem(19)(4);
       from_fpgacfg.LMS1_TXEN           <= mem(19)(5); 
       from_fpgacfg.LMS1_RXEN           <= mem(19)(6);
-
+      from_fpgacfg.LMS_TXRXEN_MUX_SEL  <= mem(19)(7);
       from_fpgacfg.LMS2_SS             <= mem(19)(8) OR (NOT sen); --to prevent SPI_SS to go low on same time as sen
       from_fpgacfg.LMS2_RESET          <= mem(19)(9);
       from_fpgacfg.LMS2_CORE_LDO_EN    <= mem(19)(10); 
@@ -287,6 +287,7 @@ begin
       from_fpgacfg.LMS2_TXNRX2         <= mem(19)(12);
       from_fpgacfg.LMS2_TXEN           <= mem(19)(13);
       from_fpgacfg.LMS2_RXEN           <= mem(19)(14);
+      from_fpgacfg.LMS_TXRXEN_INV      <= mem(19)(15);
       from_fpgacfg.GPIO                <= mem(23)(15 downto 0);
       from_fpgacfg.FPGA_LED1_CTRL      <= mem(26)(2 downto 0);
       from_fpgacfg.FPGA_LED2_CTRL      <= mem(26)(6 downto 4);

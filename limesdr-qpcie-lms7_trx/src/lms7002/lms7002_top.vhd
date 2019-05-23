@@ -68,6 +68,7 @@ entity lms7002_top is
       tx_fifo_1_data    : in  std_logic_vector(g_TX_SMPL_FIFO_1_DATAW-1 downto 0);
       tx_fifo_1_wrfull  : out std_logic;
       tx_fifo_1_wrusedw : out std_logic_vector(g_TX_SMPL_FIFO_1_WRUSEDW-1 downto 0);
+      tx_ant_en         : out std_logic;
       -- Internal RX ports
       rx_reset_n        : in  std_logic;
       rx_diq_h          : out std_logic_vector(g_IQ_WIDTH downto 0);
@@ -103,6 +104,7 @@ signal inst0_reset_n             : std_logic;
 signal inst1_fifo_0_reset_n      : std_logic;
 signal inst1_fifo_1_reset_n      : std_logic;
 signal inst1_clk_2x_reset_n      : std_logic;
+signal inst1_txant_en            : std_logic;
 
 signal int_mode                  : std_logic;    
 signal int_trxiqpulse            : std_logic;   
@@ -110,6 +112,10 @@ signal int_ddr_en                : std_logic;
 signal int_mimo_en               : std_logic;
 signal int_ch_en                 : std_logic_vector(1 downto 0);
 signal int_fidm                  : std_logic;
+
+
+signal lms_txen_int        : std_logic;
+signal lms_rxen_int        : std_logic;
 
 
   
@@ -212,7 +218,9 @@ inst1_lms7002_tx : entity work.lms7002_tx
       test_ptrn_I          => from_tstcfg.TX_TST_I,
       test_ptrn_Q          => from_tstcfg.TX_TST_Q,
       test_cnt_en          => from_fpgacfg.tx_cnt_en,
-      txant_en             => open,                 
+      txant_cyc_before_en  => from_fpgacfg.txant_pre,
+      txant_cyc_after_en   => from_fpgacfg.txant_post,
+      txant_en             => inst1_txant_en,                 
       --Tx interface data 
       DIQ                  => DIQ1,
       fsync                => ENABLE_IQSEL1,
@@ -242,13 +250,19 @@ inst1_lms7002_tx : entity work.lms7002_tx
       
 -- ----------------------------------------------------------------------------
 -- Output ports
--- ---------------------------------------------------------------------------- 
+-- ----------------------------------------------------------------------------
+   lms_txen_int <= from_fpgacfg.LMS1_TXEN when from_fpgacfg.LMS_TXRXEN_MUX_SEL = '0' else inst1_txant_en;
+   lms_rxen_int <= from_fpgacfg.LMS1_RXEN when from_fpgacfg.LMS_TXRXEN_MUX_SEL = '0' else not inst1_txant_en;
+
+ 
    RESET       	<= from_fpgacfg.LMS1_RESET;
-   TXEN        	<= from_fpgacfg.LMS1_TXEN;
-   RXEN        	<= from_fpgacfg.LMS1_RXEN;
+   TXEN        	<= lms_txen_int when from_fpgacfg.LMS_TXRXEN_INV='0' else not lms_txen_int;
+   RXEN        	<= lms_rxen_int when from_fpgacfg.LMS_TXRXEN_INV='0' else not lms_rxen_int;
    CORE_LDO_EN 	<= from_fpgacfg.LMS1_CORE_LDO_EN;
    TXNRX1      	<= from_fpgacfg.LMS1_TXNRX1;
    TXNRX2      	<= from_fpgacfg.LMS1_TXNRX2;
+   
+   tx_ant_en <= inst1_txant_en;
    
    
 end arch;   

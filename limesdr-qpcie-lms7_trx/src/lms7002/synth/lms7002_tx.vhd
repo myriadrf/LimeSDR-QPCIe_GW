@@ -48,6 +48,8 @@ entity lms7002_tx is
       test_ptrn_I          : in  std_logic_vector(15 downto 0);
       test_ptrn_Q          : in  std_logic_vector(15 downto 0);
       test_cnt_en          : in  std_logic;
+      txant_cyc_before_en  : in  std_logic_vector(15 downto 0);
+      txant_cyc_after_en   : in  std_logic_vector(15 downto 0);
       txant_en             : out std_logic;                 
       --Tx interface data 
       DIQ                  : out std_logic_vector(g_IQ_WIDTH-1 downto 0);
@@ -121,9 +123,7 @@ signal inst5_diq_h         : std_logic_vector(g_IQ_WIDTH downto 0);
 signal inst5_diq_l         : std_logic_vector(g_IQ_WIDTH downto 0);
 
 
-
-
-  
+ 
 begin
 
 -- ----------------------------------------------------------------------------
@@ -218,9 +218,9 @@ begin
       pct_sync_size        => (others=>'0'), -- valid in external pulse mode only
       pct_buff_rdy         => '0',
       --txant
-      txant_cyc_before_en  => (others=>'0'), -- valid in external pulse sync mode only
-      txant_cyc_after_en   => (others=>'0'), -- valid in external pulse sync mode only 
-      txant_en             => open,                  
+      txant_cyc_before_en  => txant_cyc_before_en, -- valid in external pulse sync mode only
+      txant_cyc_after_en   => txant_cyc_after_en, -- valid in external pulse sync mode only
+      txant_en             => txant_en,                  
       --Tx interface data 
       DIQ                  => open,
       fsync                => open,
