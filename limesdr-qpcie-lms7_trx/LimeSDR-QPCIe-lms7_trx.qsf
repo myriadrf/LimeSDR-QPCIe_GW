@@ -1303,6 +1303,280 @@ set_instance_assignment -name FAST_INPUT_REGISTER ON -to ADC_DB[4]
 set_instance_assignment -name FAST_INPUT_REGISTER ON -to ADC_DB[5]
 set_instance_assignment -name FAST_INPUT_REGISTER ON -to ADC_DB[6]
 set_instance_assignment -name FAST_INPUT_REGISTER ON -to ADC_DB[0]
+set_global_assignment -name FLOW_ENABLE_RTL_VIEWER ON
+set_instance_assignment -name GLOBAL_SIGNAL "DUAL-REGIONAL CLOCK" -to inst19_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|pll0|pll_avl_clk -tag __ddr3_av_2x32_p0
+set_instance_assignment -name GLOBAL_SIGNAL "DUAL-REGIONAL CLOCK" -to inst19_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|pll0|pll_config_clk -tag __ddr3_av_2x32_p0
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst19_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|ureset|phy_reset_mem_stable_n -tag __ddr3_av_2x32_p0
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst19_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|ureset|phy_reset_n -tag __ddr3_av_2x32_p0
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst19_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|s0|sequencer_rw_mgr_inst|rw_mgr_inst|rw_mgr_core_inst|rw_soft_reset_n -tag __ddr3_av_2x32_p0
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst19_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uio_pads|dq_ddio[0].read_capture_clk_buffer -tag __ddr3_av_2x32_p0
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst19_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uread_datapath|reset_n_fifo_write_side[0] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst19_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[0] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst19_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uio_pads|dq_ddio[1].read_capture_clk_buffer -tag __ddr3_av_2x32_p0
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst19_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uread_datapath|reset_n_fifo_write_side[1] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst19_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[1] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst19_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uio_pads|dq_ddio[2].read_capture_clk_buffer -tag __ddr3_av_2x32_p0
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst19_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uread_datapath|reset_n_fifo_write_side[2] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst19_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[2] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst19_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uio_pads|dq_ddio[3].read_capture_clk_buffer -tag __ddr3_av_2x32_p0
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst19_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uread_datapath|reset_n_fifo_write_side[3] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst19_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[3] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name ENABLE_BENEFICIAL_SKEW_OPTIMIZATION_FOR_NON_GLOBAL_CLOCKS ON -to inst19_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst -tag __ddr3_av_2x32_p0
+set_instance_assignment -name PLL_COMPENSATION_MODE DIRECT -to inst19_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|pll0|fbout -tag __ddr3_av_2x32_p0
+set_global_assignment -name OPTIMIZE_MULTI_CORNER_TIMING ON
+set_global_assignment -name ECO_REGENERATE_REPORT ON
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to OCT_RZQIN1 -tag __ddr3_av_2x32_p0
+set_global_assignment -name ADVANCED_PHYSICAL_OPTIMIZATION OFF
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[0] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[0] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[0] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[1] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[1] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[1] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[2] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[2] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[2] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[3] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[3] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[3] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[4] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[4] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[4] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[5] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[5] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[5] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[6] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[6] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[6] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[7] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[7] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[7] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[8] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[8] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[8] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[9] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[9] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[9] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[10] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[10] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[10] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[11] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[11] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[11] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[12] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[12] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[12] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[13] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[13] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[13] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[14] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[14] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[14] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[15] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[15] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[15] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[16] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[16] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[16] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[17] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[17] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[17] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[18] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[18] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[18] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[19] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[19] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[19] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[20] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[20] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[20] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[21] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[21] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[21] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[22] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[22] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[22] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[23] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[23] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[23] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[24] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[24] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[24] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[25] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[25] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[25] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[26] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[26] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[26] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[27] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[27] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[27] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[28] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[28] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[28] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[29] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[29] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[29] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[30] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[30] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[30] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[31] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[31] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[31] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.5-V SSTL CLASS I" -to DDR3_TOP_DQS_P[0] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQS_P[0] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQS_P[0] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.5-V SSTL CLASS I" -to DDR3_TOP_DQS_P[1] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQS_P[1] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQS_P[1] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.5-V SSTL CLASS I" -to DDR3_TOP_DQS_P[2] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQS_P[2] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQS_P[2] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.5-V SSTL CLASS I" -to DDR3_TOP_DQS_P[3] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQS_P[3] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQS_P[3] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.5-V SSTL CLASS I" -to DDR3_TOP_DQS_N[0] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQS_N[0] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQS_N[0] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.5-V SSTL CLASS I" -to DDR3_TOP_DQS_N[1] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQS_N[1] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQS_N[1] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.5-V SSTL CLASS I" -to DDR3_TOP_DQS_N[2] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQS_N[2] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQS_N[2] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.5-V SSTL CLASS I" -to DDR3_TOP_DQS_N[3] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQS_N[3] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQS_N[3] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.5-V SSTL CLASS I" -to DDR3_TOP_CK_P[0] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITHOUT CALIBRATION" -to DDR3_TOP_CK_P[0] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.5-V SSTL CLASS I" -to DDR3_TOP_CK_N[0] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITHOUT CALIBRATION" -to DDR3_TOP_CK_N[0] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_A[0] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_A[0] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_A[10] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_A[10] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_A[11] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_A[11] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_A[12] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_A[12] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_A[13] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_A[13] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_A[1] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_A[1] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_A[2] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_A[2] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_A[3] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_A[3] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_A[4] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_A[4] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_A[5] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_A[5] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_A[6] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_A[6] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_A[7] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_A[7] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_A[8] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_A[8] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_A[9] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_A[9] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_BA[0] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_BA[0] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_BA[1] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_BA[1] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_BA[2] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_BA[2] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_CASn[0] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_CASn[0] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_CKE[0] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_CKE[0] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_CSn[0] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_CSn[0] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_ODT[0] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_ODT[0] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_RASn[0] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_RASn[0] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_WEn[0] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_WEn[0] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD 1.5V -to DDR3_TOP_RESETn -tag __ddr3_av_2x32_p0
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_RESETn -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DM[0] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DM[0] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DM[1] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DM[1] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DM[2] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DM[2] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DM[3] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DM[3] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name GLOBAL_SIGNAL "DUAL-REGIONAL CLOCK" -to inst20_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|pll0|pll_avl_clk -tag __ddr3_av_2x32_p0
+set_instance_assignment -name GLOBAL_SIGNAL "DUAL-REGIONAL CLOCK" -to inst20_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|pll0|pll_config_clk -tag __ddr3_av_2x32_p0
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst20_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|ureset|phy_reset_mem_stable_n -tag __ddr3_av_2x32_p0
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst20_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|ureset|phy_reset_n -tag __ddr3_av_2x32_p0
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst20_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|s0|sequencer_rw_mgr_inst|rw_mgr_inst|rw_mgr_core_inst|rw_soft_reset_n -tag __ddr3_av_2x32_p0
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst20_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uio_pads|dq_ddio[0].read_capture_clk_buffer -tag __ddr3_av_2x32_p0
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst20_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uread_datapath|reset_n_fifo_write_side[0] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst20_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[0] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst20_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uio_pads|dq_ddio[1].read_capture_clk_buffer -tag __ddr3_av_2x32_p0
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst20_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uread_datapath|reset_n_fifo_write_side[1] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst20_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[1] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst20_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uio_pads|dq_ddio[2].read_capture_clk_buffer -tag __ddr3_av_2x32_p0
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst20_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uread_datapath|reset_n_fifo_write_side[2] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst20_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[2] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst20_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uio_pads|dq_ddio[3].read_capture_clk_buffer -tag __ddr3_av_2x32_p0
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst20_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uread_datapath|reset_n_fifo_write_side[3] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst20_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[3] -tag __ddr3_av_2x32_p0
+set_instance_assignment -name ENABLE_BENEFICIAL_SKEW_OPTIMIZATION_FOR_NON_GLOBAL_CLOCKS ON -to inst20_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst -tag __ddr3_av_2x32_p0
+set_instance_assignment -name PLL_COMPENSATION_MODE DIRECT -to inst20_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|pll0|fbout -tag __ddr3_av_2x32_p0
+set_instance_assignment -name D5_DELAY 1 -to LMS1_DIQ1_D[0]
+set_instance_assignment -name D5_DELAY 0 -to LMS1_DIQ1_D[1]
+set_instance_assignment -name D5_DELAY 1 -to LMS1_DIQ1_D[2]
+set_instance_assignment -name D5_DELAY 1 -to LMS1_DIQ1_D[3]
+set_instance_assignment -name D5_DELAY 1 -to LMS1_DIQ1_D[4]
+set_instance_assignment -name D5_DELAY 0 -to LMS1_DIQ1_D[5]
+set_instance_assignment -name D5_DELAY 1 -to LMS1_DIQ1_D[6]
+set_instance_assignment -name D5_DELAY 0 -to LMS1_DIQ1_D[7]
+set_instance_assignment -name D5_DELAY 0 -to LMS1_DIQ1_D[8]
+set_instance_assignment -name D5_DELAY 1 -to LMS1_DIQ1_D[9]
+set_instance_assignment -name D5_DELAY 1 -to LMS1_DIQ1_D[10]
+set_instance_assignment -name D5_DELAY 0 -to LMS1_DIQ1_D[11]
+set_instance_assignment -name D5_DELAY 0 -to LMS2_DIQ1_D[11]
+set_instance_assignment -name D5_DELAY 1 -to LMS2_DIQ1_D[10]
+set_instance_assignment -name D5_DELAY 1 -to LMS2_DIQ1_D[9]
+set_instance_assignment -name D5_DELAY 0 -to LMS2_DIQ1_D[8]
+set_instance_assignment -name D5_DELAY 0 -to LMS2_DIQ1_D[7]
+set_instance_assignment -name D5_DELAY 1 -to LMS2_DIQ1_D[6]
+set_instance_assignment -name D5_DELAY 0 -to LMS2_DIQ1_D[5]
+set_instance_assignment -name D5_DELAY 1 -to LMS2_DIQ1_D[4]
+set_instance_assignment -name D5_DELAY 1 -to LMS2_DIQ1_D[3]
+set_instance_assignment -name D5_DELAY 1 -to LMS2_DIQ1_D[2]
+set_instance_assignment -name D5_DELAY 0 -to LMS2_DIQ1_D[1]
+set_instance_assignment -name D5_DELAY 1 -to LMS2_DIQ1_D[0]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS1_DIQ2_D[11]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS1_DIQ2_D[10]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS1_DIQ2_D[9]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS1_DIQ2_D[8]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS1_DIQ2_D[7]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS1_DIQ2_D[6]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS1_DIQ2_D[5]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS1_DIQ2_D[4]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS1_DIQ2_D[3]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS1_DIQ2_D[2]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS1_DIQ2_D[1]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS1_DIQ2_D[0]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS2_DIQ2_D[11]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS2_DIQ2_D[10]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS2_DIQ2_D[9]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS2_DIQ2_D[8]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS2_DIQ2_D[7]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS2_DIQ2_D[6]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS2_DIQ2_D[5]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS2_DIQ2_D[4]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS2_DIQ2_D[3]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS2_DIQ2_D[2]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS2_DIQ2_D[1]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS2_DIQ2_D[0]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS1_ENABLE_IQSEL2
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS2_ENABLE_IQSEL2
+set_global_assignment -name VHDL_FILE src/tx_path_top/fifo2diq/synth/edge_delay.vhd
 set_global_assignment -name QIP_FILE ip/ddr3_av_2x32/ddr3_av_2x32.qip
 set_global_assignment -name VHDL_FILE src/wfm_player/synth/wfm_player.vhd
 set_global_assignment -name VHDL_FILE src/wfm_player/synth/wfm_player_x2_top.vhd
@@ -1628,277 +1902,4 @@ set_global_assignment -name VHDL_FILE src/spi/pllcfg_pkg.vhd
 set_global_assignment -name VHDL_FILE src/spi/gnsscfg_pkg.vhd
 set_global_assignment -name VHDL_FILE src/spi/tamercfg_pkg.vhd
 set_global_assignment -name VHDL_FILE src/spi/rxtspcfg_pkg.vhd
-set_global_assignment -name FLOW_ENABLE_RTL_VIEWER ON
-set_instance_assignment -name GLOBAL_SIGNAL "DUAL-REGIONAL CLOCK" -to inst19_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|pll0|pll_avl_clk -tag __ddr3_av_2x32_p0
-set_instance_assignment -name GLOBAL_SIGNAL "DUAL-REGIONAL CLOCK" -to inst19_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|pll0|pll_config_clk -tag __ddr3_av_2x32_p0
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst19_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|ureset|phy_reset_mem_stable_n -tag __ddr3_av_2x32_p0
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst19_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|ureset|phy_reset_n -tag __ddr3_av_2x32_p0
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst19_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|s0|sequencer_rw_mgr_inst|rw_mgr_inst|rw_mgr_core_inst|rw_soft_reset_n -tag __ddr3_av_2x32_p0
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst19_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uio_pads|dq_ddio[0].read_capture_clk_buffer -tag __ddr3_av_2x32_p0
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst19_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uread_datapath|reset_n_fifo_write_side[0] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst19_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[0] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst19_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uio_pads|dq_ddio[1].read_capture_clk_buffer -tag __ddr3_av_2x32_p0
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst19_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uread_datapath|reset_n_fifo_write_side[1] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst19_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[1] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst19_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uio_pads|dq_ddio[2].read_capture_clk_buffer -tag __ddr3_av_2x32_p0
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst19_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uread_datapath|reset_n_fifo_write_side[2] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst19_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[2] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst19_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uio_pads|dq_ddio[3].read_capture_clk_buffer -tag __ddr3_av_2x32_p0
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst19_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uread_datapath|reset_n_fifo_write_side[3] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst19_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[3] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name ENABLE_BENEFICIAL_SKEW_OPTIMIZATION_FOR_NON_GLOBAL_CLOCKS ON -to inst19_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst -tag __ddr3_av_2x32_p0
-set_instance_assignment -name PLL_COMPENSATION_MODE DIRECT -to inst19_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|pll0|fbout -tag __ddr3_av_2x32_p0
-set_global_assignment -name OPTIMIZE_MULTI_CORNER_TIMING ON
-set_global_assignment -name ECO_REGENERATE_REPORT ON
-set_instance_assignment -name IO_STANDARD "SSTL-15" -to OCT_RZQIN1 -tag __ddr3_av_2x32_p0
-set_global_assignment -name ADVANCED_PHYSICAL_OPTIMIZATION OFF
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[0] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[0] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[0] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[1] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[1] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[1] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[2] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[2] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[2] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[3] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[3] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[3] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[4] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[4] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[4] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[5] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[5] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[5] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[6] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[6] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[6] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[7] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[7] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[7] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[8] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[8] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[8] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[9] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[9] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[9] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[10] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[10] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[10] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[11] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[11] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[11] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[12] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[12] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[12] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[13] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[13] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[13] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[14] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[14] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[14] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[15] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[15] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[15] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[16] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[16] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[16] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[17] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[17] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[17] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[18] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[18] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[18] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[19] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[19] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[19] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[20] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[20] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[20] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[21] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[21] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[21] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[22] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[22] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[22] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[23] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[23] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[23] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[24] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[24] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[24] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[25] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[25] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[25] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[26] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[26] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[26] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[27] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[27] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[27] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[28] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[28] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[28] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[29] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[29] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[29] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[30] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[30] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[30] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DQ[31] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[31] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQ[31] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.5-V SSTL CLASS I" -to DDR3_TOP_DQS_P[0] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQS_P[0] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQS_P[0] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.5-V SSTL CLASS I" -to DDR3_TOP_DQS_P[1] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQS_P[1] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQS_P[1] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.5-V SSTL CLASS I" -to DDR3_TOP_DQS_P[2] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQS_P[2] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQS_P[2] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.5-V SSTL CLASS I" -to DDR3_TOP_DQS_P[3] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQS_P[3] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQS_P[3] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.5-V SSTL CLASS I" -to DDR3_TOP_DQS_N[0] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQS_N[0] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQS_N[0] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.5-V SSTL CLASS I" -to DDR3_TOP_DQS_N[1] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQS_N[1] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQS_N[1] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.5-V SSTL CLASS I" -to DDR3_TOP_DQS_N[2] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQS_N[2] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQS_N[2] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.5-V SSTL CLASS I" -to DDR3_TOP_DQS_N[3] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name INPUT_TERMINATION "PARALLEL 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQS_N[3] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DQS_N[3] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.5-V SSTL CLASS I" -to DDR3_TOP_CK_P[0] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITHOUT CALIBRATION" -to DDR3_TOP_CK_P[0] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.5-V SSTL CLASS I" -to DDR3_TOP_CK_N[0] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITHOUT CALIBRATION" -to DDR3_TOP_CK_N[0] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_A[0] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_A[0] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_A[10] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_A[10] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_A[11] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_A[11] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_A[12] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_A[12] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_A[13] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_A[13] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_A[1] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_A[1] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_A[2] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_A[2] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_A[3] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_A[3] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_A[4] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_A[4] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_A[5] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_A[5] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_A[6] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_A[6] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_A[7] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_A[7] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_A[8] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_A[8] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_A[9] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_A[9] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_BA[0] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_BA[0] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_BA[1] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_BA[1] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_BA[2] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_BA[2] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_CASn[0] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_CASn[0] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_CKE[0] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_CKE[0] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_CSn[0] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_CSn[0] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_ODT[0] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_ODT[0] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_RASn[0] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_RASn[0] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_WEn[0] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_WEn[0] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD 1.5V -to DDR3_TOP_RESETn -tag __ddr3_av_2x32_p0
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to DDR3_TOP_RESETn -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DM[0] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DM[0] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DM[1] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DM[1] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DM[2] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DM[2] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to DDR3_TOP_DM[3] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to DDR3_TOP_DM[3] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name GLOBAL_SIGNAL "DUAL-REGIONAL CLOCK" -to inst20_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|pll0|pll_avl_clk -tag __ddr3_av_2x32_p0
-set_instance_assignment -name GLOBAL_SIGNAL "DUAL-REGIONAL CLOCK" -to inst20_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|pll0|pll_config_clk -tag __ddr3_av_2x32_p0
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst20_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|ureset|phy_reset_mem_stable_n -tag __ddr3_av_2x32_p0
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst20_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|ureset|phy_reset_n -tag __ddr3_av_2x32_p0
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst20_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|s0|sequencer_rw_mgr_inst|rw_mgr_inst|rw_mgr_core_inst|rw_soft_reset_n -tag __ddr3_av_2x32_p0
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst20_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uio_pads|dq_ddio[0].read_capture_clk_buffer -tag __ddr3_av_2x32_p0
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst20_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uread_datapath|reset_n_fifo_write_side[0] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst20_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[0] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst20_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uio_pads|dq_ddio[1].read_capture_clk_buffer -tag __ddr3_av_2x32_p0
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst20_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uread_datapath|reset_n_fifo_write_side[1] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst20_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[1] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst20_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uio_pads|dq_ddio[2].read_capture_clk_buffer -tag __ddr3_av_2x32_p0
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst20_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uread_datapath|reset_n_fifo_write_side[2] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst20_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[2] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst20_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uio_pads|dq_ddio[3].read_capture_clk_buffer -tag __ddr3_av_2x32_p0
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst20_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uread_datapath|reset_n_fifo_write_side[3] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name GLOBAL_SIGNAL OFF -to inst20_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[3] -tag __ddr3_av_2x32_p0
-set_instance_assignment -name ENABLE_BENEFICIAL_SKEW_OPTIMIZATION_FOR_NON_GLOBAL_CLOCKS ON -to inst20_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst -tag __ddr3_av_2x32_p0
-set_instance_assignment -name PLL_COMPENSATION_MODE DIRECT -to inst20_wfm_player_x2_top|ext_mem_inst2|ddr3_av_2x32_inst|pll0|fbout -tag __ddr3_av_2x32_p0
-set_instance_assignment -name D5_DELAY 1 -to LMS1_DIQ1_D[0]
-set_instance_assignment -name D5_DELAY 0 -to LMS1_DIQ1_D[1]
-set_instance_assignment -name D5_DELAY 1 -to LMS1_DIQ1_D[2]
-set_instance_assignment -name D5_DELAY 1 -to LMS1_DIQ1_D[3]
-set_instance_assignment -name D5_DELAY 1 -to LMS1_DIQ1_D[4]
-set_instance_assignment -name D5_DELAY 0 -to LMS1_DIQ1_D[5]
-set_instance_assignment -name D5_DELAY 1 -to LMS1_DIQ1_D[6]
-set_instance_assignment -name D5_DELAY 0 -to LMS1_DIQ1_D[7]
-set_instance_assignment -name D5_DELAY 0 -to LMS1_DIQ1_D[8]
-set_instance_assignment -name D5_DELAY 1 -to LMS1_DIQ1_D[9]
-set_instance_assignment -name D5_DELAY 1 -to LMS1_DIQ1_D[10]
-set_instance_assignment -name D5_DELAY 0 -to LMS1_DIQ1_D[11]
-set_instance_assignment -name D5_DELAY 0 -to LMS2_DIQ1_D[11]
-set_instance_assignment -name D5_DELAY 1 -to LMS2_DIQ1_D[10]
-set_instance_assignment -name D5_DELAY 1 -to LMS2_DIQ1_D[9]
-set_instance_assignment -name D5_DELAY 0 -to LMS2_DIQ1_D[8]
-set_instance_assignment -name D5_DELAY 0 -to LMS2_DIQ1_D[7]
-set_instance_assignment -name D5_DELAY 1 -to LMS2_DIQ1_D[6]
-set_instance_assignment -name D5_DELAY 0 -to LMS2_DIQ1_D[5]
-set_instance_assignment -name D5_DELAY 1 -to LMS2_DIQ1_D[4]
-set_instance_assignment -name D5_DELAY 1 -to LMS2_DIQ1_D[3]
-set_instance_assignment -name D5_DELAY 1 -to LMS2_DIQ1_D[2]
-set_instance_assignment -name D5_DELAY 0 -to LMS2_DIQ1_D[1]
-set_instance_assignment -name D5_DELAY 1 -to LMS2_DIQ1_D[0]
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS1_DIQ2_D[11]
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS1_DIQ2_D[10]
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS1_DIQ2_D[9]
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS1_DIQ2_D[8]
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS1_DIQ2_D[7]
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS1_DIQ2_D[6]
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS1_DIQ2_D[5]
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS1_DIQ2_D[4]
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS1_DIQ2_D[3]
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS1_DIQ2_D[2]
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS1_DIQ2_D[1]
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS1_DIQ2_D[0]
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS2_DIQ2_D[11]
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS2_DIQ2_D[10]
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS2_DIQ2_D[9]
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS2_DIQ2_D[8]
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS2_DIQ2_D[7]
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS2_DIQ2_D[6]
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS2_DIQ2_D[5]
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS2_DIQ2_D[4]
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS2_DIQ2_D[3]
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS2_DIQ2_D[2]
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS2_DIQ2_D[1]
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS2_DIQ2_D[0]
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS1_ENABLE_IQSEL2
-set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to LMS2_ENABLE_IQSEL2
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
